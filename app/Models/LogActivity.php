@@ -10,5 +10,5 @@ class LogActivity extends Model
     use HasFactory;
     protected $table = 'log_activities';
      // Definir los campos que se pueden llenar
-     protected $fillable = ['user_id', 'action', 'table_name', 'data', 'query'];
+     protected $fillable = ['user_id', 'action', 'table_name', 'record_id', 'data', 'query'];
 }

@@ -21,6 +21,12 @@ class Camara extends Model
         'telefono_representante_legal',
         'correo_representante_legal',
         'cargo_representante_legal',
-        'direccion_representante_legal'
+        'direccion_representante_legal',
+        'estado'
     ];
+
+    public function datoTributario()
+    {
+        return $this->hasOne(DatoTributario::class, 'id_camara', 'id');
+    }
 }

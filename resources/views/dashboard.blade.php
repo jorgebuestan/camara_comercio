@@ -358,7 +358,7 @@
 				                        </a>
 				                        <ul class="nav nav-children"> 
 											<li>
-				                                <a class="nav-link" href="{{ route('dashboard') }}">
+				                                <a class="nav-link" href="{{ route('admin.maestro_camaras') }}">
 				                                    Mantenimiento Cámaras
 				                                </a>
 				                            </li>         

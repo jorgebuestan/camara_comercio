@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('logo');
             $table->date('fecha_ingreso'); 
-            $table->string('ruc');
+            $table->string('ruc')->unique();
             $table->string('razon_social');
             $table->string('cedula_representante_legal');
             $table->string('nombres_representante_legal');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('correo_representante_legal');
             $table->string('cargo_representante_legal');
             $table->string('direccion_representante_legal');
+            $table->integer('estado');
             $table->timestamps();
         });
     }

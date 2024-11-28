@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable(); // Usuario que realiza la acción
             $table->string('action'); // Tipo de acción: insert, update, delete
             $table->string('table_name'); // Nombre de la tabla afectada
+            $table->unsignedBigInteger('record_id')->nullable(); // Id del registro
             $table->text('data')->nullable(); // Datos involucrados en la acción
             $table->text('query')->nullable(); // Consulta o URL
             $table->timestamps(); // Timestamps
