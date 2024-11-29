@@ -14,8 +14,11 @@ Maestro de Cámaras
       border-radius: 10px; /* Agrega bordes circulares en las esquinas */
       box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total del elemento */
     }
-</style>
+</style> 
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/i18n/datepicker-es.js"></script>
 
 <div class="container">
     <div class="row">
@@ -416,62 +419,327 @@ Maestro de Cámaras
         </form>
 
 
-        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarCargo" tabindex="-1" aria-labelledby="ModalModificarCargoLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarCamara" tabindex="-1" aria-labelledby="ModalModificarCamaraLabel" aria-hidden="true">
             @csrf
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalModificarCargoLabel">Modificar Cargo</h5>
+                        <h5 class="modal-title" id="ModalModificarCamaraLabel"><b>Modificar Cámara</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --> 
                     </div>
                     <div class="modal-body">
-                        <div class="form-group"> 
+                        <div class="form-group">  
                             <div class="row">
-                                <div class="col-md-10">
-                                    <label for="Cargo">Localidad</label>
-                                    <select id="localidad_mod" name="localidad_mod" class="form-control populate">
-                                         
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <label for="Cargo">Nombres</label>
-                                    <input type="text" class="form-control" id="nombre_mod" name="nombre_mod">
-                                    <input type="hidden" id="consolidado_id" name="consolidado_id">
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <label for="Cargo">Area</label>
-                                    <input type="text" class="form-control" id="area_mod" name="area_mod"> 
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <label for="Cargo">Correo</label>
-                                    <input type="text" class="form-control" id="correo_mod" name="correo_mod"> 
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
+                                <div class="col-lg-12">
+                                    <div class="tabs">
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item active">
+                                                <a class="nav-link" data-bs-target="#datos_generales_mod" href="#datos_generales_mod" data-bs-toggle="tab">Datos Generales</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-target="#datos_tributarios_mod" href="#datos_tributarios_mod" data-bs-toggle="tab">Datos Tributarios</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="datos_generales_mod" class="tab-pane active">
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Fecha de Ingreso
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" data-plugin-datepicker class="form-control" name="fecha_ingreso_mod" id="fecha_ingreso_mod" placeholder="Fecha de Ingreso">
+                                                        <input type="hidden" id="camara_id" name="camara_id">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        RUC
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="ruc_mod" id="ruc_mod" placeholder="RUC de la Cámara">
+                                                        <div id="error-ruc-mod" style="color: red; display: none;">El RUC debe tener 13 dígitos.</div>
+                                                    </div> 
+                                                </div>   
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Razón Social
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="razon_social_mod" id="razon_social_mod" placeholder="Razón Social">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Cédula Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="cedula_representante_legal_mod" id="cedula_representante_legal_mod" placeholder="Cédula Representante Legal">
+                                                        <div id="error-cedula-mod" style="color: red; display: none;">La Cédula debe tener 10 dígitos.</div>
+                                                    </div> 
+                                                </div>   
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Nombres Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="nombres_representante_legal_mod" id="nombres_representante_legal_mod" placeholder="Nombres Representante Legal">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Apellidos Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="apellidos_representante_legal_mod" id="apellidos_representante_legal_mod" placeholder="Apellidos Representante Legal">
+                                                    </div> 
+                                                </div>   
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Teléfono Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="telefono_representante_legal_mod"  id="telefono_representante_legal_mod" placeholder="Teléfono Representante Legal">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Correo Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="correo_representante_legal_mod"  id="correo_representante_legal_mod" placeholder="Correo Representante Legal">
+                                                        <div id="error-correo-mod" style="color: red; display: none;">Ingrese un correo electrónico válido.</div>
+                                                    </div>
+                                                </div>   
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Cargo Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="cargo_representante_legal_mod"  id="cargo_representante_legal_mod" placeholder="Cargo Representante Legal">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Dirección Representante Legal
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="direccion_representante_legal_mod"  id="direccion_representante_legal_mod" placeholder="Dirección Representante Legal">
+                                                    </div> 
+                                                </div>   
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Logo
+                                                    </div>
+                                                    <div class="col-md-4"> 
+                                                        <input type="file" class="form-control-file" id="logoFile_mod" name="file_mod">
+                                                        <input type="hidden" name="tipoDoc" value="1"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="datos_tributarios_mod" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Tipo de Régimen
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="tipo_regimen_mod" name="tipo_regimen_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option>
+                                                            @foreach($regimen as $id => $descripcion)
+                                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Fecha de Registro
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" data-plugin-datepicker class="form-control" name="fecha_registro_mod" id="fecha_registro_mod" placeholder="Fecha de Registro">
+                                                    </div> 
+                                                </div>  
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Fecha de Constitución
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                    <input type="text" data-plugin-datepicker class="form-control" name="fecha_constitucion_mod" id="fecha_constitucion_mod" placeholder="Fecha de Constitución">
+                                                    <div id="error-fecha-constitucion-mod" style="color: red; display: none;">La fecha de constitución debe ser menor a la fecha de registro.</div>
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Años de Creación
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="anios_creacion_mod"  id="anios_creacion_mod" placeholder="Años de Creación" disabled>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Agente de Retención
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="agente_retencion_mod" name="agente_retencion_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option>
+                                                            <option value="1">Si</option>
+                                                            <option value="2">No</option>
+                                                        </select>
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Contributente Especial
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="contribuyente_especial_mod" name="contribuyente_especial_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option>
+                                                            <option value="1">Si</option>
+                                                            <option value="2">No</option>
+                                                        </select>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">  
+                                                        <h2 class="card-title">Dirección Principal</h2> 
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        País
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="pais_mod" name="pais_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option>
+                                                            @foreach($paises as $id => $nombre)
+                                                                <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Provincia
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="provincia_mod" name="provincia_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option>
+                                                            @foreach($provincias as $id => $nombre)
+                                                                <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Cantón
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="canton_mod" name="canton_mod" class="form-control populate">
+                                                            <option value="-1" selected>Seleccionar</option>
+                                                            @foreach($cantones as $id => $nombre)
+                                                                <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Parroquia
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <select id="parroquia_mod" name="parroquia_mod" class="form-control populate">
+                                                            <option value="-1">Seleccionar</option> 
+                                                            @foreach($parroquias as $id => $nombre)
+                                                                <option value="{{ $id }}">
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Calle
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="calle_mod"  id="calle_mod" placeholder="Calle">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Manzana
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="manzana_mod"  id="manzana_mod" placeholder="Manzana">
+                                                    </div> 
+                                                </div>  
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Número
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="numero_mod"  id="numero_mod" placeholder="Número">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Intersección
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="interseccion_mod"  id="interseccion_mod" placeholder="Intersección">
+                                                    </div> 
+                                                </div>  
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        Referencia Ubicación
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        <input type="text" class="form-control" name="referencia_mod"  id="referencia_mod" placeholder="Referencia Ubicación">
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        Actividad Económica
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                         
+                                                    </div> 
+                                                </div>  
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div> 
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="btn-save-changes">Guardar Cambios</button>
+                        <button type="button" class="btn btn-primary" id="btn-modificar-camara">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -497,6 +765,121 @@ Maestro de Cámaras
     <script>
 
     $(document).ready(function(){ 
+
+         // Función para validar el formato dd/mm/yyyy
+        function esFechaValida(fecha) {
+            // Expresión regular para validar el formato dd/mm/yyyy
+            var regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+            if (!regex.test(fecha)) {
+                return false; // No cumple con el formato
+            }
+
+            // Validación adicional para asegurar que la fecha sea válida en el calendario
+            var partes = fecha.split('/'); // Divide la fecha por '/'
+            var dia = parseInt(partes[0], 10);
+            var mes = parseInt(partes[1], 10) - 1; // Mes en JavaScript es 0-indexado
+            var anio = parseInt(partes[2], 10);
+
+            var fechaObj = new Date(anio, mes, dia);
+
+            return (
+                fechaObj.getDate() === dia &&
+                fechaObj.getMonth() === mes &&
+                fechaObj.getFullYear() === anio
+            );
+        }
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_ingreso').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_registro').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_constitucion').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_ingreso_mod').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_registro_mod').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
+        // Evento para validar la fecha al salir del campo
+        $('#fecha_constitucion_mod').on('blur', function () {
+            var fecha = $(this).val();
+
+            if (fecha && !esFechaValida(fecha)) {
+                alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
+                $(this).val(''); // Limpia el campo de entrada
+
+                // Retrasa el enfoque al campo para evitar el bucle infinito
+                setTimeout(() => {
+                    $(this).focus();
+                }, 0);
+            }
+        });
+
 
         var table = $('#dataTable').DataTable({
             destroy: true,
@@ -556,26 +939,7 @@ Maestro de Cámaras
                 });
             }
 
-        //jbuestan  
-
-        /* $("#btn-register-camara").click(function() {
-            var formData = new FormData(document.getElementById("ModalCamara"));
-
-            $.ajax({
-                url: "{{ route('admin.registrar_camara') }}",
-                type: "POST",
-                data: formData,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false
-            }).done(function(res){
-                alert(res.success);
-                location.reload();
-            }).fail(function(res){
-                console.log(res.responseText); // Muestra el error completo en consola
-            });
-        }); */
+        //jbuestan   
 
         // Validar campo RUC
         $("#ruc").on("input", function() {
@@ -587,12 +951,30 @@ Maestro de Cámaras
             }
         });
 
+        $("#ruc_mod").on("input", function() {
+            var ruc = $(this).val();
+            if (/^\d{13}$/.test(ruc)) { // Si tiene exactamente 13 dígitos
+                $("#error-ruc-mod").hide(); // Ocultar error
+            } else {
+                $("#error-ruc-mod").show(); // Mostrar error
+            }
+        });
+
         $("#cedula_representante_legal").on("input", function() {
             var cedula = $(this).val();
             if (/^\d{10}$/.test(cedula)) { // Si tiene exactamente 13 dígitos
                 $("#error-cedula").hide(); // Ocultar error
             } else {
                 $("#error-cedula").show(); // Mostrar error
+            }
+        });
+
+        $("#cedula_representante_legal_mod").on("input", function() {
+            var cedula = $(this).val();
+            if (/^\d{10}$/.test(cedula)) { // Si tiene exactamente 13 dígitos
+                $("#error-cedula-mod").hide(); // Ocultar error
+            } else {
+                $("#error-cedula-mod").show(); // Mostrar error
             }
         });
 
@@ -607,13 +989,33 @@ Maestro de Cámaras
             }
         });
 
+        $("#correo_representante_legal_mod").on("input", function() {
+            var correo = $(this).val();
+            var regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
+            if (regexCorreo.test(correo)) { // Si es un correo válido
+                $("#error-correo-mod").hide(); // Ocultar error
+            } else {
+                $("#error-correo-mod").show(); // Mostrar error
+            }
+        });
+
         $('#fecha_constitucion, #fecha_registro').on('change', function() {
             var fechaConstitucion = $('#fecha_constitucion').val();
             var fechaRegistro = $('#fecha_registro').val();
 
+            // Función para convertir fecha en formato dd/mm/yyyy a objeto Date
+            function convertirFecha(fecha) {
+                var partes = fecha.split('/');
+                // partes[0] = día, partes[1] = mes, partes[2] = año
+                return new Date(partes[2], partes[1] - 1, partes[0]); // El mes es base 0
+            }
+
             // Validar que fecha_constitucion sea menor a fecha_registro
             if (fechaConstitucion && fechaRegistro) {
-                if (new Date(fechaConstitucion) >= new Date(fechaRegistro)) {
+                var fechaConstitucionDate = convertirFecha(fechaConstitucion);
+                var fechaRegistroDate = convertirFecha(fechaRegistro);
+
+                if (fechaConstitucionDate >= fechaRegistroDate) {
                     $('#error-fecha-constitucion').show();
                 } else {
                     $('#error-fecha-constitucion').hide();
@@ -623,7 +1025,7 @@ Maestro de Cámaras
             // Calcular años y meses desde fecha_constitucion hasta la fecha actual
             if (fechaConstitucion) {
                 var hoy = new Date();
-                var fechaConstitucionDate = new Date(fechaConstitucion);
+                var fechaConstitucionDate = convertirFecha(fechaConstitucion);
 
                 var years = hoy.getFullYear() - fechaConstitucionDate.getFullYear();
                 var months = hoy.getMonth() - fechaConstitucionDate.getMonth();
@@ -634,6 +1036,46 @@ Maestro de Cámaras
                 }
 
                 $('#anios_creacion').val(years + ' años, ' + months + ' meses');
+            }
+        });
+
+        $('#fecha_constitucion_mod, #fecha_registro_mod').on('change', function() {
+            var fechaConstitucion = $('#fecha_constitucion_mod').val();
+            var fechaRegistro = $('#fecha_registro_mod').val();
+
+            // Función para convertir fecha en formato dd/mm/yyyy a objeto Date
+            function convertirFecha(fecha) {
+                var partes = fecha.split('/');
+                // partes[0] = día, partes[1] = mes, partes[2] = año
+                return new Date(partes[2], partes[1] - 1, partes[0]); // El mes es base 0
+            }
+
+            // Validar que fecha_constitucion sea menor a fecha_registro
+            if (fechaConstitucion && fechaRegistro) {
+                var fechaConstitucionDate = convertirFecha(fechaConstitucion);
+                var fechaRegistroDate = convertirFecha(fechaRegistro);
+
+                if (fechaConstitucionDate >= fechaRegistroDate) {
+                    $('#error-fecha-constitucion-mod').show();
+                } else {
+                    $('#error-fecha-constitucion-mod').hide();
+                }
+            }
+
+            // Calcular años y meses desde fecha_constitucion hasta la fecha actual
+            if (fechaConstitucion) {
+                var hoy = new Date();
+                var fechaConstitucionDate = convertirFecha(fechaConstitucion);
+
+                var years = hoy.getFullYear() - fechaConstitucionDate.getFullYear();
+                var months = hoy.getMonth() - fechaConstitucionDate.getMonth();
+
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+
+                $('#anios_creacion_mod').val(years + ' años, ' + months + ' meses');
             }
         });
 
@@ -740,19 +1182,35 @@ Maestro de Cámaras
                 return;
             }
 
-            //Validacion que Fecha de Constitucion sea menor a Fecha de Registro
+           // Función para convertir una fecha en formato dd/mm/yyyy a objeto Date
+            function convertirFechaAObjetoDate(fecha) {
+                if (!fecha) return new Date('Invalid Date'); // Retorna una fecha inválida si la entrada es nula
+                var partes = fecha.split('/'); // Divide la fecha por '/'
+                return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
+            }
+
+            // Validación de que la Fecha de Constitución sea menor a la Fecha de Registro
             var fechaConstitucion = $('#fecha_constitucion').val();
             var fechaRegistro = $('#fecha_registro').val();
 
-            // Validar que fecha_constitucion sea menor a fecha_registro
             if (fechaConstitucion && fechaRegistro) {
-                if (new Date(fechaConstitucion) >= new Date(fechaRegistro)) {
-                    alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
-                    $('#error-fecha-constitucion').show();
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_constitucion').focus();
+                // Convertir las fechas al formato correcto
+                var fechaConstitucionDate = convertirFechaAObjetoDate(fechaConstitucion);
+                var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
+
+                // Validar si las fechas son válidas
+                if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
+                    if (fechaConstitucionDate >= fechaRegistroDate) {
+                        alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                        $('#error-fecha-constitucion').show();
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_constitucion').focus();
+                        return;
+                    }
+                } else {
+                    alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
                     return;
-                }  
+                }
             }
 
             if ($('#agente_retencion').val() == "-1") {
@@ -866,8 +1324,72 @@ Maestro de Cámaras
         });
 
 
-    
+        /*function convertirFecha(fecha) {
+            const partes = fecha.split('-'); // Divide la fecha en partes [YYYY, MM, DD]
+            return `${partes[1]}/${partes[2]}/${partes[0]}`; // Reordena en formato MM/DD/YYYY
+        }*/
+
+        function convertirFecha(fechaISO) {
+            if (!fechaISO) return ''; // Maneja casos nulos o indefinidos
+            const partes = fechaISO.split('-'); // Divide por guión
+            return `${partes[2]}/${partes[1]}/${partes[0]}`; // Formato DD/MM/YYYY
+        }
         
+      // Establecer el idioma de forma global para todos los datepickers
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $('#fecha_ingreso').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+            todayHighlight: true, // Resalta la fecha actual
+            language: 'es'        // Asegúrate de establecer el idioma correcto
+        });
+
+
+        $('#fecha_registro').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
+
+
+        $('#fecha_constitucion').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
+
+
+        $('#fecha_ingreso_mod').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
+
+        // Destruir el datepicker si ya está inicializado y volver a inicializarlo con formato adecuado
+        $('#fecha_registro_mod').datepicker('destroy').datepicker({
+            format: 'mm/dd/yyyy', // Define el formato de fecha
+            autoclose: true        // Cierra automáticamente al seleccionar
+        });
+
+        $('#fecha_constitucion_mod').datepicker('destroy').datepicker({
+            format: 'mm/dd/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
 
         // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
         $(document).on('click', '.open-modal', function() {
@@ -875,7 +1397,10 @@ Maestro de Cámaras
             var button = $(this); 
             var camaraId = button.data('id'); 
 
-            console.log('Cargo ID:', camaraId); 
+            console.log('Cargo ID:', camaraId);  
+
+            $('#carga').show();
+
 
             $.ajax({
                 url: '/administrador/camara/detalle/' + camaraId,
@@ -883,26 +1408,148 @@ Maestro de Cámaras
                 success: function(response) {
                     console.log('Datos recibidos:', response);
 
-                    var ConsolidadoId = $('#consolidado_id');
-                    var Nombre = $('#nombre_mod'); 
-                    var Area = $('#area_mod'); 
-                    var Correo = $('#correo_mod'); 
-                    var Localidad = $('#localidad_mod'); 
+                    var CamaraId = $('#camara_id');
+                    var FechaIngreso = $('#fecha_ingreso_mod'); 
+                    var Ruc = $('#ruc_mod'); 
+                    var RazonSocial = $('#razon_social_mod'); 
+                    var Cedula = $('#cedula_representante_legal_mod'); 
+                    var Nombres = $('#nombres_representante_legal_mod'); 
+                    var Apellidos = $('#apellidos_representante_legal_mod'); 
+                    var Telefono = $('#telefono_representante_legal_mod'); 
+                    var Correo = $('#correo_representante_legal_mod'); 
+                    var Cargo = $('#cargo_representante_legal_mod'); 
+                    var Direccion = $('#direccion_representante_legal_mod');  
+                    
+                    var TipoRegimen = $('#tipo_regimen_mod'); 
+                    var FechaRegistro = $('#fecha_registro_mod'); 
+                    var FechaConstitucion = $('#fecha_constitucion_mod'); 
+                    var AgenteRetencion = $('#agente_retencion_mod'); 
+                    var ContribuyenteEspecial = $('#contribuyente_especial_mod'); 
+                    var Pais = $('#pais_mod'); 
+                    var Provincia = $('#provincia_mod'); 
+                    var Canton = $('#canton_mod'); 
+                    var Parroquia = $('#parroquia_mod'); 
+                    var Calle = $('#calle_mod'); 
+                    var Manzana = $('#manzana_mod'); 
+                    var Numero = $('#numero_mod'); 
+                    var Interseccion = $('#interseccion_mod'); 
+                    var Referencia = $('#referencia_mod'); 
 
                     //console.log('Elemento Cargo encontrado:', CargoInput.length); // Verificar que el elemento se encuentra
                     //console.log('Elemento cargo_id encontrado:', camaraIdInput.length); // Verificar que el elemento se encuentra
                      
-                    ConsolidadoId.val(response.id);
-                    Nombre.val(response.nombres); 
-                    Area.val(response.area); 
-                    Correo.val(response.correo); 
-                    Localidad.val(response.id_localidad); 
+                    CamaraId.val(response.id);
+                    //FechaIngreso.val(response.fecha_ingreso); 
+                    FechaIngreso.val(convertirFecha(response.fecha_ingreso));
+                    Ruc.val(response.ruc); 
+                    RazonSocial.val(response.razon_social); 
+                    Cedula.val(response.cedula_representante_legal); 
+                    Nombres.val(response.nombres_representante_legal); 
+                    Apellidos.val(response.apellidos_representante_legal); 
+                    Telefono.val(response.telefono_representante_legal); 
+                    Correo.val(response.correo_representante_legal); 
+                    Cargo.val(response.cargo_representante_legal); 
+                    Direccion.val(response.direccion_representante_legal); 
+                    
+                    TipoRegimen.val(response.dato_tributario.tipo_regimen); 
+                    //FechaRegistro.val(response.dato_tributario.fecha_registro_sri); 
+                    //FechaRegistro.val(convertirFecha(response.dato_tributario.fecha_registro_sri));
+
+                    //alert (response.dato_tributario.fecha_registro_sri);
+                    // Manejo de la fecha de registro
+                    const fechaISO = response.dato_tributario.fecha_registro_sri; // Por ejemplo, '2008-01-22'
+                    const fechaConvertida = convertirFecha(fechaISO); 
+
+                    // Convertir la fecha al formato necesario para `Date`
+                    const fechaObj = convertirFechaAObjetoDate(fechaConvertida); // Convertir de DD/MM/YYYY a Date
+
+                    if (!isNaN(fechaObj.getTime())) {
+                        $('#fecha_registro_mod').datepicker('setDate', fechaObj); // Asigna la fecha
+                    } else {
+                        console.error("Fecha no válida:", fechaConvertida);
+                    }
+
+                    // Manejo de la fecha de constitución
+                    const fechaISO2 = response.dato_tributario.fecha_constitucion; // Por ejemplo, '2008-01-22'
+                    const fechaConvertida2 = convertirFecha(fechaISO2);
+
+                    const fechaObj2 = convertirFechaAObjetoDate(fechaConvertida2);
+
+                    if (!isNaN(fechaObj2.getTime())) {
+                        $('#fecha_constitucion_mod').datepicker('setDate', fechaObj2); // Asigna la fecha
+                    } else {
+                        console.error("Fecha no válida:", fechaConvertida2);
+                    }
+
+                    // Calcular años y meses
+                    var hoy = new Date();
+                    var FechaConstitucion = $('#fecha_constitucion_mod').val();
+                    var FechaConstitucionDate = convertirFechaAObjetoDate(FechaConstitucion);
+
+                    if (!isNaN(FechaConstitucionDate.getTime())) {
+                        var years = hoy.getFullYear() - FechaConstitucionDate.getFullYear();
+                        var months = hoy.getMonth() - FechaConstitucionDate.getMonth();
+
+                        if (months < 0) {
+                            years--;
+                            months += 12;
+                        }
+
+                        console.log(`${years} años, ${months} meses`);
+                    } else {
+                        console.error("Fecha de constitución no válida.");
+                    }
+
+                    // Función auxiliar para convertir DD/MM/YYYY a Date
+                    function convertirFechaAObjetoDate(fecha) {
+                        if (!fecha) return new Date('Invalid Date'); // Retorna fecha inválida si la entrada es nula
+                        const partes = fecha.split('/'); // Divide por barra
+                        return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
+                    }
+                    
+                    $('#anios_creacion_mod').val(years + ' años, ' + months + ' meses');
+                    
+                    AgenteRetencion.val(response.dato_tributario.agente_retencion); 
+                    ContribuyenteEspecial.val(response.dato_tributario.contribuyente_especial); 
+                    Pais.val(response.dato_tributario.id_pais); 
+                    Provincia.val(response.dato_tributario.id_provincia); 
+                    Canton.val(response.dato_tributario.id_canton); 
+                    Parroquia.val(response.dato_tributario.id_parroquia); 
+
+                    // Asignar país y disparar cambio para cargar provincias
+                    $('#pais_mod').val(response.dato_tributario.id_pais).trigger('change');
+
+                    // Cargar provincias y asignar provincia
+                    cargarProvincias(response.dato_tributario.id_pais).then(() => {
+                        $('#provincia_mod').val(response.dato_tributario.id_provincia).trigger('change');
+
+                        // Cargar cantones y asignar cantón
+                        cargarCantones(response.dato_tributario.id_pais, response.dato_tributario.id_provincia).then(() => {
+                            $('#canton_mod').val(response.dato_tributario.id_canton).trigger('change');
+
+                            // Cargar parroquias y asignar parroquia
+                            cargarParroquias(
+                                response.dato_tributario.id_pais, 
+                                response.dato_tributario.id_provincia, 
+                                response.dato_tributario.id_canton
+                            ).then(() => {
+                                $('#parroquia_mod').val(response.dato_tributario.id_parroquia);
+                            });
+                        });
+                    }); 
+                    
+                    Calle.val(response.dato_tributario.calle); 
+                    Manzana.val(response.dato_tributario.manzana); 
+                    Numero.val(response.dato_tributario.numero); 
+                    Interseccion.val(response.dato_tributario.interseccion); 
+                    Referencia.val(response.dato_tributario.referencia); 
+                    
 
                     //console.log('Valor cargo_id:', camaraIdInput.val()); // Verificar que el valor se asigna
                     //console.log('Valor cargoname:', CargoInput.val()); // Verificar que el valor se asigna 
 
-
-                    $('#ModalModificarCargo').modal('show');
+                    $('#carga').hide();
+                    $('#ModalModificarCamara').modal('show');
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -912,15 +1559,289 @@ Maestro de Cámaras
 
         $('#btn-close').on('click', function () {
             // Aquí puedes añadir la lógica para enviar el formulario modificado
-            $('#ModalModificarCargo').modal('hide'); // Cerrar el modal después de guardar
+            $('#ModalModificarCamara').modal('hide'); // Cerrar el modal después de guardar
         });
 
+        // Función para cargar provincias
+        function cargarProvincias(paisId) {
+            return $.ajax({
+                url: '/get-provincias',
+                method: 'GET',
+                data: { id_pais: paisId },
+                success: function (response) {
+                    let provincias = response.provincias;
+                    let $provinciaSelect = $('#provincia_mod');
+                    $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
 
-        $('#btn-save-changes').on('click', function () {
+                    provincias.forEach(function (provincia) {
+                        $provinciaSelect.append(`<option value="${provincia.id}">${provincia.nombre}</option>`);
+                    });
+                },
+                error: function () {
+                    alert('Hubo un error al cargar las provincias.');
+                }
+            });
+        }
+
+        // Función para cargar cantones
+        function cargarCantones(paisId, provinciaId) {
+            return $.ajax({
+                url: '/get-cantones',
+                method: 'GET',
+                data: { id_pais: paisId, id_provincia: provinciaId },
+                success: function (response) {
+                    let cantones = response.cantones;
+                    let $cantonSelect = $('#canton_mod');
+                    $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+
+                    cantones.forEach(function (canton) {
+                        $cantonSelect.append(`<option value="${canton.id}">${canton.nombre}</option>`);
+                    });
+                },
+                error: function () {
+                    alert('Hubo un error al cargar los cantones.');
+                }
+            });
+        }
+
+        // Función para cargar parroquias
+        function cargarParroquias(paisId, provinciaId, cantonId) {
+            return $.ajax({
+                url: '/get-parroquias',
+                method: 'GET',
+                data: { id_pais: paisId, id_provincia: provinciaId, id_canton: cantonId },
+                success: function (response) {
+                    let parroquias = response.parroquias;
+                    let $parroquiaSelect = $('#parroquia_mod');
+                    $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+
+                    parroquias.forEach(function (parroquia) {
+                        $parroquiaSelect.append(`<option value="${parroquia.id}">${parroquia.nombre}</option>`);
+                    });
+                },
+                error: function () {
+                    alert('Hubo un error al cargar las parroquias.');
+                }
+            });
+        }
+
+
+        $('#btn-modificar-camara').on('click', function () {
+
+            if ($('#fecha_ingreso_mod').val() == "") {
+                alert('Debe ingresar la Fecha de Ingreso de la Cámara');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#fecha_ingreso_mod').focus();
+                return;
+            }
+
+            if (!/^\d{13}$/.test($('#ruc_mod').val())) {
+                /*$("#error-ruc").show();
+                isValid = false;*/
+                $("#error-ruc-mod").show();
+                alert('El RUC debe tener 13 dígitos');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#ruc_mod').focus();
+                return;
+            }
+
+            if ($('#razon_social_mod').val() == "") {
+                alert('Debe ingresar la Razón Social');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#razon_social_mod').focus();
+                return;
+            }
+
+            if (!/^\d{10}$/.test($('#cedula_representante_legal_mod').val())) {
+                /*$("#error-ruc").show();
+                isValid = false;*/
+                $("#error-cedula-mod").show();
+                alert('La Cédula del Representante Legal debe tener 10 dígitos');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#cedula_representante_legal_mod').focus();
+                return;
+            }
+
+            if ($('#nombres_representante_legal_mod').val() == "") {
+                alert('Debe ingresar los Nombres del Representante Legal');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#nombres_representante_legal_mod').focus();
+                return;
+            }
+
+            if ($('#apellidos_representante_legal_mod').val() == "") {
+                alert('Debe ingresar los Apellidos del Representante Legal');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#apellidos_representante_legal_mod').focus();
+                return;
+            }
+
+            if ($('#telefono_representante_legal_mod').val() == "") {
+                alert('Debe ingresar el Teléfono del Representante Legal');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#telefono_representante_legal_mod').focus();
+                return;
+            }
+
+
+            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo_representante_legal_mod').val())) {
+                /*$("#error-correo").show();
+                isValid = false;*/
+                $("#error-correo-mod").show();
+                alert('Debe registrar un correo con formato válido');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#correo_representante_legal_mod').focus();
+                return;
+            }
+
+            if ($('#cargo_representante_legal_mod').val() == "") {
+                alert('Debe ingresar el Cargo del Representante Legal');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#cargo_representante_legal_mod').focus();
+                return;
+            }
+
+            if ($('#direccion_representante_legal_mod').val() == "") {
+                alert('Debe ingresar la Dirección del Representante Legal');
+                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
+                $('#direccion_representante_legal_mod').focus();
+                return;
+            }  
+
+            if ($('#tipo_regimen_mod').val() == "-1") {
+                alert('Debe seleccionar un Tipo de Régimen');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#tipo_regimen_mod').focus();
+                return;
+            }
+            
+            if ($('#fecha_registro_mod').val() == "") {
+                alert('Debe ingresar la Fecha de Registro de la Cámara');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#fecha_registro_mod').focus();
+                return;
+            }
+
+            if ($('#fecha_constitucion_mod').val() == "") {
+                alert('Debe ingresar la Fecha de Constitución de la Cámara');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#fecha_constitucion_mod').focus();
+                return;
+            }
+
+            // Función para convertir una fecha en formato dd/mm/yyyy a objeto Date
+            function convertirFechaAObjetoDate(fecha) {
+                if (!fecha) return new Date('Invalid Date'); // Retorna una fecha inválida si la entrada es nula
+                var partes = fecha.split('/'); // Divide la fecha por '/'
+                return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
+            }
+
+            // Validación de que la Fecha de Constitución sea menor a la Fecha de Registro
+            var fechaConstitucion = $('#fecha_constitucion_mod').val();
+            var fechaRegistro = $('#fecha_registro_mod').val();
+
+            if (fechaConstitucion && fechaRegistro) {
+                // Convertir las fechas al formato correcto
+                var fechaConstitucionDate = convertirFechaAObjetoDate(fechaConstitucion);
+                var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
+
+                // Validar si las fechas son válidas
+                if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
+                    if (fechaConstitucionDate >= fechaRegistroDate) {
+                        alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                        $('#error-fecha-constitucion-mod').show();
+                        $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                        $('#fecha_constitucion_mod').focus();
+                        return;
+                    }
+                } else {
+                    alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
+                    return;
+                }
+            }
+
+            if ($('#agente_retencion_mod').val() == "-1") {
+                alert('Debe indicar si la Cámara es o no un Agente de Retención');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#agente_retencion_mod').focus();
+                return;
+            }
+
+            if ($('#contribuyente_especial_mod').val() == "-1") {
+                alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#contribuyente_especial_mod').focus();
+                return;
+            }
+
+            if ($('#pais_mod').val() == "-1") {
+                alert('Debe seleccionar el País');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#pais_mod').focus();
+                return;
+            }
+
+            if ($('#provincia_mod').val() == "-1") {
+                alert('Debe seleccionar la Provincia');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#provincia_mod').focus();
+                return;
+            }
+
+            if ($('#canton_mod').val() == "-1") {
+                alert('Debe seleccionar el Cantón');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#canton_mod').focus();
+                return;
+            }
+
+            if ($('#parroquia_mod').val() == "-1") {
+                alert('Debe seleccionar la Parroquia');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#parroquia_mod').focus();
+                return;
+            }
+
+            if ($('#calle_mod').val() == "") {
+                alert('Debe ingresar la Calle en la Dirección Tributaria');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#calle_mod').focus();
+                return;
+            }
+
+            if ($('#manzana_mod').val() == "") {
+                alert('Debe ingresar la Manzana en la Dirección Tributaria');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#manzana_mod').focus();
+                return;
+            }
+
+            if ($('#numero_mod').val() == "") {
+                alert('Debe ingresar el Número en la Dirección Tributaria');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#numero_mod').focus();
+                return;
+            }
+
+            if ($('#interseccion_mod').val() == "") {
+                alert('Debe ingresar la Intersección en la Dirección Tributaria');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#interseccion_mod').focus();
+                return;
+            }
+
+            if ($('#referencia_mod').val() == "") {
+                alert('Debe ingresar la Referencia en la Dirección Tributaria');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                $('#referencia_mod').focus();
+                return;
+            }
+            $('#carga').show();
+
             // Aquí puedes añadir la lógica para enviar el formulario modificado
-            var formData = new FormData(document.getElementById("ModalModificarCargo"));
+            var formData = new FormData(document.getElementById("ModalModificarCamara"));
             $.ajax({
-                url: "{{ route('dashboard') }}",
+                url: "{{ route('admin.modificar_camara') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -931,11 +1852,12 @@ Maestro de Cámaras
                 msg = JSON.parse(res).response.msg
                 alert(msg);
                 location.reload();
+                $('#carga').hide();
             }).fail(function(res){
                 console.log(res)
             });
-
-            $('#ModalModificarCargo').modal('hide'); // Cerrar el modal después de guardar
+            $('#carga').hide();
+            $('#ModalModificarCamara').modal('hide'); // Cerrar el modal después de guardar
         });
 
         $(document).on('click', '.delete-camara', function() {
@@ -1064,6 +1986,105 @@ Maestro de Cámaras
                 });
             } else {
                 $('#parroquia').empty().append('<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+            }
+        });
+
+        $('#pais_mod').change(function () {
+            let paisId = $(this).val();
+
+            if (paisId != -1) {
+                $.ajax({
+                    url: '/get-provincias', // Ruta para obtener las provincias
+                    method: 'GET',
+                    data: { id_pais: paisId },
+                    success: function (response) {
+                        let provincias = response.provincias;
+                        let $provinciaSelect = $('#provincia_mod');
+                        
+                        $provinciaSelect.empty(); // Limpiamos el select de provincias
+                        $provinciaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+
+                        // Agregamos las provincias al select
+                        provincias.forEach(function (provincia) {
+                            $provinciaSelect.append(`<option value="${provincia.id}">${provincia.nombre}</option>`);
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al cargar las provincias.');
+                    }
+                });
+            }
+        });
+
+        $('#provincia_mod').change(function () {
+            let paisId = $('#pais_mod').val(); // ID del país seleccionado
+            let provinciaId = $(this).val(); // ID de la provincia seleccionada
+
+            if (paisId != -1 && provinciaId != -1) {
+                $.ajax({
+                    url: '/get-cantones', // Ruta para obtener los cantones
+                    method: 'GET',
+                    data: {
+                        id_pais: paisId,      // Enviamos el ID del país
+                        id_provincia: provinciaId // Enviamos el ID de la provincia
+                    },
+                    success: function (response) {
+                        let cantones = response.cantones;
+                        let $cantonSelect = $('#canton_mod'); // Select de cantones
+                        let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+                        
+                        $cantonSelect.empty(); // Limpiamos el select de cantones
+                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>'); // Limpiamos parroquias
+
+                        $cantonSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+
+                        // Agregamos los cantones al select
+                        cantones.forEach(function (canton) {
+                            $cantonSelect.append(`<option value="${canton.id}">${canton.nombre}</option>`);
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al cargar los cantones.');
+                    }
+                });
+            } else {
+                $('#canton_mod').empty().append('<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                $('#parroquia_mod').empty().append('<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+            }
+        });
+
+        $('#canton_mod').change(function () {
+            let paisId = $('#pais_mod').val(); // ID del país seleccionado
+            let provinciaId = $('#provincia_mod').val(); // ID de la provincia seleccionada
+            let cantonId = $(this).val(); // ID del cantón seleccionado
+
+            if (paisId != -1 && provinciaId != -1 && cantonId != -1) {
+                $.ajax({
+                    url: '/get-parroquias', // Ruta para obtener las parroquias
+                    method: 'GET',
+                    data: {
+                        id_pais: paisId,      // Enviamos el ID del país
+                        id_provincia: provinciaId, // Enviamos el ID de la provincia
+                        id_canton: cantonId  // Enviamos el ID del cantón
+                    },
+                    success: function (response) {
+                        let parroquias = response.parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                        let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+                        
+                        $parroquiaSelect.empty(); // Limpiamos el select de parroquias
+                        $parroquiaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+
+                        // Agregamos las parroquias al select
+                        parroquias.forEach(function (parroquia) {
+                            $parroquiaSelect.append(`<option value="${parroquia.id}">${parroquia.nombre}</option>`);
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al cargar las parroquias.');
+                    }
+                });
+            } else {
+                $('#parroquia_mod').empty().append('<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
             }
         });
 

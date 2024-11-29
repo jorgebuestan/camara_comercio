@@ -139,7 +139,7 @@ class CamaraController extends Controller
 
         try {
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
-            $fechaIngreso = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('fecha_ingreso'))->format('Y-m-d');
+            $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso'))->format('Y-m-d');
 
             $rutaLogo = 'default/default_logo.png'; // Ruta por defecto al logo
 
@@ -158,38 +158,38 @@ class CamaraController extends Controller
             $camara = Camara::create([
                 'logo' => $rutaLogo,
                 'fecha_ingreso' => $fechaIngreso, // Usar fecha convertida
-                'ruc' => $request->input('ruc'),
-                'razon_social' => $request->input('razon_social'),
-                'cedula_representante_legal' => $request->input('cedula_representante_legal'),
-                'nombres_representante_legal' => $request->input('nombres_representante_legal'),
-                'apellidos_representante_legal' => $request->input('apellidos_representante_legal'),
-                'telefono_representante_legal' => $request->input('telefono_representante_legal'),
-                'correo_representante_legal' => $request->input('correo_representante_legal'),
-                'cargo_representante_legal' => $request->input('cargo_representante_legal'),
-                'direccion_representante_legal' => $request->input('direccion_representante_legal'),
+                'ruc' => strtoupper($request->input('ruc')),
+                'razon_social' => strtoupper($request->input('razon_social')),
+                'cedula_representante_legal' => strtoupper($request->input('cedula_representante_legal')),
+                'nombres_representante_legal' => strtoupper($request->input('nombres_representante_legal')),
+                'apellidos_representante_legal' => strtoupper($request->input('apellidos_representante_legal')),
+                'telefono_representante_legal' => strtoupper($request->input('telefono_representante_legal')),
+                'correo_representante_legal' => strtoupper($request->input('correo_representante_legal')),
+                'cargo_representante_legal' => strtoupper($request->input('cargo_representante_legal')),
+                'direccion_representante_legal' => strtoupper($request->input('direccion_representante_legal')),
                 'estado' => 1
             ]);
 
-            $fechaRegistro = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('fecha_registro'))->format('Y-m-d');
-            $fechaConstitucion = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('fecha_constitucion'))->format('Y-m-d');
+            $fechaRegistro = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_registro'))->format('Y-m-d');
+            $fechaConstitucion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_constitucion'))->format('Y-m-d');
 
 
             DatoTributario::create([
                 'id_camara' => $camara->id,
-                'tipo_regimen' => $request->input('tipo_regimen'), // Usar fecha convertida
+                'tipo_regimen' => strtoupper($request->input('tipo_regimen')), 
                 'fecha_registro_sri' => $fechaRegistro,
                 'fecha_constitucion' => $fechaConstitucion,
-                'agente_retencion' => $request->input('agente_retencion'),
-                'contribuyente_especial' => $request->input('contribuyente_especial'),
+                'agente_retencion' => strtoupper($request->input('agente_retencion')),
+                'contribuyente_especial' => strtoupper($request->input('contribuyente_especial')),
                 'id_pais' => $request->input('pais'),
                 'id_provincia' => $request->input('provincia'),
                 'id_canton' => $request->input('canton'),
                 'id_parroquia' => $request->input('parroquia'),
-                'calle' => $request->input('calle'),
-                'manzana' => $request->input('manzana'),
-                'numero' => $request->input('numero'),
-                'interseccion' => $request->input('interseccion'),
-                'referencia' => $request->input('referencia')
+                'calle' => strtoupper($request->input('calle')),
+                'manzana' => strtoupper($request->input('manzana')),
+                'numero' => strtoupper($request->input('numero')),
+                'interseccion' => strtoupper($request->input('interseccion')),
+                'referencia' => strtoupper($request->input('referencia'))
             ]);
 
             return response()->json(['success' => 'Cámara registrada correctamente'], 200);
@@ -242,5 +242,88 @@ class CamaraController extends Controller
     
         // Devolver la respuesta JSON
         return response()->json($camaraArray);
+    }
+
+    public function modificar_camara(Request $request)
+    {  
+        try {
+            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+            $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso_mod'))->format('Y-m-d');
+        
+            $rutaLogo = 'default/default_logo.png'; // Ruta por defecto al logo
+        
+            // Manejo del archivo de logo si existe
+            if ($request->hasFile('file_mod')) {
+                $ruc = $request->input('ruc_mod');
+                $archivoLogo = $request->file('file_mod');
+                $nombreArchivo = "{$ruc}." . $archivoLogo->getClientOriginalExtension();
+        
+                // Crear carpeta con el nombre del RUC y guardar el archivo
+                $rutaLogo = "logos/{$ruc}/{$nombreArchivo}";
+                $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
+            }
+        
+            // Buscar el registro existente por ID
+            $camara = Camara::find($request->input('camara_id'));
+        
+            if (!$camara) {
+                return response()->json(['error' => 'La cámara no existe.'], 404);
+            }
+        
+            // Actualizar los campos del registro existente
+            $camara->update([
+                'logo' => $rutaLogo,
+                'fecha_ingreso' => $fechaIngreso,
+                'ruc' => $request->input('ruc_mod'),
+                'razon_social' => strtoupper($request->input('razon_social_mod')),
+                'cedula_representante_legal' => strtoupper($request->input('cedula_representante_legal_mod')),
+                'nombres_representante_legal' => strtoupper($request->input('nombres_representante_legal_mod')),
+                'apellidos_representante_legal' => strtoupper($request->input('apellidos_representante_legal_mod')),
+                'telefono_representante_legal' => strtoupper($request->input('telefono_representante_legal_mod')),
+                'correo_representante_legal' => strtoupper($request->input('correo_representante_legal_mod')),
+                'cargo_representante_legal' => strtoupper($request->input('cargo_representante_legal_mod')),
+                'direccion_representante_legal' => strtoupper($request->input('direccion_representante_legal_mod')),
+                'estado' => 1
+            ]); 
+        
+            // Convertir fechas al formato MySQL (YYYY-MM-DD)
+            $fechaRegistro = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_registro_mod'))->format('Y-m-d');
+            $fechaConstitucion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_constitucion_mod'))->format('Y-m-d');
+        
+            // Buscar DatoTributario relacionado
+            $datoTributario = DatoTributario::where('id_camara', $camara->id)->first();
+        
+            if (!$datoTributario) {
+                return response()->json(['error' => 'Los datos tributarios no existen.'], 404);
+            }
+        
+            // Actualizar DatoTributario
+            $datoTributario->update([
+                'tipo_regimen' => strtoupper($request->input('tipo_regimen_mod')),
+                'fecha_registro_sri' => $fechaRegistro,
+                'fecha_constitucion' => $fechaConstitucion,
+                'agente_retencion' => strtoupper($request->input('agente_retencion_mod')),
+                'contribuyente_especial' => strtoupper($request->input('contribuyente_especial_mod')),
+                'id_pais' => $request->input('pais_mod'),
+                'id_provincia' => $request->input('provincia_mod'),
+                'id_canton' => $request->input('canton_mod'),
+                'id_parroquia' => $request->input('parroquia_mod'),
+                'calle' => strtoupper($request->input('calle_mod')),
+                'manzana' => strtoupper($request->input('manzana_mod')),
+                'numero' => strtoupper($request->input('numero_mod')),
+                'interseccion' => strtoupper($request->input('interseccion_mod')),
+                'referencia' => strtoupper($request->input('referencia_mod'))
+            ]);
+        
+            //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
+            return response()->json(['response' => [
+                'msg' => "Registro modificado",
+                ]
+            ], 201);
+        } catch (\Illuminate\Database\QueryException $e) { 
+            return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
+        }
     }
 }
