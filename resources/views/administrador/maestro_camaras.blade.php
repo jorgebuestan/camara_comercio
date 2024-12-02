@@ -14,6 +14,39 @@ Maestro de Cámaras
       border-radius: 10px; /* Agrega bordes circulares en las esquinas */
       box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total del elemento */
     }
+
+    /* Contenedor de elementos seleccionados */
+   /* Contenedor de elementos seleccionados */
+   .selected-items {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .selected-items .badge {
+        font-size: 12px;
+        padding: 5px 10px;
+        margin: 5px 5px 0 0;
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 3px;
+    }
+
+    .selected-items .badge .remove-item {
+        margin-left: 5px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .selected-items .badge .remove-item:hover {
+        color: #ff0000;
+    }
 </style> 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -396,8 +429,30 @@ Maestro de Cámaras
                                                     <div class="col-md-2">  
                                                         Actividad Económica
                                                     </div> 
+                                                    <div class="col-md-4">   
+                                                        <select name="actividad_economica" id="actividad_economica" multiple data-plugin-selectTwo class="form-control populate"> 
+                                                        <option value="-1">Seleccionar</option>
+                                                            @foreach($actividadesEconomicas as $id => $descripcion)
+                                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                                            @endforeach
+                                                        </select> 
+                                                    </div> 
+                                                </div>  
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        &nbsp;
+                                                    </div> 
                                                     <div class="col-md-4">  
-                                                         
+                                                        &nbsp;
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        &nbsp;
+                                                    </div> 
+                                                    <div class="col-md-4">   
+                                                        <div id="selectedItemsContainer" class="selected-items">
+                                                            <strong>Seleccionados:</strong>
+                                                            <div id="selectedList"></div>
+                                                        </div>
                                                     </div> 
                                                 </div>  
                                                 <div class="row">
@@ -724,9 +779,31 @@ Maestro de Cámaras
                                                         Actividad Económica
                                                     </div> 
                                                     <div class="col-md-4">  
-                                                         
+                                                        <select id="actividad_economica_mod" name="actividad_economica_mod" multiple data-plugin-selectTwo class="form-control populate"> 
+                                                            <option value="-1">Seleccionar</option>
+                                                            @foreach($actividadesEconomicas as $id => $descripcion)
+                                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                                            @endforeach
+                                                        </select> 
                                                     </div> 
-                                                </div>  
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">  
+                                                        &nbsp;
+                                                    </div> 
+                                                    <div class="col-md-4">  
+                                                        &nbsp;
+                                                    </div> 
+                                                    <div class="col-md-2">  
+                                                        &nbsp;
+                                                    </div> 
+                                                    <div class="col-md-4">   
+                                                        <div id="selectedItemsContainer_mod" class="selected-items">
+                                                            <strong>Seleccionados:</strong>
+                                                            <div id="selectedList_mod"></div>
+                                                        </div>
+                                                    </div> 
+                                                </div>    
                                                 <div class="row">
                                                     &nbsp;
                                                 </div> 
@@ -766,6 +843,145 @@ Maestro de Cámaras
 
     $(document).ready(function(){ 
 
+            // Inicializar Select2 con búsqueda habilitada
+           // Inicializar Select2
+    // Inicializar Select2
+    $('#actividad_economica').select2({
+        placeholder: "Selecciona una o más opciones",
+        width: '100%',
+        allowClear: true
+    });
+
+    let selectedItems = [];
+
+    // Manejar selección de elementos
+    $('#actividad_economica').on('select2:select', function (e) {
+        const selectedId = e.params.data.id; // ID del elemento seleccionado
+        const selectedText = e.params.data.text; // Texto del elemento seleccionado
+
+        // Evitar duplicados
+        if (!selectedItems.includes(selectedId)) {
+            selectedItems.push(selectedId);
+
+            // Crear el badge y agregarlo al contenedor
+            $('#selectedList').append(`
+                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                </span>
+            `);
+
+            // Deseleccionar automáticamente en el dropdown
+            const optionElement = $(this).find(`option[value="${selectedId}"]`);
+            optionElement.prop('selected', false);
+            $(this).trigger('change'); // Actualizar el estado de Select2
+        }
+    });
+
+    // Manejar eliminación de elementos seleccionados
+    $('#selectedList').on('click', '.remove-item', function () {
+        const badge = $(this).closest('.selected-item'); // Badge del elemento seleccionado
+        const id = badge.data('id'); // Obtener el ID del elemento
+
+        // Remover del array de seleccionados
+        selectedItems = selectedItems.filter(item => item !== id);
+
+        // Eliminar visualmente el badge
+        badge.remove();
+
+        // Rehabilitar y reiniciar el estado de la opción en el dropdown
+        const optionElement = $(`#actividad_economica option[value="${id}"]`);
+        optionElement.prop('disabled', false); // Rehabilitar la opción
+        optionElement.prop('selected', false); // Deseleccionar en el dropdown
+        $('#actividad_economica').trigger('change'); // Actualizar Select2
+    });
+
+    // Sincronizar al quitar desde el dropdown
+    $('#actividad_economica').on('select2:unselect', function (e) {
+        const unselectedId = e.params.data.id;
+
+        // Remover visualmente del contenedor
+        $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+
+        // Remover del array de seleccionados
+        selectedItems = selectedItems.filter(item => item !== unselectedId);
+    });
+
+    //Para el Mod
+    $('#actividad_economica_mod').select2({
+        placeholder: "Selecciona una o más opciones",
+        width: '100%',
+        allowClear: true
+    });
+
+    let selectedItemsMod = [];
+
+    // Manejar selección de elementos
+    $('#actividad_economica_mod').on('select2:select', function (e) {
+        const selectedId = e.params.data.id; // ID del elemento seleccionado
+        const selectedText = e.params.data.text; // Texto del elemento seleccionado
+
+        // Evitar duplicados
+        if (!selectedItemsMod.includes(selectedId)) {
+            selectedItemsMod.push(selectedId);
+
+            // Crear el badge y agregarlo al contenedor
+            $('#selectedList_mod').append(`
+                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                </span>
+            `);
+
+            // Deseleccionar automáticamente en el dropdown
+            const optionElement = $(this).find(`option[value="${selectedId}"]`);
+            optionElement.prop('selected', false);
+            $(this).trigger('change'); // Actualizar el estado de Select2
+        }
+    });
+
+    // Manejar eliminación de elementos seleccionados
+    $('#selectedList_mod').on('click', '.remove-item', function () {
+        const badge = $(this).closest('.selected-item'); // Badge del elemento seleccionado
+        const id = badge.data('id'); // Obtener el ID del elemento
+
+        // Remover del array de seleccionados
+        selectedItemsMod = selectedItemsMod.filter(item => item !== id);
+
+        // Eliminar visualmente el badge
+        badge.remove();
+
+        // Rehabilitar y reiniciar el estado de la opción en el dropdown
+        const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
+        optionElement.prop('disabled', false); // Rehabilitar la opción
+        optionElement.prop('selected', false); // Deseleccionar en el dropdown
+        $('#actividad_economica_mod').trigger('change'); // Actualizar Select2
+    });
+
+    // Sincronizar al quitar desde el dropdown
+    $('#actividad_economica_mod').on('select2:unselect', function (e) {
+        const unselectedId = e.params.data.id;
+
+        // Remover visualmente del contenedor
+        $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
+
+        // Remover del array de seleccionados
+        selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
+    });
+
+ 
+
+    $('#ModalCamara').on('hidden.bs.modal', function () {
+        // Limpiar el contenedor de badges
+        $('#selectedList').empty();
+
+        // Reiniciar el estado de Select2
+        $('#actividad_economica').val(null).trigger('change');
+
+        // Vaciar el array de seleccionados
+        selectedItems = [];
+    });
+ 
+
+        //Manejo de Fechas
          // Función para validar el formato dd/mm/yyyy
         function esFechaValida(fecha) {
             // Expresión regular para validar el formato dd/mm/yyyy
@@ -880,6 +1096,119 @@ Maestro de Cámaras
             }
         });
 
+        //Manejo de Upercase 
+        $('#razon_social').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#nombres_representante_legal').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#apellidos_representante_legal').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#telefono_representante_legal').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#cargo_representante_legal').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#direccion_representante_legal').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#calle').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#manzana').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#numero').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#interseccion').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#referencia').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        }); 
+
+        $('#razon_social_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#nombres_representante_legal_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#apellidos_representante_legal_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#telefono_representante_legal_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#cargo_representante_legal_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#direccion_representante_legal_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#calle_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#manzana_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#numero_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#interseccion_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#referencia_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        }); 
+
+
+
 
         var table = $('#dataTable').DataTable({
             destroy: true,
@@ -980,6 +1309,7 @@ Maestro de Cámaras
 
          // Validar campo Correo
         $("#correo_representante_legal").on("input", function() {
+            $(this).val($(this).val().toUpperCase());
             var correo = $(this).val();
             var regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
             if (regexCorreo.test(correo)) { // Si es un correo válido
@@ -990,6 +1320,7 @@ Maestro de Cámaras
         });
 
         $("#correo_representante_legal_mod").on("input", function() {
+            $(this).val($(this).val().toUpperCase());
             var correo = $(this).val();
             var regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
             if (regexCorreo.test(correo)) { // Si es un correo válido

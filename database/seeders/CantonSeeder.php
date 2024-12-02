@@ -556,7 +556,7 @@ class CantonSeeder extends Seeder
         DB::table('cantones')->insert([
             'id_pais' => 57,
             'id_provincia' =>10,
-            'nombre' => 'DO BAQUERIZO MORENO (JU',
+            'nombre' => 'ALFREDO BAQUERIZO MORENO (JUJAN)',
             'estado' => '1',
         ]);
 
@@ -689,7 +689,7 @@ class CantonSeeder extends Seeder
         DB::table('cantones')->insert([
             'id_pais' => 57,
             'id_provincia' =>10,
-            'nombre' => 'ORONEL MARCELINO MARIDUE',
+            'nombre' => 'CORONEL MARCELINO MARIDUEÑA',
             'estado' => '1',
         ]);
 
@@ -1235,7 +1235,7 @@ class CantonSeeder extends Seeder
         DB::table('cantones')->insert([
             'id_pais' => 57,
             'id_provincia' =>16,
-            'nombre' => 'ARLOS JULIO AROSEMENA TOL',
+            'nombre' => 'CARLOS JULIO AROSEMENA TOLA',
             'estado' => '1',
         ]);
 

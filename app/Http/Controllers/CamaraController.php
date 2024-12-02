@@ -11,6 +11,7 @@ use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
+use App\Models\ActividadEconomica;
 
 class CamaraController extends Controller
 {
@@ -22,7 +23,8 @@ class CamaraController extends Controller
         $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
-        
+        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');  
+
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
             $provincias->put($provinciaDefault->id, $provinciaDefault->nombre); // Añadimos al listado
@@ -38,7 +40,7 @@ class CamaraController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
         
-        return view('administrador.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias') );
+        return view('administrador.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas') );
     }
 
     public function obtener_listado_camaras(Request $request)
