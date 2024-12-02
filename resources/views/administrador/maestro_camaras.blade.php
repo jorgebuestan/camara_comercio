@@ -430,12 +430,12 @@ Maestro de Cámaras
                                                         Actividad Económica
                                                     </div> 
                                                     <div class="col-md-4">   
-                                                        <select name="actividad_economica" id="actividad_economica" multiple data-plugin-selectTwo class="form-control populate"> 
-                                                        <option value="-1">Seleccionar</option>
+                                                        <select name="actividad_economica[]" id="actividad_economica" multiple data-plugin-selectTwo class="form-control populate"> 
                                                             @foreach($actividadesEconomicas as $id => $descripcion)
                                                                 <option value="{{ $id }}">{{ $descripcion }}</option>
                                                             @endforeach
                                                         </select> 
+                                                        <input type="hidden" id="hiddenSelectedItems" name="actividad_economica_seleccionados">
                                                     </div> 
                                                 </div>  
                                                 <div class="row">
@@ -780,11 +780,11 @@ Maestro de Cámaras
                                                     </div> 
                                                     <div class="col-md-4">  
                                                         <select id="actividad_economica_mod" name="actividad_economica_mod" multiple data-plugin-selectTwo class="form-control populate"> 
-                                                            <option value="-1">Seleccionar</option>
                                                             @foreach($actividadesEconomicas as $id => $descripcion)
                                                                 <option value="{{ $id }}">{{ $descripcion }}</option>
                                                             @endforeach
                                                         </select> 
+                                                        <input type="hidden" id="hiddenSelectedItemsMod" name="actividad_economica_seleccionados_mod">
                                                     </div> 
                                                 </div>
                                                 <div class="row">
@@ -852,59 +852,68 @@ Maestro de Cámaras
         allowClear: true
     });
 
-    let selectedItems = [];
+    function syncHiddenInput() {
+    $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
+    console.log('Contenido actualizado de selectedItems:', selectedItems);
+}
 
-    // Manejar selección de elementos
-    $('#actividad_economica').on('select2:select', function (e) {
-        const selectedId = e.params.data.id; // ID del elemento seleccionado
-        const selectedText = e.params.data.text; // Texto del elemento seleccionado
+let selectedItems = [];
 
-        // Evitar duplicados
-        if (!selectedItems.includes(selectedId)) {
-            selectedItems.push(selectedId);
+// Manejar selección de elementos
+$('#actividad_economica').on('select2:select', function (e) {
+    const selectedId = String(e.params.data.id); // Convertir a cadena
+    const selectedText = e.params.data.text;
 
-            // Crear el badge y agregarlo al contenedor
-            $('#selectedList').append(`
-                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
-                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-                </span>
-            `);
+    if (!selectedItems.includes(selectedId)) {
+        selectedItems.push(selectedId); // Agregar al array como cadena
+        $('#selectedList').append(`
+            <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+            </span>
+        `);
+        syncHiddenInput(); // Sincronizar el campo oculto
+    }
 
-            // Deseleccionar automáticamente en el dropdown
-            const optionElement = $(this).find(`option[value="${selectedId}"]`);
-            optionElement.prop('selected', false);
-            $(this).trigger('change'); // Actualizar el estado de Select2
-        }
-    });
+    $(this).val(null).trigger('change'); // Resetear el dropdown
+});
 
-    // Manejar eliminación de elementos seleccionados
-    $('#selectedList').on('click', '.remove-item', function () {
-        const badge = $(this).closest('.selected-item'); // Badge del elemento seleccionado
-        const id = badge.data('id'); // Obtener el ID del elemento
+// Manejar eliminación de elementos seleccionados (badge)
+$('#selectedList').on('click', '.remove-item', function () {
+    const badge = $(this).closest('.selected-item');
+    const id = String(badge.data('id')); // Convertir a cadena
 
-        // Remover del array de seleccionados
-        selectedItems = selectedItems.filter(item => item !== id);
+    // Eliminar el ID del array
+    selectedItems = selectedItems.filter(item => item !== id);
+    console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
 
-        // Eliminar visualmente el badge
-        badge.remove();
+    // Eliminar visualmente el badge
+    badge.remove();
 
-        // Rehabilitar y reiniciar el estado de la opción en el dropdown
-        const optionElement = $(`#actividad_economica option[value="${id}"]`);
-        optionElement.prop('disabled', false); // Rehabilitar la opción
-        optionElement.prop('selected', false); // Deseleccionar en el dropdown
-        $('#actividad_economica').trigger('change'); // Actualizar Select2
-    });
+    // Restaurar la opción en el dropdown
+    const optionElement = $(`#actividad_economica option[value="${id}"]`);
+    optionElement.prop('disabled', false).prop('selected', false);
 
-    // Sincronizar al quitar desde el dropdown
-    $('#actividad_economica').on('select2:unselect', function (e) {
-        const unselectedId = e.params.data.id;
+    syncHiddenInput(); // Sincronizar el campo oculto
+});
 
-        // Remover visualmente del contenedor
-        $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+// Sincronizar al quitar desde el dropdown
+$('#actividad_economica').on('select2:unselect', function (e) {
+    const unselectedId = String(e.params.data.id); // Convertir a cadena
 
-        // Remover del array de seleccionados
-        selectedItems = selectedItems.filter(item => item !== unselectedId);
-    });
+    // Eliminar visualmente el badge
+    $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+
+    // Eliminar el ID del array
+    selectedItems = selectedItems.filter(item => item !== unselectedId);
+    console.log(`Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`); // Depuración
+
+    syncHiddenInput(); // Sincronizar el campo oculto
+});
+
+    // Actualizar el array 'selectedItems' cuando cambie la selección en Select2
+    /*$('#actividad_economica').on('change', function () {
+        selectedItems = $(this).val() || []; // Sincronizar con los valores seleccionados reales
+    });*/
 
     //Para el Mod
     $('#actividad_economica_mod').select2({
@@ -913,71 +922,91 @@ Maestro de Cámaras
         allowClear: true
     });
 
-    let selectedItemsMod = [];
+    function syncHiddenInputMod() {
+    $('#hiddenSelectedItemsMod').val(selectedItemsMod.join(',')); // Actualizar el campo oculto
+    console.log('Contenido actualizado de selectedItemsMod:', selectedItemsMod);
+}
 
-    // Manejar selección de elementos
-    $('#actividad_economica_mod').on('select2:select', function (e) {
-        const selectedId = e.params.data.id; // ID del elemento seleccionado
-        const selectedText = e.params.data.text; // Texto del elemento seleccionado
+let selectedItemsMod = [];
 
-        // Evitar duplicados
-        if (!selectedItemsMod.includes(selectedId)) {
-            selectedItemsMod.push(selectedId);
+// Manejar selección de elementos
+$('#actividad_economica_mod').on('select2:select', function (e) {
+    const selectedId = String(e.params.data.id); // Convertir a cadena
+    const selectedText = e.params.data.text;
 
-            // Crear el badge y agregarlo al contenedor
-            $('#selectedList_mod').append(`
-                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
-                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-                </span>
-            `);
+    if (!selectedItemsMod.includes(selectedId)) {
+        selectedItemsMod.push(selectedId); // Agregar el ID al array
+        $('#selectedList_mod').append(`
+            <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+            </span>
+        `);
 
-            // Deseleccionar automáticamente en el dropdown
-            const optionElement = $(this).find(`option[value="${selectedId}"]`);
-            optionElement.prop('selected', false);
-            $(this).trigger('change'); // Actualizar el estado de Select2
-        }
-    });
+        syncHiddenInputMod(); // Sincronizar el campo oculto
+    }
 
-    // Manejar eliminación de elementos seleccionados
-    $('#selectedList_mod').on('click', '.remove-item', function () {
-        const badge = $(this).closest('.selected-item'); // Badge del elemento seleccionado
-        const id = badge.data('id'); // Obtener el ID del elemento
+    $(this).val(null).trigger('change'); // Resetear el dropdown
+});
 
-        // Remover del array de seleccionados
-        selectedItemsMod = selectedItemsMod.filter(item => item !== id);
+// Manejar eliminación de elementos seleccionados (badge)
+$('#selectedList_mod').on('click', '.remove-item', function () {
+    const badge = $(this).closest('.selected-item');
+    const id = String(badge.data('id')); // Convertir a cadena
 
-        // Eliminar visualmente el badge
-        badge.remove();
+    // Eliminar el ID del array
+    selectedItemsMod = selectedItemsMod.filter(item => item !== id);
+    console.log(`Eliminado del array Mod: ${id}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
 
-        // Rehabilitar y reiniciar el estado de la opción en el dropdown
-        const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
-        optionElement.prop('disabled', false); // Rehabilitar la opción
-        optionElement.prop('selected', false); // Deseleccionar en el dropdown
-        $('#actividad_economica_mod').trigger('change'); // Actualizar Select2
-    });
+    // Eliminar visualmente el badge
+    badge.remove();
 
-    // Sincronizar al quitar desde el dropdown
-    $('#actividad_economica_mod').on('select2:unselect', function (e) {
-        const unselectedId = e.params.data.id;
+    // Restaurar la opción en el dropdown
+    const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
+    optionElement.prop('disabled', false).prop('selected', false);
 
-        // Remover visualmente del contenedor
-        $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
+    syncHiddenInputMod(); // Sincronizar el campo oculto
+});
 
-        // Remover del array de seleccionados
-        selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
-    });
+// Sincronizar al quitar desde el dropdown
+$('#actividad_economica_mod').on('select2:unselect', function (e) {
+    const unselectedId = String(e.params.data.id); // Convertir a cadena
+
+    // Eliminar visualmente el badge
+    $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
+
+    // Eliminar el ID del array
+    selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
+    console.log(`Eliminado desde dropdown Mod: ${unselectedId}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
+
+    syncHiddenInputMod(); // Sincronizar el campo oculto
+});
 
  
+    $('#ModalCamara').on('show.bs.modal', function() { 
+        // Reiniciar el array de ítems seleccionados
+        selectedItems = [];
+
+        // Limpiar lista de badges y el campo oculto
+        $('#selectedList').empty();
+        $('#hiddenSelectedItems').val('');
+
+        // Limpiar completamente el select, establecer en blanco
+        $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
+        $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
+        console.log('Modal abierto, campos limpios');
+    }); 
 
     $('#ModalCamara').on('hidden.bs.modal', function () {
-        // Limpiar el contenedor de badges
-        $('#selectedList').empty();
-
-        // Reiniciar el estado de Select2
-        $('#actividad_economica').val(null).trigger('change');
-
-        // Vaciar el array de seleccionados
         selectedItems = [];
+
+        // Limpiar lista de badges y el campo oculto
+        $('#selectedList').empty();
+        $('#hiddenSelectedItems').val('');
+
+        // Limpiar completamente el select, establecer en blanco
+        $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
+        $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
+        console.log('Modal abierto, campos limpios');
     });
  
 
@@ -1412,6 +1441,9 @@ Maestro de Cámaras
 
         $("#btn-register-camara").click(function() {
 
+        //alert($('#hiddenSelectedItems').val());
+        //return;
+
             if ($('#fecha_ingreso').val() == "") {
                 alert('Debe ingresar la Fecha de Ingreso de la Cámara');
                 $('.nav-tabs a[href="#datos_generales"]').tab('show');
@@ -1619,7 +1651,14 @@ Maestro de Cámaras
                 $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                 $('#referencia').focus();
                 return;
-            }
+            }  
+
+            if ($('#hiddenSelectedItems').val() == "") {
+                alert('Debe seleccionar al menos una Actividad Económica');  
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show'); 
+                $('#hiddenSelectedItems').focus();
+                return;
+            } 
 
             var formData = new FormData(document.getElementById("ModalCamara"));
             $('#carga').show();
@@ -1732,6 +1771,12 @@ Maestro de Cámaras
 
             $('#carga').show();
 
+            // **LIMPIAR EL SELECT Y EL INPUT HIDDEN ANTES DE CARGAR DATOS**
+            selectedItemsMod = []; // Vaciar el array de actividades económicas seleccionadas
+            $('#selectedList_mod').empty(); // Vaciar la lista de badges visuales
+            $('#actividad_economica_mod').val(null).trigger('change'); // Limpiar y deseleccionar el select2
+            $('#hiddenSelectedItemsMod').val(''); // Limpiar el input hidden
+
 
             $.ajax({
                 url: '/administrador/camara/detalle/' + camaraId,
@@ -1765,6 +1810,8 @@ Maestro de Cámaras
                     var Numero = $('#numero_mod'); 
                     var Interseccion = $('#interseccion_mod'); 
                     var Referencia = $('#referencia_mod'); 
+                    var ActividadEconomica = $('#actividad_economica_mod');
+                    var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
                     //console.log('Elemento Cargo encontrado:', CargoInput.length); // Verificar que el elemento se encuentra
                     //console.log('Elemento cargo_id encontrado:', camaraIdInput.length); // Verificar que el elemento se encuentra
@@ -1874,6 +1921,63 @@ Maestro de Cámaras
                     Numero.val(response.dato_tributario.numero); 
                     Interseccion.val(response.dato_tributario.interseccion); 
                     Referencia.val(response.dato_tributario.referencia); 
+
+                    // Limpia la lista visual y el array
+                    selectedItemsMod = [];
+                    $('#selectedList_mod').empty();
+
+                    console.log(response.dato_tributario.actividades_economicas);
+
+                    // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
+                    if (response.dato_tributario && response.dato_tributario.actividades_economicas) {
+                        // Decodifica el JSON si es necesario
+                        let actividadesEconomicas = response.dato_tributario.actividades_economicas;
+
+                        // Verifica si es un string y necesita ser decodificado
+                        if (typeof actividadesEconomicas === 'string') {
+                            try {
+                                actividadesEconomicas = JSON.parse(actividadesEconomicas);
+                            } catch (error) {
+                                console.error("Error al decodificar actividades_economicas:", error);
+                                actividadesEconomicas = [];
+                            }
+                        }
+
+                        // Asegúrate de que ahora sea un array
+                        if (Array.isArray(actividadesEconomicas) && actividadesEconomicas.length > 0) {
+                            console.log("Actividades económicas recibidas:", actividadesEconomicas);
+
+                            actividadesEconomicas.forEach(function (id) {
+                                id = String(id); // Asegúrate de que el ID es una cadena
+
+                                // Obtener el texto de la opción seleccionada
+                                var optionText = $(`#actividad_economica_mod option[value="${id}"]`).text();
+
+                                // Añadir ID al array de elementos seleccionados
+                                selectedItemsMod.push(id);
+
+                                // Añadir el badge visualmente en la lista
+                                $('#selectedList_mod').append(`
+                                    <span class="badge bg-primary me-2 selected-item" data-id="${id}">
+                                        ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                                    </span>
+                                `);
+
+                                // Marcar la opción como seleccionada
+                                $(`#actividad_economica_mod option[value="${id}"]`).prop('selected', true);
+                            });
+
+                            // Actualiza el input oculto para sincronizar
+                            syncHiddenInputMod();
+
+                            // Activa Select2 y muestra los valores seleccionados
+                            $('#actividad_economica_mod').trigger('change');
+                        } else {
+                            console.warn("No se recibieron actividades económicas o el array está vacío.");
+                        }
+                    } else {
+                        console.warn("No se encontraron actividades económicas en dato_tributario.");
+                    }
                     
 
                     //console.log('Valor cargo_id:', camaraIdInput.val()); // Verificar que el valor se asigna
@@ -1958,6 +2062,9 @@ Maestro de Cámaras
 
 
         $('#btn-modificar-camara').on('click', function () {
+
+        //alert($('#hiddenSelectedItemsMod').val());
+        //return;
 
             if ($('#fecha_ingreso_mod').val() == "") {
                 alert('Debe ingresar la Fecha de Ingreso de la Cámara');
@@ -2167,6 +2274,14 @@ Maestro de Cámaras
                 $('#referencia_mod').focus();
                 return;
             }
+
+            if ($('#hiddenSelectedItemsMod').val() == "") {
+                alert('Debe seleccionar al menos una Actividad Económica');
+                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show'); 
+                $('#hiddenSelectedItemsMod').focus();
+                return;
+            }
+            
             $('#carga').show();
 
             // Aquí puedes añadir la lógica para enviar el formulario modificado

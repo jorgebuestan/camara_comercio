@@ -156,6 +156,8 @@ class CamaraController extends Controller
                 $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
             }
 
+            
+
             // Crear registro en la base de datos
             $camara = Camara::create([
                 'logo' => $rutaLogo,
@@ -176,6 +178,12 @@ class CamaraController extends Controller
             $fechaConstitucion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_constitucion'))->format('Y-m-d');
 
 
+            //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', ''); 
+            // Convertir la cadena en un array (si no está vacío)
+            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+
+            
             DatoTributario::create([
                 'id_camara' => $camara->id,
                 'tipo_regimen' => strtoupper($request->input('tipo_regimen')), 
@@ -191,7 +199,8 @@ class CamaraController extends Controller
                 'manzana' => strtoupper($request->input('manzana')),
                 'numero' => strtoupper($request->input('numero')),
                 'interseccion' => strtoupper($request->input('interseccion')),
-                'referencia' => strtoupper($request->input('referencia'))
+                'referencia' => strtoupper($request->input('referencia')),
+                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
 
             return response()->json(['success' => 'Cámara registrada correctamente'], 200);
@@ -298,7 +307,10 @@ class CamaraController extends Controller
             if (!$datoTributario) {
                 return response()->json(['error' => 'Los datos tributarios no existen.'], 404);
             }
-        
+ 
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');  
+            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+
             // Actualizar DatoTributario
             $datoTributario->update([
                 'tipo_regimen' => strtoupper($request->input('tipo_regimen_mod')),
@@ -314,7 +326,8 @@ class CamaraController extends Controller
                 'manzana' => strtoupper($request->input('manzana_mod')),
                 'numero' => strtoupper($request->input('numero_mod')),
                 'interseccion' => strtoupper($request->input('interseccion_mod')),
-                'referencia' => strtoupper($request->input('referencia_mod'))
+                'referencia' => strtoupper($request->input('referencia_mod')),
+                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
         
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
