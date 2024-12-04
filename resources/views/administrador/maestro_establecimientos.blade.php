@@ -352,12 +352,12 @@ Maestro de Establecimientos
         </form>
 
 
-        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarCamara" tabindex="-1" aria-labelledby="ModalModificarCamaraLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarEstablecimiento" tabindex="-1" aria-labelledby="ModalModificarEstablecimientoLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalModificarCamaraLabel"><b>Modificar Cámara</b></h5>
+                        <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --> 
@@ -366,10 +366,10 @@ Maestro de Establecimientos
                         <div class="form-group">  
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombreCamaraSeleccionadaMod"></span></p>
-
+                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombreCamaraSeleccionadaMod"></span></p> 
                                     <!-- Campo oculto para enviar el valor de la cámara -->
                                     <input type="hidden" id="camaraHiddenMod" name="camaraHiddenMod" value="">
+                                    <input type="hidden" id="establecimiento_id" name="establecimiento_id" value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -439,7 +439,7 @@ Maestro de Establecimientos
                                     Nombre Comercial
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="nombre_comercial_mod"  id="nombre_comercial_mod" placeholder="Calle">
+                                    <input type="text" class="form-control" name="nombre_comercial_mod"  id="nombre_comercial_mod" placeholder="Nombre Comercial">
                                 </div> 
                                 <div class="col-md-2">  
                                     Fecha de inicio de actividades
@@ -1167,159 +1167,86 @@ Maestro de Establecimientos
 
 
         $.ajax({
-            url: '/administrador/camara/detalle/' + establecimientoId,
+            url: '/administrador/establecimiento/detalle/' + establecimientoId,
             method: 'GET',
             success: function(response) {
                 console.log('Datos recibidos:', response);
 
-                var establecimientoId = $('#camara_id');
-                var FechaIngreso = $('#fecha_inicio_actividades_mod'); 
-                var Ruc = $('#ruc_mod'); 
-                var RazonSocial = $('#razon_social_mod'); 
-                var Cedula = $('#cedula_representante_legal_mod'); 
-                var Nombres = $('#nombres_representante_legal_mod'); 
-                var Apellidos = $('#apellidos_representante_legal_mod'); 
-                var Telefono = $('#telefono_representante_legal_mod'); 
-                var Correo = $('#correo_representante_legal_mod'); 
-                var Cargo = $('#cargo_representante_legal_mod'); 
-                var Direccion = $('#direccion_representante_legal_mod');  
-                
-                var TipoRegimen = $('#tipo_regimen_mod'); 
-                var FechaRegistro = $('#fecha_registro_mod'); 
-                var FechaConstitucion = $('#fecha_constitucion_mod'); 
-                var AgenteRetencion = $('#agente_retencion_mod'); 
-                var ContribuyenteEspecial = $('#contribuyente_especial_mod'); 
+                var establecimientoId = $('#establecimiento_id');
+                var FechaInicioACtividades = $('#fecha_inicio_actividades_mod');   
+                 
                 var Pais = $('#pais_mod'); 
                 var Provincia = $('#provincia_mod'); 
                 var Canton = $('#canton_mod'); 
                 var Parroquia = $('#parroquia_mod'); 
+                var NombreComercial = $('#nombre_comercial_mod'); 
                 var Calle = $('#calle_mod'); 
                 var Manzana = $('#manzana_mod'); 
                 var Numero = $('#numero_mod'); 
                 var Interseccion = $('#interseccion_mod'); 
                 var Referencia = $('#referencia_mod'); 
+                var Correo = $('#correo_mod'); 
+                var Telefono1 = $('#telefono1_mod'); 
+                var Telefono2 = $('#telefono2_mod'); 
+                var Telefono3 = $('#telefono3_mod'); 
                 var ActividadEconomica = $('#actividad_economica_mod');
                 var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
                 //console.log('Elemento Cargo encontrado:', CargoInput.length); // Verificar que el elemento se encuentra
                 //console.log('Elemento cargo_id encontrado:', establecimientoIdInput.length); // Verificar que el elemento se encuentra
                     
-                establecimientoId.val(response.id);
-                //FechaIngreso.val(response.fecha_inicio_actividades); 
-                FechaIngreso.val(convertirFecha(response.fecha_inicio_actividades));
-                Ruc.val(response.ruc); 
-                RazonSocial.val(response.razon_social); 
-                Cedula.val(response.cedula_representante_legal); 
-                Nombres.val(response.nombres_representante_legal); 
-                Apellidos.val(response.apellidos_representante_legal); 
-                Telefono.val(response.telefono_representante_legal); 
-                Correo.val(response.correo_representante_legal); 
-                Cargo.val(response.cargo_representante_legal); 
-                Direccion.val(response.direccion_representante_legal); 
-                
-                TipoRegimen.val(response.dato_tributario.tipo_regimen); 
-                //FechaRegistro.val(response.dato_tributario.fecha_registro_sri); 
-                //FechaRegistro.val(convertirFecha(response.dato_tributario.fecha_registro_sri));
+                establecimientoId.val(response.id); 
+                FechaInicioACtividades.val(convertirFecha(response.fecha_inicio_actividades));  
+                Pais.val(response.id_pais); 
+                Provincia.val(response.id_provincia); 
+                Canton.val(response.id_canton); 
+                Parroquia.val(response.id_parroquia); 
 
-                //alert (response.dato_tributario.fecha_registro_sri);
-                // Manejo de la fecha de registro
-                const fechaISO = response.dato_tributario.fecha_registro_sri; // Por ejemplo, '2008-01-22'
-                const fechaConvertida = convertirFecha(fechaISO); 
-
-                // Convertir la fecha al formato necesario para `Date`
-                const fechaObj = convertirFechaAObjetoDate(fechaConvertida); // Convertir de DD/MM/YYYY a Date
-
-                if (!isNaN(fechaObj.getTime())) {
-                    $('#fecha_registro_mod').datepicker('setDate', fechaObj); // Asigna la fecha
-                } else {
-                    console.error("Fecha no válida:", fechaConvertida);
-                }
-
-                // Manejo de la fecha de constitución
-                const fechaISO2 = response.dato_tributario.fecha_constitucion; // Por ejemplo, '2008-01-22'
-                const fechaConvertida2 = convertirFecha(fechaISO2);
-
-                const fechaObj2 = convertirFechaAObjetoDate(fechaConvertida2);
-
-                if (!isNaN(fechaObj2.getTime())) {
-                    $('#fecha_constitucion_mod').datepicker('setDate', fechaObj2); // Asigna la fecha
-                } else {
-                    console.error("Fecha no válida:", fechaConvertida2);
-                }
-
-                // Calcular años y meses
-                var hoy = new Date();
-                var FechaConstitucion = $('#fecha_constitucion_mod').val();
-                var FechaConstitucionDate = convertirFechaAObjetoDate(FechaConstitucion);
-
-                if (!isNaN(FechaConstitucionDate.getTime())) {
-                    var years = hoy.getFullYear() - FechaConstitucionDate.getFullYear();
-                    var months = hoy.getMonth() - FechaConstitucionDate.getMonth();
-
-                    if (months < 0) {
-                        years--;
-                        months += 12;
-                    }
-
-                    console.log(`${years} años, ${months} meses`);
-                } else {
-                    console.error("Fecha de constitución no válida.");
-                }
-
-                // Función auxiliar para convertir DD/MM/YYYY a Date
-                function convertirFechaAObjetoDate(fecha) {
-                    if (!fecha) return new Date('Invalid Date'); // Retorna fecha inválida si la entrada es nula
-                    const partes = fecha.split('/'); // Divide por barra
-                    return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
-                }
-                
-                $('#anios_creacion_mod').val(years + ' años, ' + months + ' meses');
-                
-                AgenteRetencion.val(response.dato_tributario.agente_retencion); 
-                ContribuyenteEspecial.val(response.dato_tributario.contribuyente_especial); 
-                Pais.val(response.dato_tributario.id_pais); 
-                Provincia.val(response.dato_tributario.id_provincia); 
-                Canton.val(response.dato_tributario.id_canton); 
-                Parroquia.val(response.dato_tributario.id_parroquia); 
+                $('#nombreCamaraSeleccionadaMod').text(response.camara.razon_social);
 
                 // Asignar país y disparar cambio para cargar provincias
-                $('#pais_mod').val(response.dato_tributario.id_pais).trigger('change');
+                $('#pais_mod').val(response.id_pais).trigger('change');
 
                 // Cargar provincias y asignar provincia
-                cargarProvincias(response.dato_tributario.id_pais).then(() => {
-                    $('#provincia_mod').val(response.dato_tributario.id_provincia).trigger('change');
+                cargarProvincias(response.id_pais).then(() => {
+                    $('#provincia_mod').val(response.id_provincia).trigger('change');
 
                     // Cargar cantones y asignar cantón
-                    cargarCantones(response.dato_tributario.id_pais, response.dato_tributario.id_provincia).then(() => {
-                        $('#canton_mod').val(response.dato_tributario.id_canton).trigger('change');
+                    cargarCantones(response.id_pais, response.id_provincia).then(() => {
+                        $('#canton_mod').val(response.id_canton).trigger('change');
 
                         // Cargar parroquias y asignar parroquia
                         cargarParroquias(
-                            response.dato_tributario.id_pais, 
-                            response.dato_tributario.id_provincia, 
-                            response.dato_tributario.id_canton
+                            response.id_pais, 
+                            response.id_provincia, 
+                            response.id_canton
                         ).then(() => {
-                            $('#parroquia_mod').val(response.dato_tributario.id_parroquia);
+                            $('#parroquia_mod').val(response.id_parroquia);
                         });
                     });
                 }); 
                 
-                Calle.val(response.dato_tributario.calle); 
-                Manzana.val(response.dato_tributario.manzana); 
-                Numero.val(response.dato_tributario.numero); 
-                Interseccion.val(response.dato_tributario.interseccion); 
-                Referencia.val(response.dato_tributario.referencia); 
+                NombreComercial.val(response.nombre_comercial); 
+                Calle.val(response.calle); 
+                Manzana.val(response.manzana); 
+                Numero.val(response.numero); 
+                Interseccion.val(response.interseccion); 
+                Referencia.val(response.referencia); 
+                Correo.val(response.correo); 
+                Telefono1.val(response.telefono1); 
+                Telefono2.val(response.telefono2); 
+                Telefono3.val(response.telefono3); 
 
                 // Limpia la lista visual y el array
                 selectedItemsMod = [];
                 $('#selectedList_mod').empty();
 
-                console.log(response.dato_tributario.actividades_economicas);
+                console.log(response.actividades_economicas);
 
                 // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
-                if (response.dato_tributario && response.dato_tributario.actividades_economicas) {
+                if ( response.actividades_economicas) {
                     // Decodifica el JSON si es necesario
-                    let actividadesEconomicas = response.dato_tributario.actividades_economicas;
+                    let actividadesEconomicas = response.actividades_economicas;
 
                     // Verifica si es un string y necesita ser decodificado
                     if (typeof actividadesEconomicas === 'string') {
@@ -1368,7 +1295,7 @@ Maestro de Establecimientos
                 } 
 
                 $('#carga').hide();
-                $('#ModalModificarCamara').modal('show');
+                $('#ModalModificarEstablecimiento').modal('show');
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
@@ -1378,7 +1305,7 @@ Maestro de Establecimientos
 
         $('#btn-close').on('click', function () {
             // Aquí puedes añadir la lógica para enviar el formulario modificado
-            $('#ModalModificarCamara').modal('hide'); // Cerrar el modal después de guardar
+            $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
         });
 
         // Función para cargar provincias
@@ -1450,228 +1377,98 @@ Maestro de Establecimientos
         //alert($('#hiddenSelectedItemsMod').val());
         //return;
 
-            if ($('#fecha_inicio_actividades_mod').val() == "") {
-                alert('Debe ingresar la Fecha de Ingreso de la Cámara');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#fecha_inicio_actividades_mod').focus();
-                return;
-            }
+        if ($('#nombre_comercial_mod').val() == "") {
+            alert('Debe ingresar el Nombre Comercial'); 
+            $('#nombre_comercial_mod').focus();
+            return;
+        }
 
-            if (!/^\d{13}$/.test($('#ruc_mod').val())) {
-                /*$("#error-ruc").show();
-                isValid = false;*/
-                $("#error-ruc-mod").show();
-                alert('El RUC debe tener 13 dígitos');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#ruc_mod').focus();
-                return;
-            }
+        if ($('#fecha_inicio_actividades_mod').val() == "") {
+            alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento'); 
+            $('#fecha_inicio_actividades_mod').focus();
+            return;
+        }  
 
-            if ($('#razon_social_mod').val() == "") {
-                alert('Debe ingresar la Razón Social');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#razon_social_mod').focus();
-                return;
-            }
+        if ($('#pais_mod').val() == "-1") {
+            alert('Debe seleccionar el País'); 
+            $('#pais_mod').focus();
+            return;
+        }
 
-            if (!/^\d{10}$/.test($('#cedula_representante_legal_mod').val())) {
-                /*$("#error-ruc").show();
-                isValid = false;*/
-                $("#error-cedula-mod").show();
-                alert('La Cédula del Representante Legal debe tener 10 dígitos');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#cedula_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#provincia_mod').val() == "-1") {
+            alert('Debe seleccionar la Provincia'); 
+            $('#provincia_mod').focus();
+            return;
+        }
 
-            if ($('#nombres_representante_legal_mod').val() == "") {
-                alert('Debe ingresar los Nombres del Representante Legal');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#nombres_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#canton_mod').val() == "-1") {
+            alert('Debe seleccionar el Cantón'); 
+            $('#canton_mod').focus();
+            return;
+        }
 
-            if ($('#apellidos_representante_legal_mod').val() == "") {
-                alert('Debe ingresar los Apellidos del Representante Legal');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#apellidos_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#parroquia_mod').val() == "-1") {
+            alert('Debe seleccionar la Parroquia'); 
+            $('#parroquia_mod').focus();
+            return;
+        }
 
-            if ($('#telefono_representante_legal_mod').val() == "") {
-                alert('Debe ingresar el Teléfono del Representante Legal');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#telefono_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#calle_mod').val() == "") {
+            alert('Debe ingresar la Calle'); 
+            $('#calle_mod').focus();
+            return;
+        }
 
+        if ($('#manzana_mod').val() == "") {
+            alert('Debe ingresar la Manzana'); 
+            $('#manzana_mod').focus();
+            return;
+        }
 
-            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo_representante_legal_mod').val())) {
-                /*$("#error-correo").show();
-                isValid = false;*/
-                $("#error-correo-mod").show();
-                alert('Debe registrar un correo con formato válido');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#correo_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#numero_mod').val() == "") {
+            alert('Debe ingresar el Número'); 
+            $('#numero_mod').focus();
+            return;
+        }
 
-            if ($('#cargo_representante_legal_mod').val() == "") {
-                alert('Debe ingresar el Cargo del Representante Legal');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#cargo_representante_legal_mod').focus();
-                return;
-            }
+        if ($('#interseccion_mod').val() == "") {
+            alert('Debe ingresar la Intersección'); 
+            $('#interseccion_mod').focus();
+            return;
+        }
 
-            if ($('#direccion_representante_legal_mod').val() == "") {
-                alert('Debe ingresar la Dirección del Representante Legal');
-                $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
-                $('#direccion_representante_legal_mod').focus();
-                return;
-            }  
+        if ($('#referencia_mod').val() == "") {
+            alert('Debe ingresar la Referencia'); 
+            $('#referencia_mod').focus();
+            return;
+        }  
 
-            if ($('#tipo_regimen_mod').val() == "-1") {
-                alert('Debe seleccionar un Tipo de Régimen');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#tipo_regimen_mod').focus();
-                return;
-            }
-            
-            if ($('#fecha_registro_mod').val() == "") {
-                alert('Debe ingresar la Fecha de Registro de la Cámara');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#fecha_registro_mod').focus();
-                return;
-            }
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo_mod').val())) {
+            /*$("#error-correo").show();
+            isValid = false;*/
+            $("#error-correo-mod").show();
+            alert('Debe registrar un correo con formato válido'); 
+            $('#correo_mod').focus();
+            return;
+        } 
 
-            if ($('#fecha_constitucion_mod').val() == "") {
-                alert('Debe ingresar la Fecha de Constitución de la Cámara');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#fecha_constitucion_mod').focus();
-                return;
-            }
+        if ($('#telefono1_mod').val() == "") {
+            alert('Debe ingresar al menos 1 número de Teléfono'); 
+            $('#telefono1_mod').focus();
+            return;
+        }  
 
-            // Función para convertir una fecha en formato dd/mm/yyyy a objeto Date
-            function convertirFechaAObjetoDate(fecha) {
-                if (!fecha) return new Date('Invalid Date'); // Retorna una fecha inválida si la entrada es nula
-                var partes = fecha.split('/'); // Divide la fecha por '/'
-                return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
-            }
-
-            // Validación de que la Fecha de Constitución sea menor a la Fecha de Registro
-            var fechaConstitucion = $('#fecha_constitucion_mod').val();
-            var fechaRegistro = $('#fecha_registro_mod').val();
-
-            if (fechaConstitucion && fechaRegistro) {
-                // Convertir las fechas al formato correcto
-                var fechaConstitucionDate = convertirFechaAObjetoDate(fechaConstitucion);
-                var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
-
-                // Validar si las fechas son válidas
-                if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
-                    if (fechaConstitucionDate >= fechaRegistroDate) {
-                        alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
-                        $('#error-fecha-constitucion-mod').show();
-                        $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                        $('#fecha_constitucion_mod').focus();
-                        return;
-                    }
-                } else {
-                    alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
-                    return;
-                }
-            }
-
-            if ($('#agente_retencion_mod').val() == "-1") {
-                alert('Debe indicar si la Cámara es o no un Agente de Retención');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#agente_retencion_mod').focus();
-                return;
-            }
-
-            if ($('#contribuyente_especial_mod').val() == "-1") {
-                alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#contribuyente_especial_mod').focus();
-                return;
-            }
-
-            if ($('#pais_mod').val() == "-1") {
-                alert('Debe seleccionar el País');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#pais_mod').focus();
-                return;
-            }
-
-            if ($('#provincia_mod').val() == "-1") {
-                alert('Debe seleccionar la Provincia');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#provincia_mod').focus();
-                return;
-            }
-
-            if ($('#canton_mod').val() == "-1") {
-                alert('Debe seleccionar el Cantón');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#canton_mod').focus();
-                return;
-            }
-
-            if ($('#parroquia_mod').val() == "-1") {
-                alert('Debe seleccionar la Parroquia');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#parroquia_mod').focus();
-                return;
-            }
-
-            if ($('#calle_mod').val() == "") {
-                alert('Debe ingresar la Calle en la Dirección Tributaria');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#calle_mod').focus();
-                return;
-            }
-
-            if ($('#manzana_mod').val() == "") {
-                alert('Debe ingresar la Manzana en la Dirección Tributaria');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#manzana_mod').focus();
-                return;
-            }
-
-            if ($('#numero_mod').val() == "") {
-                alert('Debe ingresar el Número en la Dirección Tributaria');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#numero_mod').focus();
-                return;
-            }
-
-            if ($('#interseccion_mod').val() == "") {
-                alert('Debe ingresar la Intersección en la Dirección Tributaria');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#interseccion_mod').focus();
-                return;
-            }
-
-            if ($('#referencia_mod').val() == "") {
-                alert('Debe ingresar la Referencia en la Dirección Tributaria');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
-                $('#referencia_mod').focus();
-                return;
-            }
-
-            if ($('#hiddenSelectedItemsMod').val() == "") {
-                alert('Debe seleccionar al menos una Actividad Económica');
-                $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show'); 
-                $('#hiddenSelectedItemsMod').focus();
-                return;
-            }
+        if ($('#hiddenSelectedItemsMod').val() == "") {
+            alert('Debe seleccionar al menos una Actividad Económica');    
+            return;
+        } 
             
             $('#carga').show();
 
             // Aquí puedes añadir la lógica para enviar el formulario modificado
-            var formData = new FormData(document.getElementById("ModalModificarCamara"));
+            var formData = new FormData(document.getElementById("ModalModificarEstablecimiento"));
             $.ajax({
-                url: "{{ route('admin.modificar_camara') }}",
+                url: "{{ route('admin.modificar_establecimiento') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -1687,7 +1484,7 @@ Maestro de Establecimientos
                 console.log(res)
             });
             $('#carga').hide();
-            $('#ModalModificarCamara').modal('hide'); // Cerrar el modal después de guardar
+            $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
         });
 
         $(document).on('click', '.delete-establecimiento', function() {

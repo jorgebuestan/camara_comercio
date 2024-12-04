@@ -183,4 +183,81 @@ class EstablecimientoController extends Controller
     
         return response()->json(['success' => 'Establecimiento eliminado correctamente']);
     }
+
+    public function detalle_establecimiento($id)
+    {
+        // Buscar la cámara por ID
+        $establecimiento = Establecimiento::find($id);
+    
+        if (!$establecimiento) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+    
+        // Convertir el modelo Establecimiento a un array
+        $establecimientoArray = $establecimiento->toArray(); 
+
+        
+        // Buscar el DatoTributario relacionado
+        $camara = Camara::where('id', $establecimientoArray["id_camara"])->first();
+    
+        // Si existe un DatoTributario, agregarlo al array de respuesta
+        if ($camara) {
+            $establecimientoArray['camara'] = $camara->toArray();
+        }
+    
+        // Devolver la respuesta JSON
+        return response()->json($establecimientoArray);
+    }
+
+    public function modificar_establecimiento(Request $request)
+    {  
+        try {
+            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+            $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
+         
+            // Buscar el registro existente por ID
+            $camara = Camara::find($request->input('camaraHiddenMod'));
+            $establecimiento = Establecimiento::find($request->input('establecimiento_id'));
+        
+            if (!$establecimiento) {
+                return response()->json(['error' => 'El establecimiento no existe.'], 404);
+            }
+
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');  
+            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+
+        
+            // Actualizar los campos del registro existente
+            $establecimiento->update([
+                'nombre_comercial' => strtoupper($request->input('nombre_comercial_mod')),
+                'id_pais' => $request->input('pais_mod'),
+                'id_provincia' => $request->input('provincia_mod'),
+                'id_canton' => $request->input('canton_mod'),
+                'id_parroquia' => $request->input('parroquia_mod'),
+                'calle' => strtoupper($request->input('calle_mod')),
+                'manzana' => strtoupper($request->input('manzana_mod')),
+                'numero' => strtoupper($request->input('numero_mod')),
+                'interseccion' => strtoupper($request->input('interseccion_mod')),
+                'referencia' => strtoupper($request->input('referencia_mod')),
+                'correo' => strtoupper($request->input('correo_mod')),
+                'telefono1' => strtoupper($request->input('telefono1_mod')),
+                'telefono2' => strtoupper($request->input('telefono2_mod')),
+                'telefono3' => strtoupper($request->input('telefono3_mod')),
+                'fecha_inicio_actividades' => $fecha_inicio_actividades,
+                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray) 
+                
+            ]);  
+
+            //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
+            return response()->json(['response' => [
+                'msg' => "Registro modificado",
+                ]
+            ], 201);
+        } catch (\Illuminate\Database\QueryException $e) { 
+            return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
+        }
+    }
+
 }

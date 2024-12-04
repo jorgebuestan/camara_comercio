@@ -65,7 +65,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/obtener_listado_establecimientos', [EstablecimientoController::class, 'obtener_listado_establecimientos'])->middleware('auth')->name('admin.obtener_listado_establecimientos');
     Route::post('/administrador/registrar_establecimiento', [EstablecimientoController::class, 'registrar_establecimiento'])->middleware('auth')->name('admin.registrar_establecimiento');
     Route::post('/administrador/establecimiento/eliminar/{id}', [EstablecimientoController::class, 'eliminar_establecimiento'])->middleware('auth')->name('admin.eliminar_establecimiento');;
-    
+    Route::get('/administrador/establecimiento/detalle/{id}', [EstablecimientoController::class, 'detalle_establecimiento'])->middleware('auth')->name('admin.detalle_establecimiento');
+    Route::post('/administrador/camara/modificar_establecimiento', [EstablecimientoController::class, 'modificar_establecimiento'])->middleware('auth')->name('admin.modificar_establecimiento');
 
 });
 
