@@ -3,9 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CamaraController;  
+use App\Http\Controllers\CamaraController;
 use App\Http\Controllers\EstablecimientoController;
-use App\Http\Controllers\FuncionesGeneralesController; 
+use App\Http\Controllers\FuncionesGeneralesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-provincias', [FuncionesGeneralesController::class, 'get_provincias'])->middleware('auth')->name('funciones_generales.get_provincias');
     Route::get('/get-cantones', [FuncionesGeneralesController::class, 'get_cantones'])->middleware('auth')->name('funciones_generales.get_cantones');
     Route::get('/get-parroquias', [FuncionesGeneralesController::class, 'get_parroquias'])->middleware('auth')->name('funciones_generales.get_parroquias');
-    
+
     //Funciones Administrador
 
     //Maestro de Camaras
@@ -68,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/establecimiento/detalle/{id}', [EstablecimientoController::class, 'detalle_establecimiento'])->middleware('auth')->name('admin.detalle_establecimiento');
     Route::post('/administrador/camara/modificar_establecimiento', [EstablecimientoController::class, 'modificar_establecimiento'])->middleware('auth')->name('admin.modificar_establecimiento');
 
+    //Maestro de Socios
+    Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
