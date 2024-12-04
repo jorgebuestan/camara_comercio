@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('datos_tributarios', function (Blueprint $table) {
+        Schema::create('establecimientos', function (Blueprint $table) {
             $table->id();
+            $table->text('nombre_comercial');
             $table->integer('id_camara');
-            $table->string('tipo_regimen');
-            $table->date('fecha_registro_sri'); 
-            $table->date('fecha_constitucion'); //No debe ser menor a fecha_registro
-            $table->integer('agente_retencion');  
-            $table->integer('contribuyente_especial'); 
             $table->integer('id_pais');
             $table->integer('id_provincia');
             $table->integer('id_canton');
@@ -28,17 +24,24 @@ return new class extends Migration
             $table->text('numero');
             $table->text('interseccion');
             $table->text('referencia'); 
+            $table->text('correo'); 
+            $table->text('telefono1')->nullable();
+            $table->text('telefono2')->nullable();
+            $table->text('telefono3')->nullable();
+            $table->date('fecha_inicio_actividades'); 
+            $table->date('fecha_reinicio_actividades')->nullable();
+            $table->date('fecha_cese_actividades')->nullable();
             $table->json('actividades_economicas')->nullable();
-            $table->json('obligaciones_tributarias')->nullable();
+            $table->integer('estado');
             $table->timestamps();
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('datos_tributarios');
+        Schema::dropIfExists('establecimientos');
     }
 };

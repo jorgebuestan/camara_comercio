@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;  
+use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\FuncionesGeneralesController; 
 
 /*
@@ -58,6 +59,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/camara/eliminar/{id}', [CamaraController::class, 'eliminar_camara'])->middleware('auth')->name('admin.eliminar_camara');;
     Route::get('/administrador/camara/detalle/{id}', [CamaraController::class, 'detalle_camara'])->middleware('auth')->name('admin.detalle_camara');
     Route::post('/administrador/camara/modificar_camara', [CamaraController::class, 'modificar_camara'])->middleware('auth')->name('admin.modificar_camara');
+
+    //Maestro de Establecimientos
+    Route::get('/administrador/maestro_establecimientos', [EstablecimientoController::class, 'maestro_establecimientos'])->middleware('auth')->name('admin.maestro_establecimientos');
+    Route::get('/administrador/obtener_listado_establecimientos', [EstablecimientoController::class, 'obtener_listado_establecimientos'])->middleware('auth')->name('admin.obtener_listado_establecimientos');
+    Route::post('/administrador/registrar_establecimiento', [EstablecimientoController::class, 'registrar_establecimiento'])->middleware('auth')->name('admin.registrar_establecimiento');
+    Route::post('/administrador/establecimiento/eliminar/{id}', [EstablecimientoController::class, 'eliminar_establecimiento'])->middleware('auth')->name('admin.eliminar_establecimiento');;
+    
 
 });
 

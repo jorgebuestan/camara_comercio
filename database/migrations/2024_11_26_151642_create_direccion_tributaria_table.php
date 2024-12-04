@@ -18,11 +18,11 @@ return new class extends Migration
             $table->integer('id_provincia');
             $table->integer('id_canton');
             $table->integer('id_parroquia');
-            $table->string('calle');
-            $table->string('manzana');
-            $table->string('numero');
-            $table->string('interseccion');
-            $table->string('referencia');
+            $table->text('calle');
+            $table->text('manzana');
+            $table->text('numero');
+            $table->text('interseccion');
+            $table->text('referencia');
             $table->integer('direccion_principal');
             $table->timestamps();
         });

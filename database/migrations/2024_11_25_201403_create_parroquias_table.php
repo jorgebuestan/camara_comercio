@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('id_pais');
             $table->integer('id_provincia');
             $table->integer('id_canton');
-            $table->string('nombre');
+            $table->text('nombre');
             $table->string('estado');
             $table->timestamps();
         });

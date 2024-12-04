@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('camaras', function (Blueprint $table) {
             $table->id();
-            $table->string('logo');
+            $table->text('logo');
             $table->date('fecha_ingreso'); 
             $table->string('ruc')->unique();
             $table->string('razon_social');
             $table->string('cedula_representante_legal');
-            $table->string('nombres_representante_legal');
-            $table->string('apellidos_representante_legal');
-            $table->string('telefono_representante_legal');
-            $table->string('correo_representante_legal');
-            $table->string('cargo_representante_legal');
-            $table->string('direccion_representante_legal');
+            $table->text('nombres_representante_legal');
+            $table->text('apellidos_representante_legal');
+            $table->text('telefono_representante_legal');
+            $table->text('correo_representante_legal');
+            $table->text('cargo_representante_legal');
+            $table->text('direccion_representante_legal');
             $table->integer('estado');
             $table->timestamps();
         });

@@ -353,7 +353,7 @@
 									@can('Admin')
 				                    <li class="nav-parent">
 				                        <a class="nav-link" href="#">
-				                            <i class="bx bx-layout" aria-hidden="true"></i>
+				                            <i class="bx bxs-building" aria-hidden="true"></i>
 				                            <span>Cámaras</span>
 				                        </a>
 				                        <ul class="nav nav-children"> 
@@ -364,9 +364,22 @@
 				                            </li>         
 				                        </ul>
 				                    </li>
+									<li class="nav-parent">
+				                        <a class="nav-link" href="#">
+				                            <i class="bx bxs-building-house" aria-hidden="true"></i>
+				                            <span>Establecimientos</span>
+				                        </a>
+				                        <ul class="nav nav-children"> 
+											<li>
+				                                <a class="nav-link" href="{{ route('admin.maestro_establecimientos') }}">
+				                                    Mantenimiento Establecimientos
+				                                </a>
+				                            </li>         
+				                        </ul>
+				                    </li>
                                     <li class="nav-parent">
 				                        <a class="nav-link" href="#">
-				                            <i class="bx bx-layout" aria-hidden="true"></i>
+				                            <i class="bx bxs-user" aria-hidden="true"></i>
 				                            <span>Socios</span>
 				                        </a>
 				                        <ul class="nav nav-children"> 
@@ -376,20 +389,7 @@
 				                                </a>
 				                            </li>         
 				                        </ul>
-				                    </li>
-                                    <li class="nav-parent">
-				                        <a class="nav-link" href="#">
-				                            <i class="bx bx-layout" aria-hidden="true"></i>
-				                            <span>Establecimientos</span>
-				                        </a>
-				                        <ul class="nav nav-children"> 
-											<li>
-				                                <a class="nav-link" href="{{ route('dashboard') }}">
-				                                    Mantenimiento Establecimientos
-				                                </a>
-				                            </li>         
-				                        </ul>
-				                    </li>
+				                    </li> 
 									@endcan
 
 									@can('Camara')

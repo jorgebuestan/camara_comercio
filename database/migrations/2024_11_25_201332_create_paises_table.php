@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('paises', function (Blueprint $table) {
             $table->id();
             $table->string('codigo');
-            $table->string('nombre');
+            $table->text('nombre');
             $table->string('estado');
             $table->timestamps();
         });

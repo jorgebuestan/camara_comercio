@@ -23,10 +23,5 @@ class Camara extends Model
         'cargo_representante_legal',
         'direccion_representante_legal',
         'estado'
-    ];
-
-    public function datoTributario()
-    {
-        return $this->hasOne(DatoTributario::class, 'id_camara', 'id');
-    }
+    ]; 
 }

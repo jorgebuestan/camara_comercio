@@ -843,6 +843,41 @@ Maestro de Cámaras
 
     $(document).ready(function(){ 
 
+
+    var table = $('#dataTable').DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('admin.obtener_listado_camaras') }}",
+            type: "GET",
+            data: function (d) {
+                d.start = d.start || 0;
+                d.length = d.length || 10;
+                d.localidad = $('#localidad').val(); // Enviar el valor de localidad seleccionada
+            },
+            error: function (error) {
+                console.error("Error al cargar los datos: ", error);
+            }
+        },
+        pageLength: 10, // Establece el número de registros por página
+        columns: [
+            { data: 'fecha_ingreso', width: '10%' }, 
+            { data: 'ruc', width: '15%' }, 
+            { data: 'razon_social', width: '20%' }, 
+            { data: 'representante_legal', width: '20%' } , 
+            { data: 'cedula_representante_legal', width: '15%' } , 
+            { data: 'btn', width: '20%' } 
+        ],
+        order: [[0, "asc"]],
+        createdRow: function(row, data, dataIndex) {
+            var td = $(row).find(".truncate");
+            td.attr("title", td.text());
+
+            var td2 = $(row).find(".truncate2");
+            td2.attr("title", td2.text());
+        }
+    });
             // Inicializar Select2 con búsqueda habilitada
            // Inicializar Select2
     // Inicializar Select2
@@ -853,62 +888,62 @@ Maestro de Cámaras
     });
 
     function syncHiddenInput() {
-    $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
-    console.log('Contenido actualizado de selectedItems:', selectedItems);
-}
-
-let selectedItems = [];
-
-// Manejar selección de elementos
-$('#actividad_economica').on('select2:select', function (e) {
-    const selectedId = String(e.params.data.id); // Convertir a cadena
-    const selectedText = e.params.data.text;
-
-    if (!selectedItems.includes(selectedId)) {
-        selectedItems.push(selectedId); // Agregar al array como cadena
-        $('#selectedList').append(`
-            <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
-                ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-            </span>
-        `);
-        syncHiddenInput(); // Sincronizar el campo oculto
+        $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
+        console.log('Contenido actualizado de selectedItems:', selectedItems);
     }
 
-    $(this).val(null).trigger('change'); // Resetear el dropdown
-});
+    let selectedItems = [];
 
-// Manejar eliminación de elementos seleccionados (badge)
-$('#selectedList').on('click', '.remove-item', function () {
-    const badge = $(this).closest('.selected-item');
-    const id = String(badge.data('id')); // Convertir a cadena
+    // Manejar selección de elementos
+    $('#actividad_economica').on('select2:select', function (e) {
+        const selectedId = String(e.params.data.id); // Convertir a cadena
+        const selectedText = e.params.data.text;
 
-    // Eliminar el ID del array
-    selectedItems = selectedItems.filter(item => item !== id);
-    console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
+        if (!selectedItems.includes(selectedId)) {
+            selectedItems.push(selectedId); // Agregar al array como cadena
+            $('#selectedList').append(`
+                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                </span>
+            `);
+            syncHiddenInput(); // Sincronizar el campo oculto
+        }
 
-    // Eliminar visualmente el badge
-    badge.remove();
+        $(this).val(null).trigger('change'); // Resetear el dropdown
+    });
 
-    // Restaurar la opción en el dropdown
-    const optionElement = $(`#actividad_economica option[value="${id}"]`);
-    optionElement.prop('disabled', false).prop('selected', false);
+    // Manejar eliminación de elementos seleccionados (badge)
+    $('#selectedList').on('click', '.remove-item', function () {
+        const badge = $(this).closest('.selected-item');
+        const id = String(badge.data('id')); // Convertir a cadena
 
-    syncHiddenInput(); // Sincronizar el campo oculto
-});
+        // Eliminar el ID del array
+        selectedItems = selectedItems.filter(item => item !== id);
+        console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
 
-// Sincronizar al quitar desde el dropdown
-$('#actividad_economica').on('select2:unselect', function (e) {
-    const unselectedId = String(e.params.data.id); // Convertir a cadena
+        // Eliminar visualmente el badge
+        badge.remove();
 
-    // Eliminar visualmente el badge
-    $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+        // Restaurar la opción en el dropdown
+        const optionElement = $(`#actividad_economica option[value="${id}"]`);
+        optionElement.prop('disabled', false).prop('selected', false);
 
-    // Eliminar el ID del array
-    selectedItems = selectedItems.filter(item => item !== unselectedId);
-    console.log(`Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`); // Depuración
+        syncHiddenInput(); // Sincronizar el campo oculto
+    });
 
-    syncHiddenInput(); // Sincronizar el campo oculto
-});
+    // Sincronizar al quitar desde el dropdown
+    $('#actividad_economica').on('select2:unselect', function (e) {
+        const unselectedId = String(e.params.data.id); // Convertir a cadena
+
+        // Eliminar visualmente el badge
+        $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+
+        // Eliminar el ID del array
+        selectedItems = selectedItems.filter(item => item !== unselectedId);
+        console.log(`Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`); // Depuración
+
+        syncHiddenInput(); // Sincronizar el campo oculto
+    });
 
     // Actualizar el array 'selectedItems' cuando cambie la selección en Select2
     /*$('#actividad_economica').on('change', function () {
@@ -916,98 +951,98 @@ $('#actividad_economica').on('select2:unselect', function (e) {
     });*/
 
     //Para el Mod
-    $('#actividad_economica_mod').select2({
-        placeholder: "Selecciona una o más opciones",
-        width: '100%',
-        allowClear: true
-    });
+        $('#actividad_economica_mod').select2({
+            placeholder: "Selecciona una o más opciones",
+            width: '100%',
+            allowClear: true
+        });
 
-    function syncHiddenInputMod() {
-    $('#hiddenSelectedItemsMod').val(selectedItemsMod.join(',')); // Actualizar el campo oculto
-    console.log('Contenido actualizado de selectedItemsMod:', selectedItemsMod);
-}
+        function syncHiddenInputMod() {
+            $('#hiddenSelectedItemsMod').val(selectedItemsMod.join(',')); // Actualizar el campo oculto
+            console.log('Contenido actualizado de selectedItemsMod:', selectedItemsMod);
+        }
 
-let selectedItemsMod = [];
+        let selectedItemsMod = [];
 
-// Manejar selección de elementos
-$('#actividad_economica_mod').on('select2:select', function (e) {
-    const selectedId = String(e.params.data.id); // Convertir a cadena
-    const selectedText = e.params.data.text;
+        // Manejar selección de elementos
+        $('#actividad_economica_mod').on('select2:select', function (e) {
+            const selectedId = String(e.params.data.id); // Convertir a cadena
+            const selectedText = e.params.data.text;
 
-    if (!selectedItemsMod.includes(selectedId)) {
-        selectedItemsMod.push(selectedId); // Agregar el ID al array
-        $('#selectedList_mod').append(`
-            <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
-                ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-            </span>
-        `);
+            if (!selectedItemsMod.includes(selectedId)) {
+                selectedItemsMod.push(selectedId); // Agregar el ID al array
+                $('#selectedList_mod').append(`
+                    <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                        ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                    </span>
+                `);
 
-        syncHiddenInputMod(); // Sincronizar el campo oculto
-    }
+                syncHiddenInputMod(); // Sincronizar el campo oculto
+            }
 
-    $(this).val(null).trigger('change'); // Resetear el dropdown
-});
+            $(this).val(null).trigger('change'); // Resetear el dropdown
+        });
 
-// Manejar eliminación de elementos seleccionados (badge)
-$('#selectedList_mod').on('click', '.remove-item', function () {
-    const badge = $(this).closest('.selected-item');
-    const id = String(badge.data('id')); // Convertir a cadena
+        // Manejar eliminación de elementos seleccionados (badge)
+        $('#selectedList_mod').on('click', '.remove-item', function () {
+            const badge = $(this).closest('.selected-item');
+            const id = String(badge.data('id')); // Convertir a cadena
 
-    // Eliminar el ID del array
-    selectedItemsMod = selectedItemsMod.filter(item => item !== id);
-    console.log(`Eliminado del array Mod: ${id}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
+            // Eliminar el ID del array
+            selectedItemsMod = selectedItemsMod.filter(item => item !== id);
+            console.log(`Eliminado del array Mod: ${id}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
 
-    // Eliminar visualmente el badge
-    badge.remove();
+            // Eliminar visualmente el badge
+            badge.remove();
 
-    // Restaurar la opción en el dropdown
-    const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
-    optionElement.prop('disabled', false).prop('selected', false);
+            // Restaurar la opción en el dropdown
+            const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
+            optionElement.prop('disabled', false).prop('selected', false);
 
-    syncHiddenInputMod(); // Sincronizar el campo oculto
-});
+            syncHiddenInputMod(); // Sincronizar el campo oculto
+        });
 
-// Sincronizar al quitar desde el dropdown
-$('#actividad_economica_mod').on('select2:unselect', function (e) {
-    const unselectedId = String(e.params.data.id); // Convertir a cadena
+        // Sincronizar al quitar desde el dropdown
+        $('#actividad_economica_mod').on('select2:unselect', function (e) {
+            const unselectedId = String(e.params.data.id); // Convertir a cadena
 
-    // Eliminar visualmente el badge
-    $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
+            // Eliminar visualmente el badge
+            $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
 
-    // Eliminar el ID del array
-    selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
-    console.log(`Eliminado desde dropdown Mod: ${unselectedId}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
+            // Eliminar el ID del array
+            selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
+            console.log(`Eliminado desde dropdown Mod: ${unselectedId}, Nuevo contenido Mod: ${selectedItemsMod}`); // Depuración
 
-    syncHiddenInputMod(); // Sincronizar el campo oculto
-});
+            syncHiddenInputMod(); // Sincronizar el campo oculto
+        });
 
  
-    $('#ModalCamara').on('show.bs.modal', function() { 
-        // Reiniciar el array de ítems seleccionados
-        selectedItems = [];
+        $('#ModalCamara').on('show.bs.modal', function() { 
+            // Reiniciar el array de ítems seleccionados
+            selectedItems = [];
 
-        // Limpiar lista de badges y el campo oculto
-        $('#selectedList').empty();
-        $('#hiddenSelectedItems').val('');
+            // Limpiar lista de badges y el campo oculto
+            $('#selectedList').empty();
+            $('#hiddenSelectedItems').val('');
 
-        // Limpiar completamente el select, establecer en blanco
-        $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
-        $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
-        console.log('Modal abierto, campos limpios');
-    }); 
+            // Limpiar completamente el select, establecer en blanco
+            $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
+            $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
+            console.log('Modal abierto, campos limpios');
+        }); 
 
-    $('#ModalCamara').on('hidden.bs.modal', function () {
-        selectedItems = [];
+        $('#ModalCamara').on('hidden.bs.modal', function () {
+            selectedItems = [];
 
-        // Limpiar lista de badges y el campo oculto
-        $('#selectedList').empty();
-        $('#hiddenSelectedItems').val('');
+            // Limpiar lista de badges y el campo oculto
+            $('#selectedList').empty();
+            $('#hiddenSelectedItems').val('');
 
-        // Limpiar completamente el select, establecer en blanco
-        $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
-        $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
-        console.log('Modal abierto, campos limpios');
-    });
+            // Limpiar completamente el select, establecer en blanco
+            $('#actividad_economica').val([]).trigger('change');  // Para select2 u otros plugins
+            $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
+            console.log('Modal abierto, campos limpios');
+        });
  
 
         //Manejo de Fechas
@@ -1234,45 +1269,7 @@ $('#actividad_economica_mod').on('select2:unselect', function (e) {
         $('#referencia_mod').on('input', function() {
             // Convierte el valor del campo a mayúsculas
             $(this).val($(this).val().toUpperCase());
-        }); 
-
-
-
-
-        var table = $('#dataTable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('admin.obtener_listado_camaras') }}",
-                type: "GET",
-                data: function (d) {
-                    d.start = d.start || 0;
-                    d.length = d.length || 10;
-                    d.localidad = $('#localidad').val(); // Enviar el valor de localidad seleccionada
-                },
-                error: function (error) {
-                    console.error("Error al cargar los datos: ", error);
-                }
-            },
-            pageLength: 10, // Establece el número de registros por página
-            columns: [
-                { data: 'fecha_ingreso', width: '10%' }, 
-                { data: 'ruc', width: '15%' }, 
-                { data: 'razon_social', width: '20%' }, 
-                { data: 'representante_legal', width: '20%' } , 
-                { data: 'cedula_representante_legal', width: '15%' } , 
-                { data: 'btn', width: '20%' } 
-            ],
-            order: [[0, "asc"]],
-            createdRow: function(row, data, dataIndex) {
-                var td = $(row).find(".truncate");
-                td.attr("title", td.text());
-
-                var td2 = $(row).find(".truncate2");
-                td2.attr("title", td2.text());
-            }
-        });
+        });  
 
         // Evento para recargar el DataTable cuando cambia el valor del select de localidad
         $('#localidad').on('change', function() {
@@ -2347,9 +2344,17 @@ $('#actividad_economica_mod').on('select2:unselect', function (e) {
                     success: function (response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia');
+                        let $cantonSelect = $('#canton');
+                        let $parroquiaSelect = $('#parroquia');
                         
                         $provinciaSelect.empty(); // Limpiamos el select de provincias
                         $provinciaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+
+                        $cantonSelect.empty(); // Limpiamos el select de provincias
+                        $cantonSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+                        
+                        $parroquiaSelect.empty(); // Limpiamos el select de provincias
+                        $parroquiaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
 
                         // Agregamos las provincias al select
                         provincias.forEach(function (provincia) {
@@ -2446,9 +2451,17 @@ $('#actividad_economica_mod').on('select2:unselect', function (e) {
                     success: function (response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
+                        let $cantonSelect = $('#canton_mod');
+                        let $parroquiaSelect = $('#parroquia_mod');
                         
                         $provinciaSelect.empty(); // Limpiamos el select de provincias
                         $provinciaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+
+                        $cantonSelect.empty(); // Limpiamos el select de provincias
+                        $cantonSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
+                        
+                        $parroquiaSelect.empty(); // Limpiamos el select de provincias
+                        $parroquiaSelect.append('<option value="-1">Seleccionar</option>'); // Opción por defecto
 
                         // Agregamos las provincias al select
                         provincias.forEach(function (provincia) {
