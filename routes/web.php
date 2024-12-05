@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Maestro de Socios
     Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
+    Route::get('/administrador/obtener_listado_socios', [App\Http\Controllers\SocioController::class, 'obtener_listado_socios'])->middleware('auth')->name('admin.obtener_listado_socios');
 });
 
 require __DIR__ . '/auth.php';
