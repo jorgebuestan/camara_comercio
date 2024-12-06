@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_vencimiento')->nullable();
             $table->date('fecha_presentacion')->nullable();
+            $table->integer('estado');
             $table->timestamps();
         });
         DB::statement('ALTER TABLE obligaciones ADD FULLTEXT fulltext_obligacion_busqueda (obligacion_busqueda)');
