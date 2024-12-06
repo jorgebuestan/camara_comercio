@@ -71,6 +71,9 @@ Route::middleware(['auth'])->group(function () {
     //Maestro de Socios
     Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
     Route::get('/administrador/obtener_listado_socios', [App\Http\Controllers\SocioController::class, 'obtener_listado_socios'])->middleware('auth')->name('admin.obtener_listado_socios');
+    Route::post('/administrador/registrar_socio', [App\Http\Controllers\SocioController::class, 'registrar_socio'])->middleware('auth')->name('admin.registrar_socio');
+    Route::post('/administrador/actualizar_socio', [App\Http\Controllers\SocioController::class, 'modificar_socio'])->middleware('auth')->name('admin.actualizar_socio');
+    Route::post('/administrador/eliminar_socio', [App\Http\Controllers\SocioController::class, 'eliminar_socio'])->middleware('auth')->name('admin.eliminar_socio');
 });
 
 require __DIR__ . '/auth.php';
