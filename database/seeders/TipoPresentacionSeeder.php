@@ -15,23 +15,23 @@ class TipoPresentacionSeeder extends Seeder
     {
         //
         DB::table('tipo_presentacion')->insert([  
-            'nombre' => 'MENSUAL' 
+            'descripcion' => 'MENSUAL' 
         ]); 
 
         DB::table('tipo_presentacion')->insert([  
-            'nombre' => 'BIMENSUAL' 
+            'descripcion' => 'BIMENSUAL' 
         ]); 
 
         DB::table('tipo_presentacion')->insert([  
-            'nombre' => 'TRIMESTRAL' 
+            'descripcion' => 'TRIMESTRAL' 
         ]); 
 
         DB::table('tipo_presentacion')->insert([  
-            'nombre' => 'SEMESTRAL' 
+            'descripcion' => 'SEMESTRAL' 
         ]); 
 
         DB::table('tipo_presentacion')->insert([  
-            'nombre' => 'ANUAL' 
+            'descripcion' => 'ANUAL' 
         ]); 
     }
 }

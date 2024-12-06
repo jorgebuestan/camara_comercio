@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('entidades', function (Blueprint $table) {
             $table->id();
+            $table->text('ruc');
+            $table->text('entidad');
+            $table->integer('id_tipo_entidad');
+            $table->integer('alcance');
+            $table->text('direccion');
+            $table->text('telefono');
+            $table->text('representante')->nullable();
+            $table->text('telefono_representante')->nullable();
+            $table->integer('id_pais')->nullable();
+            $table->integer('id_parroquia')->nullable();
+            $table->integer('id_canton')->nullable();
+            $table->integer('estado');
             $table->timestamps();
         });
     }

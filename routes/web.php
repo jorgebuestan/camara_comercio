@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\FuncionesGeneralesController;
+use App\Http\Controllers\SocioController;
+use App\Http\Controllers\EntidadesController;
+use App\Http\Controllers\ObligacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +72,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/camara/modificar_establecimiento', [EstablecimientoController::class, 'modificar_establecimiento'])->middleware('auth')->name('admin.modificar_establecimiento');
 
     //Maestro de Socios
-    Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
+    Route::get('/administrador/maestro_socios', [SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
+
+
+    //Maestro de Obligaciones
+    Route::get('/administrador/maestro_obligaciones', [ObligacionesController::class, 'maestro_obligaciones'])->middleware('auth')->name('admin.maestro_obligaciones');
+
+    //Maestro de Entidades
+    Route::get('/administrador/maestro_entidades', [EntidadesController::class, 'maestro_entidades'])->middleware('auth')->name('admin.maestro_entidades');
+    Route::get('/administrador/obtener_listado_entidades', [EntidadesController::class, 'obtener_listado_entidades'])->middleware('auth')->name('admin.obtener_listado_entidades');
+    Route::post('/administrador/registrar_entidad', [EntidadesController::class, 'registrar_entidad'])->middleware('auth')->name('admin.registrar_entidad');
+   
 });
 
 require __DIR__ . '/auth.php';

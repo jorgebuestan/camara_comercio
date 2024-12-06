@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TiempoPresentacionSeeder extends Seeder
+class TipoEntidadSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,12 @@ class TiempoPresentacionSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('tiempo_presentacion')->insert([  
-            'descripcion' => 'ÚNICA VEZ' 
+        DB::table('tipo_entidad')->insert([  
+            'descripcion' => 'PÚBLICA' 
         ]); 
 
-        DB::table('tiempo_presentacion')->insert([  
-            'descripcion' => 'CONSECUTIVA' 
+        DB::table('tipo_entidad')->insert([  
+            'descripcion' => 'PRIVADA' 
         ]); 
     }
 }
