@@ -80,7 +80,7 @@ Maestro de Entidades
                             <div class="col-md-6"> 
                                 <div class="row">
                                     <div class="col-md-12">   
-                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalObligacion">Agregar Nuevo Registro</button>  
+                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEntidad">Agregar Nuevo Registro</button>  
                                         <!-- <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Registro</button> -->
                                     </div> 
                                 </div> 
@@ -95,7 +95,7 @@ Maestro de Entidades
                                             <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                                         </div>
 
-                                        <h2 class="card-title">Listado de Entidades creadas hasta la fecha</h2>
+                                        <h2 class="card-title">Listado de Entidades creadas</h2>
                                     </header>
                                     <div class="card-body"> 
                                         <table class="table table-bordered table-striped mb-0" id="dataTable"> 
@@ -124,12 +124,12 @@ Maestro de Entidades
       <!-- Modal --> 
 
         <!-- Jbuestan Modales -->
-        <form enctype="multipart/form-data" class="modal fade" id="ModalObligacion" tabindex="-1" aria-labelledby="ModalObligacionLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalEntidad" tabindex="-1" aria-labelledby="ModalEntidadLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog modal-xl"> 
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalObligacionLabel"><b>Agregar una nueva Entidad</b></h5>
+                        <h5 class="modal-title" id="ModalEntidadLabel"><b>Agregar una nueva Entidad</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> -->
@@ -148,6 +148,7 @@ Maestro de Entidades
                                 </div> 
                                 <div class="col-md-4">  
                                     <input type="text" class="form-control" name="ruc"  id="ruc" placeholder="Ruc">
+                                    <div id="error-ruc" style="color: red; display: none;">El RUC debe tener 13 dígitos.</div>
                                 </div> 
                             </div>  
                             <div class="row">
@@ -186,13 +187,13 @@ Maestro de Entidades
                                     Dirección
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="direccion"  id="direccion" placeholder="Calle">
+                                    <input type="text" class="form-control" name="direccion"  id="direccion" placeholder="Dirección">
                                 </div> 
                                 <div class="col-md-2">  
                                     Teléfono
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="telefono"  id="telefono" placeholder="Manzana">
+                                    <input type="text" class="form-control" name="telefono"  id="telefono" placeholder="Teléfono">
                                 </div> 
                             </div>  
                             <div class="row">
@@ -203,13 +204,13 @@ Maestro de Entidades
                                     Representante
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="representante"  id="representante" placeholder="Número">
+                                    <input type="text" class="form-control" name="representante"  id="representante" placeholder="Representante">
                                 </div> 
                                 <div class="col-md-2">  
                                     Teléfono Representante
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="telefono_representante"  id="telefono_representante" placeholder="Intersección">
+                                    <input type="text" class="form-control" name="telefono_representante"  id="telefono_representante" placeholder="Teléfono Representante">
                                 </div> 
                             </div>  
                             <div class="row">
@@ -285,12 +286,12 @@ Maestro de Entidades
         </form>
 
 
-        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarEstablecimiento" tabindex="-1" aria-labelledby="ModalModificarEstablecimientoLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarEntidad" tabindex="-1" aria-labelledby="ModalModificarEntidadLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Entidad</b></h5>
+                        <h5 class="modal-title" id="ModalModificarEntidadLabel"><b>Modificar Entidad</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --> 
@@ -299,17 +300,18 @@ Maestro de Entidades
                         <div class="form-group">  
                             <div class="row">
                                 <div class="col-md-2">  
-                                    Entidad
-                                    <input type="hidden" id="entidad_id" name="entidad_id" value="">
+                                    Nombre
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="entidad_mod"  id="entidad" placeholder="Entidad">
+                                    <input type="text" class="form-control" name="entidad_mod"  id="entidad_mod" placeholder="Entidad">
+                                    <input type="hidden" id="entidad_id" name="entidad_id">
                                 </div> 
                                 <div class="col-md-2">  
                                     Ruc
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="ruc"  id="ruc" placeholder="Ruc">
+                                    <input type="text" class="form-control" name="ruc_mod"  id="ruc_mod" placeholder="Ruc">
+                                    <div id="error-ruc-mod" style="color: red; display: none;">El RUC debe tener 13 dígitos.</div>
                                 </div> 
                             </div>  
                             <div class="row">
@@ -320,7 +322,7 @@ Maestro de Entidades
                                     Clase
                                 </div> 
                                 <div class="col-md-4">  
-                                    <select id="tipo_entidad" name="tipo_entidad" class="form-control populate">
+                                    <select id="tipo_entidad_mod" name="tipo_entidad_mod" class="form-control populate">
                                         <option value="-1">Seleccionar</option>
                                         @foreach($tipo_entidad as $id => $nombre)
                                             <option value="{{ $id }}">
@@ -330,10 +332,14 @@ Maestro de Entidades
                                     </select>
                                 </div> 
                                 <div class="col-md-2">  
-                                    &nbsp;
+                                    Alcance
                                 </div> 
                                 <div class="col-md-4">  
-                                    &nbsp;
+                                    <select id="alcance_mod" name="alcance_mod" class="form-control populate">
+                                        <option value="-1">Seleccionar</option>
+                                        <option value="1">GENERAL</option>
+                                        <option value="2">LOCAL</option>
+                                    </select>
                                 </div> 
                             </div>
                             <div class="row">
@@ -344,13 +350,13 @@ Maestro de Entidades
                                     Dirección
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="direccion"  id="direccion" placeholder="Calle">
+                                    <input type="text" class="form-control" name="direccion_mod"  id="direccion_mod" placeholder="Dirección">
                                 </div> 
                                 <div class="col-md-2">  
                                     Teléfono
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="telefono"  id="telefono" placeholder="Manzana">
+                                    <input type="text" class="form-control" name="telefono_mod"  id="telefono_mod" placeholder="Teléfono">
                                 </div> 
                             </div>  
                             <div class="row">
@@ -361,13 +367,13 @@ Maestro de Entidades
                                     Representante
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="representante"  id="representante" placeholder="Número">
+                                    <input type="text" class="form-control" name="representante_mod"  id="representante_mod" placeholder="Representante">
                                 </div> 
                                 <div class="col-md-2">  
                                     Teléfono Representante
                                 </div> 
                                 <div class="col-md-4">  
-                                    <input type="text" class="form-control" name="telefono_representante"  id="telefono_representante" placeholder="Intersección">
+                                    <input type="text" class="form-control" name="telefono_representante_mod"  id="telefono_representante_mod" placeholder="Teléfono Representante">
                                 </div> 
                             </div>  
                             <div class="row">
@@ -381,7 +387,7 @@ Maestro de Entidades
                                     País
                                 </div> 
                                 <div class="col-md-4">  
-                                    <select id="pais" name="pais" class="form-control populate">
+                                    <select id="pais_mod" name="pais_mod" class="form-control populate">
                                         <option value="-1">Seleccionar</option>
                                         @foreach($paises as $id => $nombre)
                                             <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
@@ -394,7 +400,7 @@ Maestro de Entidades
                                     Provincia
                                 </div> 
                                 <div class="col-md-4">  
-                                    <select id="provincia" name="provincia" class="form-control populate">
+                                    <select id="provincia_mod" name="provincia_mod" class="form-control populate">
                                         <option value="-1">Seleccionar</option>
                                         @foreach($provincias as $id => $nombre)
                                             <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
@@ -412,7 +418,7 @@ Maestro de Entidades
                                     Cantón
                                 </div> 
                                 <div class="col-md-4">  
-                                    <select id="canton" name="canton" class="form-control populate">
+                                    <select id="canton_mod" name="canton_mod" class="form-control populate">
                                         <option value="-1" selected>Seleccionar</option>
                                         @foreach($cantones as $id => $nombre)
                                             <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
@@ -435,12 +441,12 @@ Maestro de Entidades
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="btn-modificar-camara">Guardar Cambios</button>
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
+                        <button type="button" class="btn btn-primary" id="btn-modificar-entidad">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
-        </form>
- 
+        </form> 
     </div>
 
     <div id="carga" style="display: none; text-align: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
@@ -495,34 +501,59 @@ Maestro de Entidades
                 var td2 = $(row).find(".truncate2");
                 td2.attr("title", td2.text());
             }
+        }); 
+
+        //Manejo de Upercase 
+        $('#entidad').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
         });
 
-
-        $('#abrirModal').click(function (e) {
-            e.preventDefault(); // Evita el comportamiento predeterminado del botón
-
-            // Verificar si se seleccionó una opción válida en el select
-            var camaraSeleccionada = $('#camara').val();
-            var nombreCamaraSeleccionada = $('#camara option:selected').text();
-
-            if (camaraSeleccionada === '-1') {
-                alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
-            } else {
-                // Mostrar el nombre de la cámara seleccionada en el modal
-                $('#nombreCamaraSeleccionada').text(nombreCamaraSeleccionada);
-
-                // Cargar el valor de la cámara en el campo oculto
-                $('#camaraHidden').val(camaraSeleccionada);
-
-                // Abrir el modal
-                $('#ModalObligacion').modal('show');
-            }
+        $('#direccion').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
         });
 
-        // Cerrar el modal manualmente
-        $('.cerrar-modal').click(function () {
-            $('#ModalObligacion').modal('hide'); // Cerrar el modal
+        $('#telefono').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
         });
+
+        $('#representante').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#telefono_representante').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#entidad_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#direccion_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#telefono_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#representante_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        $('#telefono_representante_mod').on('input', function() {
+            // Convierte el valor del campo a mayúsculas
+            $(this).val($(this).val().toUpperCase());
+        });
+
 
         // Escucha el cambio en el select tipo_entidad
         $('#alcance').change(function () {
@@ -532,20 +563,72 @@ Maestro de Entidades
             // Deshabilitar o habilitar los selects según el valor
             if (tipoEntidad === '1') { // General
                 $('#pais, #provincia, #canton').prop('disabled', true);
+                $('#pais').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia').val('-1').change();
+                $('#canton').val('-1').change();
             } else if (tipoEntidad === '2') { // Local
                 $('#pais, #provincia, #canton').prop('disabled', false);
                 // Seleccionar automáticamente el valor '1' en el combo de país
                 $('#pais').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia').val('-1').change();
+                $('#canton').val('-1').change();
             } else {
                 // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
                 $('#pais, #provincia, #canton').prop('disabled', true);
+                $('#pais').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia').val('-1').change();
+                $('#canton').val('-1').change();
+            }
+        });
+
+        $('#alcance_mod').change(function () {
+            // Obtén el valor seleccionado
+            const tipoEntidad = $(this).val();
+
+            // Deshabilitar o habilitar los selects según el valor
+            if (tipoEntidad === '1') { // General
+                $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
+                $('#pais_mod').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia_mod').val('-1').change();
+                $('#canton_mod').val('-1').change();
+            } else if (tipoEntidad === '2') { // Local
+                $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', false);
+                // Seleccionar automáticamente el valor '1' en el combo de país
+                $('#pais_mod').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia_mod').val('-1').change();
+                $('#canton_mod').val('-1').change();
+            } else {
+                // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
+                $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
+                $('#pais_mod').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                $('#provincia_mod').val('-1').change();
+                $('#canton_mod').val('-1').change();
             }
         });
 
         // Inicializar los selects deshabilitados por defecto
         $('#pais, #provincia, #canton').prop('disabled', true);
 
-        $("#btn-register-entidad").click(function() { 
+        // Validar campo RUC
+        $("#ruc").on("input", function() {
+            var ruc = $(this).val();
+            if (/^\d{13}$/.test(ruc)) { // Si tiene exactamente 13 dígitos
+                $("#error-ruc").hide(); // Ocultar error
+            } else {
+                $("#error-ruc").show(); // Mostrar error
+            }
+        });
+
+        $("#ruc_mod").on("input", function() {
+            var ruc = $(this).val();
+            if (/^\d{13}$/.test(ruc)) { // Si tiene exactamente 13 dígitos
+                $("#error-ruc-mod").hide(); // Ocultar error
+            } else {
+                $("#error-ruc-mod").show(); // Mostrar error
+            }
+        });
+
+        /*$("#btn-register-entidad").click(function() { 
 
             if ($('#entidad').val() == "") {
                 alert('Debe ingresar el nombre de la Entidad'); 
@@ -553,258 +636,417 @@ Maestro de Entidades
                 return;
             }
 
-            if ($('#ruc').val() == "") {
-                alert('Debe ingresar el Ruc de la Entidad'); 
-                $('#entidad').focus();
+            if (!/^\d{13}$/.test($('#ruc').val())) { 
+                $("#error-ruc").show();
+                alert('El RUC debe tener 13 dígitos'); 
+                $('#ruc').focus();
                 return;
             }
 
-            if ($('#tipo_entidad').val() == "1") {
+            if ($('#tipo_entidad').val() == "-1") {
                 alert('Debe seleccionar la Clase de Entidad'); 
                 $('#entidad').focus();
                 return;
             }
 
-                if (!/^\d{13}$/.test($('#ruc').val())) {
-                    /*$("#error-ruc").show();
-                    isValid = false;*/
-                    $("#error-ruc").show();
-                    alert('El RUC debe tener 13 dígitos');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#ruc').focus();
-                    return;
-                }
+            if ($('#alcance').val() == "-1") {
+                alert('Debe seleccionar un alcance para la Entidad'); 
+                $('#entidad').focus();
+                return;
+            }
 
-                if ($('#razon_social').val() == "") {
-                    alert('Debe ingresar la Razón Social');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#razon_social').focus();
-                    return;
-                }
+            if ($('#direccion').val() == "") {
+                alert('Debe ingresar la Dirección de la Entidad'); 
+                $('#direccion').focus();
+                return;
+            }
 
-                if (!/^\d{10}$/.test($('#cedula_representante_legal').val())) {
-                    /*$("#error-ruc").show();
-                    isValid = false;*/
-                    $("#error-cedula").show();
-                    alert('La Cédula del Representante Legal debe tener 10 dígitos');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#cedula_representante_legal').focus();
-                    return;
-                }
+            if ($('#telefono').val() == "") {
+                alert('Debe ingresar el Teléfono de la Entidad'); 
+                $('#telefono').focus();
+                return;
+            }
 
-                if ($('#nombres_representante_legal').val() == "") {
-                    alert('Debe ingresar los Nombres del Representante Legal');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#nombres_representante_legal').focus();
-                    return;
-                }
+            if ($('#alcance').val() == "2") {
 
-                if ($('#apellidos_representante_legal').val() == "") {
-                    alert('Debe ingresar los Apellidos del Representante Legal');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#apellidos_representante_legal').focus();
-                    return;
-                }
-
-                if ($('#telefono_representante_legal').val() == "") {
-                    alert('Debe ingresar el Teléfono del Representante Legal');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#telefono_representante_legal').focus();
-                    return;
-                }
-
-
-                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo_representante_legal').val())) {
-                    /*$("#error-correo").show();
-                    isValid = false;*/
-                    $("#error-correo").show();
-                    alert('Debe registrar un correo con formato válido');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#correo_representante_legal').focus();
-                    return;
-                }
-
-                if ($('#cargo_representante_legal').val() == "") {
-                    alert('Debe ingresar el Cargo del Representante Legal');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#cargo_representante_legal').focus();
-                    return;
-                }
-
-                if ($('#direccion_representante_legal').val() == "") {
-                    alert('Debe ingresar la Dirección del Representante Legal');
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#direccion_representante_legal').focus();
-                    return;
-                }  
-
-                if ($('#tipo_regimen').val() == "-1") {
-                    alert('Debe seleccionar un Tipo de Régimen');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#tipo_regimen').focus();
-                    return;
-                }
-                
-                if ($('#fecha_registro').val() == "") {
-                    alert('Debe ingresar la Fecha de Registro de la Cámara');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_registro').focus();
-                    return;
-                }
-
-                if ($('#fecha_constitucion').val() == "") {
-                    alert('Debe ingresar la Fecha de Constitución de la Cámara');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_constitucion').focus();
-                    return;
-                }
-
-                // Función para convertir una fecha en formato dd/mm/yyyy a objeto Date
-                function convertirFechaAObjetoDate(fecha) {
-                    if (!fecha) return new Date('Invalid Date'); // Retorna una fecha inválida si la entrada es nula
-                    var partes = fecha.split('/'); // Divide la fecha por '/'
-                    return new Date(partes[2], partes[1] - 1, partes[0]); // Formato DD/MM/YYYY
-                }
-
-                // Validación de que la Fecha de Constitución sea menor a la Fecha de Registro
-                var fechaConstitucion = $('#fecha_constitucion').val();
-                var fechaRegistro = $('#fecha_registro').val();
-
-                if (fechaConstitucion && fechaRegistro) {
-                    // Convertir las fechas al formato correcto
-                    var fechaConstitucionDate = convertirFechaAObjetoDate(fechaConstitucion);
-                    var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
-
-                    // Validar si las fechas son válidas
-                    if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
-                        if (fechaConstitucionDate >= fechaRegistroDate) {
-                            alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
-                            $('#error-fecha-constitucion').show();
-                            $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                            $('#fecha_constitucion').focus();
-                            return;
-                        }
-                    } else {
-                        alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
-                        return;
-                    }
-                }
-
-                if ($('#agente_retencion').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Agente de Retención');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#agente_retencion').focus();
-                    return;
-                }
-
-                if ($('#contribuyente_especial').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#contribuyente_especial').focus();
-                    return;
-                }
-
-                if ($('#pais').val() == "-1") {
-                    alert('Debe seleccionar el País');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#pais').focus();
-                    return;
-                }
-
-                if ($('#provincia').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#provincia').focus();
-                    return;
-                }
-
-                if ($('#canton').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#canton').focus();
-                    return;
-                }
-
-                if ($('#parroquia').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#parroquia').focus();
-                    return;
-                }
-
-                if ($('#calle').val() == "") {
-                    alert('Debe ingresar la Calle en la Dirección Tributaria');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#calle').focus();
-                    return;
-                }
-
-                if ($('#manzana').val() == "") {
-                    alert('Debe ingresar la Manzana en la Dirección Tributaria');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#manzana').focus();
-                    return;
-                }
-
-                if ($('#numero').val() == "") {
-                    alert('Debe ingresar el Número en la Dirección Tributaria');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#numero').focus();
-                    return;
-                }
-
-                if ($('#interseccion').val() == "") {
-                    alert('Debe ingresar la Intersección en la Dirección Tributaria');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#interseccion').focus();
-                    return;
-                }
-
-                if ($('#referencia').val() == "") {
-                    alert('Debe ingresar la Referencia en la Dirección Tributaria');
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#referencia').focus();
-                    return;
-                }  
-
-                if ($('#hiddenSelectedItems').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');  
-                    $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show'); 
-                    $('#hiddenSelectedItems').focus();
+                if ($('#pais').val() == "-1" || $('#provincia').val() == "-1" || $('#canton').val() == "-1"){
+                    alert('Si seleccinó que alcance de la Entidad es local, debe seleccionar Pais, Provincia y Cantón');  
                     return;
                 } 
+            }   
+     
+            //alert('Fin de validaciones');return;
 
-                var formData = new FormData(document.getElementById("ModalCamara"));
-                $('#carga').show();
+            var formData = new FormData(document.getElementById("ModalEntidad"));
+            $('#carga').show();
 
-                $.ajax({
-                    url: "{{ route('admin.registrar_camara') }}",
-                    type: "POST",
-                    data: formData,
-                    dataType: "json",
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                }).done(function(res){
-                    $('#carga').hide(); 
-                    alert(res.success); // Mostrar el mensaje de éxito en un alert
-                    location.reload(); // Recargar la página
-                }).fail(function(res){
-                    $('#carga').hide(); 
+            $.ajax({
+                url: "{{ route('admin.registrar_entidad') }}",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function(res){
+                $('#carga').hide(); 
+                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                location.reload(); // Recargar la página
+            }).fail(function(res){
+                $('#carga').hide(); 
 
-                    if (res.status === 422) {
-                        // Mostrar mensaje de error de validación
-                        let errors = res.responseJSON;
-                        if (errors.error) {
-                            alert(errors.error);
+                if (res.status === 422) {
+                    // Mostrar mensaje de error de validación
+                    let errors = res.responseJSON;
+                    if (errors.error) {
+                        alert(errors.error);
+                    }
+                } else {
+                    // Mostrar mensaje genérico si no se recibió un error específico
+                    alert("Ocurrió un error al registrar la cámara.");
+                }
+
+                console.log(res.responseText); // Muestra el error completo en la consola para depuración
+            });
+        });*/
+
+        $('#btn-close').on('click', function () {
+            // Aquí puedes añadir la lógica para enviar el formulario modificado
+            $('#ModalModificarEntidad').modal('hide'); // Cerrar el modal después de guardar
+        });
+
+        $("#btn-register-entidad").click(function () {
+
+            if ($('#entidad').val() == "") {
+                alert('Debe ingresar el nombre de la Entidad');
+                $('#entidad').focus();
+                return;
+            }
+
+            if (!/^\d{13}$/.test($('#ruc').val())) {
+                $("#error-ruc").show();
+                alert('El RUC debe tener 13 dígitos');
+                $('#ruc').focus();
+                return;
+            }
+
+            if ($('#tipo_entidad').val() == "-1") {
+                alert('Debe seleccionar la Clase de Entidad');
+                $('#entidad').focus();
+                return;
+            }
+
+            if ($('#alcance').val() == "-1") {
+                alert('Debe seleccionar un alcance para la Entidad');
+                $('#entidad').focus();
+                return;
+            }
+
+            if ($('#direccion').val() == "") {
+                alert('Debe ingresar la Dirección de la Entidad');
+                $('#direccion').focus();
+                return;
+            }
+
+            if ($('#telefono').val() == "") {
+                alert('Debe ingresar el Teléfono de la Entidad');
+                $('#telefono').focus();
+                return;
+            }
+
+            if ($('#alcance').val() == "2") {
+
+                if ($('#pais').val() == "-1" || $('#provincia').val() == "-1" || $('#canton').val() == "-1") {
+                    alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    return;
+                }
+            }
+
+            // Verificar si hay registros similares antes de proceder
+            const entidad = $('#entidad').val();
+            const ruc = $('#ruc').val();
+
+            $.ajax({
+                url: "{{ route('admin.check_entidad') }}", // Ruta para verificar similitudes
+                type: "POST",
+                data: {
+                    entidad: entidad,
+                    ruc: ruc,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    if (response.similar.length > 0) {
+                        // Mostrar mensaje de confirmación al usuario
+                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
+
+                        if (!confirm(similarMessage)) {
+                            return; // Detener la ejecución si el usuario cancela
                         }
-                    } else {
-                        // Mostrar mensaje genérico si no se recibió un error específico
-                        alert("Ocurrió un error al registrar la cámara.");
                     }
 
-                    console.log(res.responseText); // Muestra el error completo en la consola para depuración
+                    // Si no hay similitudes o el usuario confirma, proceder con el registro
+                    registrarEntidad();
+                },
+                error: function () {
+                    alert('Error al verificar registros similares. Intente nuevamente.');
+                }
+            });
+        });
+
+        $("#btn-modificar-entidad").click(function () {
+
+            if ($('#entidad_mod').val() == "") {
+                alert('Debe ingresar el nombre de la Entidad');
+                $('#entidad_mod').focus();
+                return;
+            }
+
+            if (!/^\d{13}$/.test($('#ruc_mod').val())) {
+                $("#error-ruc-mod").show();
+                alert('El RUC debe tener 13 dígitos');
+                $('#ruc_mod').focus();
+                return;
+            }
+
+            if ($('#tipo_entidad_mod').val() == "-1") {
+                alert('Debe seleccionar la Clase de Entidad');
+                $('#entidad_mod').focus();
+                return;
+            }
+
+            if ($('#alcance_mod').val() == "-1") {
+                alert('Debe seleccionar un alcance para la Entidad');
+                $('#entidad_mod').focus();
+                return;
+            }
+
+            if ($('#direccion_mod').val() == "") {
+                alert('Debe ingresar la Dirección de la Entidad');
+                $('#direccion_mod').focus();
+                return;
+            }
+
+            if ($('#telefono_mod').val() == "") {
+                alert('Debe ingresar el Teléfono de la Entidad');
+                $('#telefono_mod').focus();
+                return;
+            }
+
+            if ($('#alcance_mod').val() == "2") {
+
+                if ($('#pais_mod').val() == "-1" || $('#provincia_mod').val() == "-1" || $('#canton_mod').val() == "-1") {
+                    alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    return;
+                }
+            }
+
+            // Verificar si hay registros similares antes de proceder
+            const entidadId = $('#entidad_id').val();
+            const entidad = $('#entidad_mod').val();
+            const ruc = $('#ruc_mod').val();
+
+            $.ajax({
+                url: "{{ route('admin.check_entidad_modificar') }}", // Ruta para verificar similitudes
+                type: "POST",
+                data: {
+                    entidad: entidad,
+                    ruc: ruc,
+                    entidad_id: entidadId, // Enviar el ID actual
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    /*if (response.similar.length > 0) {
+                        // Filtrar el propio registro en caso de estar en los resultados
+                        const registrosSimilares = response.similar.filter(sim => sim.id !== entidadId);
+
+                        if (registrosSimilares.length > 0) {
+                            const similarMessage = `Se encontraron registros similares:\n- ${registrosSimilares.map(s => s.entidad).join('\n- ')}\n\n¿Está seguro de modificar esta entidad de todas formas?`;
+
+                            if (!confirm(similarMessage)) {
+                                return; // Detener la ejecución si el usuario cancela
+                            }
+                        }
+                    }*/
+                    if (response.similar.length > 0) {
+                        // Mostrar mensaje de confirmación al usuario
+                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
+
+                        if (!confirm(similarMessage)) {
+                            return; // Detener la ejecución si el usuario cancela
+                        }
+                    }
+
+                    // Proceder con la modificación
+                    modificarEntidad();
+                },
+                error: function () {
+                    alert('Error al verificar registros similares. Intente nuevamente.');
+                }
+            });
+        }); 
+
+        function registrarEntidad() {
+            var formData = new FormData(document.getElementById("ModalEntidad"));
+            $('#carga').show();
+
+            $.ajax({
+                url: "{{ route('admin.registrar_entidad') }}",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function (res) {
+                $('#carga').hide();
+                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                location.reload(); // Recargar la página
+            }).fail(function (res) {
+                $('#carga').hide();
+
+                if (res.status === 422) {
+                    let errors = res.responseJSON;
+                    if (errors.error) {
+                        alert(errors.error);
+                    }
+                } else {
+                    alert("Ocurrió un error al registrar la entidad.");
+                }
+
+                console.log(res.responseText); // Muestra el error completo en la consola para depuración
+            });
+        }
+
+        function modificarEntidad() {
+            var formData = new FormData(document.getElementById("ModalModificarEntidad"));
+            $('#carga').show();
+
+            $.ajax({
+                url: "{{ route('admin.modificar_entidad') }}",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function (res) {
+                $('#carga').hide();
+                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                location.reload(); // Recargar la página
+            }).fail(function (res) {
+                $('#carga').hide();
+
+                if (res.status === 422) {
+                    let errors = res.responseJSON;
+                    if (errors.error) {
+                        alert(errors.error);
+                    }
+                } else {
+                    alert("Ocurrió un error al modificar la entidad.");
+                }
+
+                console.log(res.responseText); // Muestra el error completo en la consola para depuración
+            });
+        }
+
+        // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
+        $(document).on('click', '.open-modal', function() {
+            console.log('Botón clicado...');
+            var button = $(this); 
+            var entidadId = button.data('id'); 
+
+            console.log('Cargo ID:', entidadId);  
+
+            $('#carga').show();
+
+            
+            $.ajax({
+                url: '/administrador/entidad/detalle/' + entidadId,
+                method: 'GET',
+                success: function(response) {
+                    console.log('Datos recibidos:', response);
+
+                    var entidadId = $('#entidad_id');
+                    var Entidad = $('#entidad_mod');  
+                    var Ruc = $('#ruc_mod'); 
+                    var TipoEntidad = $('#tipo_entidad_mod'); 
+                    var Alcance = $('#alcance_mod'); 
+                    var Direccion = $('#direccion_mod');  
+                    var Telefono = $('#telefono_mod');  
+                    var Representante = $('#representante_mod');  
+                    var TelefonoRepresentante = $('#telefono_representante_mod');  
+                    var Pais = $('#pais_mod'); 
+                    var Provincia = $('#provincia_mod'); 
+                    var Canton = $('#canton_mod'); 
+
+ 
+                    entidadId.val(response.id); 
+                    Entidad.val(response.entidad);
+                    Ruc.val(response.ruc); 
+                    TipoEntidad.val(response.id_tipo_entidad); 
+                    Alcance.val(response.alcance); 
+                    Direccion.val(response.direccion); 
+                    Telefono.val(response.telefono); 
+                    Representante.val(response.representante); 
+                    TelefonoRepresentante.val(response.telefono_representante);  
+                     
+                    if(response.id_pais!=0){
+                             // Asignar país y disparar cambio para cargar provincias
+                        $('#pais_mod').val(response.id_pais).trigger('change');
+
+                        // Cargar provincias y asignar provincia
+                        cargarProvincias(response.id_pais).then(() => {
+                            $('#provincia_mod').val(response.id_provincia).trigger('change');
+
+                            // Cargar cantones y asignar cantón
+                            cargarCantones(response.id_pais, response.id_provincia).then(() => {
+                                $('#canton_mod').val(response.id_canton).trigger('change'); 
+                            });
+                        });   
+                    }else{
+                        $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
+                        $('#pais_mod').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        $('#provincia_mod').val('-1').change();
+                        $('#canton_mod').val('-1').change();
+                    }
+                   
+                    $('#carga').hide();
+                    $('#ModalModificarEntidad').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-entidad', function() {
+            var button = $(this); 
+            var entidadId = button.data('id'); 
+
+            // Mostrar la confirmación antes de proceder con la eliminación
+            var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+
+            if (confirmDelete) {
+                $.ajax({
+                    url: '/administrador/entidad/eliminar/' + entidadId,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                    },
+                    success: function(response) {
+                        alert('Registro eliminado correctamente.'); 
+                        // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
+                        location.reload(); // O cualquier otra lógica para actualizar la interfaz
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Hubo un problema al eliminar el Registro.');
+                    }
                 });
+            } else {
+                // El usuario canceló la eliminación
+                console.log('Eliminación cancelada por el usuario.');
+            }
         });
 
 
@@ -1083,8 +1325,7 @@ Maestro de Entidades
             } else {
                 $('#parroquia_mod').empty().append('<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
             }
-        });
-
+        }); 
 
    
     });

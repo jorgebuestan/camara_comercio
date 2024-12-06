@@ -8,6 +8,7 @@ use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\TipoEntidad; 
+use App\Models\Entidad; 
 
 class EntidadesController extends Controller
 {
@@ -93,7 +94,7 @@ class EntidadesController extends Controller
                 'entidad' => $entidad->entidad, 
                 'tipo_entidad' => $entidad->tipo_entidad, 
                 'direccion' => $entidad->direccion, 
-                'representante' => $representante, 
+                'representante' => $entidad->representante, 
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $entidad->id . '">Modificar</button>' .
                 '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar</button>'.
                 '&nbsp;&nbsp;&nbsp;' 
@@ -110,81 +111,216 @@ class EntidadesController extends Controller
         return response()->json($json_data);
     }
 
+    /*public function checkEntidad(Request $request)
+    {
+        $entidad = $request->input('entidad');
+
+        // Buscar entidades similares 
+
+        $stopWords = ['CAMARA', 'COMERCIO', 'DE']; // Palabras genéricas a excluir
+        $cleanEntidad = str_replace($stopWords, '', strtoupper($entidad));
+
+        $similares = DB::table('entidades')
+            ->select('entidad_busqueda')
+            ->whereRaw("MATCH(entidad_busqueda) AGAINST(? IN BOOLEAN MODE)", [$cleanEntidad])
+            ->pluck('entidad_busqueda');
+
+        return response()->json([
+            'similar' => $similares,
+        ]);
+    }*/
+    public function checkEntidad(Request $request)
+    {
+        $entidad = strtoupper($request->input('entidad'));
+
+        // Lista de palabras genéricas que no queremos comparar
+        $stopWords = ['CAMARA', 'COMERCIO', 'DE'];
+        $entidadFiltrada = preg_replace('/\b(' . implode('|', $stopWords) . ')\b/', '', $entidad);
+
+        // Obtener todas las entidades para comparar
+        $entidadesExistentes = DB::table('entidades')->pluck('entidad');
+
+        // Lista para almacenar entidades similares
+        $entidadesSimilares = [];
+
+        // Calcular similitudes usando similar_text
+        foreach ($entidadesExistentes as $existente) {
+            $existenteFiltrado = preg_replace('/\b(' . implode('|', $stopWords) . ')\b/', '', strtoupper($existente));
+            similar_text($entidadFiltrada, $existenteFiltrado, $porcentajeSimilitud);
+
+            if ($porcentajeSimilitud >= 70) { // Umbral de similitud
+                $entidadesSimilares[] = $existente;
+            }
+        }
+
+        return response()->json([
+            'similar' => $entidadesSimilares,
+        ]);
+    }
+
+    public function checkEntidadMod(Request $request)
+    {
+        $entidad = strtoupper($request->input('entidad'));
+
+        // Lista de palabras genéricas que no queremos comparar
+        $stopWords = ['CAMARA', 'COMERCIO', 'DE'];
+        $entidadFiltrada = preg_replace('/\b(' . implode('|', $stopWords) . ')\b/', '', $entidad);
+
+        // Obtener todas las entidades para comparar
+        $entidadesExistentes = DB::table('entidades')->where('id', '!=', $request->input('entidad_id'))->pluck('entidad');
+
+        // Lista para almacenar entidades similares
+        $entidadesSimilares = [];
+
+        // Calcular similitudes usando similar_text
+        foreach ($entidadesExistentes as $existente) {
+            $existenteFiltrado = preg_replace('/\b(' . implode('|', $stopWords) . ')\b/', '', strtoupper($existente));
+            similar_text($entidadFiltrada, $existenteFiltrado, $porcentajeSimilitud);
+
+            if ($porcentajeSimilitud >= 70) { // Umbral de similitud
+                $entidadesSimilares[] = $existente;
+            }
+        }
+
+        return response()->json([
+            'similar' => $entidadesSimilares,
+        ]);
+    }
+
     public function registrar_entidad(Request $request)
     { 
 
         try {
-            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
-            $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso'))->format('Y-m-d');
-
-            $rutaLogo = 'default/default_logo.png'; // Ruta por defecto al logo
-
-            // Manejo del archivo de logo si existe
-            if ($request->hasFile('file')) {
-                $ruc = $request->input('ruc');
-                $archivoLogo = $request->file('file');
-                $nombreArchivo = "{$ruc}." . $archivoLogo->getClientOriginalExtension();
-
-                // Crear carpeta con el nombre del RUC y guardar el archivo
-                $rutaLogo = "logos/{$ruc}/{$nombreArchivo}";
-                $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
+            
+            $pais = 0;
+            $provincia = 0;
+            $canton = 0;
+            if($request->input('pais')){
+                $pais = $request->input('pais');
             }
-
-            
-
+            if($request->input('provincia')){
+                $provincia = $request->input('provincia');
+            }
+            if($request->input('canton')){
+                $canton = $request->input('canton');
+            }
             // Crear registro en la base de datos
-            $camara = Camara::create([
-                'logo' => $rutaLogo,
-                'fecha_ingreso' => $fechaIngreso, // Usar fecha convertida
+            $camara = Entidad::create([ 
                 'ruc' => strtoupper($request->input('ruc')),
-                'razon_social' => strtoupper($request->input('razon_social')),
-                'cedula_representante_legal' => strtoupper($request->input('cedula_representante_legal')),
-                'nombres_representante_legal' => strtoupper($request->input('nombres_representante_legal')),
-                'apellidos_representante_legal' => strtoupper($request->input('apellidos_representante_legal')),
-                'telefono_representante_legal' => strtoupper($request->input('telefono_representante_legal')),
-                'correo_representante_legal' => strtoupper($request->input('correo_representante_legal')),
-                'cargo_representante_legal' => strtoupper($request->input('cargo_representante_legal')),
-                'direccion_representante_legal' => strtoupper($request->input('direccion_representante_legal')),
+                'entidad' => strtoupper($request->input('entidad')),
+                'entidad_busqueda' => strtoupper($request->input('entidad')),
+                'id_tipo_entidad' => strtoupper($request->input('tipo_entidad')),
+                'alcance' => strtoupper($request->input('alcance')),
+                'direccion' => strtoupper($request->input('direccion')),
+                'telefono' => strtoupper($request->input('telefono')),
+                'representante' => strtoupper($request->input('representante')),
+                'telefono_representante' => strtoupper($request->input('telefono_representante')),
+                'id_pais' => strtoupper($pais),
+                'id_provincia' => strtoupper($provincia),
+                'id_canton' => strtoupper($canton),
                 'estado' => 1
-            ]);
+            ]); 
 
-            $fechaRegistro = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_registro'))->format('Y-m-d');
-            $fechaConstitucion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_constitucion'))->format('Y-m-d');
-
-
-            //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
-            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', ''); 
-            // Convertir la cadena en un array (si no está vacío)
-            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
-
-            
-            DatoTributario::create([
-                'id_camara' => $camara->id,
-                'tipo_regimen' => strtoupper($request->input('tipo_regimen')), 
-                'fecha_registro_sri' => $fechaRegistro,
-                'fecha_constitucion' => $fechaConstitucion,
-                'agente_retencion' => strtoupper($request->input('agente_retencion')),
-                'contribuyente_especial' => strtoupper($request->input('contribuyente_especial')),
-                'id_pais' => $request->input('pais'),
-                'id_provincia' => $request->input('provincia'),
-                'id_canton' => $request->input('canton'),
-                'id_parroquia' => $request->input('parroquia'),
-                'calle' => strtoupper($request->input('calle')),
-                'manzana' => strtoupper($request->input('manzana')),
-                'numero' => strtoupper($request->input('numero')),
-                'interseccion' => strtoupper($request->input('interseccion')),
-                'referencia' => strtoupper($request->input('referencia')),
-                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
-            ]);
-
-            return response()->json(['success' => 'Cámara registrada correctamente'], 200);
+            return response()->json(['success' => 'Entidad registrada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
-                return response()->json(['error' => 'El RUC ingresado ya existe en el sistema.'], 422);
+                return response()->json(['error' => 'El RUC o nombre de Entidad ingresado ya existe en el Sistema.'], 422);
             }
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function eliminar_entidad($id)
+    {
+        //$colaborador = Colaborador::find($id);
+        $entidad = Entidad::where('id', $id)->first();
+
+
+        if (!$entidad) {
+            return response()->json(['error' => 'Entidad no encontrada'], 404);
+        }
+    
+        // Cambiar el valor del campo 'activo' a 0
+        $entidad->estado = 0;
+        $entidad->save();
+    
+        return response()->json(['success' => 'Entidad eliminada correctamente']);
+    }
+
+    public function detalle_entidad($id)
+    {
+        // Buscar la cámara por ID
+        $entidad = Entidad::find($id);
+    
+        if (!$entidad) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+    
+        // Convertir el modelo Camara a un array
+        $entidadArray = $entidad->toArray(); 
+    
+        // Devolver la respuesta JSON
+        return response()->json($entidadArray);
+    }
+
+    public function modificar_entidad(Request $request)
+    {  
+        try {
+            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+             
+            // Buscar el registro existente por ID
+            $entidad = Entidad::find($request->input('entidad_id'));
+        
+            if (!$entidad) {
+                return response()->json(['error' => 'La entidad no existe.'], 404);
+            }
+
+            $pais = 0;
+            $provincia = 0;
+            $canton = 0;
+            if($request->input('pais_mod')){
+                $pais = $request->input('pais_mod');
+            }
+            if($request->input('provincia_mod')){
+                $provincia = $request->input('provincia_mod');
+            }
+            if($request->input('canton_mod')){
+                $canton = $request->input('canton_mod');
+            }
+        
+            // Actualizar los campos del registro existente
+            $entidad->update([
+                'ruc' => strtoupper($request->input('ruc_mod')),
+                'entidad' => strtoupper($request->input('entidad_mod')),
+                'entidad_busqueda' => strtoupper($request->input('entidad_mod')),
+                'id_tipo_entidad' => strtoupper($request->input('tipo_entidad_mod')),
+                'alcance' => strtoupper($request->input('alcance_mod')),
+                'direccion' => strtoupper($request->input('direccion_mod')),
+                'telefono' => strtoupper($request->input('telefono_mod')),
+                'representante' => strtoupper($request->input('representante_mod')),
+                'telefono_representante' => strtoupper($request->input('telefono_representante_mod')),
+                'id_pais' => strtoupper($pais),
+                'id_provincia' => strtoupper($provincia),
+                'id_canton' => strtoupper($canton),
+                'estado' => 1
+            ]); 
+        
+            
+            //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
+            /*return response()->json(['response' => [
+                'msg' => "Registro modificado",
+                ]
+            ], 201);*/
+            return response()->json(['success' => 'Entidad modificada correctamente'], 200);
+        } catch (\Illuminate\Database\QueryException $e) { 
+            if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
+                return response()->json(['error' => 'El RUC o nombre de Entidad que intenta modificar ya existe en el Sistema.'], 422);
+            }
+            return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
         }
     }
 
