@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\FuncionesGeneralesController;
+use App\Http\Controllers\SocioController;
+use App\Http\Controllers\EntidadesController;
+use App\Http\Controllers\ObligacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +77,24 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/registrar_socio', [App\Http\Controllers\SocioController::class, 'registrar_socio'])->middleware('auth')->name('admin.registrar_socio');
     Route::post('/administrador/actualizar_socio', [App\Http\Controllers\SocioController::class, 'modificar_socio'])->middleware('auth')->name('admin.actualizar_socio');
     Route::post('/administrador/eliminar_socio', [App\Http\Controllers\SocioController::class, 'eliminar_socio'])->middleware('auth')->name('admin.eliminar_socio');
+
+    //Maestro de Obligaciones
+    Route::get('/administrador/maestro_obligaciones', [ObligacionesController::class, 'maestro_obligaciones'])->middleware('auth')->name('admin.maestro_obligaciones');
+    Route::get('/administrador/obtener_listado_obligaciones', [ObligacionesController::class, 'obtener_listado_obligaciones'])->middleware('auth')->name('admin.obtener_listado_obligaciones');
+    Route::post('/administrador/registrar_obligacion', [ObligacionesController::class, 'registrar_obligacion'])->middleware('auth')->name('admin.registrar_obligacion');
+
+    Route::post('/administrador/check-obligacion', [ObligacionesController::class, 'checkObligacion'])->name('admin.check_obligacion');
+
+    //Maestro de Entidades
+    Route::get('/administrador/maestro_entidades', [EntidadesController::class, 'maestro_entidades'])->middleware('auth')->name('admin.maestro_entidades');
+    Route::get('/administrador/obtener_listado_entidades', [EntidadesController::class, 'obtener_listado_entidades'])->middleware('auth')->name('admin.obtener_listado_entidades');
+    Route::post('/administrador/registrar_entidad', [EntidadesController::class, 'registrar_entidad'])->middleware('auth')->name('admin.registrar_entidad');
+    Route::post('/administrador/entidad/eliminar/{id}', [EntidadesController::class, 'eliminar_entidad'])->middleware('auth')->name('admin.eliminar_entidad');;
+    Route::get('/administrador/entidad/detalle/{id}', [EntidadesController::class, 'detalle_entidad'])->middleware('auth')->name('admin.detalle_entidad');
+    Route::post('/administrador/camara/modificar_entidad', [EntidadesController::class, 'modificar_entidad'])->middleware('auth')->name('admin.modificar_entidad');
+
+    Route::post('/administrador/check-entidad', [EntidadesController::class, 'checkEntidad'])->name('admin.check_entidad');
+    Route::post('/administrador/check-entidad-modificar', [EntidadesController::class, 'checkEntidadMod'])->name('admin.check_entidad_modificar');
 });
 
 require __DIR__ . '/auth.php';

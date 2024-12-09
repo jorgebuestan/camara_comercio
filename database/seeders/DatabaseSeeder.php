@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ObligacionTributariaSeeder::class); 
         $this->call(TipoIdentificacionSeeder::class); 
         $this->call(TipoPersonaSeeder::class); 
-        $this->call(TipoPersoneriaSeeder::class); 
+        $this->call(TipoPersoneriaSeeder::class);  
+        $this->call(TipoEntidadSeeder::class);  
+        $this->call(TiempoPresentacionSeeder::class); 
+        $this->call(TipoPresentacionSeeder::class);
     }
 }

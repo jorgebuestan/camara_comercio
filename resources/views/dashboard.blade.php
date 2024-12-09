@@ -384,7 +384,7 @@
                                         <ul class="nav nav-children">
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.maestro_camaras') }}">
-                                                    Mantenimiento Cámaras
+                                                    Mantenimiento de Cámaras
                                                 </a>
                                             </li>
                                         </ul>
@@ -397,7 +397,7 @@
                                         <ul class="nav nav-children">
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.maestro_establecimientos') }}">
-                                                    Mantenimiento Establecimientos
+                                                    Mantenimiento de Establecimientos
                                                 </a>
                                             </li>
                                         </ul>
@@ -410,13 +410,38 @@
                                         <ul class="nav nav-children">
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.maestro_socios') }}">
-                                                    Mantenimiento Socios
+                                                    Mantenimiento de Socios
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-parent">
+                                        <a class="nav-link" href="#">
+                                            <i class="bx bxs-user-account" aria-hidden="true"></i>
+                                            <span>Entidades</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.maestro_entidades') }}">
+                                                    Mantenimiento de Entidades
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-parent">
+                                        <a class="nav-link" href="#">
+                                            <i class="bx bxs-user-detail" aria-hidden="true"></i>
+                                            <span>Ogligaciones</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.maestro_obligaciones') }}">
+                                                    Mantenimiento de Obligaciones
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
                                 @endcan
-
                                 @can('Camara')
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
@@ -424,6 +449,11 @@
                                             <span>Gestor</span>
                                         </a>
                                         <ul class="nav nav-children">
+                                            <li>
+                                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                                    Cámara
+                                                </a>
+                                            </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('dashboard') }}">
                                                     Cámara
@@ -440,22 +470,22 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-parent">
-                            <a class="nav-link" href="#">
-                                                                            Socios
-                            </a>
-                            <ul class="nav nav-children">
-                            <li>
-                                      <a class="nav-link" href="{{ route('dashboard') }}">
-                            Solicitud de Herramientas
-                            </a>
-                            </li>
-                            </ul>
-                            </li>
-                            <li>
-                            <a class="nav-link" href="{{ route('dashboard') }}">
-                            Solicitudes en Proceso
-                            </a>
-                            </li>  -->
+                                <a class="nav-link" href="#">
+                                                                                Socios
+                                </a>
+                                <ul class="nav nav-children">
+                                <li>
+                                          <a class="nav-link" href="{{ route('dashboard') }}">
+                                Solicitud de Herramientas
+                                </a>
+                                </li>
+                                </ul>
+                                </li>
+                                <li>
+                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                Solicitudes en Proceso
+                                </a>
+                                </li>  -->
                                         </ul>
                                     </li>
                                 @endcan
