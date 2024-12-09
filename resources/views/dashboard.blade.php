@@ -349,7 +349,8 @@
         </header>
         <!-- end: header -->
 
-        <div class="inner-wrapper">
+        <!--<div class="inner-wrapper"> -->
+        <div class="inner-wrapper" style="overflow: auto;max-height: 100vh;">
             <!-- start: sidebar -->
             <aside id="sidebar-left" class="sidebar-left">
 
