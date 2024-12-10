@@ -9,7 +9,7 @@ use App\Traits\LogsActivity;
 class Camara extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'camaras'; 
+    protected $table = 'camaras';
     protected $fillable = [
         'logo',
         'fecha_ingreso',
@@ -23,5 +23,10 @@ class Camara extends Model
         'cargo_representante_legal',
         'direccion_representante_legal',
         'estado'
-    ]; 
+    ];
+
+    public function datos_tributarios()
+    {
+        return $this->hasOne(DatoTributario::class, 'id_camara', 'id');
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\TipoRegimen;
 use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
+use App\Models\DatoTributarioSocio;
 use App\Models\Parroquia;
 use App\Models\Socio;
 use App\Models\TipoPersona;
@@ -28,9 +29,7 @@ class SocioController extends Controller
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
 
-        $tiposPersona = TipoPersona::pluck('descripcion', 'id'); // Obtenemos los tipos de persona
         $tiposPersoneria = TipoPersoneria::pluck('descripcion', 'id'); // Obtenemos los tipos de personeria
-        $tiposIdentificacion = TipoIdentificacion::pluck('descripcion', 'id'); // Obtenemos los tipos de identificacion
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -48,7 +47,7 @@ class SocioController extends Controller
         }
 
 
-        return view('administrador.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersona', 'tiposPersoneria', 'tiposIdentificacion'));
+        return view('administrador.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria'));
     }
 
     public function obtener_listado_socios(Request $request)
@@ -60,9 +59,15 @@ class SocioController extends Controller
             ];
 
             // Construcción de la consulta inicial
-            $query = Socio::with('tipo_identificacion', 'tipo_persona', 'tipo_personeria')
-                ->where('estado', 1);
-
+            $query = Socio::with([
+                'tipo_identificacion',
+                'tipo_persona',
+                'tipo_personeria',
+                'datos_tributarios.provincia',
+                'datos_tributarios.pais',
+                'datos_tributarios.canton',
+                'datos_tributarios.parroquia'
+            ])->where('estado', 1);
             // Búsqueda
             if ($search = $request->input('search.value')) {
                 $query->where(function ($q) use ($search) {
@@ -100,10 +105,26 @@ class SocioController extends Controller
                     'fecha_ingreso' => Carbon::parse($socio->fecha_ingreso)->format('d/m/Y'),
                     'fecha_registro_mercantil' => Carbon::parse($socio->fecha_registro_mercantil)->format('d/m/Y'),
                     'fecha_vencimiento_nombramiento' => Carbon::parse($socio->fecha_vencimiento_nombramiento)->format('d/m/Y'),
+                    'tipo_regimen' => $socio->datos_tributarios->tipo_regimen->id,
+                    'fecha_registro_sri' => Carbon::parse($socio->datos_tributarios->fecha_registro_sri)->format('d/m/Y'),
+                    'fecha_actualizacion_ruc' => Carbon::parse($socio->datos_tributarios->fecha_actualizacion_ruc)->format('d/m/Y'),
+                    'fecha_constitucion' => Carbon::parse($socio->datos_tributarios->fecha_constitucion)->format('d/m/Y'),
+                    'agente_retencion' => $socio->datos_tributarios->agente_retencion,
+                    'contribuyente_especial' => $socio->datos_tributarios->contribuyente_especial,
+                    'obligaciones_tributarias' => json_decode($socio->datos_tributarios->obligaciones_tributarias),
+                    'fecha_nacimiento' => Carbon::parse($socio->datos_tributarios->fecha_nacimiento)->format('d/m/Y'),
+                    'id_provincia' => $socio->datos_tributarios->provincia->id,
+                    'id_canton' => $socio->datos_tributarios->canton->id,
+                    'id_parroquia' => $socio->datos_tributarios->parroquia->id,
+                    'id_pais' => $socio->datos_tributarios->pais->id,
+                    'calle' => $socio->datos_tributarios->calle,
+                    'manzana' => $socio->datos_tributarios->manzana,
+                    'numero' => $socio->datos_tributarios->numero,
+                    'interseccion' => $socio->datos_tributarios->interseccion,
+                    'referencia' => $socio->datos_tributarios->referencia,
                     'razon_social' => $socio->razon_social,
-                    'persona_data' => $tipo_persona . ' - ' . $tipo_personeria,
+                    'tipo_personeria' => $tipo_personeria,
                     'identificacion' => $socio->identificacion,
-                    'tipo_identificacion' => $socio->tipo_identificacion->descripcion ?? '',
                     'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Modificar</button>' .
                         '<button class="btn btn-warning mb-1 delete-socio flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Eliminar</button></div>'
                 ]);
@@ -135,8 +156,46 @@ class SocioController extends Controller
     {
         $storedFilePath = null;
         try {
+            $request->validate([
+                'fecha_ingreso' => 'required|date_format:d/m/Y',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
+                'tipo_personeria' => 'required|integer',
+                'identificacion' => 'required|string',
+                'razon_social' => 'required|string|max:255',
+                'cedula_representante' => 'required_if:tipo_personeria,2|string|max:13',
+                'nombre_representante' => 'required_if:tipo_personeria,2|string|max:255',
+                'apellido_representante' => 'required_if:tipo_personeria,2|string|max:255',
+                'telefono_representante' => 'required_if:tipo_personeria,2|string|max:15',
+                'correo_representante' => 'required_if:tipo_personeria,2|email|max:255',
+                'fecha_registro_mercantil' => 'required_if:tipo_personeria,2|date_format:d/m/Y',
+                'vencimiento_nombramiento' => 'required_if:tipo_personeria,2|date_format:d/m/Y',
+                'correo' => 'required_if:tipo_personeria,1|nullable|email|max:255',
+                'telefono' => 'required_if:tipo_personeria,1|nullable|string|max:15',
+                'tipo_regimen' => 'required|integer',
+                'fecha_registro_sri' => 'required|date_format:d/m/Y',
+                'fecha_actualizacion_ruc' => 'required|date_format:d/m/Y',
+                'fecha_constitucion' => 'required|date_format:d/m/Y',
+                'agente_retencion' => 'required|integer',
+                'contribuyente_especial' => 'required|integer',
+                //'obligaciones_tributarias' => 'required|array',
+                'fecha_nacimiento' => 'required_if:tipo_personeria,1|nullable|date_format:d/m/Y',
+                'provincia' => 'required|integer',
+                'canton' => 'required|integer',
+                'parroquia' => 'required|integer',
+                'calle' => 'required|string|max:255',
+                'manzana' => 'required|string|max:255',
+                'numero' => 'required|string|max:255',
+                'interseccion' => 'required|string|max:255',
+                'referencia' => 'required|string|max:255',
+            ]);
             DB::beginTransaction();
             $data = $request->all();
+
+            $socioExiste = Socio::where('identificacion', $data['identificacion'])->orWhere('razon_social', $data['razon_social'])->first();
+            if ($socioExiste) {
+                return response()->json(['error' => 'El socio con estos datos ya existe en el sistema.'], 422);
+            }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $rutaFoto = 'prueba';
 
@@ -151,40 +210,75 @@ class SocioController extends Controller
             }
 
             $numero_consecutivo = Socio::count() + 1;
-
-            $tipo_identificacion = null;
-            if ($data['tipo_personeria'] == 2) {
-                $tipo_identificacion = 1;
+            if (!isset($data['fecha_registro_mercantil'])) {
+                $data['fecha_registro_mercantil'] = null;
             } else {
-                $tipo_identificacion = $data['tipo_identificacion'];
+                $data['fecha_registro_mercantil'] = Carbon::createFromFormat('d/m/Y', $data['fecha_registro_mercantil'])->format('Y-m-d');
             }
 
-            $socioExiste = Socio::where('identificacion', $data['identificacion'])->first();
-            if ($socioExiste) {
-                return response()->json(['error' => 'La identificacion ingresada ya existe en el sistema.'], 422);
+            if (!isset($data['vencimiento_nombramiento'])) {
+                $data['vencimiento_nombramiento'] = null;
+            } else {
+                $data['vencimiento_nombramiento'] = Carbon::createFromFormat('d/m/Y', $data['vencimiento_nombramiento'])->format('Y-m-d');
             }
+
+            if ($data['tipo_personeria'] == 1) {
+                $data['cedula_representante'] = null;
+                $data['nombre_representante'] = null;
+                $data['apellido_representante'] = null;
+                $data['telefono_representante'] = null;
+                $data['correo_representante'] = null;
+                $data['fecha_registro_mercantil'] = null;
+                $data['vencimiento_nombramiento'] = null;
+                $data['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d');
+            } else if ($data['tipo_personeria'] == 2) {
+                $data['fecha_nacimiento'] = null;
+            }
+
             $socio = Socio::create([
                 'logo' => $rutaFoto,
                 'numero_consecutivo' => $numero_consecutivo,
                 'fecha_ingreso' => $fecha_ingreso,
-                'id_tipo_persona' => $data['tipo_persona'],
+                'id_tipo_persona' => 1,
                 'id_tipo_personeria' => $data['tipo_personeria'],
-                'id_tipo_identificacion' => $tipo_identificacion,
+                'id_tipo_identificacion' => 1,
                 'identificacion' => $data['identificacion'],
-                'razon_social' => $data['razon_social'],
-                'correo' => $data['correo'],
-                'telefono' => $data['telefono'],
+                'razon_social' => $data['razon_social'] ?? null,
+                'correo' => $data['correo'] ?? null,
+                'telefono' => $data['telefono'] ?? null,
                 'cedula_representante_legal' => $data['cedula_representante'],
                 'nombres_representante_legal' => $data['nombre_representante'],
                 'apellidos_representante_legal' => $data['apellido_representante'],
                 'telefono_representante_legal' => $data['telefono_representante'],
                 'correo_representante_legal' => $data['correo_representante'],
-                'fecha_registro_mercantil' => Carbon::createFromFormat('d/m/Y', $data['fecha_registro_mercantil'])->format('Y-m-d'),
-                'fecha_vencimiento_nombramiento' => Carbon::createFromFormat('d/m/Y', $data['vencimiento_nombramiento'])->format('Y-m-d'),
+                'fecha_registro_mercantil' => $data['fecha_registro_mercantil'],
+                'fecha_vencimiento_nombramiento' => $data['vencimiento_nombramiento'],
                 'fecha_desafiliacion' => null,
                 'motivo_desafiliacion' => null,
                 'estado' => 1,
             ]);
+            $datos_tributarios = DatoTributarioSocio::create([
+                'id_socio' => $socio->id,
+                'estado_sri' => 1,
+                'id_tipo_regimen' => $data['tipo_regimen'],
+                'fecha_registro_sri' => Carbon::createFromFormat('d/m/Y', $data['fecha_registro_sri'])->format('Y-m-d'),
+                'fecha_actualizacion_ruc' => Carbon::createFromFormat('d/m/Y', $data['fecha_actualizacion_ruc'])->format('Y-m-d'),
+                'fecha_constitucion' => Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d'),
+                'fecha_nacimiento' => $data['fecha_nacimiento'] ?? null,
+                'agente_retencion' => $data['agente_retencion'],
+                'contribuyente_especial' => $data['contribuyente_especial'],
+                'obligaciones_tributarias' => json_encode($data['obligaciones_tributarias']) ?? null,
+                'id_pais' => $data['pais'],
+                'id_provincia' => $data['provincia'],
+                'id_canton' => $data['canton'],
+                'id_parroquia' => $data['parroquia'],
+                'calle' => $data['calle'],
+                'manzana' => $data['manzana'],
+                'numero' => $data['numero'],
+                'interseccion' => $data['interseccion'] ?? null,
+                'referencia' => $data['referencia'] ?? null,
+            ]);
+
             DB::commit();
             return response()->json([
                 'message' => 'Socio registrado correctamente',
@@ -209,14 +303,59 @@ class SocioController extends Controller
     {
         $storedFilePath = null;
         try {
+            $request->validate([
+                'fecha_ingreso' => 'sometimes|date_format:d/m/Y',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
+                'tipo_personeria' => 'sometimes|integer',
+                'identificacion' => 'sometimes|string',
+                'razon_social' => 'sometimes|string|max:255',
+                'cedula_representante' => 'sometimes|string|max:13',
+                'nombre_representante' => 'sometimes|string|max:255',
+                'apellido_representante' => 'sometimes|string|max:255',
+                'telefono_representante' => 'sometimes|string|max:15',
+                'correo_representante' => 'sometimes|email|max:255',
+                'fecha_registro_mercantil' => 'sometimes|date_format:d/m/Y',
+                'vencimiento_nombramiento' => 'sometimes|date_format:d/m/Y',
+                'correo' => 'sometimes|nullable|email|max:255',
+                'telefono' => 'sometimes|nullable|string|max:15',
+                'tipo_regimen' => 'sometimes|integer',
+                'fecha_registro_sri' => 'sometimes|date_format:d/m/Y',
+                'fecha_actualizacion_ruc' => 'sometimes|date_format:d/m/Y',
+                'fecha_constitucion' => 'sometimes|date_format:d/m/Y',
+                'agente_retencion' => 'sometimes|integer',
+                'contribuyente_especial' => 'sometimes|integer',
+                //'obligaciones_tributarias' => 'sometimes|array',
+                'fecha_nacimiento' => 'sometimes|nullable|date_format:d/m/Y',
+                'pais' => 'sometimes|integer',
+                'provincia' => 'sometimes|integer',
+                'canton' => 'sometimes|integer',
+                'parroquia' => 'sometimes|integer',
+                'calle' => 'sometimes|string|max:255',
+                'manzana' => 'sometimes|string|max:255',
+                'numero' => 'sometimes|string|max:255',
+                'interseccion' => 'sometimes|string|max:255',
+                'referencia' => 'sometimes|string|max:255',
+            ]);
             DB::beginTransaction();
             $data = $request->all();
             $socioId = $request->socio_id;
             $socioId = intval($socioId);
+            Log::info($request->all());
 
             $socio = Socio::find($socioId);
             if (!$socio) {
                 return response()->json(['error' => 'Socio no encontrado.'], 404);
+            }
+
+
+            $socioExiste = Socio::where(function ($query) use ($data, $socioId) {
+                $query->where('identificacion', $data['identificacion'])
+                    ->orWhere('razon_social', $data['razon_social']);
+            })->where('id', '!=', $socioId)->count();
+            Log::info($socioExiste);
+            if ($socioExiste > 0) {
+                return response()->json(['error' => 'Existe un socio con estos datos en el sistema.'], 422);
             }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $rutaFoto = 'prueba';
@@ -230,36 +369,73 @@ class SocioController extends Controller
                 $archivoFoto->storeAs("fotos_socios/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
-            $tipo_identificacion = null;
-            if ($data['tipo_personeria'] == 2) {
-                $tipo_identificacion = 1;
+            if (!isset($data['fecha_registro_mercantil'])) {
+                $data['fecha_registro_mercantil'] = null;
             } else {
-                $tipo_identificacion = $data['tipo_identificacion'];
+                $data['fecha_registro_mercantil'] = Carbon::createFromFormat('d/m/Y', $data['fecha_registro_mercantil'])->format('Y-m-d');
             }
 
-            $socioExiste = Socio::where('identificacion', $data['identificacion'])->count();
-            if ($socioExiste > 1) {
-                return response()->json(['error' => 'La identificacion ingresada ya existe en el sistema.'], 422);
+            if (!isset($data['vencimiento_nombramiento'])) {
+                $data['vencimiento_nombramiento'] = null;
+            } else {
+                $data['vencimiento_nombramiento'] = Carbon::createFromFormat('d/m/Y', $data['vencimiento_nombramiento'])->format('Y-m-d');
             }
 
+            if ($data['tipo_personeria'] == 1) {
+                $data['cedula_representante'] = null;
+                $data['nombre_representante'] = null;
+                $data['apellido_representante'] = null;
+                $data['telefono_representante'] = null;
+                $data['correo_representante'] = null;
+                $data['fecha_registro_mercantil'] = null;
+                $data['vencimiento_nombramiento'] = null;
+                $data['fecha_nacimiento'] = Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d');
+            } else if ($data['tipo_personeria'] == 2) {
+                $data['fecha_nacimiento'] = null;
+            }
             $socio->update([
                 'logo' => $rutaFoto,
                 'fecha_ingreso' => $fecha_ingreso,
-                'id_tipo_persona' => $data['tipo_persona'],
+                'id_tipo_persona' => 1,
                 'id_tipo_personeria' => $data['tipo_personeria'],
-                'id_tipo_identificacion' => $tipo_identificacion,
+                'id_tipo_identificacion' => 1,
                 'identificacion' => $data['identificacion'],
-                'razon_social' => $data['razon_social'],
-                'correo' => $data['correo'],
-                'telefono' => $data['telefono'],
-                'cedula_representante_legal' => $data['cedula_representante'],
-                'nombres_representante_legal' => $data['nombre_representante'],
-                'apellidos_representante_legal' => $data['apellido_representante'],
-                'telefono_representante_legal' => $data['telefono_representante'],
-                'correo_representante_legal' => $data['correo_representante'],
-                'fecha_registro_mercantil' => Carbon::createFromFormat('d/m/Y', $data['fecha_registro_mercantil'])->format('Y-m-d'),
-                'fecha_vencimiento_nombramiento' => Carbon::createFromFormat('d/m/Y', $data['vencimiento_nombramiento'])->format('Y-m-d'),
+                'razon_social' => $data['razon_social'] ?? null,
+                'correo' => $data['correo'] ?? null,
+                'telefono' => $data['telefono'] ?? null,
+                'cedula_representante_legal' => $data['cedula_representante'] ?? null,
+                'nombres_representante_legal' => $data['nombre_representante'] ?? null,
+                'apellidos_representante_legal' => $data['apellido_representante'] ?? null,
+                'telefono_representante_legal' => $data['telefono_representante'] ?? null,
+                'correo_representante_legal' => $data['correo_representante'] ?? null,
+                'fecha_registro_mercantil' => $data['fecha_registro_mercantil'] ?? null,
+                'fecha_vencimiento_nombramiento' => $data['vencimiento_nombramiento'] ?? null,
+                'fecha_desafiliacion' => null,
+                'motivo_desafiliacion' => null,
                 'estado' => 1,
+            ]);
+
+            $datosTributarios = DatoTributarioSocio::where('id_socio', $socioId)->first();
+            $datosTributarios->update([
+                'id_socio' => $socio->id,
+                'estado_sri' => 1,
+                'id_tipo_regimen' => $data['tipo_regimen'],
+                'fecha_registro_sri' => Carbon::createFromFormat('d/m/Y', $data['fecha_registro_sri'])->format('Y-m-d'),
+                'fecha_actualizacion_ruc' => Carbon::createFromFormat('d/m/Y', $data['fecha_actualizacion_ruc'])->format('Y-m-d'),
+                'fecha_constitucion' => Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d'),
+                'fecha_nacimiento' => $data['fecha_nacimiento'],
+                'agente_retencion' => $data['agente_retencion'],
+                'contribuyente_especial' => $data['contribuyente_especial'],
+                'obligaciones_tributarias' => json_encode($data['obligaciones_tributarias']) ?? null,
+                'id_pais' => $data['pais'] ?? null,
+                'id_provincia' => $data['provincia'] ?? null,
+                'id_canton' => $data['canton'] ?? null,
+                'id_parroquia' => $data['parroquia'] ?? null,
+                'calle' => $data['calle'],
+                'manzana' => $data['manzana'],
+                'numero' => $data['numero'],
+                'interseccion' => $data['interseccion'] ?? null,
+                'referencia' => $data['referencia'] ?? null,
             ]);
             DB::commit();
             return response()->json([
@@ -274,7 +450,7 @@ class SocioController extends Controller
             return response()->json(
                 [
                     'error' => $th->getMessage(),
-                    'message' => 'Error al registrar el socio',
+                    'message' => 'Error al modificar el socio',
                 ],
                 500,
             );

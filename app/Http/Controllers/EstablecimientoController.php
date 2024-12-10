@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Establecimiento;
-use App\Models\DatoTributario;
 use App\Models\TipoRegimen;
 use App\Models\Pais;
 use App\Models\Provincia;
@@ -18,14 +18,16 @@ class EstablecimientoController extends Controller
 {
     //
     public function maestro_establecimientos()
-    {  
-        $regimen = TipoRegimen::pluck('nombre', 'id'); 
-        $paises = Pais::pluck('nombre', 'id');  
+    {
+        $regimen = TipoRegimen::pluck('nombre', 'id');
+        $paises = Pais::pluck('nombre', 'id');
         $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');  
-        $camaras = Camara::pluck('razon_social', 'id'); 
+        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
+        $camarasSelect = Camara::pluck('razon_social', 'id');
+        $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
+        Log::info($camaras);
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -41,24 +43,24 @@ class EstablecimientoController extends Controller
         if ($parroquiaDefault) {
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
-        
-        return view('administrador.maestro_establecimientos', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camaras') );
+
+        return view('administrador.maestro_establecimientos', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras'));
     }
 
     public function obtener_listado_establecimientos(Request $request)
     {
         $columns = [
-            0 => 'establecimientos.id', 
+            0 => 'establecimientos.id',
             1 => 'acciones'
         ];
 
-        $query = DB::table('establecimientos')  
+        $query = DB::table('establecimientos')
             ->select(
                 'establecimientos.id',
                 'establecimientos.fecha_inicio_actividades',
                 'establecimientos.nombre_comercial',
                 DB::raw('CONCAT(establecimientos.calle, " ", establecimientos.manzana, " ", establecimientos.numero, " ", establecimientos.interseccion) AS direccion'),
-                'establecimientos.correo' 
+                'establecimientos.correo'
             )
             ->where('establecimientos.estado', 1)
             ->orderBy('establecimientos.nombre_comercial', 'asc');
@@ -67,13 +69,13 @@ class EstablecimientoController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('establecimientos.nombre_comercial', 'LIKE', "%{$search}%") 
+            $query->where(function ($query) use ($search) {
+                $query->where('establecimientos.nombre_comercial', 'LIKE', "%{$search}%")
                     ->orWhere('establecimientos.calle', 'LIKE', "%{$search}%")
                     ->orWhere('establecimientos.manzana', 'LIKE', "%{$search}%")
                     ->orWhere('establecimientos.numero', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.interseccion', 'LIKE', "%{$search}%") 
-                    ->orWhere('establecimientos.correo', 'LIKE', "%{$search}%"); 
+                    ->orWhere('establecimientos.interseccion', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos.correo', 'LIKE', "%{$search}%");
             });
         }
 
@@ -101,17 +103,17 @@ class EstablecimientoController extends Controller
         $establecimientos = $query->get();
 
         $data = $establecimientos->map(function ($establecimiento) {
-            $boton = "";  
-            
-             
+            $boton = "";
+
+
             return [
-                'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades, 
-                'nombre_comercial' => $establecimiento->nombre_comercial, 
-                'direccion' => $establecimiento->direccion, 
-                'correo' => $establecimiento->correo,  
+                'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
+                'nombre_comercial' => $establecimiento->nombre_comercial,
+                'direccion' => $establecimiento->direccion,
+                'correo' => $establecimiento->correo,
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $establecimiento->id . '">Modificar</button>' .
-                '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar</button>'.
-                '&nbsp;&nbsp;&nbsp;' 
+                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar</button>' .
+                    '&nbsp;&nbsp;&nbsp;'
             ];
         });
 
@@ -121,25 +123,25 @@ class EstablecimientoController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
     }
 
     public function registrar_establecimiento(Request $request)
-    { 
+    {
 
         try {
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades'))->format('Y-m-d');
             //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
-            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', ''); 
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', '');
             // Convertir la cadena en un array (si no está vacío)
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+            $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
-              
             // Crear registro en la base de datos
-            $establecimiento = Establecimiento::create([ 
-                'nombre_comercial' => strtoupper($request->input('nombre_comercial')), 
+            $establecimiento = Establecimiento::create([
+                'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_camara' => strtoupper($request->input('camaraHidden')),
                 'id_pais' => $request->input('pais'),
                 'id_provincia' => $request->input('provincia'),
@@ -157,10 +159,10 @@ class EstablecimientoController extends Controller
                 'fecha_inicio_actividades' => $fecha_inicio_actividades, // Usar fecha convertida
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray),
                 'estado' => 1
-            ]); 
+            ]);
 
             return response()->json(['success' => 'Establecimiento registrado correctamente'], 200);
-        } catch (\Illuminate\Database\QueryException $e) { 
+        } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
@@ -176,11 +178,11 @@ class EstablecimientoController extends Controller
         if (!$establecimiento) {
             return response()->json(['error' => 'Establecimiento no encontrado'], 404);
         }
-    
+
         // Cambiar el valor del campo 'activo' a 0
         $establecimiento->estado = 0;
         $establecimiento->save();
-    
+
         return response()->json(['success' => 'Establecimiento eliminado correctamente']);
     }
 
@@ -188,45 +190,45 @@ class EstablecimientoController extends Controller
     {
         // Buscar la cámara por ID
         $establecimiento = Establecimiento::find($id);
-    
+
         if (!$establecimiento) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
-    
-        // Convertir el modelo Establecimiento a un array
-        $establecimientoArray = $establecimiento->toArray(); 
 
-        
+        // Convertir el modelo Establecimiento a un array
+        $establecimientoArray = $establecimiento->toArray();
+
+
         // Buscar el DatoTributario relacionado
         $camara = Camara::where('id', $establecimientoArray["id_camara"])->first();
-    
+
         // Si existe un DatoTributario, agregarlo al array de respuesta
         if ($camara) {
             $establecimientoArray['camara'] = $camara->toArray();
         }
-    
+
         // Devolver la respuesta JSON
         return response()->json($establecimientoArray);
     }
 
     public function modificar_establecimiento(Request $request)
-    {  
+    {
         try {
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
-         
+
             // Buscar el registro existente por ID
             $camara = Camara::find($request->input('camaraHiddenMod'));
             $establecimiento = Establecimiento::find($request->input('establecimiento_id'));
-        
+
             if (!$establecimiento) {
                 return response()->json(['error' => 'El establecimiento no existe.'], 404);
             }
 
-            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');  
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+            $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
-        
             // Actualizar los campos del registro existente
             $establecimiento->update([
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial_mod')),
@@ -244,20 +246,20 @@ class EstablecimientoController extends Controller
                 'telefono2' => strtoupper($request->input('telefono2_mod')),
                 'telefono3' => strtoupper($request->input('telefono3_mod')),
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
-                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray) 
-                
-            ]);  
+                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
+
+            ]);
 
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
-            return response()->json(['response' => [
-                'msg' => "Registro modificado",
+            return response()->json([
+                'response' => [
+                    'msg' => "Registro modificado",
                 ]
             ], 201);
-        } catch (\Illuminate\Database\QueryException $e) { 
+        } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
-
 }

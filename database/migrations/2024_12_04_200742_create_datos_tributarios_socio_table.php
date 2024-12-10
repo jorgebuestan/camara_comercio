@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->integer('id_socio');
             $table->integer('estado_sri');
-            $table->string('tipo_regimen');
-            $table->date('fecha_registro_sri'); 
-            $table->date('fecha_actualizacion_ruc')->nullable(); 
+            $table->integer('id_tipo_regimen');
+            $table->date('fecha_registro_sri');
+            $table->date('fecha_actualizacion_ruc')->nullable();
             $table->date('fecha_constitucion')->nullable(); //No debe ser menor a fecha_registro
-            $table->date('fecha_nacimiento')->nullable(); 
-            $table->integer('agente_retencion');  
-            $table->integer('contribuyente_especial'); 
+            $table->date('fecha_nacimiento')->nullable();
+            $table->integer('agente_retencion');
+            $table->integer('contribuyente_especial');
             $table->integer('id_pais');
             $table->integer('id_provincia');
             $table->integer('id_canton');
@@ -30,8 +30,9 @@ return new class extends Migration
             $table->text('manzana');
             $table->text('numero');
             $table->text('interseccion');
-            $table->text('referencia');  
+            $table->text('referencia');
             $table->json('obligaciones_tributarias')->nullable();
+            $table->timestamps();
         });
     }
 
