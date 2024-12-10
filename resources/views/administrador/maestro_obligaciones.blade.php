@@ -358,7 +358,7 @@ Maestro de Obligaciones
                 data: function (d) {
                     d.start = d.start || 0;
                     d.length = d.length || 10;
-                    d.id_camara = $('#camara').val(); // Enviar el valor de localidad seleccionada
+                    d.tipo_boton = 1; // Enviar el valor de localidad seleccionada
                 },
                 error: function (error) {
                     console.error("Error al cargar los datos: ", error);
@@ -639,7 +639,7 @@ Maestro de Obligaciones
                         alert(errors.error);
                     }
                 } else {
-                    alert("Ocurrió un error al registrar la obligacion.");
+                    alert("Ocurrió un error al registrar la obligacion."); 
                 }
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
