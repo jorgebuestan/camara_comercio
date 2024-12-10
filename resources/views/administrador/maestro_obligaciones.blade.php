@@ -335,6 +335,19 @@ Maestro de Obligaciones
             autoclose: true,      // Cierra automáticamente al seleccionar
         });  
 
+        $('#fecha_inicio_mod').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+            todayHighlight: true, // Resalta la fecha actual
+            language: 'es'        // Asegúrate de establecer el idioma correcto
+        });
+
+
+        $('#fecha_presentacion_mod').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
+
         var table = $('#dataTable').DataTable({
             destroy: true,
             processing: true,

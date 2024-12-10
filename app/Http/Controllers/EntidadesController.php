@@ -324,4 +324,24 @@ class EntidadesController extends Controller
         }
     }
 
+    public function entidades_obligaciones()
+    {   
+        $paises = Pais::pluck('nombre', 'id');  
+        $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
+        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
+        $tipo_entidad = TipoEntidad::pluck('descripcion', 'id');   
+
+        $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
+        if ($provinciaDefault) {
+            $provincias->put($provinciaDefault->id, $provinciaDefault->nombre); // Añadimos al listado
+        }
+
+        $cantonDefault = Canton::find(1); // Obtenemos la provincia con ID = 1
+        if ($cantonDefault) {
+            $cantones->put($cantonDefault->id, $cantonDefault->nombre); // Añadimos al listado
+        }
+        
+        return view('administrador.entidades_obligaciones', compact('paises', 'provincias', 'cantones', 'tipo_entidad') );
+    }
+
 }

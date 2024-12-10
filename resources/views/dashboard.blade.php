@@ -427,6 +427,11 @@
                                                     Mantenimiento de Entidades
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.entidades_obligaciones') }}">
+                                                    Obligaciones por Entidad
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li class="nav-parent">
