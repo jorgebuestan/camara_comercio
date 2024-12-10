@@ -304,7 +304,15 @@ $(document).ready(function(){
         var selectedEntidad = $(this).val();
 
         if (selectedEntidad === '-1') {
-            alert('Por favor selecciona una cámara válida.');
+            //alert('Por favor selecciona una cámara válida.');
+            Swal.fire({
+                target: document.getElementById('ModalObligacion'),
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor selecciona una cámara válida.',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            });
         } else {
             Swal.fire({
                 title: 'Cargando',
@@ -328,7 +336,15 @@ $(document).ready(function(){
         var nombreEntidadSeleccionada = $('#entidad option:selected').text();
 
         if (entidadSeleccionada === '-1') {
-            alert('Por favor, selecciona una Entidad para poder registrar una Obligación');
+            //alert('Por favor, selecciona una Entidad para poder registrar una Obligación');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Por favor, selecciona una Entidad para poder registrar una Obligación',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            });
+           // return;
         } else {
             // Mostrar el nombre de la cámara seleccionada en el modal
             $('#nombreEntidadSeleccionada').text(nombreEntidadSeleccionada); 
@@ -497,13 +513,29 @@ $(document).ready(function(){
     $("#agregarObligacion").click(function() {
 
         if ($('#obligacion_id').val() == "") {
-            alert('Debe debe seleccionar una Obligación'); 
+            //alert('Debe debe seleccionar una Obligación'); 
+            Swal.fire({
+                target: document.getElementById('ModalObligacion'),
+                icon: 'error',
+                title: 'Error',
+                text: 'Debe debe seleccionar una Obligación',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            });
             return;
         }
         
         if ($('#tiempo_presentacion').val() == "1") {
             if ($('#fecha_presentacion').val() == "") {
-                alert('Debe ingresar la Fecha de Presentación'); 
+                //alert('Debe ingresar la Fecha de Presentación'); 
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Fecha de Presentación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#fecha_presentacion').focus();
                 return;
             }
@@ -511,7 +543,15 @@ $(document).ready(function(){
 
         if ($('#tiempo_presentacion').val() == "2") {
             if ($('#fecha_inicio').val() == "") {
-                alert('Debe ingresar la Fecha de Inicio'); 
+                //alert('Debe ingresar la Fecha de Inicio'); 
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Fecha de Inicio',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#fecha_inicio').focus();
                 return;
             }
@@ -519,7 +559,16 @@ $(document).ready(function(){
 
          
         var formData = new FormData(document.getElementById("ModalObligacion"));
-        $('#carga').show();
+        Swal.fire({
+            target: document.getElementById('ModalObligacion'),
+            title: 'Enviando información',
+            text: 'Por favor espere',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
 
         $.ajax({
             url: "{{ route('admin.registrar_obligacion_entidad') }}",
@@ -531,7 +580,16 @@ $(document).ready(function(){
             processData: false
         }).done(function(res){
             $('#carga').hide(); 
-            alert(res.success); // Mostrar el mensaje de éxito en un alert
+            Swal.close();
+            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+            Swal.fire({
+                target: document.getElementById('ModalObligacion'),
+                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                title: 'Éxito',
+                text: res.success,
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            });
             location.reload(); // Recargar la página
         }).fail(function(res){
             $('#carga').hide(); 
@@ -540,11 +598,28 @@ $(document).ready(function(){
                 // Mostrar mensaje de error de validación
                 let errors = res.responseJSON;
                 if (errors.error) {
-                    alert(errors.error);
+                    //alert(errors.error);
+                    Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: errors.error,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 }
             } else {
                 // Mostrar mensaje genérico si no se recibió un error específico
-                alert("Ocurrió un error al registrar la Obligación.");
+                //alert("Ocurrió un error al registrar la Obligación.");
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error al registrar la Obligación.',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
+
             }
 
             console.log(res.responseText); // Muestra el error completo en la consola para depuración
