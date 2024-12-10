@@ -85,9 +85,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/obligacion/eliminar/{id}', [ObligacionesController::class, 'eliminar_obligacion'])->middleware('auth')->name('admin.eliminar_obligacion');;
     Route::get('/administrador/obligacion/detalle/{id}', [ObligacionesController::class, 'detalle_obligacion'])->middleware('auth')->name('admin.detalle_obligacion');
     Route::post('/administrador/obligacion/modificar_obligacion', [ObligacionesController::class, 'modificar_obligacion'])->middleware('auth')->name('admin.modificar_obligacion');
-
+    
     Route::post('/administrador/check-obligacion', [ObligacionesController::class, 'checkObligacion'])->name('admin.check_obligacion'); 
-
+    
+     
     //Maestro de Entidades
     Route::get('/administrador/maestro_entidades', [EntidadesController::class, 'maestro_entidades'])->middleware('auth')->name('admin.maestro_entidades');
     Route::get('/administrador/obtener_listado_entidades', [EntidadesController::class, 'obtener_listado_entidades'])->middleware('auth')->name('admin.obtener_listado_entidades');
@@ -101,6 +102,10 @@ Route::middleware(['auth'])->group(function () {
 
     //Manejo de Obligaciones por Entidad
     Route::get('/administrador/entidades_obligaciones', [EntidadesController::class, 'entidades_obligaciones'])->middleware('auth')->name('admin.entidades_obligaciones');
+    
+    //Manejo de Obligaciones por Entidad
+    Route::get('/administrador/obtener_listado_obligaciones_por_entidad', [ObligacionesController::class, 'obtener_listado_obligaciones_por_entidad'])->middleware('auth')->name('admin.obtener_listado_obligaciones_por_entidad');
+    Route::post('/administrador/registrar_obligacion_entidad', [ObligacionesController::class, 'registrar_obligacion_entidad'])->middleware('auth')->name('admin.registrar_obligacion_entidad');
     
 });
 
