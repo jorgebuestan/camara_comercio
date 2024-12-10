@@ -139,7 +139,7 @@ Maestro de Obligaciones
                                     Nombre
                                 </div> 
                                 <div class="col-md-10">  
-                                    <input type="text" class="form-control" name="obligacion"  id="obligacion" placeholder="Obligación">
+                                    <input type="text" class="form-control" name="obligacion"  id="obligacion" placeholder="Obligación"> 
                                 </div>  
                             </div>  
                             <div class="row">
@@ -160,6 +160,17 @@ Maestro de Obligaciones
                                     </select>
                                 </div> 
                                 <div class="col-md-2">  
+                                    Fecha de Presentación
+                                </div> 
+                                <div class="col-md-4">  
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_presentacion" id="fecha_presentacion" placeholder="Fecha de Presentación">
+                                </div> 
+                            </div> 
+                            <div class="row">
+                                &nbsp;
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-2">  
                                     Tipo de Presentación
                                 </div> 
                                 <div class="col-md-4">  
@@ -172,10 +183,13 @@ Maestro de Obligaciones
                                         @endforeach
                                     </select>
                                 </div> 
+                                <div class="col-md-2">  
+                                    Fecha de Inicio
+                                </div> 
+                                <div class="col-md-4">  
+                                <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
+                                </div> 
                             </div> 
-                            <div class="row">
-                                &nbsp;
-                            </div>   
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -199,12 +213,70 @@ Maestro de Obligaciones
                         </button> --> 
                     </div>
                     <div class="modal-body">
-                        
+                        <div class="form-group">  
+                            <div class="row">
+                                <div class="col-md-2">  
+                                    Nombre
+                                </div> 
+                                <div class="col-md-10">  
+                                    <input type="text" class="form-control" name="obligacion_mod"  id="obligacion_mod" placeholder="Obligación"> 
+                                    <input type="hidden" id="obligacion_id" name="obligacion_id">
+                                </div>  
+                            </div>  
+                            <div class="row">
+                                &nbsp;
+                            </div> 
+                            <div class="row">
+                                <div class="col-md-2">  
+                                    Tiempo de Presentación
+                                </div> 
+                                <div class="col-md-4">  
+                                    <select id="tiempo_presentacion_mod" name="tiempo_presentacion_mod" class="form-control populate">
+                                        <option value="-1">Seleccionar</option>
+                                        @foreach($tiempo_presentacion as $id => $nombre)
+                                            <option value="{{ $id }}">
+                                                {{ $nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div> 
+                                <div class="col-md-2">  
+                                    Fecha de Presentación
+                                </div> 
+                                <div class="col-md-4">  
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_presentacion_mod" id="fecha_presentacion_mod" placeholder="Fecha de Presentación">
+                                </div> 
+                            </div> 
+                            <div class="row">
+                                &nbsp;
+                            </div>   
+                            <div class="row">
+                                <div class="col-md-2">  
+                                    Tipo de Presentación
+                                </div> 
+                                <div class="col-md-4">  
+                                    <select id="tipo_presentacion_mod" name="tipo_presentacion_mod" disabled class="form-control populate">
+                                        <option value="-1">Seleccionar</option>
+                                        @foreach($tipo_presentacion as $id => $nombre)
+                                            <option value="{{ $id }}">
+                                                {{ $nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div> 
+                                <div class="col-md-2">  
+                                    Fecha de Inicio
+                                </div> 
+                                <div class="col-md-4">  
+                                <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
+                                </div> 
+                            </div> 
+                        </div>                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close" data-dismiss="modal">Cerrar</button>
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
-                        <button type="button" class="btn btn-primary" id="btn-modificar-entidad">Guardar Cambios</button>
+                        <button type="button" class="btn btn-primary" id="btn-modificar-obligacion">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -229,6 +301,52 @@ Maestro de Obligaciones
     <script>
 
     $(document).ready(function(){ 
+
+        // Establecer el idioma de forma global para todos los datepickers
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $('#fecha_inicio').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+            todayHighlight: true, // Resalta la fecha actual
+            language: 'es'        // Asegúrate de establecer el idioma correcto
+        });
+
+
+        $('#fecha_presentacion').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
+
+        $('#fecha_inicio_mod').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+            todayHighlight: true, // Resalta la fecha actual
+            language: 'es'        // Asegúrate de establecer el idioma correcto
+        });
+
+
+        $('#fecha_presentacion_mod').datepicker('destroy').datepicker({
+            format: 'dd/mm/yyyy', // Define el formato de fecha
+            autoclose: true,      // Cierra automáticamente al seleccionar
+        });  
 
         var table = $('#dataTable').DataTable({
             destroy: true,
@@ -282,16 +400,37 @@ Maestro de Obligaciones
             // Deshabilitar o habilitar los selects según el valor
             if (tiempoPresentacion === '1') { // General
 
+                $('#fecha_presentacion').prop('disabled', false); 
+                $('#fecha_presentacion').val('').change();
+
                 $('#tipo_presentacion').prop('disabled', true);
                 $('#tipo_presentacion').val('-1').change();  
 
+                $('#fecha_inicio').prop('disabled', true);
+                $('#fecha_inicio').val('').change();  
+
             } else if (tiempoPresentacion === '2') { // Local
+
+                $('#fecha_presentacion').prop('disabled', true); 
+                $('#fecha_presentacion').val('').change();
+
                 $('#tipo_presentacion').prop('disabled', false); 
                 $('#tipo_presentacion').val('-1').change();  
+
+                $('#fecha_inicio').prop('disabled', false);
+                $('#fecha_inicio').val('').change(); 
+
             } else {
                 // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
+
+                $('#fecha_presentacion').prop('disabled', true); 
+                $('#fecha_presentacion').val('').change();
+                
                 $('#tipo_presentacion').prop('disabled', true);
                 $('#tipo_presentacion').val('-1').change();  
+
+                $('#fecha_inicio').prop('disabled', true);
+                $('#fecha_inicio').val('').change();  
             }
         });
 
@@ -302,16 +441,37 @@ Maestro de Obligaciones
             // Deshabilitar o habilitar los selects según el valor
             if (tiempoPresentacion === '1') { // General
 
+                $('#fecha_presentacion_mod').prop('disabled', false); 
+                $('#fecha_presentacion_mod').val('').change();
+
                 $('#tipo_presentacion_mod').prop('disabled', true);
                 $('#tipo_presentacion_mod').val('-1').change();  
 
-            } else if (tiempoPresentacion === '2') { // Local
+                $('#fecha_inicio_mod').prop('disabled', true);
+                $('#fecha_inicio_mod').val('').change();  
+
+                } else if (tiempoPresentacion === '2') { // Local
+
+                $('#fecha_presentacion_mod').prop('disabled', true); 
+                $('#fecha_presentacion_mod').val('').change();
+
                 $('#tipo_presentacion_mod').prop('disabled', false); 
                 $('#tipo_presentacion_mod').val('-1').change();  
-            } else {
+
+                $('#fecha_inicio_mod').prop('disabled', false);
+                $('#fecha_inicio_mod').val('').change(); 
+
+                } else {
                 // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
+
+                $('#fecha_presentacion_mod').prop('disabled', true); 
+                $('#fecha_presentacion_mod').val('').change();
+
                 $('#tipo_presentacion_mod').prop('disabled', true);
                 $('#tipo_presentacion_mod').val('-1').change();  
+
+                $('#fecha_inicio_mod').prop('disabled', true);
+                $('#fecha_inicio_mod').val('').change();  
             }
         }); 
 
@@ -327,32 +487,46 @@ Maestro de Obligaciones
 
             if ($('#obligacion').val() == "") {
                 alert('Debe ingresar el nombre de la Obligación');
-                $('#entidad').focus();
+                $('#obligacion').focus();
                 return;
             } 
 
             if ($('#tiempo_presentacion').val() == "-1") {
                 alert('Debe seleccionar el Tiempo de Presentación');
-                $('#entidad').focus();
+                $('#tiempo_presentacion').focus();
                 return;
             }
 
             if ($('#tiempo_presentacion').val() == "2") {
                 if ($('#tipo_presentacion').val() == "-1") {
                     alert('Debe seleccionar el Tipo de Presentación');
-                    $('#entidad').focus();
+                    $('#tipo_presentacion').focus();
+                    return;
+                }
+                if($('#fecha_inicio').val() == ""){
+                    alert('Debe registrar la Fecha de Inicio');
+                    $('#fecha_inicio').focus();
+                    return;
+                }
+            } 
+
+            if ($('#tiempo_presentacion').val() == "1") { 
+
+                if($('#fecha_presentacion').val() == ""){
+                    alert('Debe registrar la Fecha de Presentación');
+                    $('#fecha_presentacion').focus();
                     return;
                 }
             } 
 
             // Verificar si hay registros similares antes de proceder
-            const entidad = $('#obligacion').val(); 
+            const obligacion = $('#obligacion').val(); 
 
             $.ajax({
                 url: "{{ route('admin.check_obligacion') }}", // Ruta para verificar similitudes
                 type: "POST",
                 data: {
-                    entidad: entidad, 
+                    obligacion: obligacion, 
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
@@ -374,80 +548,54 @@ Maestro de Obligaciones
             });
         });
 
-        $("#btn-modificar-entidad").click(function () {
+        $("#btn-modificar-obligacion").click(function () {
 
-            if ($('#entidad_mod').val() == "") {
-                alert('Debe ingresar el nombre de la Entidad');
-                $('#entidad_mod').focus();
+            if ($('#obligacion_mod').val() == "") {
+                alert('Debe ingresar el nombre de la Obligación');
+                $('#obligacion_mod').focus();
+                return;
+            } 
+
+            if ($('#tiempo_presentacion_mod').val() == "-1") {
+                alert('Debe seleccionar el Tiempo de Presentación');
+                $('#tiempo_presentacion_mod').focus();
                 return;
             }
 
-            if (!/^\d{13}$/.test($('#ruc_mod').val())) {
-                $("#error-ruc-mod").show();
-                alert('El RUC debe tener 13 dígitos');
-                $('#ruc_mod').focus();
-                return;
-            }
-
-            if ($('#tipo_presentacion_mod').val() == "-1") {
-                alert('Debe seleccionar la Clase de Entidad');
-                $('#entidad_mod').focus();
-                return;
-            }
-
-            if ($('#alcance_mod').val() == "-1") {
-                alert('Debe seleccionar un alcance para la Entidad');
-                $('#entidad_mod').focus();
-                return;
-            }
-
-            if ($('#direccion_mod').val() == "") {
-                alert('Debe ingresar la Dirección de la Entidad');
-                $('#direccion_mod').focus();
-                return;
-            }
-
-            if ($('#telefono_mod').val() == "") {
-                alert('Debe ingresar el Teléfono de la Entidad');
-                $('#telefono_mod').focus();
-                return;
-            }
-
-            if ($('#alcance_mod').val() == "2") {
-
-                if ($('#pais_mod').val() == "-1" || $('#provincia_mod').val() == "-1" || $('#canton_mod').val() == "-1") {
-                    alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+            if ($('#tiempo_presentacion_mod').val() == "2") {
+                if ($('#tipo_presentacion_mod').val() == "-1") {
+                    alert('Debe seleccionar el Tipo de Presentación');
+                    $('#tipo_presentacion_mod').focus();
                     return;
                 }
-            }
+                if($('#fecha_inicio_mod').val() == ""){
+                    alert('Debe registrar la Fecha de Inicio');
+                    $('#fecha_inicio_mod').focus();
+                    return;
+                }
+            } 
+
+            if ($('#tiempo_presentacion_mod').val() == "1") { 
+
+                if($('#fecha_presentacion_mod').val() == ""){
+                    alert('Debe registrar la Fecha de Presentación');
+                    $('#fecha_presentacion_mod').focus();
+                    return;
+                }
+            } 
 
             // Verificar si hay registros similares antes de proceder
-            const entidadId = $('#entidad_id').val();
-            const entidad = $('#entidad_mod').val();
-            const ruc = $('#ruc_mod').val();
+            const obligacion = $('#obligacion').val(); 
 
             $.ajax({
-                url: "{{ route('admin.check_entidad_modificar') }}", // Ruta para verificar similitudes
+                url: "{{ route('admin.check_obligacion') }}", // Ruta para verificar similitudes
                 type: "POST",
                 data: {
-                    entidad: entidad,
-                    ruc: ruc,
-                    entidad_id: entidadId, // Enviar el ID actual
+                    obligacion: obligacion, 
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
-                    /*if (response.similar.length > 0) {
-                        // Filtrar el propio registro en caso de estar en los resultados
-                        const registrosSimilares = response.similar.filter(sim => sim.id !== entidadId);
+                success: function (response) { 
 
-                        if (registrosSimilares.length > 0) {
-                            const similarMessage = `Se encontraron registros similares:\n- ${registrosSimilares.map(s => s.entidad).join('\n- ')}\n\n¿Está seguro de modificar esta entidad de todas formas?`;
-
-                            if (!confirm(similarMessage)) {
-                                return; // Detener la ejecución si el usuario cancela
-                            }
-                        }
-                    }*/
                     if (response.similar.length > 0) {
                         // Mostrar mensaje de confirmación al usuario
                         const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
@@ -458,7 +606,7 @@ Maestro de Obligaciones
                     }
 
                     // Proceder con la modificación
-                    modificarEntidad();
+                    modificarObligacion();
                 },
                 error: function () {
                     alert('Error al verificar registros similares. Intente nuevamente.');
@@ -498,12 +646,12 @@ Maestro de Obligaciones
             });
         }
 
-        function modificarEntidad() {
+        function modificarObligacion() {
             var formData = new FormData(document.getElementById("ModalModificarObligacion"));
             $('#carga').show();
 
             $.ajax({
-                url: "{{ route('admin.modificar_entidad') }}",
+                url: "{{ route('admin.modificar_obligacion') }}",
                 type: "POST",
                 data: formData,
                 dataType: "json",
@@ -523,7 +671,7 @@ Maestro de Obligaciones
                         alert(errors.error);
                     }
                 } else {
-                    alert("Ocurrió un error al modificar la entidad.");
+                    alert("Ocurrió un error al modificar la obligación.");
                 }
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
@@ -534,61 +682,47 @@ Maestro de Obligaciones
         $(document).on('click', '.open-modal', function() {
             console.log('Botón clicado...');
             var button = $(this); 
-            var entidadId = button.data('id'); 
+            var obligacionId = button.data('id'); 
 
-            console.log('Cargo ID:', entidadId);  
+            console.log('Obligacion ID:', obligacionId);  
 
             $('#carga').show();
 
             
             $.ajax({
-                url: '/administrador/entidad/detalle/' + entidadId,
+                url: '/administrador/obligacion/detalle/' + obligacionId,
                 method: 'GET',
                 success: function(response) {
                     console.log('Datos recibidos:', response);
 
-                    var entidadId = $('#entidad_id');
-                    var Entidad = $('#entidad_mod');  
-                    var Ruc = $('#ruc_mod'); 
-                    var tiempoPresentacion = $('#tipo_presentacion_mod'); 
-                    var Alcance = $('#alcance_mod'); 
-                    var Direccion = $('#direccion_mod');  
-                    var Telefono = $('#telefono_mod');  
-                    var Representante = $('#representante_mod');  
-                    var TelefonoRepresentante = $('#telefono_representante_mod');  
-                    var Pais = $('#pais_mod'); 
-                    var Provincia = $('#provincia_mod'); 
-                    var Canton = $('#canton_mod'); 
-
+                    var obligacionId = $('#obligacion_id');
+                    var Obligacion = $('#obligacion_mod');   
+                    var tiempoPresentacion = $('#tiempo_presentacion_mod'); 
+                    var fechaPresentacion = $('#fecha_presentacion_mod'); 
+                    var tipoPresentacion = $('#tipo_presentacion_mod');  
+                    var fechaInicio = $('#fecha_inicio_mod ');   
  
-                    entidadId.val(response.id); 
-                    Entidad.val(response.entidad);
-                    Ruc.val(response.ruc); 
-                    tiempoPresentacion.val(response.id_tipo_presentacion); 
-                    Alcance.val(response.alcance); 
-                    Direccion.val(response.direccion); 
-                    Telefono.val(response.telefono); 
-                    Representante.val(response.representante); 
-                    TelefonoRepresentante.val(response.telefono_representante);  
-                     
-                    if(response.id_pais!=0){
-                             // Asignar país y disparar cambio para cargar provincias
-                        $('#pais_mod').val(response.id_pais).trigger('change');
+                    obligacionId.val(response.id); 
+                    Obligacion.val(response.obligacion); 
+                    tiempoPresentacion.val(response.id_tiempo_presentacion); 
+                    fechaPresentacion.val(response.fecha_presentacion); 
+                    tipoPresentacion.val(response.id_tipo_presentacion); 
+                    fechaInicio.val(response.fecha_inicio);   
 
-                        // Cargar provincias y asignar provincia
-                        cargarProvincias(response.id_pais).then(() => {
-                            $('#provincia_mod').val(response.id_provincia).trigger('change');
+                    // Deshabilitar o habilitar los selects según el valor
+                    //alert(response.id_tiempo_presentacion);
+                    if (response.id_tiempo_presentacion === 1) { // General
 
-                            // Cargar cantones y asignar cantón
-                            cargarCantones(response.id_pais, response.id_provincia).then(() => {
-                                $('#canton_mod').val(response.id_canton).trigger('change'); 
-                            });
-                        });   
-                    }else{
-                        $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
-                        $('#pais_mod').val('-1').change(); // Llamamos a .change() para disparar eventos asociados si los hay
-                        $('#provincia_mod').val('-1').change();
-                        $('#canton_mod').val('-1').change();
+                        $('#fecha_presentacion_mod').prop('disabled', false);   
+                        $('#tipo_presentacion_mod').prop('disabled', true); 
+                        $('#fecha_inicio_mod').prop('disabled', true); 
+
+                    } else if (response.id_tiempo_presentacion === 2) { // Local
+
+                        $('#fecha_presentacion_mod').prop('disabled', true);   
+                        $('#tipo_presentacion_mod').prop('disabled', false);  
+                        $('#fecha_inicio_mod').prop('disabled', false); 
+
                     }
                    
                     $('#carga').hide();
@@ -600,16 +734,16 @@ Maestro de Obligaciones
             });
         });
 
-        $(document).on('click', '.delete-entidad', function() {
+        $(document).on('click', '.delete-obligacion', function() {
             var button = $(this); 
-            var entidadId = button.data('id'); 
+            var obligacionId = button.data('id'); 
 
             // Mostrar la confirmación antes de proceder con la eliminación
             var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
 
             if (confirmDelete) {
                 $.ajax({
-                    url: '/administrador/entidad/eliminar/' + entidadId,
+                    url: '/administrador/obligacion/eliminar/' + obligacionId,
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF

@@ -87,7 +87,7 @@ class ObligacionesController extends Controller
 
         $json_data = [
             "draw" => intval($request->input('draw')),
-            "recordsTotal" => DB::table('obligaciones')->count(),
+            "recordsTotal" => DB::table('obligaciones')->where('obligaciones.estado', 1)->count(),
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
@@ -97,22 +97,32 @@ class ObligacionesController extends Controller
 
     public function checkObligacion(Request $request)
     {
-        $entidad = $request->input('obligacion');
+        // Validar si el campo obligacion está vacío o nulo
+        $obligacion = $request->input('obligacion');
+        if (!$obligacion) {
+            return response()->json([
+                'similar' => [],
+            ]);
+        }
 
-        // Buscar entidades similares 
-
-        $stopWords = ['CAMARA', 'COMERCIO', 'DE']; // Palabras genéricas a excluir
-        $cleanEntidad = str_replace($stopWords, '', strtoupper($entidad));
-
-        $similares = DB::table('obligaciones')
+        // Consulta para encontrar registros similares
+        $query = DB::table('obligaciones')
             ->select('obligacion_busqueda')
-            ->whereRaw("MATCH(obligacion_busqueda) AGAINST(? IN BOOLEAN MODE)", [$cleanEntidad])
-            ->pluck('obligacion_busqueda');
+            ->whereRaw("MATCH(obligacion_busqueda) AGAINST(? IN BOOLEAN MODE)", [strtoupper($obligacion)]);
 
+        // Excluir el ID actual si se proporciona
+        if ($request->filled('obligacion_id')) {
+            $query->where('id', '!=', $request->input('obligacion_id'));
+        }
+
+        $similares = $query->pluck('obligacion_busqueda');
+
+        // Responder con los registros similares
         return response()->json([
             'similar' => $similares,
         ]);
-    }
+    } 
+
 
     public function registrar_obligacion(Request $request)
     { 
@@ -123,6 +133,21 @@ class ObligacionesController extends Controller
             if($request->input('tiempo_presentacion')){
                 $id_tipo_presentacion = $request->input('tipo_presentacion');
             } 
+
+            $fecha_inicio = $request->input('fecha_inicio'); 
+            if ($fecha_inicio) {
+                $fecha_inicio = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
+            } else {
+                $fecha_inicio = null;
+            }
+
+            $fecha_presentacion = $request->input('fecha_presentacion'); 
+            if ($fecha_presentacion) {
+                $fecha_presentacion = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_presentacion)->format('Y-m-d');
+            } else {
+                $fecha_presentacion = null;
+            }
+             
              
             // Crear registro en la base de datos
             $camara = Obligacion::create([ 
@@ -130,6 +155,8 @@ class ObligacionesController extends Controller
                 'obligacion_busqueda' => strtoupper($request->input('obligacion')),
                 'id_tiempo_presentacion' => strtoupper($request->input('tiempo_presentacion')),
                 'id_tipo_presentacion' => $id_tipo_presentacion,
+                'fecha_inicio' => $fecha_inicio,
+                'fecha_presentacion' => $fecha_presentacion,
                 'estado' => 1
             ]); 
 
@@ -141,6 +168,99 @@ class ObligacionesController extends Controller
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function eliminar_obligacion($id)
+    {
+        //$colaborador = Colaborador::find($id);
+        $obligacion = Obligacion::where('id', $id)->first();
+
+
+        if (!$obligacion) {
+            return response()->json(['error' => 'Obligacion no encontrada'], 404);
+        }
+    
+        // Cambiar el valor del campo 'activo' a 0
+        $obligacion->estado = 0;
+        $obligacion->save();
+    
+        return response()->json(['success' => 'Obligacion eliminada correctamente']);
+    }
+
+    public function detalle_obligacion($id)
+    {
+        // Buscar la cámara por ID
+        $obligacion = Obligacion::find($id);
+    
+        if (!$obligacion) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+    
+        // Convertir el modelo Camara a un array
+        $obligacionArray = $obligacion->toArray(); 
+    
+        // Devolver la respuesta JSON
+        return response()->json($obligacionArray);
+    }
+
+    public function modificar_obligacion(Request $request)
+    {  
+        try {
+            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+             
+            // Buscar el registro existente por ID
+            $obligacion = Obligacion::find($request->input('obligacion_id'));
+        
+            if (!$obligacion) {
+                return response()->json(['error' => 'La Obligacion no existe.'], 404);
+            }
+
+            $id_tipo_presentacion = 0; 
+            if($request->input('tiempo_presentacion_mod')){
+                $id_tipo_presentacion = $request->input('tipo_presentacion_mod');
+            } 
+
+            $fecha_inicio = $request->input('fecha_inicio_mod'); 
+            if ($fecha_inicio) {
+                $fecha_inicio = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
+            } else {
+                $fecha_inicio = null;
+            }
+
+            $fecha_presentacion = $request->input('fecha_presentacion_mod'); 
+            if ($fecha_presentacion) {
+                $fecha_presentacion = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_presentacion)->format('Y-m-d');
+            } else {
+                $fecha_presentacion = null;
+            }
+ 
+        
+            // Actualizar los campos del registro existente
+            $obligacion->update([
+                'obligacion' => strtoupper($request->input('obligacion_mod')),
+                'obligacion_busqueda' => strtoupper($request->input('obligacion_mod')),
+                'id_tiempo_presentacion' => strtoupper($request->input('tiempo_presentacion_mod')),
+                'id_tipo_presentacion' => $id_tipo_presentacion,
+                'fecha_inicio' => $fecha_inicio,
+                'fecha_presentacion' => $fecha_presentacion,
+                'estado' => 1
+            ]); 
+        
+            
+            //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
+            /*return response()->json(['response' => [
+                'msg' => "Registro modificado",
+                ]
+            ], 201);*/
+            return response()->json(['success' => 'Obligación modificada correctamente'], 200);
+        } catch (\Illuminate\Database\QueryException $e) { 
+            if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
+                return response()->json(['error' => 'La Obligación que intenta modificar ya existe en el Sistema.'], 422);
+            }
+            return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
         }
     }
 }

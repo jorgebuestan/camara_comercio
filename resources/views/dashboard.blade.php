@@ -349,6 +349,7 @@
         </header>
         <!-- end: header -->
 
+        <!--<div class="inner-wrapper"> -->
         <div class="inner-wrapper" style="overflow: auto;max-height: 100vh;">
             <!-- start: sidebar -->
             <aside id="sidebar-left" class="sidebar-left">
@@ -426,6 +427,11 @@
                                                     Mantenimiento de Entidades
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.entidades_obligaciones') }}">
+                                                    Obligaciones por Entidad
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li class="nav-parent">
@@ -470,22 +476,22 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-parent">
-                                                                <a class="nav-link" href="#">
-                                                                                                                Socios
-                                                                </a>
-                                                                <ul class="nav nav-children">
-                                                                <li>
-                                                                          <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                Solicitud de Herramientas
-                                                                </a>
-                                                                </li>
-                                                                </ul>
-                                                                </li>
-                                                                <li>
-                                                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                Solicitudes en Proceso
-                                                                </a>
-                                                                </li>  -->
+                                                                    <a class="nav-link" href="#">
+                                                                                                                    Socios
+                                                                    </a>
+                                                                    <ul class="nav nav-children">
+                                                                    <li>
+                                                                              <a class="nav-link" href="{{ route('dashboard') }}">
+                                                                    Solicitud de Herramientas
+                                                                    </a>
+                                                                    </li>
+                                                                    </ul>
+                                                                    </li>
+                                                                    <li>
+                                                                    <a class="nav-link" href="{{ route('dashboard') }}">
+                                                                    Solicitudes en Proceso
+                                                                    </a>
+                                                                    </li>  -->
                                         </ul>
                                     </li>
                                 @endcan
