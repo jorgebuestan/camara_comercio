@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\TipoIdentificacion;
 use App\Models\TipoPersona;
 use App\Models\TipoPersoneria;
+use App\Models\DatoTributarioSocio;
 
 class Socio extends Model
 {
@@ -49,5 +50,9 @@ class Socio extends Model
     public function tipo_personeria()
     {
         return $this->hasOne(TipoPersoneria::class, 'id', 'id_tipo_personeria');
+    }
+    public function datos_tributarios()
+    {
+        return $this->hasOne(DatoTributarioSocio::class, 'id_socio', 'id');
     }
 }

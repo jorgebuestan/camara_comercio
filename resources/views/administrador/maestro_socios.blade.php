@@ -8,19 +8,12 @@
     <style>
         .rowborder {
             margin: 20px;
-            /* Establece el margen deseado */
             padding: 10px;
-            /* Añade un relleno interno para separar el contenido del margen */
             border: 2px solid #ccc;
-            /* Añade un borde para crear el efecto rectangular */
             border-radius: 10px;
-            /* Agrega bordes circulares en las esquinas */
             box-sizing: border-box;
-            /* Incluye el borde y el relleno en el tamaño total del elemento */
         }
 
-        /* Contenedor de elementos seleccionados */
-        /* Contenedor de elementos seleccionados */
         .selected-items {
             margin-top: 20px;
             padding: 10px;
@@ -99,7 +92,8 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button class="btn btn-primary mb-3 new-socio">Agregar Nuevo Registro</button>
+                                        <button id="btn_new_socio" class="btn btn-primary mb-3">Agregar Nuevo
+                                            Registro</button>
                                     </div>
                                 </div>
                             </div>
@@ -122,10 +116,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>
-                                                    <th>Tipo de Identificación</th>
                                                     <th>Identificación</th>
                                                     <th>Razón Social</th>
-                                                    <th>Tipo de Persona / Personería</th>
+                                                    <th>Tipo de Personería</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -159,14 +152,14 @@
                                                 <a class="nav-link" data-bs-target="#datos_generales"
                                                     href="#datos_generales" data-bs-toggle="tab">Datos Generales</a>
                                             </li>
-                                            <li id="tab-item-establecimiento" class="nav-item" style="display:none;">
-                                                <a class="nav-link" data-bs-target="#establecimientos"
-                                                    href="#establecimientos" data-bs-toggle="tab">Establecimientos</a>
-                                            </li>
-                                            <li id="tab-item-tributario" class="nav-item" style="display:none;">
+                                            <li id="tab_item_tributario" class="nav-item">
                                                 <a class="nav-link" data-bs-target="#datos_tributarios"
                                                     href="#datos_tributarios" data-bs-toggle="tab">Datos Tributarios</a>
                                             </li>
+                                            {{-- <li id="tab_item_establecimiento" class="nav-item">
+                                                <a class="nav-link" data-bs-target="#establecimientos"
+                                                    href="#establecimientos" data-bs-toggle="tab">Establecimientos</a>
+                                            </li> --}}
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
@@ -176,11 +169,9 @@
                                                             Adjuntar Foto
                                                         </label>
                                                         <input type="file" class="form-control-file" id="fotoFile"
-                                                            name="file">
-                                                        <input type="hidden" name="tipoDoc" value="1">
+                                                            name="file" />
+                                                        <input type="hidden" name="tipoDoc" value="1" />
                                                     </div>
-                                                </div>
-                                                <div class="row mb-2">
                                                     <div class="col-md-6 gap-1">
                                                         <label>
                                                             Fecha de Ingreso
@@ -188,19 +179,6 @@
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_ingreso" id="fecha_ingreso"
                                                             placeholder="Fecha de Ingreso" />
-                                                    </div>
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>
-                                                            Tipo de Persona
-                                                        </label>
-                                                        <select id="tipo_persona" name="tipo_persona"
-                                                            class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            @foreach ($tiposPersona as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -210,9 +188,9 @@
                                                         </label>
                                                         <select id="tipo_personeria" name="tipo_personeria"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($tiposPersoneria as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endForEach
                                                         </select>
@@ -222,25 +200,9 @@
                                                             Identificación
                                                         </label>
                                                         <input type="text" class="form-control" name="identificacion"
-                                                            id="identificacion" placeholder="Identificación">
-                                                        <div id="error-identificacion" style="color: red; display: none;">
+                                                            id="identificacion" placeholder="Identificación" />
+                                                        <div id="error_identificacion" style="color: red; display: none;">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div id='tipo_identificacion_container' class="col-md-6 gap-1"
-                                                        style="display: none;">
-                                                        <label>
-                                                            Tipo de Identificación
-                                                        </label>
-                                                        <select id="tipo_identificacion" name="tipo_identificacion"
-                                                            class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            @foreach ($tiposIdentificacion as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
-                                                                </option>
-                                                            @endForEach
-                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -249,9 +211,9 @@
                                                         <hr class="my-1">
                                                     </div>
                                                 </div>
-                                                <div id="datos-juridico-ruc" style="display: none;">
+                                                <div id="datos_personales">
                                                     <div class="row mb-2">
-                                                        <div class="col-md-6 gap-1">
+                                                        <div class="col-md-12 gap-1">
                                                             <label>
                                                                 Razón Social
                                                             </label>
@@ -260,22 +222,24 @@
                                                                 placeholder="Razón Social" />
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-2">
+                                                    <div id="natural" class="row mb-2" style="display:none">
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Correo</label>
+                                                            <input type="email" class="form-control" name="correo"
+                                                                id="correo" placeholder="Correo" />
+                                                            <div id="error_correo" style="color: red; display: none;">
+                                                                Ingrese un correo
+                                                                electrónico valido</div>
+                                                        </div>
                                                         <div class="col-md-6 gap-1">
                                                             <label>Teléfono</label>
                                                             <input type="text" class="form-control" name="telefono"
-                                                                id="telefono" placeholder="Teléfono">
-                                                            <div id="error-telefono" style="color: red; display: none;">
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>Correo</label>
-                                                                <input type="email" class="form-control" name="correo"
-                                                                    id="correo" placeholder="Correo">
-                                                                <div id="error-correo" style="color: red; display: none;">
-                                                                    Ingrese un correo
-                                                                    electrónico valido</div>
+                                                                id="telefono" placeholder="Teléfono" />
+                                                            <div id="error_telefono" style="color: red; display: none;">
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div id="juridico" style="display: none">
                                                         <div class="row mb-2">
                                                             <div class="col-md-12">
                                                                 <h4>Datos Representante Legal</h4>
@@ -289,7 +253,7 @@
                                                                     name="cedula_representante" id="cedula_representante"
                                                                     placeholder="Cédula Representante Legal"
                                                                     maxlength="10">
-                                                                <div id="error-cedula-representante"
+                                                                <div id="error_cedula_representante"
                                                                     style="color: red; display: none;"></div>
                                                             </div>
                                                         </div>
@@ -315,7 +279,7 @@
                                                                     name="telefono_representante"
                                                                     id="telefono_representante"
                                                                     placeholder="Teléfono Representante Legal">
-                                                                <div id="error-telefono-representante"
+                                                                <div id="error_telefono_representante"
                                                                     style="color: red; display: none;"></div>
                                                             </div>
                                                             <div class="col-md-6 gap-1">
@@ -323,21 +287,21 @@
                                                                 <input type="email" class="form-control"
                                                                     name="correo_representante" id="correo_representante"
                                                                     placeholder="Correo Representante Legal">
-                                                                <div id="error-correo-representante"
+                                                                <div id="error_correo_representante"
                                                                     style="color: red; display: none;">Ingrese un correo
                                                                     electrónico valido</div>
                                                             </div>
                                                         </div>
                                                         <div class="row mb-2">
                                                             <div class="col-md-6 gap-1">
-                                                                <label>Fecha Registro Mercantil</label>
+                                                                <label>Fecha de Registro Mercantil</label>
                                                                 <input type="text" data-plugin-datepicker
                                                                     class="form-control" name="fecha_registro_mercantil"
                                                                     id="fecha_registro_mercantil"
                                                                     placeholder="Fecha Registro Mercantil">
                                                             </div>
                                                             <div class="col-md-6 gap-1">
-                                                                <label>Vencimiento Nombramiento</label>
+                                                                <label>Vencimiento de Nombramiento</label>
                                                                 <input type="text" data-plugin-datepicker
                                                                     class="form-control" name="vencimiento_nombramiento"
                                                                     id="vencimiento_nombramiento"
@@ -353,173 +317,204 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="datos-natural" style="display:none;">
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Nombre Completo Adherente
-                                                                </label>
-                                                                <input type="text" class="form-control"
-                                                                    name="nombre_adherentes" id="nombre_adherente"
-                                                                    placeholder="Nombre Completo del Adherente">
-                                                            </div>
-                                                            <!-- Considerar cambio por componente que elije al socio existente -->
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Afiliado que Pertenece
-                                                                </label>
-                                                                <input type="text" class="form-control"
-                                                                    name="afiliado_pertenece" id="afiliado_pertenece"
-                                                                    placeholder="Afiliado que Pertenece">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Correo
-                                                                </label>
-                                                                <input type="email" class="form-control"
-                                                                    name="correo_adherente" id="correo_adherente"
-                                                                    placeholder="Correo">
-                                                                <div id="error-correo-adherente"
-                                                                    style="color: red; display: none;">
-                                                                    Ingrese un correo electrónico valido</div>
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Teléfono
-                                                                </label>
-                                                                <input type="text" class="form-control"
-                                                                    name="telefono_adherente" id="telefono_adherente"
-                                                                    placeholder="Teléfono">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-12">
-                                                                <h5>Dirección</h5>
-                                                                <hr class="my-1">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Provincia
-                                                                </label>
-                                                                <select id="provincia" name="provincia"
-                                                                    class="form-control populate">
-                                                                    <option value="-1">Seleccionar</option>
-                                                                    @foreach ($provincias as $id => $descripcion)
-                                                                        <option value="{{ $id }}">
-                                                                            {{ $descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Cantón
-                                                                </label>
-                                                                <select id="canton" name="canton"
-                                                                    class="form-control populate">
-                                                                    <option value="-1">Seleccionar</option>
-                                                                    @foreach ($cantones as $id => $descripcion)
-                                                                        <option value="{{ $id }}">
-                                                                            {{ $descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Parroquia
-                                                                </label>
-                                                                <select id="parroquia" name="parroquia"
-                                                                    class="form-control populate">
-                                                                    <option value="-1">Seleccionar</option>
-                                                                    @foreach ($parroquias as $id => $descripcion)
-                                                                        <option value="{{ $id }}">
-                                                                            {{ $descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Calle
-                                                                </label>
-                                                                <input type="text" class="form-control" name="calle"
-                                                                    id="calle" placeholder="Calle">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Manzana
-                                                                </label>
-                                                                <input type="text" class="form-control" name="manzana"
-                                                                    id="manzana" placeholder="Manzana">
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Número
-                                                                </label>
-                                                                <input type="text" class="form-control" name="numero"
-                                                                    id="numero" placeholder="Número">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Intersección
-                                                                </label>
-                                                                <input type="text" class="form-control"
-                                                                    name="interseccion" id="interseccion"
-                                                                    placeholder="Intersección">
-                                                            </div>
-                                                            <div class="col-md-6 gap-1">
-                                                                <label>
-                                                                    Referencia
-                                                                </label>
-                                                                <input type="text" class="form-control"
-                                                                    name="referencia" id="referencia"
-                                                                    placeholder="Referencia">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-2">
-                                                            <div class="col-md-12 gap-1">
-                                                                <label>
-                                                                    Observaciones
-                                                                </label>
-                                                                <textarea class="form-control" name="observaciones" id="observaciones" placeholder="Observaciones"></textarea>
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 flex flex-col gap-1">
+                                                        <label>
+                                                            Datos adjuntos (máximo 5)
+                                                        </label>
+                                                        <input type="file" class="form-control-file" id="adjuntos"
+                                                            name="adjuntos[]" multiple />
                                                     </div>
-                                                    <div class="row mb-2" style="display: none;">
-                                                        <div class="col-md-12 gap-1">
-                                                            <label>
-                                                                Datos adjuntos (máximo 5)
-                                                            </label>
-                                                            <input type="file" class="form-control-file"
-                                                                id="adjuntos" name="adjuntos[]" multiple />
-                                                            <small class="text-muted">Puede seleccionar hasta 5
-                                                                archivos.</small>
+                                                </div>
+                                            </div>
+                                            <div id="datos_tributarios" class="tab-pane">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Estado SRI</label>
+                                                        <input type="text" class="form-control" name="estado_sri"
+                                                            id="estado_sri" readonly />
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Tipo Régimen</label>
+                                                        <select id="tipo_regimen" name="tipo_regimen"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            @foreach ($regimenes as $id => $descripcion)
+                                                                <option value={{ $id }}>{{ $descripcion }}
+                                                                </option>
+                                                            @endForEach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha Registro SRI</label>
+                                                        <input type="text" data-plugin-datepicker class="form-control"
+                                                            name="fecha_registro_sri" id="fecha_registro_sri"
+                                                            placeholder="Fecha Registro SRI">
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha Actualización RUC</label>
+                                                        <input type="text" data-plugin-datepicker class="form-control"
+                                                            name="fecha_actualizacion_ruc" id="fecha_actualizacion_ruc"
+                                                            placeholder="Fecha Actualización RUC">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Constitución</label>
+                                                        <input type="text" data-plugin-datepicker class="form-control"
+                                                            name="fecha_constitucion" id="fecha_constitucion"
+                                                            placeholder="Fecha de Constitución">
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Años de Creación</label>
+                                                        <input type="text" class="form-control" name="anios_creacion"
+                                                            id="anios_creacion" readonly />
+                                                    </div>
+                                                </div>
+                                                <div id="tributario_natural" style="display:none">
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Fecha de Nacimiento</label>
+                                                            <input type="text" data-plugin-datepicker
+                                                                class="form-control" name="fecha_nacimiento"
+                                                                id="fecha_nacimiento" placeholder="Fecha de Nacimiento">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="establecimientos" class="tab-pane"></div>
-                                                <div id="datos_tributarios" class="tab-pane"></div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Agente de Retención</label>
+                                                        <select id="agente_retencion" name="agente_retencion"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>SI</option>
+                                                            <option value=0>NO</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Contribuyente Especial</label>
+                                                        <select id="contribuyente_especial" name="contribuyente_especial"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>SI</option>
+                                                            <option value=0>NO</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <label>Obligaciones Tributarias y Demás</label>
+                                                        <select id="obligaciones_tributarias"
+                                                            name="obligaciones_tributarias[]"
+                                                            class="form-control populate" multiple>
+                                                            <option value=-1>Seleccionar</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Pais</label>
+                                                        <select id="pais" name="pais"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            @foreach ($paises as $id => $nombre)
+                                                                <option value={{ $id }}
+                                                                    {{ $id == 57 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Provincia</label>
+                                                        <select id="provincia" name="provincia"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            @foreach ($provincias as $id => $nombre)
+                                                                <option value={{ $id }}
+                                                                    {{ $id == 2 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cantón</label>
+                                                        <select id="canton" name="canton"
+                                                            class="form-control populate">
+                                                            <option value=-1 selected>Seleccionar</option>
+                                                            @foreach ($cantones as $id => $nombre)
+                                                                <option value={{ $id }}
+                                                                    {{ $id == 2 ? 'selected' : '' }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Parroquia</label>
+                                                        <select id="parroquia" name="parroquia"
+                                                            class="form-control populate">
+                                                            <option value=-1>Seleccionar</option>
+                                                            @foreach ($parroquias as $id => $nombre)
+                                                                <option value={{ $id }}>
+                                                                    {{ $nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Calle</label>
+                                                        <input type="text" class="form-control" name="calle"
+                                                            id="calle" placeholder="Calle" />
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Manzana</label>
+                                                        <input type="text" class="form-control" name="manzana"
+                                                            id="manzana" placeholder="Manzana" />
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Número</label>
+                                                        <input type="text" class="form-control" name="numero"
+                                                            id="numero" placeholder="Número" />
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Intersección</label>
+                                                        <input type="text" class="form-control" name="interseccion"
+                                                            id="interseccion" placeholder="Intersección" />
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Referencia</label>
+                                                        <input type="text" class="form-control" name="referencia"
+                                                            id="referencia" placeholder="Referencia" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" id="btn-register-socio">Guardar</button>
-                                <button type="button" class="btn btn-primary" style="display: none;"
-                                    id="btn-update-socio">Actualizar</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btn_register_socio">Guardar</button>
+                            <button type="button" class="btn btn-primary" style="display: none;"
+                                id="btn_update_socio">Actualizar</button>
                         </div>
                     </div>
+                </div>
         </form>
     </div>
 
@@ -530,85 +525,6 @@
 
     <script>
         $(document).ready(function() {
-            /**
-             * DataTable - Initial Load of Socios
-             */
-            let socios = [];
-            Swal.fire({
-                title: 'Cargando',
-                text: 'Por favor espere',
-                icon: 'info',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading()
-                }
-            });
-            var table = $('#dataTable').DataTable({
-                destroy: true,
-                processing: false,
-                serverSide: true,
-                ajax: {
-                    url: "{{ route('admin.obtener_listado_socios') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.start = d.start || 0;
-                        d.length = d.length || 10;
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: error.responseJSON?.message || "Error al cargar los datos.",
-                        });
-                        console.error("Error al cargar los datos: ", error);
-                    },
-                    complete: function(response) {
-                        socios = response.responseJSON.data;
-                        Swal.close();
-                    },
-                },
-                pageLength: 10,
-                columns: [{
-                        data: 'fecha_ingreso',
-                        width: '10%'
-                    },
-                    {
-                        data: 'tipo_identificacion',
-                        width: '15%'
-                    },
-                    {
-                        data: 'identificacion',
-                        width: '20%'
-                    },
-                    {
-                        data: 'razon_social',
-                        width: '20%'
-                    },
-                    {
-                        data: 'persona_data',
-                        width: '15%'
-                    },
-                    {
-                        data: 'btn',
-                        width: '20%',
-                        sortable: false,
-                    }
-                ],
-                order: [
-                    [0, "asc"]
-                ],
-                createdRow: function(row, data, dataIndex) {
-                    var td = $(row).find(".truncate");
-                    td.attr("title", td.text());
-
-                    var td2 = $(row).find(".truncate2");
-                    td2.attr("title", td2.text());
-                }
-            });
-
             /** 
              * Default values and States
              */
@@ -638,6 +554,81 @@
             $('#identificacion').attr('maxlength', 13);
 
             var socioSelected = null;
+            let socios = [];
+            /**
+             * DataTable - Initial Load of Socios
+             */
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            var table = $('#dataTable').DataTable({
+                destroy: true,
+                processing: false,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('admin.obtener_listado_socios') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.start = d.start || 0;
+                        d.length = d.length || 10;
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.error || "Error al cargar los datos.",
+                        });
+                        console.error("Error al cargar los datos: ", error);
+                    },
+                    complete: function(response) {
+                        socios = response.responseJSON.data;
+                        Swal.close();
+                    },
+                },
+                pageLength: 10,
+                columns: [{
+                        data: 'fecha_ingreso',
+                        width: '10%'
+                    },
+                    {
+                        data: 'identificacion',
+                        width: '20%'
+                    },
+                    {
+                        data: 'razon_social',
+                        width: '20%'
+                    },
+                    {
+                        data: 'tipo_personeria',
+                        width: '15%'
+                    },
+                    {
+                        data: 'btn',
+                        width: '20%',
+                        sortable: false,
+                    }
+                ],
+                order: [
+                    [0, "asc"]
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    var td = $(row).find(".truncate");
+                    td.attr("title", td.text());
+
+                    var td2 = $(row).find(".truncate2");
+                    td2.attr("title", td2.text());
+                }
+            });
+
 
             /**
              * Event listeners
@@ -647,116 +638,113 @@
                 $('#ModalSocio').modal('hide');
                 limpiarFormulario();
             });
-            // Event listener for onClick of button new-socio
-            $(document).on('click', '.new-socio', function() {
+            // Event listener for onClick of button#btn_new_socio
+            $(document).on('click', '#btn_new_socio', function() {
                 limpiarFormulario();
-                $('#ModalSocio').find('#btn-register-socio').show();
-                $('#ModalSocio').find('#btn-update-socio').hide();
+                $('#ModalSocio').find('#btn_register_socio').show();
+                $('#ModalSocio').find('#btn_update_socio').hide();
                 $('#ModalSocio').modal('show');
             });
+
+            // Functions for Form Selects and Elements
+            function toggleJuridico(active) {
+                if (active) {
+                    $('#juridico').show();
+                    $('#tributario_natural').hide()
+                    $('#natural').hide();
+                } else {
+                    $('#juridico').hide();
+                }
+            }
+
+            function toggleNatural(active) {
+                if (active) {
+                    $('#juridico').hide();
+                    $('#natural').show();
+                    $('#tributario_natural').show();
+                } else {
+                    $('#natural').hide();
+                }
+            }
 
             // Event listener for onChange of select tipo_personeria
             $('#tipo_personeria').change(function() {
                 var tipoPersoneria = $(this).val();
-                $('#tipo_identificacion').val(-1);
-                $('#identificacion').val('');
-                $("#error-identificacion").val('');
-                $('#error-identificacion').hide();
-
-                $('#tipo_identificacion_container').hide();
-
                 if (tipoPersoneria == 1) {
-                    $('#tipo_identificacion_container').show();
-                    $('#datos-juridico-ruc').hide();
-                    $('#tab-item-tributario').hide();
-                    $('#tab-item-establecimiento').hide();
+                    toggleJuridico(false);
+                    toggleNatural(true);
+                    $('#identificacion').focus();
                 } else if (tipoPersoneria == 2) {
-                    $('#identificacion').attr('maxlength', 13);
-                    $('#datos-juridico-ruc').show();
-                    $('#datos-natural').hide();
-                    $('#tab-item-tributario').show();
-                    $('#tab-item-establecimiento').show();
+                    toggleJuridico(true);
+                    toggleNatural(false);
                     $('#identificacion').focus();
                 } else {
-                    $('#tab-item-tributario').hide();
-                    $('#tab-item-establecimiento').hide();
-                    $('#datos-natural').hide();
-                    $('#datos-juridico-ruc').hide();
-                }
-            });
-
-            // Event listener for onChange of select tipo_identificacion
-            $('#tipo_identificacion').change(function() {
-                var tipoIdentificacion = $(this).val();
-                $('#datos-natural').hide();
-
-                $('#identificacion').val('');
-                $("#error-identificacion").val('');
-                $('#error-identificacion').hide();
-                $('#tab-item-tributario').hide();
-                $('#tab-item-establecimiento').hide();
-
-                if (tipoIdentificacion == 1) {
-                    $('#identificacion').attr('maxlength', 13);
-                    $('#identificacion').focus();
-                    $('#datos-juridico-ruc').show();
-                    $('#datos-natural').hide();
-                    $('#tab-item-tributario').show();
-                    $('#tab-item-establecimiento').show();
-                } else if (tipoIdentificacion == 2) {
-                    //$('#datos-natural').show();
-                    $('#datos-juridico-ruc').hide();
-
-                    $('#identificacion').attr('maxlength', 10);
-                } else if (tipoIdentificacion == 3 || tipoIdentificacion == 4) {
-                    //$('#datos-natural').show();
-                    $('#datos-juridico-ruc').hide();
-
-                    $('#identificacion').attr('minlength', 5);
-                    $('#identificacion').attr('maxlength', 20);
-                } else {
-                    $('#datos-natural').hide();
-                    $('#datos-juridico-ruc').hide();
+                    toggleJuridico(false);
+                    toggleNatural(false);
                 }
             });
 
             // Event listener for onInput of input identificacion
             $('#identificacion').on('input', function() {
                 var identificacion = $(this).val();
-                var tipoPersona = $('#tipo_persona').val();
-                var tipoPersoneria = $('#tipo_personeria').val();
-                var tipoIdentificacion = $('#tipo_identificacion').val();
-
-                var validCedula = /^\d{10}$/.test(identificacion);
                 var validRuc = /^\d{13}$/.test(identificacion);
-                var validPasaporte = /^[a-zA-Z0-9]{5,}$/.test(identificacion);
-
-                if (tipoPersoneria == -1) {
-                    $('#error-identificacion').text('Debe seleccionar el tipo de personería.');
-                    $('#error-identificacion').show();
-                } else if (tipoPersoneria == 2 && !validRuc) {
-                    $('#error-identificacion').text('La identificación debe tener 13 dígitos.');
-                    $('#error-identificacion').show();
-                } else if (tipoIdentificacion == 1 && !validRuc) {
-                    $('#error-identificacion').text('La identificación debe tener 13 dígitos.');
-                    $('#error-identificacion').show();
-                } else if (tipoIdentificacion == 2 && !validCedula) {
-                    $('#error-identificacion').text('La identificación debe tener 10 dígitos.');
-                    $('#error-identificacion').show();
-                } else if ((tipoIdentificacion == 3 || tipo_identificacion == 4) && !validPasaporte) {
-                    $('#error-identificacion').text(
-                        'La identificación debe tener minimo 5 caracteres alfanumericos.');
-                    $('#error-identificacion').show();
+                if (!validRuc) {
+                    $('#error_identificacion').text('La identificación debe tener 13 dígitos.');
+                    $('#error_identificacion').show();
                 } else {
-                    $('#error-identificacion').hide();
+                    $('#error_identificacion').hide();
                 }
             });
 
-            $("#btn-register-socio").click(function() {
+            $("#btn_register_socio").click(function() {
                 if (!validarRegistro()) {
                     return;
                 }
-                let formData = new FormData(document.getElementById('ModalSocio'));
+
+                let formData = new FormData();
+                const data = {};
+
+                const commonFields = [
+                    'fecha_ingreso', 'tipo_personeria', 'identificacion',
+                    'fotoFile', 'adjuntos', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fecha_registro_sri',
+                    'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
+                    'contribuyente_especial',
+                    'obligaciones_tributarias', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
+                    'manzana',
+                    'numero',
+                    'interseccion', 'referencia'
+                ];
+
+                const requiredFieldsJuridico = commonFields.concat([
+                    'cedula_representante', 'nombre_representante', 'apellido_representante',
+                    'telefono_representante', 'correo_representante', 'fecha_registro_mercantil',
+                    'vencimiento_nombramiento'
+                ]);
+                const requiredFieldsNaturalRuc = commonFields.concat([
+                    'correo', 'telefono', , 'fecha_nacimiento'
+                ]);
+
+                let requiredFields = $('#tipo_personeria').val() == 2 ? requiredFieldsJuridico :
+                    requiredFieldsNaturalRuc;
+
+
+                requiredFields.forEach(field => {
+                    const value = $(`#${field}`).val();
+                    if (value) {
+                        data[field] = value;
+                    }
+                    formData.append(field, value);
+                });
+                if ($('#fotoFile')[0].files.length > 0) {
+                    formData.append('file', $('#fotoFile')[0].files[0]);
+                }
+                if ($('#adjuntos')[0].files.length > 0) {
+                    $.each($('#adjuntos')[0].files, function(i, file) {
+                        formData.append('adjuntos[]', file);
+                    });
+                }
+                formData.append('_token', '{{ csrf_token() }}');
                 Swal.fire({
                     target: document.getElementById('ModalSocio'),
                     title: 'Procesando...',
@@ -794,7 +782,7 @@
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: error.responseJSON?.message ||
+                        text: error.responseJSON?.error ||
                             "Error al registrar el socio.",
                         showConfirmButton: true,
                         allowOutsideClick: false,
@@ -804,13 +792,55 @@
                 });
             });
 
-            $("#btn-update-socio").click(function() {
+            $("#btn_update_socio").click(function() {
                 if (!validarRegistro()) {
                     return;
                 }
-                let formData = new FormData(document.getElementById('ModalSocio'));
-                formData.append('socio_id', socioSelected);
+                let formData = new FormData();
+                const data = {};
+
+                const commonFields = [
+                    'fecha_ingreso', 'tipo_personeria', 'identificacion',
+                    'fotoFile', 'adjuntos', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fecha_registro_sri',
+                    'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
+                    'contribuyente_especial',
+                    'obligaciones_tributarias', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
+                    'manzana',
+                    'numero',
+                    'interseccion', 'referencia'
+                ];
+
+                const requiredFieldsJuridico = commonFields.concat([
+                    'cedula_representante', 'nombre_representante', 'apellido_representante',
+                    'telefono_representante', 'correo_representante', 'fecha_registro_mercantil',
+                    'vencimiento_nombramiento'
+                ]);
+                const requiredFieldsNaturalRuc = commonFields.concat([
+                    'correo', 'telefono', , 'fecha_nacimiento'
+                ]);
+
+                let requiredFields = $('#tipo_personeria').val() == 2 ? requiredFieldsJuridico :
+                    requiredFieldsNaturalRuc;
+
+
+                requiredFields.forEach(field => {
+                    const value = $(`#${field}`).val();
+                    if (value) {
+                        data[field] = value;
+                    }
+                    formData.append(field, value);
+                });
+                if ($('#fotoFile')[0].files.length > 0) {
+                    formData.append('file', $('#fotoFile')[0].files[0]);
+                }
+                if ($('#adjuntos')[0].files.length > 0) {
+                    $.each($('#adjuntos')[0].files, function(i, file) {
+                        formData.append('adjuntos[]', file);
+                    });
+                }
                 formData.append('_token', '{{ csrf_token() }}');
+                formData.append('socio_id', socioSelected);
                 Swal.fire({
                     target: document.getElementById('ModalSocio'),
                     title: 'Cargando',
@@ -851,7 +881,7 @@
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: error.responseJSON?.message ||
+                        text: error.responseJSON?.error ||
                             "Error al actualizar el socio.",
                     });
                     console.error("Error al actualizar el socio: ", error);
@@ -917,7 +947,7 @@
                             showConfirmButton: true,
                             allowOutsideClick: false,
                             confirmButtonText: 'Aceptar',
-                            text: error.responseJSON?.message ||
+                            text: error.responseJSON?.error ||
                                 "Error al eliminar el socio.",
                         });
                         console.error("Error al eliminar el socio: ", error);
@@ -928,28 +958,58 @@
                 let button = $(this);
                 socioSelected = button.data('id');
 
+                $('.nav-tabs a[href="#datos_generales"]').tab('show');
+
                 let data = socios.find(socio => socio.id == socioSelected);
                 console.log(data);
                 // Populate modal fields with the row data
                 $('#ModalSocio').find('#fecha_ingreso').val(data.fecha_ingreso);
-                $('#ModalSocio').find('#tipo_persona').val(data.id_tipo_persona).trigger('change');
                 $('#ModalSocio').find('#tipo_personeria').val(data.id_tipo_personeria).trigger(
                     'change');
                 $('#ModalSocio').find('#identificacion').val(data.identificacion);
                 $('#ModalSocio').find('#razon_social').val(data.razon_social);
-                $('#ModalSocio').find('#telefono').val(data.telefono);
-                $('#ModalSocio').find('#correo').val(data.correo);
-                $('#ModalSocio').find('#cedula_representante').val(data.cedula_representante_legal);
-                $('#ModalSocio').find('#nombre_representante').val(data.nombres_representante_legal);
-                $('#ModalSocio').find('#apellido_representante').val(data
-                    .apellidos_representante_legal);
-                $('#ModalSocio').find('#telefono_representante').val(data.telefono_representante_legal);
-                $('#ModalSocio').find('#correo_representante').val(data.correo_representante_legal);
-                $('#ModalSocio').find('#fecha_registro_mercantil').val(data.fecha_registro_mercantil);
-                $('#ModalSocio').find('#vencimiento_nombramiento').val(data
-                    .fecha_vencimiento_nombramiento).trigger('change');
-                $('#ModalSocio').find('#btn-register-socio').hide();
-                $('#ModalSocio').find('#btn-update-socio').show();
+                if (data.id_tipo_personeria == 1) {
+                    $('#ModalSocio').find('#telefono').val(data.telefono);
+                    $('#ModalSocio').find('#correo').val(data.correo);
+                    $('#ModalSocio').find('#fecha_nacimiento').val(data.fecha_nacimiento).trigger(
+                        'change');
+                } else if (data.id_tipo_personeria == 2) {
+                    $('#ModalSocio').find('#cedula_representante').val(data
+                        .cedula_representante_legal);
+                    $('#ModalSocio').find('#nombre_representante').val(data
+                        .nombres_representante_legal);
+                    $('#ModalSocio').find('#apellido_representante').val(data
+                        .apellidos_representante_legal);
+                    $('#ModalSocio').find('#telefono_representante').val(data
+                        .telefono_representante_legal);
+                    $('#ModalSocio').find('#correo_representante').val(data
+                        .correo_representante_legal);
+                    $('#ModalSocio').find('#fecha_registro_mercantil').val(data
+                        .fecha_registro_mercantil);
+                    $('#ModalSocio').find('#vencimiento_nombramiento').val(data
+                        .fecha_vencimiento_nombramiento).trigger('change');
+                }
+                $('#ModalSocio').find('#estado_sri').val(data.estado_sri);
+                $('#ModalSocio').find('#fecha_registro_sri').val(data.fecha_registro_sri).trigger(
+                    'change');
+                $('#ModalSocio').find('#fecha_actualizacion_ruc').val(data.fecha_actualizacion_ruc);
+                $('#ModalSocio').find('#fecha_constitucion').val(data.fecha_constitucion).trigger(
+                    'change');
+                $('#ModalSocio').find('#tipo_regimen').val(data.tipo_regimen);
+                $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
+                $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
+                $('#ModalSocio').find('#obligaciones_tributarias').val(data.obligaciones_tributarias);
+                $('#ModalSocio').find('#pais').val(data.id_pais);
+                $('#ModalSocio').find('#provincia').val(data.id_provincia);
+                $('#ModalSocio').find('#canton').val(data.id_canton);
+                $('#ModalSocio').find('#parroquia').val(data.id_parroquia);
+                $('#ModalSocio').find('#calle').val(data.calle);
+                $('#ModalSocio').find('#manzana').val(data.manzana);
+                $('#ModalSocio').find('#numero').val(data.numero);
+                $('#ModalSocio').find('#interseccion').val(data.interseccion);
+                $('#ModalSocio').find('#referencia').val(data.referencia);
+                $('#ModalSocio').find('#btn_register_socio').hide();
+                $('#ModalSocio').find('#btn_update_socio').show();
                 $('#ModalSocio').modal('show');
             });
 
@@ -957,22 +1017,11 @@
              * Functions
              */
             function limpiarFormulario() {
-                $('#ModalSocio').find('#fecha_ingreso').val('');
-                $('#ModalSocio').find('#tipo_persona').val(-1);
-                $('#ModalSocio').find('#tipo_personeria').val(-1);
-                $('#ModalSocio').find('#tipo_identificacion').val(-1);
-                $('#ModalSocio').find('#identificacion').val('');
-                $('#ModalSocio').find('#razon_social').val('');
-                $('#ModalSocio').find('#telefono').val('');
-                $('#ModalSocio').find('#correo').val('');
-                $('#ModalSocio').find('#cedula_representante').val('');
-                $('#ModalSocio').find('#nombre_representante').val('');
-                $('#ModalSocio').find('#apellido_representante').val('');
-                $('#ModalSocio').find('#telefono_representante').val('');
-                $('#ModalSocio').find('#correo_representante').val('');
-                $('#ModalSocio').find('#fecha_registro_mercantil').val('');
-                $('#ModalSocio').find('#vencimiento_nombramiento').val('');
-                $('#ModalSocio').find('#anios_nombramiento').val('');
+                $('#ModalSocio').find('input, select, textarea').val('');
+                $('#ModalSocio').find(
+                        '#tipo_personeria, #tipo_regimen, #agente_retencion, #contribuyente_especial, #pais, #provincia, #canton, #parroquia'
+                    )
+                    .val(-1);
             }
 
             function validarRegistro() {
@@ -987,34 +1036,6 @@
                         text: 'Por favor, ingrese la fecha de ingreso.',
                     });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    return false;
-                }
-                if ($('#estado_socio').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el estado del socio.',
-                    });
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#estado_socio').focus();
-                    return false;
-                }
-                if ($('#tipo_persona').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el tipo de persona.',
-                    });
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#tipo_persona').focus();
                     return false;
                 }
                 if ($('#tipo_personeria').val() == -1) {
@@ -1045,63 +1066,35 @@
                     $('#identificacion').focus();
                     return false;
                 }
+                if ($('#razon_social').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la razón social.',
+                    });
+                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                    $('#razon_social').focus();
+                    return false;
+                }
+                if (!/^\d{13}$/.test($('#identificacion').val())) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'El RUC debe tener 13 dígitos.',
+                    });
+                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                    $('#identificacion').focus();
+                    return false;
+                }
                 if ($('#tipo_personeria').val() == 2) {
-                    if ($('#razon_social').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese la razón social.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#razon_social').focus();
-                        return false;
-                    }
-                    if ($('#telefono').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese el teléfono.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#telefono').focus();
-                        return false;
-                    }
-                    if ($('#correo').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese el correo.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#correo').focus();
-                        return false;
-                    }
-                    if ($('#cedula_representante').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese la cédula del representante legal.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#cedula_representante').focus();
-                        return false;
-                    }
                     if ($('#nombre_representante').val() == "") {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1130,34 +1123,6 @@
                         $('#apellido_representante').focus();
                         return false;
                     }
-                    if ($('#telefono_representante').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese el teléfono del representante legal.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#telefono_representante').focus();
-                        return false;
-                    }
-                    if ($('#correo_representante').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese el correo del representante legal.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#correo_representante').focus();
-                        return false;
-                    }
                     if ($('#fecha_registro_mercantil').val() == "") {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1184,20 +1149,6 @@
                         $('.nav-tabs a[href="#datos_generales"]').tab('show');
                         return false;
                     }
-                    if (!/^\d{13}$/.test($('#identificacion').val())) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'El RUC debe tener 13 dígitos.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#identificacion').focus();
-                        return false;
-                    }
                     if (!/^\d{10}$/.test($('#cedula_representante').val())) {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1212,20 +1163,6 @@
                         $('#cedula_representante').focus();
                         return false;
                     }
-                    if (!/^\+?\d{1,14}$/.test($('#telefono').val())) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'El teléfono no tiene el formato adecuado.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#telefono').focus();
-                        return false;
-                    }
                     if (!/^\+?\d{1,14}$/.test($('#telefono_representante').val())) {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1238,20 +1175,6 @@
                         });
                         $('.nav-tabs a[href="#datos_generales"]').tab('show');
                         $('#telefono_representante').focus();
-                        return false;
-                    }
-                    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo').val())) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'El correo no tiene el formato adecuado.',
-                        });
-                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                        $('#correo').focus();
                         return false;
                     }
                     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo_representante')
@@ -1297,9 +1220,331 @@
                         $('#vencimiento_nombramiento').focus();
                         return false;
                     }
-                } else {
+                } else if ($('#tipo_personeria').val() == 1) {
+                    if (!/^\+?\d{1,14}$/.test($('#telefono').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'El teléfono no tiene el formato adecuado o se encuentra vacio.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#telefono').focus();
+                        return false;
+                    }
+                    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#correo')
+                            .val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'El correo no tiene el formato adecuado o se encuentra vacio.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#correo').focus();
+                        return false;
+                    }
+                    if ($('#fecha_nacimiento').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la fecha de nacimiento.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        return false;
+                    }
+                    if (!esFechaValida($('#fecha_nacimiento').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_nacimiento').focus();
+                        return false;
+                    }
+                }
+                if ($('#estado_sri').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione el estado del SRI.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#estado_sri').focus();
                     return false;
                 }
+                if ($('#tipo_regimen').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione el tipo de régimen.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#tipo_regimen').focus();
+                    return false;
+                }
+                if ($('#fecha_registro_sri').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la fecha de registro en el SRI.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_registro_sri').focus();
+                    return false;
+                }
+                if (!esFechaValida($('#fecha_registro_sri').val())) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_registro_sri').focus();
+                    return false;
+                }
+                if ($('#fecha_actualizacion_ruc').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la fecha de actualización del RUC.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_actualizacion_ruc').focus();
+                    return false;
+                }
+                if (!esFechaValida($('#fecha_actualizacion_ruc').val())) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_actualizacion_ruc').focus();
+                    return false;
+                }
+                if ($('#fecha_constitucion').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la fecha de constitución.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_constitucion').focus();
+                    return false;
+                }
+                if (!esFechaValida($('#fecha_constitucion').val())) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#fecha_constitucion').focus();
+                    return false;
+                }
+                if ($('#agente_retencion').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione si es agente de retención.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#agente_retencion').focus();
+                    return false;
+                }
+                if ($('#contribuyente_especial').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione si es contribuyente especial.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#contribuyente_especial').focus();
+                    return false;
+                }
+                /* if ($('#obligaciones_tributarias').val() == -1 || $('#obligaciones_tributarias').val() == []) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione las obligaciones tributarias.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#obligaciones_tributarias').focus();
+                    return false;
+                } */
+                if ($('#pais').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione el país.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#pais').focus();
+                    return false;
+                }
+                if ($('#provincia').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione la provincia.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#provincia').focus();
+                    return false;
+                }
+                if ($('#canton').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione el cantón.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#canton').focus();
+                    return false;
+                }
+                if ($('#parroquia').val() == -1) {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, seleccione la parroquia.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#parroquia').focus();
+                    return false;
+                }
+                if ($('#calle').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la calle.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#calle').focus();
+                    return false;
+                }
+                if ($('#numero').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese el número.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#numero').focus();
+                    return false;
+                }
+                if ($('#interseccion').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la intersección.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#interseccion').focus();
+                    return false;
+                }
+                if ($('#referencia').val() == "") {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, ingrese la referencia.',
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                    $('#referencia').focus();
+                    return false;
+                }
+                //validacion para datos adjuntos y foto.
                 return true;
             }
 
@@ -1316,6 +1561,22 @@
                     autoclose: true,
                 });
                 $('#vencimiento_nombramiento').datepicker('destroy').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                });
+                $('#fecha_registro_sri').datepicker('destroy').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                });
+                $('#fecha_actualizacion_ruc').datepicker('destroy').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                });
+                $('#fecha_constitucion').datepicker('destroy').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                });
+                $('#fecha_nacimiento').datepicker('destroy').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                 });
@@ -1405,28 +1666,74 @@
                 });
             }
 
-            function calcularAniosNombramiento() {
-                $('#fecha_ingreso, #vencimiento_nombramiento').on('change', function() {
-                    let fechaIngreso = $('#fecha_ingreso').val()
-                    let vencimiento = $('#vencimiento_nombramiento').val();
-                    if (fechaIngreso != '' && vencimiento != '') {
-                        let fechaInicio = new Date(fechaIngreso);
-                        let fechaFin = new Date(vencimiento);
+            $('#fecha_nacimiento').on('change', function() {
+                let fechaNacimiento = $(this).val();
+                let fechaRegistro = $('#fecha_registro_sri').val();
 
-                        if (fechaInicio > fechaFin) {
-                            alert(
-                                'La fecha de vencimiento del nombramiento no puede ser menor a la fecha de ingreso.'
-                            );
-                            $('#vencimiento_nombramiento').val('');
+                function parseDate(str) {
+                    let mdy = str.split('/');
+                    return new Date(mdy[2], mdy[1] - 1, mdy[0]);
+                }
+                if (fechaRegistro && fechaNacimiento) {
+                    let fechaInicio = parseDate(fechaRegistro);
+                    let fechaFin = parseDate(fechaNacimiento);
+
+                    if (fechaFin >= fechaInicio) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'La fecha de nacimiento no puede ser mayor o igual a la fecha de registro en el SRI.',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                        });
+                        $(this).val('');
+                        return;
+                    }
+                }
+            });
+
+            function calcularDuracion(id_inicio, id_fin, alertText, id_resultado) {
+                $('#' + id_inicio + ', #' + id_fin).on('change', function() {
+                    let fechaIngreso = $('#' + id_inicio).val()
+                    let vencimiento = $('#' + id_fin).val();
+
+                    function parseDate(str) {
+                        let mdy = str.split('/');
+                        return new Date(mdy[2], mdy[1] - 1, mdy[0]);
+                    }
+                    if (fechaIngreso && vencimiento) {
+                        let fechaInicio = parseDate(fechaIngreso);
+                        let fechaFin = parseDate(vencimiento);
+
+                        if (fechaFin >= fechaInicio) {
+                            Swal.fire({
+                                target: document.getElementById('ModalSocio'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: alertText,
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                            });
+                            $('#' + id_fin).val('');
                             return;
                         }
-                        let years = fechaFin.getFullYear() - fechaInicio.getFullYear();
-                        let months = fechaFin.getMonth() - fechaInicio.getMonth();
+                    }
+
+                    if (vencimiento) {
+                        let today = new Date();
+                        let fechaFin = parseDate(vencimiento);
+                        let years = today.getFullYear() - fechaFin.getFullYear();
+                        let months = today.getMonth() - fechaFin.getMonth();
+
                         if (months < 0) {
                             years--;
                             months += 12;
                         }
-                        $('#anios_nombramiento').val(`${years} años y ${months} meses`);
+
+                        $('#' + id_resultado).val(years + ' años ' + months + ' meses');
                     }
                 });
             }
@@ -1436,23 +1743,51 @@
              */
             setupDatePicker();
             validarFechaOnBlur('fecha_ingreso');
-            validarFechaOnBlur('fecha_registro_mercantil');
+            validarFechaOnBlur(
+                'fecha_registro_mercantil');
             validarFechaOnBlur('vencimiento_nombramiento');
+            validarFechaOnBlur(
+                'fecha_registro_sri');
+            validarFechaOnBlur('fecha_actualizacion_ruc');
+            validarFechaOnBlur(
+                'fecha_constitucion');
+            validarFechaOnBlur('fecha_nacimiento');
 
             onInputUppercase('razon_social');
+            onInputUppercase('identificacion');
             onInputUppercase('correo');
-            onInputUppercase('nombre_representante');
+            onInputUppercase('correo');
+            onInputUppercase(
+                'nombre_representante');
             onInputUppercase('apellido_representante');
-            onInputUppercase('correo_representante');
+            onInputUppercase(
+                'correo_representante');
+            onInputUppercase('calle');
+            onInputUppercase('manzana');
+            onInputUppercase(
+                'numero');
+            onInputUppercase('interseccion');
+            onInputUppercase('referencia');
 
-            validarCorreo('correo', 'error-correo');
-            validarCorreo('correo_representante', 'error-correo-representante');
 
-            validarCedula('cedula_representante', 'error-cedula-representante');
-            validarTelefono('telefono', 'error-telefono');
-            validarTelefono('telefono_representante', 'error-telefono-representante');
+            validarCorreo('correo', 'error_correo');
+            validarCorreo('correo_representante',
+                'error_correo_representante');
+            validarCorreo('correo', 'error_correo');
 
-            calcularAniosNombramiento();
+            validarCedula('cedula_representante', 'error_cedula_representante');
+            validarTelefono('telefono',
+                'error_telefono');
+            validarTelefono('telefono', 'error_telefono');
+            validarTelefono(
+                'telefono_representante', 'error_telefono_representante');
+
+            calcularDuracion('fecha_ingreso', 'vencimiento_nombramiento',
+                'La fecha de vencimiento del nombramiento no puede ser menor a la fecha de ingreso.',
+                'anios_nombramiento');
+            calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
+                'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
+            );
         });
     </script>
 @endsection
