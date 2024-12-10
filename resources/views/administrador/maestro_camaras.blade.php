@@ -49,7 +49,7 @@
 
         .selected-items .badge {
             font-size: 12px;
-            padding: 5px 10px;
+            padding: 8px 15px;
             margin: 5px 5px 0 0;
             display: inline-block;
             background-color: #007bff;
@@ -175,8 +175,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalCamaraLabel"><b>Agregar una Nueva Cámara de Comercio</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                                                    </button> -->
+                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -539,7 +539,7 @@
                                                         <select name="actividad_economica[]" id="actividad_economica"
                                                             multiple data-plugin-selectTwo>
                                                             @foreach ($actividadesEconomicas as $id => $descripcion)
-                                                                <option value="{{ $id }}">
+                                                                <option value={{ $id }}>
                                                                     {{ $descripcion }}
                                                                 </option>
                                                             @endforeach
@@ -592,8 +592,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarCamaraLabel"><b>Modificar Cámara</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                                                    </button> -->
+                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -945,15 +945,25 @@
                                                         <input type="text" class="form-control" name="referencia_mod"
                                                             id="referencia_mod" placeholder="Referencia Ubicación">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Actividad Económica
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h2 class="card-title">Actividades Economicas</h2>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                </div>
+                                                <div class="row">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
                                                         <select id="actividad_economica_mod"
-                                                            name="actividad_economica_mod" multiple data-plugin-selectTwo
-                                                            class="form-control populate">
+                                                            name="actividad_economica_mod[]" multiple
+                                                            data-plugin-selectTwo>
                                                             @foreach ($actividadesEconomicas as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -1092,13 +1102,13 @@
 
             // Manejar selección de elementos
             $('#actividad_economica').on('select2:select', function(e) {
-                const selectedId = String(e.params.data.id); // Convertir a cadena
+                const selectedId = parseInt(e.params.data.id); // Convertir a cadena
                 const selectedText = e.params.data.text;
 
                 if (!selectedItems.includes(selectedId)) {
                     selectedItems.push(selectedId); // Agregar al array como cadena
                     $('#selectedList').append(`
-                <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                <span class="badge bg-primary me-2 selected-item" data-id=${selectedId}>
                     ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
                 </span>
             `);
@@ -1111,7 +1121,7 @@
             // Manejar eliminación de elementos seleccionados (badge)
             $('#selectedList').on('click', '.remove-item', function() {
                 const badge = $(this).closest('.selected-item');
-                const id = String(badge.data('id')); // Convertir a cadena
+                const id = badge.data('id'); // Convertir a cadena
 
                 // Eliminar el ID del array
                 selectedItems = selectedItems.filter(item => item !== id);
@@ -1121,7 +1131,7 @@
                 badge.remove();
 
                 // Restaurar la opción en el dropdown
-                const optionElement = $(`#actividad_economica option[value="${id}"]`);
+                const optionElement = $(`#actividad_economica option[value=${id}]`);
                 optionElement.prop('disabled', false).prop('selected', false);
 
                 syncHiddenInput(); // Sincronizar el campo oculto
@@ -1129,10 +1139,10 @@
 
             // Sincronizar al quitar desde el dropdown
             $('#actividad_economica').on('select2:unselect', function(e) {
-                const unselectedId = String(e.params.data.id); // Convertir a cadena
+                const unselectedId = (e.params.data.id); // Convertir a cadena
 
                 // Eliminar visualmente el badge
-                $(`#selectedList .selected-item[data-id="${unselectedId}"]`).remove();
+                $(`#selectedList .selected-item[data-id=${unselectedId}]`).remove();
 
                 // Eliminar el ID del array
                 selectedItems = selectedItems.filter(item => item !== unselectedId);
@@ -1164,13 +1174,13 @@
 
             // Manejar selección de elementos
             $('#actividad_economica_mod').on('select2:select', function(e) {
-                const selectedId = String(e.params.data.id); // Convertir a cadena
+                const selectedId = parseInt(e.params.data.id); // Convertir a cadena
                 const selectedText = e.params.data.text;
 
                 if (!selectedItemsMod.includes(selectedId)) {
                     selectedItemsMod.push(selectedId); // Agregar el ID al array
                     $('#selectedList_mod').append(`
-                    <span class="badge bg-primary me-2 selected-item" data-id="${selectedId}">
+                    <span class="badge bg-primary me-2 selected-item" data-id=${selectedId}>
                         ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
                     </span>
                 `);
@@ -1184,7 +1194,7 @@
             // Manejar eliminación de elementos seleccionados (badge)
             $('#selectedList_mod').on('click', '.remove-item', function() {
                 const badge = $(this).closest('.selected-item');
-                const id = String(badge.data('id')); // Convertir a cadena
+                const id = (badge.data('id')); // Convertir a cadena
 
                 // Eliminar el ID del array
                 selectedItemsMod = selectedItemsMod.filter(item => item !== id);
@@ -1196,7 +1206,7 @@
                 badge.remove();
 
                 // Restaurar la opción en el dropdown
-                const optionElement = $(`#actividad_economica_mod option[value="${id}"]`);
+                const optionElement = $(`#actividad_economica_mod option[value=${id}]`);
                 optionElement.prop('disabled', false).prop('selected', false);
 
                 syncHiddenInputMod(); // Sincronizar el campo oculto
@@ -1204,10 +1214,10 @@
 
             // Sincronizar al quitar desde el dropdown
             $('#actividad_economica_mod').on('select2:unselect', function(e) {
-                const unselectedId = String(e.params.data.id); // Convertir a cadena
+                const unselectedId = e.params.data.id; // Convertir a cadena
 
                 // Eliminar visualmente el badge
-                $(`#selectedList_mod .selected-item[data-id="${unselectedId}"]`).remove();
+                $(`#selectedList_mod .selected-item[data-id=${unselectedId}]`).remove();
 
                 // Eliminar el ID del array
                 selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
@@ -2162,6 +2172,7 @@
                             if (typeof actividadesEconomicas === 'string') {
                                 try {
                                     actividadesEconomicas = JSON.parse(actividadesEconomicas);
+                                    console.log(actividadesEconomicas);
                                 } catch (error) {
                                     console.error(
                                         "Error al decodificar actividades_economicas:",
@@ -2177,26 +2188,28 @@
                                     actividadesEconomicas);
 
                                 actividadesEconomicas.forEach(function(id) {
-                                    id = String(
-                                        id); // Asegúrate de que el ID es una cadena
+                                    id = parseInt(
+                                        id); // Asegúrate de que el ID es un entero
 
                                     // Obtener el texto de la opción seleccionada
                                     var optionText = $(
-                                        `#actividad_economica_mod option[value="${id}"]`
+                                        `#actividad_economica_mod option[value=${id}]`
                                     ).text();
 
                                     // Añadir ID al array de elementos seleccionados
+                                    console.log('ID:', id);
+                                    console.log(typeof id);
                                     selectedItemsMod.push(id);
 
                                     // Añadir el badge visualmente en la lista
                                     $('#selectedList_mod').append(`
-                                    <span class="badge bg-primary me-2 selected-item" data-id="${id}">
+                                    <span class="badge bg-primary me-2 selected-item" data-id=${id}>
                                         ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
                                     </span>
                                 `);
 
                                     // Marcar la opción como seleccionada
-                                    $(`#actividad_economica_mod option[value="${id}"]`)
+                                    $(`#actividad_economica_mod option[value=${id}]`)
                                         .prop('selected', true);
                                 });
 
@@ -2204,7 +2217,7 @@
                                 syncHiddenInputMod();
 
                                 // Activa Select2 y muestra los valores seleccionados
-                                $('#actividad_economica_mod').trigger('change');
+                                $('#actividad_economica_mod').val(null).trigger('change');
                             } else {
                                 console.warn(
                                     "No se recibieron actividades económicas o el array está vacío."
