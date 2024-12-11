@@ -389,7 +389,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_establecimientos') }}">
+                                                <a class="nav-link" href="{{ route('admin.establecimientos_camara') }}">
                                                     Establecimientos por Cámara
                                                 </a>
                                             </li>
@@ -407,7 +407,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_establecimientos') }}">
+                                                <a class="nav-link" href="{{ route('admin.establecimientos_socio') }}">
                                                     Establecimientos por Socios
                                                 </a>
                                             </li>

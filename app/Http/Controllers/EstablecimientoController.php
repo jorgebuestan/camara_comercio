@@ -17,7 +17,7 @@ use App\Models\Camara;
 class EstablecimientoController extends Controller
 {
     //
-    public function maestro_establecimientos()
+    public function establecimientos_camara()
     {
         $regimen = TipoRegimen::pluck('nombre', 'id');
         $paises = Pais::pluck('nombre', 'id');

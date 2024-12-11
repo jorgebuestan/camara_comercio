@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('pagename')
-    Maestro de Establecimientos
+    Establecimientos por Socio
 @endsection
 
 @section('content')
@@ -114,7 +114,7 @@
             <div class="col-lg-12">
                 <section class="card" id="w3">
                     <header class="card-header">
-                        <h2 class="card-title">Gestión de Establecimientos</h2>
+                        <h2 class="card-title">Gestión de Establecimientos por Socio</h2>
                     </header>
                     <div class="card-body">
                         <div class="row">
@@ -132,7 +132,7 @@
                                     <div class="col-md-12">
                                         <select id="camara" name="camara" class="form-control populate">
                                             <option value="-1">Seleccionar</option>
-                                            @foreach ($camarasSelect as $id => $descripcion)
+                                            @foreach ($sociosSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
