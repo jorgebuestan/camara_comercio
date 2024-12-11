@@ -130,7 +130,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" class="form-control populate">
+                                        <select id="socio" name="socio" class="form-control populate">
                                             <option value="-1">Seleccionar</option>
                                             @foreach ($sociosSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
@@ -149,7 +149,7 @@
                                             <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                                         </div>
 
-                                        <h2 class="card-title">Listado de Establecimientos Registrados por Cámara</h2>
+                                        <h2 class="card-title">Listado de Establecimientos Registrados por Socio</h2>
                                     </header>
                                     <div class="card-body">
                                         <table class="table table-bordered table-striped mb-0" id="dataTable">
@@ -192,10 +192,10 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombreCamaraSeleccionada"></span></p>
+                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombresocioSeleccionado"></span></p>
 
                                     <!-- Campo oculto para enviar el valor de la cámara -->
-                                    <input type="hidden" id="camaraHidden" name="camaraHidden" value="">
+                                    <input type="hidden" id="socioHidden" name="socioHidden" value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -435,10 +435,10 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombreCamaraSeleccionadaMod"></span>
+                                    <p><strong>Cámara Seleccionada:</strong> <span id="nombresocioSeleccionadoMod"></span>
                                     </p>
                                     <!-- Campo oculto para enviar el valor de la cámara -->
-                                    <input type="hidden" id="camaraHiddenMod" name="camaraHiddenMod" value="">
+                                    <input type="hidden" id="socioHiddenMod" name="socioHiddenMod" value="">
                                     <input type="hidden" id="establecimiento_id" name="establecimiento_id"
                                         value="">
                                 </div>
@@ -654,7 +654,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
                             data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="btn-modificar-camara">Guardar Cambios</button>
+                        <button type="button" class="btn btn-primary" id="btn-modificar-establecimiento">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -682,23 +682,36 @@
     <script>
         $(document).ready(function() {
             var actividadesEconomicas = @json($actividadesEconomicas);
-            var camaras = @json($camaras);
+            var socios = @json($socios);
+
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             var table = $('#dataTable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.obtener_listado_establecimientos') }}",
+                    url: "{{ route('admin.obtener_listado_establecimientos_socio') }}",
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
                         d.length = d.length || 10;
-                        d.id_camara = $('#camara').val(); // Enviar el valor de localidad seleccionada
+                        d.id_socio = $('#socio').val(); // Enviar el valor de localidad seleccionada
                     },
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
-                    }
+                    },
+                    complete: function(response) { 
+                        Swal.close();
+                    },
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
@@ -735,10 +748,10 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() {
-                let selectedCamera = $(this).val();
-                let filtered = camaras.find(function(camara) {
-                    return camara.id == selectedCamera;
+            /*$('#socio').change(function() {
+                let selectedSocio = $(this).val();
+                let filtered = socios.find(function(socio) {
+                    return socio.id == selectedSocio;
                 });
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
 
@@ -762,23 +775,30 @@
                         `<option value=${actividad.id}>${actividad.descripcion}</option>`
                     );
                 });
-            });
+            });*/
 
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
 
                 // Verificar si se seleccionó una opción válida en el select
-                var camaraSeleccionada = $('#camara').val();
-                var nombreCamaraSeleccionada = $('#camara option:selected').text();
+                var socioSeleccionado = $('#socio').val();
+                var nombresocioSeleccionado = $('#socio option:selected').text();
 
-                if (camaraSeleccionada === '-1') {
-                    alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
+                if (socioSeleccionado === '-1') {
+                    //alert('Por favor, selecciona un Socio para poder registrar un Establecimiento');
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor, selecciona un Socio para poder registrar un Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 } else {
                     // Mostrar el nombre de la cámara seleccionada en el modal
-                    $('#nombreCamaraSeleccionada').text(nombreCamaraSeleccionada);
+                    $('#nombresocioSeleccionado').text(nombresocioSeleccionado);
 
                     // Cargar el valor de la cámara en el campo oculto
-                    $('#camaraHidden').val(camaraSeleccionada);
+                    $('#socioHidden').val(socioSeleccionado);
 
                     // Abrir el modal
                     $('#ModalEstablecimiento').modal('show');
@@ -791,12 +811,29 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() {
-                var selectedCamera = $(this).val();
+            $('#socio').change(function() {
+                var selectedSocio = $(this).val();
 
-                if (selectedCamera === '-1') {
-                    alert('Por favor selecciona una cámara válida.');
-                } else {
+                if (selectedSocio === '-1') {
+                    //alert('Por favor selecciona un Socio válido.'); 
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor selecciona un Socio válido.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    table.ajax.reload();
+                } else { 
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
                     table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
                 }
             });
@@ -1162,69 +1199,159 @@
 
                 //alert($('#hiddenSelectedItems').val());
                 //return; 
+                //alert($('#socioHidden').val());
+                //alert;
 
                 if ($('#nombre_comercial').val() == "") {
-                    alert('Debe ingresar el Nombre Comercial');
+                    //alert('Debe ingresar el Nombre Comercial');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Nombre Comercial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#nombre_comercial').focus();
                     return;
                 }
 
                 if ($('#fecha_inicio_actividades').val() == "") {
-                    alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de inicio de actividades del Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio_actividades').focus();
                     return;
                 }
 
                 if ($('#pais').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#pais').focus();
                     return;
                 }
 
                 if ($('#provincia').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
+                    //alert('Debe seleccionar la Provincia');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#provincia').focus();
                     return;
                 }
 
                 if ($('#canton').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#canton').focus();
                     return;
                 }
 
                 if ($('#parroquia').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#parroquia').focus();
                     return;
                 }
 
                 if ($('#calle').val() == "") {
-                    alert('Debe ingresar la Calle');
+                    //alert('Debe ingresar la Calle');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#calle').focus();
                     return;
                 }
 
                 if ($('#manzana').val() == "") {
-                    alert('Debe ingresar la Manzana');
+                    //alert('Debe ingresar la Manzana');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#manzana').focus();
                     return;
                 }
 
                 if ($('#numero').val() == "") {
-                    alert('Debe ingresar el Número');
+                    //alert('Debe ingresar el Número');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#numero').focus();
                     return;
                 }
 
                 if ($('#interseccion').val() == "") {
-                    alert('Debe ingresar la Intersección');
+                    //alert('Debe ingresar la Intersección');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#interseccion').focus();
                     return;
                 }
 
                 if ($('#referencia').val() == "") {
-                    alert('Debe ingresar la Referencia');
+                    //alert('Debe ingresar la Referencia');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#referencia').focus();
                     return;
                 }
@@ -1233,27 +1360,60 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#correo').focus();
                     return;
                 }
 
                 if ($('#telefono1').val() == "") {
-                    alert('Debe ingresar al menos 1 número de Teléfono');
+                    //alert('Debe ingresar al menos 1 número de Teléfono');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar al menos 1 número de Teléfono',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#telefono1').focus();
                     return;
                 }
 
-                if ($('#hiddenSelectedItems').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                /*if ($('#hiddenSelectedItems').val() == "") {
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
-                }
+                }*/
 
                 var formData = new FormData(document.getElementById("ModalEstablecimiento"));
-                $('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalEstablecimiento'),
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 $.ajax({
-                    url: "{{ route('admin.registrar_establecimiento') }}",
+                    url: "{{ route('admin.registrar_establecimiento_socio') }}",
                     type: "POST",
                     data: formData,
                     dataType: "json",
@@ -1261,21 +1421,48 @@
                     contentType: false,
                     processData: false
                 }).done(function(res) {
-                    $('#carga').hide();
-                    alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    //$('#carga').hide();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+
+                    Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: res.success,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
-                    $('#carga').hide();
+                    //$('#carga').hide();
 
                     if (res.status === 422) {
                         // Mostrar mensaje de error de validación
                         let errors = res.responseJSON;
                         if (errors.error) {
-                            alert(errors.error);
+                            //alert(errors.error);
+                            Swal.fire({
+                                target: document.getElementById('ModalEstablecimiento'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: errors.error,
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
-                        alert("Ocurrió un error al registrar el establecimiento.");
+                        //alert("Ocurrió un error al registrar el establecimiento.");
+                        Swal.fire({
+                            target: document.getElementById('ModalEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al registrar el Establecimiento.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
 
                     console.log(res
@@ -1330,7 +1517,16 @@
 
                 console.log('Cargo ID:', establecimientoId);
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // **LIMPIAR EL SELECT Y EL INPUT HIDDEN ANTES DE CARGAR DATOS**
                 selectedItemsMod = []; // Vaciar el array de actividades económicas seleccionadas
@@ -1341,9 +1537,11 @@
 
 
                 $.ajax({
-                    url: '/administrador/establecimiento/detalle/' + establecimientoId,
+                    url: '/administrador/establecimiento_socio/detalle/' + establecimientoId,
                     method: 'GET',
                     success: function(response) {
+
+                        Swal.close();
                         console.log('Datos recibidos:', response);
 
                         var establecimientoId = $('#establecimiento_id');
@@ -1377,7 +1575,7 @@
                         Canton.val(response.id_canton);
                         Parroquia.val(response.id_parroquia);
 
-                        $('#nombreCamaraSeleccionadaMod').text(response.camara.razon_social);
+                        $('#nombresocioSeleccionadoMod').text(response.socio.razon_social);
 
                         // Asignar país y disparar cambio para cargar provincias
                         $('#pais_mod').val(response.id_pais).trigger('change');
@@ -1485,11 +1683,18 @@
                             );
                         }
 
-                        $('#carga').hide();
+                        //$('#carga').hide();
                         $('#ModalModificarEstablecimiento').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
+                        Swal.fire({ 
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un problema al cargar el Establecimiento.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 });
             });
@@ -1577,73 +1782,161 @@
             }
 
 
-            $('#btn-modificar-camara').on('click', function() {
+            $('#btn-modificar-establecimiento').on('click', async function() {
 
                 //alert($('#hiddenSelectedItemsMod').val());
                 //return;
 
                 if ($('#nombre_comercial_mod').val() == "") {
-                    alert('Debe ingresar el Nombre Comercial');
+                    //alert('Debe ingresar el Nombre Comercial');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Nombre Comercial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#nombre_comercial_mod').focus();
                     return;
                 }
 
                 if ($('#fecha_inicio_actividades_mod').val() == "") {
-                    alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de inicio de actividades del Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio_actividades_mod').focus();
                     return;
                 }
 
                 if ($('#pais_mod').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#pais_mod').focus();
                     return;
                 }
 
                 if ($('#provincia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
+                    //alert('Debe seleccionar la Provincia');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#provincia_mod').focus();
                     return;
                 }
 
                 if ($('#canton_mod').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#canton_mod').focus();
                     return;
                 }
 
                 if ($('#parroquia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#parroquia_mod').focus();
                     return;
                 }
 
                 if ($('#calle_mod').val() == "") {
-                    alert('Debe ingresar la Calle');
+                    //alert('Debe ingresar la Calle');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#calle_mod').focus();
                     return;
                 }
 
                 if ($('#manzana_mod').val() == "") {
-                    alert('Debe ingresar la Manzana');
+                    //alert('Debe ingresar la Manzana');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#manzana_mod').focus();
                     return;
                 }
 
                 if ($('#numero_mod').val() == "") {
-                    alert('Debe ingresar el Número');
+                    //alert('Debe ingresar el Número');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#numero_mod').focus();
                     return;
                 }
 
                 if ($('#interseccion_mod').val() == "") {
-                    alert('Debe ingresar la Intersección');
+                    //alert('Debe ingresar la Intersección');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#interseccion_mod').focus();
                     return;
                 }
 
                 if ($('#referencia_mod').val() == "") {
-                    alert('Debe ingresar la Referencia');
+                    //alert('Debe ingresar la Referencia');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#referencia_mod').focus();
                     return;
                 }
@@ -1652,28 +1945,62 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo-mod").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#correo_mod').focus();
                     return;
                 }
 
                 if ($('#telefono1_mod').val() == "") {
-                    alert('Debe ingresar al menos 1 número de Teléfono');
+                    //alert('Debe ingresar al menos 1 número de Teléfono');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar al menos 1 número de Teléfono',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#telefono1_mod').focus();
                     return;
                 }
 
-                if ($('#hiddenSelectedItemsMod').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                /* if ($('#hiddenSelectedItemsMod').val() == "") {
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    Swal.fire({  
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
-                }
+                }*/
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalModificarEstablecimiento'),
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // Aquí puedes añadir la lógica para enviar el formulario modificado
                 var formData = new FormData(document.getElementById("ModalModificarEstablecimiento"));
                 $.ajax({
-                    url: "{{ route('admin.modificar_establecimiento') }}",
+                    url: "{{ route('admin.modificar_establecimiento_socio') }}",
                     type: "post",
                     dataType: "html",
                     data: formData,
@@ -1682,39 +2009,95 @@
                     processData: false
                 }).done(function(res) {
                     msg = JSON.parse(res).response.msg
-                    alert(msg);
-                    location.reload();
-                    $('#carga').hide();
+                    //alert(msg);
+                    //location.reload();
+ 
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({ 
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: msg,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    location.reload(); // Recargar la página
+                    ///$('#carga').hide();
                 }).fail(function(res) {
-                    console.log(res)
+                    console.log(res);
+                    Swal.fire({  
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al modificar el Registro.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 });
-                $('#carga').hide();
+                //$('#carga').hide();
                 $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
             });
 
-            $(document).on('click', '.delete-establecimiento', function() {
+           // $(document).on('click', '.delete-establecimiento', function() {
+            $(document).on('click', '.delete-establecimiento', async function () {
                 var button = $(this);
                 var establecimientoId = button.data('id');
 
                 // Mostrar la confirmación antes de proceder con la eliminación
-                var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                //var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+ 
 
-                if (confirmDelete) {
+                const { isConfirmed } = await Swal.fire({
+                        title: '¿Está seguro de eliminar el Establecimiento del Socio?',
+                        text: "Esta acción no se puede deshacer.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Aceptar',
+                        cancelButtonText: 'Cancelar',
+                        allowOutsideClick: false,
+                    });
+
+                if (isConfirmed) {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
                     $.ajax({
-                        url: '/administrador/establecimiento/eliminar/' + establecimientoId,
+                        url: '/administrador/establecimiento_socio/eliminar/' + establecimientoId,
                         method: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
                         },
                         success: function(response) {
-                            alert('Registro eliminado correctamente.');
+                            //alert('Registro eliminado correctamente.');
+
+                            Swal.close();
+                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                            Swal.fire({ 
+                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                                title: 'Éxito',
+                                text: 'Registro eliminado correctamente.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
-                            location
-                                .reload(); // O cualquier otra lógica para actualizar la interfaz
+                            location.reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            alert('Hubo un problema al eliminar el Registro.');
+                            //alert('Hubo un problema al eliminar el Registro.');
+                            Swal.fire({ 
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un problema al eliminar el Registro.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                         }
                     });
                 } else {
@@ -1765,6 +2148,13 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
+                }else {
+                    $('#provincia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#canton').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1850,6 +2240,144 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#pais_mod').change(function() {
+                let paisId = $(this).val();
+
+                if (paisId != -1) {
+                    $.ajax({
+                        url: '/get-provincias', // Ruta para obtener las provincias
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId
+                        },
+                        success: function(response) {
+                            let provincias = response.provincias;
+                            let $provinciaSelect = $('#provincia_mod');
+                            let $cantonSelect = $('#canton_mod');
+                            let $parroquiaSelect = $('#parroquia_mod');
+
+                            $provinciaSelect.empty(); // Limpiamos el select de provincias
+                            $provinciaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            $cantonSelect.empty(); // Limpiamos el select de provincias
+                            $cantonSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            $parroquiaSelect.empty(); // Limpiamos el select de provincias
+                            $parroquiaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos las provincias al select
+                            provincias.forEach(function(provincia) {
+                                $provinciaSelect.append(
+                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar las provincias.');
+                        }
+                    });
+                }else {
+                    $('#provincia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#canton_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#provincia_mod').change(function() {
+                let paisId = $('#pais_mod').val(); // ID del país seleccionado
+                let provinciaId = $(this).val(); // ID de la provincia seleccionada
+
+                if (paisId != -1 && provinciaId != -1) {
+                    $.ajax({
+                        url: '/get-cantones', // Ruta para obtener los cantones
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId, // Enviamos el ID del país
+                            id_provincia: provinciaId // Enviamos el ID de la provincia
+                        },
+                        success: function(response) {
+                            let cantones = response.cantones;
+                            let $cantonSelect = $('#canton_mod'); // Select de cantones
+                            let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+
+                            $cantonSelect.empty(); // Limpiamos el select de cantones
+                            $parroquiaSelect.empty().append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Limpiamos parroquias
+
+                            $cantonSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos los cantones al select
+                            cantones.forEach(function(canton) {
+                                $cantonSelect.append(
+                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar los cantones.');
+                        }
+                    });
+                } else {
+                    $('#canton_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#canton_mod').change(function() {
+                let paisId = $('#pais_mod').val(); // ID del país seleccionado
+                let provinciaId = $('#provincia_mod').val(); // ID de la provincia seleccionada
+                let cantonId = $(this).val(); // ID del cantón seleccionado
+
+                if (paisId != -1 && provinciaId != -1 && cantonId != -1) {
+                    $.ajax({
+                        url: '/get-parroquias', // Ruta para obtener las parroquias
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId, // Enviamos el ID del país
+                            id_provincia: provinciaId, // Enviamos el ID de la provincia
+                            id_canton: cantonId // Enviamos el ID del cantón
+                        },
+                        success: function(response) {
+                            let parroquias = response
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                            let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+
+                            $parroquiaSelect.empty(); // Limpiamos el select de parroquias
+                            $parroquiaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos las parroquias al select
+                            parroquias.forEach(function(parroquia) {
+                                $parroquiaSelect.append(
+                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar las parroquias.');
+                        }
+                    });
+                } else {
+                    $('#parroquia_mod').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });

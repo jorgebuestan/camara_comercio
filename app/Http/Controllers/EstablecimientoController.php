@@ -47,11 +47,11 @@ class EstablecimientoController extends Controller
         return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras'));
     }
 
-    public function obtener_listado_establecimientos(Request $request)
+    public function obtener_listado_establecimientos_camara(Request $request)
     {
         $columns = [
             0 => 'establecimientos.id',
-            1 => 'acciones'
+            1 => 'acciones' 
         ];
 
         $query = DB::table('establecimientos')

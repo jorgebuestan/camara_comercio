@@ -12,7 +12,7 @@ class EstablecimientoSocio extends Model
     protected $table = 'establecimientos_socios'; 
     protected $fillable = [
         'nombre_comercial',
-        'id_camara',
+        'id_socio',
         'id_pais',
         'id_provincia',
         'id_canton',
