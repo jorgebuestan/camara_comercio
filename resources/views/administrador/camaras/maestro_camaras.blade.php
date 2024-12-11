@@ -1024,28 +1024,49 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
 
 
     <script>
         $(document).ready(function() {
 
+            let camaras = [];
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            }); 
 
             var table = $('#dataTable').DataTable({
                 destroy: true,
-                processing: true,
+                processing: false,
                 serverSide: true,
                 ajax: {
                     url: "{{ route('admin.obtener_listado_camaras') }}",
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
-                        d.length = d.length || 10;
-                        d.localidad = $('#localidad')
-                            .val(); // Enviar el valor de localidad seleccionada
+                        d.length = d.length || 10; 
                     },
                     error: function(error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.error || "Error al cargar los datos.",
+                        });
                         console.error("Error al cargar los datos: ", error);
-                    }
+                    },
+                    complete: function(response) {
+                        camaras = response.responseJSON.data;
+                        Swal.close();
+                    },
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{

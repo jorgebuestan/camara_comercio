@@ -234,7 +234,7 @@ Obligaciones por Entidad
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
                 <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>
+                <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
             </div>
         </div>
     </div>
