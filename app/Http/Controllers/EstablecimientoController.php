@@ -27,7 +27,6 @@ class EstablecimientoController extends Controller
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
         $camarasSelect = Camara::pluck('razon_social', 'id');
         $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
-        Log::info($camaras);
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -51,7 +50,7 @@ class EstablecimientoController extends Controller
     {
         $columns = [
             0 => 'establecimientos.id',
-            1 => 'acciones' 
+            1 => 'acciones'
         ];
 
         $query = DB::table('establecimientos')

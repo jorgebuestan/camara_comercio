@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;
+use App\Http\Controllers\CamaraObligacionesController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\EstablecimientoSocioController;
 use App\Http\Controllers\FuncionesGeneralesController;
@@ -72,6 +73,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/establecimiento/detalle/{id}', [EstablecimientoController::class, 'detalle_establecimiento'])->middleware('auth')->name('admin.detalle_establecimiento');
     Route::post('/administrador/camara/modificar_establecimiento', [EstablecimientoController::class, 'modificar_establecimiento'])->middleware('auth')->name('admin.modificar_establecimiento');
 
+    //Maestro de Obligaciones de Camara
+    Route::get('/administrador/camara/obligaciones_camara', [CamaraObligacionesController::class, 'obligaciones_camara'])->middleware('auth')->name('admin.obligaciones_camara');
+    Route::get('/administrador/obligacion_camara/index', [CamaraObligacionesController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_obligaciones_camara');
+    Route::post('/administrador/obligacion_camara/registrar_obligacion_camara', [CamaraObligacionesController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_camara');
+    Route::post('/administrador/obligacion_camara/modificar', [CamaraObligacionesController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_camara');
+    Route::post('/administrador/obligacion_camara/eliminar/{id}', [CamaraObligacionesController::class, 'eliminarObligacionCamara'])->middleware('auth')->name('admin.eliminar_obligacion_camara');;
+
     //Maestro de Socios
     Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
     Route::get('/administrador/obtener_listado_socios', [App\Http\Controllers\SocioController::class, 'obtener_listado_socios'])->middleware('auth')->name('admin.obtener_listado_socios');
@@ -94,10 +102,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/obligacion/eliminar/{id}', [ObligacionesController::class, 'eliminar_obligacion'])->middleware('auth')->name('admin.eliminar_obligacion');;
     Route::get('/administrador/obligacion/detalle/{id}', [ObligacionesController::class, 'detalle_obligacion'])->middleware('auth')->name('admin.detalle_obligacion');
     Route::post('/administrador/obligacion/modificar_obligacion', [ObligacionesController::class, 'modificar_obligacion'])->middleware('auth')->name('admin.modificar_obligacion');
-    
-    Route::post('/administrador/check-obligacion', [ObligacionesController::class, 'checkObligacion'])->name('admin.check_obligacion'); 
-    
-     
+
+    Route::post('/administrador/check-obligacion', [ObligacionesController::class, 'checkObligacion'])->name('admin.check_obligacion');
+
+
     //Maestro de Entidades
     Route::get('/administrador/maestro_entidades', [EntidadesController::class, 'maestro_entidades'])->middleware('auth')->name('admin.maestro_entidades');
     Route::get('/administrador/obtener_listado_entidades', [EntidadesController::class, 'obtener_listado_entidades'])->middleware('auth')->name('admin.obtener_listado_entidades');
@@ -111,11 +119,10 @@ Route::middleware(['auth'])->group(function () {
 
     //Manejo de Obligaciones por Entidad
     Route::get('/administrador/entidades_obligaciones', [EntidadesController::class, 'entidades_obligaciones'])->middleware('auth')->name('admin.entidades_obligaciones');
-    
+
     //Manejo de Obligaciones por Entidad
     Route::get('/administrador/obtener_listado_obligaciones_por_entidad', [ObligacionesController::class, 'obtener_listado_obligaciones_por_entidad'])->middleware('auth')->name('admin.obtener_listado_obligaciones_por_entidad');
     Route::post('/administrador/registrar_obligacion_entidad', [ObligacionesController::class, 'registrar_obligacion_entidad'])->middleware('auth')->name('admin.registrar_obligacion_entidad');
-    
 });
 
 require __DIR__ . '/auth.php';
