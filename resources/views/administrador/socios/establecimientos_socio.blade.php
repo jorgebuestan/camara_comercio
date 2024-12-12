@@ -370,7 +370,7 @@
                             <div class="row">
                                 &nbsp;
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-12">
                                     <h2 class="card-title">Actividades Economicas</h2>
                                 </div>
@@ -406,7 +406,7 @@
                                 <div class="row">
                                     &nbsp;
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -615,7 +615,7 @@
                             <div class="row">
                                 &nbsp;
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-12">
                                     <h2 class="card-title">Actividades Economicas</h2>
                                 </div>
@@ -648,7 +648,7 @@
                                         <div id="selectedList_mod"></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -811,12 +811,12 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#socio').change(function() {
+            $('#socio').change(async function() {
                 var selectedSocio = $(this).val();
 
                 if (selectedSocio === '-1') {
                     //alert('Por favor selecciona un Socio válido.'); 
-                    Swal.fire({ 
+                    await Swal.fire({ 
                         icon: 'error',
                         title: 'Error',
                         text: 'Por favor selecciona un Socio válido.',

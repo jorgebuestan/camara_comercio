@@ -325,15 +325,6 @@ class EntidadesController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
         }
-    }
-
-    public function entidades_obligaciones()
-    {   
-        $tiempo_presentacion = TiempoPresentacion::pluck('descripcion', 'id');  
-        $tipo_presentacion = TipoPresentacion::pluck('descripcion', 'id');    
-        $entidades = Entidad::pluck('entidad', 'id');   
-
-        return view('administrador.entidades.entidades_obligaciones', compact('entidades', 'tiempo_presentacion', 'tipo_presentacion') );
-    }
+    } 
 
 }

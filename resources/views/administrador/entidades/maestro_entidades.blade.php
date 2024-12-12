@@ -462,11 +462,22 @@ Maestro de Entidades
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
  
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
      
 
     <script>
 
     $(document).ready(function(){ 
+
+        Swal.fire({
+            title: 'Cargando',
+            text: 'Por favor espere',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
 
         var table = $('#dataTable').DataTable({
             destroy: true,
@@ -482,7 +493,10 @@ Maestro de Entidades
                 },
                 error: function (error) {
                     console.error("Error al cargar los datos: ", error);
-                }
+                },
+                complete: function(response) { 
+                    Swal.close();
+                },
             },
             pageLength: 10, // Establece el número de registros por página
             columns: [
@@ -718,38 +732,86 @@ Maestro de Entidades
         $("#btn-register-entidad").click(function () {
 
             if ($('#entidad').val() == "") {
-                alert('Debe ingresar el nombre de la Entidad');
+                //alert('Debe ingresar el nombre de la Entidad'); ModalEntidad
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el nombre de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad').focus();
                 return;
             }
 
             if (!/^\d{13}$/.test($('#ruc').val())) {
                 $("#error-ruc").show();
-                alert('El RUC debe tener 13 dígitos');
+                //alert('El RUC debe tener 13 dígitos');
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El RUC debe tener 13 dígitos',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#ruc').focus();
                 return;
             }
 
             if ($('#tipo_entidad').val() == "-1") {
-                alert('Debe seleccionar la Clase de Entidad');
+                //alert('Debe seleccionar la Clase de Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar la Clase de Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad').focus();
                 return;
             }
 
             if ($('#alcance').val() == "-1") {
-                alert('Debe seleccionar un alcance para la Entidad');
+                //alert('Debe seleccionar un alcance para la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar un alcance para la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad').focus();
                 return;
             }
 
             if ($('#direccion').val() == "") {
-                alert('Debe ingresar la Dirección de la Entidad');
+                //alert('Debe ingresar la Dirección de la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Dirección de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#direccion').focus();
                 return;
             }
 
             if ($('#telefono').val() == "") {
-                alert('Debe ingresar el Teléfono de la Entidad');
+                //alert('Debe ingresar el Teléfono de la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el Teléfono de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#telefono').focus();
                 return;
             }
@@ -757,7 +819,15 @@ Maestro de Entidades
             if ($('#alcance').val() == "2") {
 
                 if ($('#pais').val() == "-1" || $('#provincia').val() == "-1" || $('#canton').val() == "-1") {
-                    alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    //alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    Swal.fire({ 
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                     return;
                 }
             }
@@ -774,12 +844,25 @@ Maestro de Entidades
                     ruc: ruc,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
+                success: async function (response) {
                     if (response.similar.length > 0) {
                         // Mostrar mensaje de confirmación al usuario
                         const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
 
-                        if (!confirm(similarMessage)) {
+                        const { isConfirmed: confirmSimilar } = await Swal.fire({
+                            target: document.getElementById('ModalEntidad'),
+                            title: 'Registros similares encontrados',
+                            text: similarMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Registrar de todas formas',
+                            cancelButtonText: 'Cancelar',
+                            allowOutsideClick: false,
+                        });
+
+                        if (!confirmSimilar) {
                             return; // Detener la ejecución si el usuario cancela
                         }
                     }
@@ -796,38 +879,86 @@ Maestro de Entidades
         $("#btn-modificar-entidad").click(function () {
 
             if ($('#entidad_mod').val() == "") {
-                alert('Debe ingresar el nombre de la Entidad');
+                //alert('Debe ingresar el nombre de la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el nombre de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad_mod').focus();
                 return;
             }
 
             if (!/^\d{13}$/.test($('#ruc_mod').val())) {
                 $("#error-ruc-mod").show();
-                alert('El RUC debe tener 13 dígitos');
+                //alert('El RUC debe tener 13 dígitos');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El RUC debe tener 13 dígitos',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#ruc_mod').focus();
                 return;
             }
 
             if ($('#tipo_entidad_mod').val() == "-1") {
-                alert('Debe seleccionar la Clase de Entidad');
+                //alert('Debe seleccionar la Clase de Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar la Clase de Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad_mod').focus();
                 return;
             }
 
             if ($('#alcance_mod').val() == "-1") {
-                alert('Debe seleccionar un alcance para la Entidad');
+                //alert('Debe seleccionar un alcance para la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar un alcance para la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#entidad_mod').focus();
                 return;
             }
 
             if ($('#direccion_mod').val() == "") {
-                alert('Debe ingresar la Dirección de la Entidad');
+                //alert('Debe ingresar la Dirección de la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Dirección de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#direccion_mod').focus();
                 return;
             }
 
             if ($('#telefono_mod').val() == "") {
-                alert('Debe ingresar el Teléfono de la Entidad');
+                //alert('Debe ingresar el Teléfono de la Entidad');
+                Swal.fire({ 
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el Teléfono de la Entidad',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#telefono_mod').focus();
                 return;
             }
@@ -835,7 +966,15 @@ Maestro de Entidades
             if ($('#alcance_mod').val() == "2") {
 
                 if ($('#pais_mod').val() == "-1" || $('#provincia_mod').val() == "-1" || $('#canton_mod').val() == "-1") {
-                    alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    //alert('Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón');
+                    Swal.fire({ 
+                        target: document.getElementById('ModalModificarEntidad'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Si seleccionó que alcance de la Entidad es local, debe seleccionar País, Provincia y Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
                 }
             }
@@ -854,7 +993,7 @@ Maestro de Entidades
                     entidad_id: entidadId, // Enviar el ID actual
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
+                success: async function (response) {
                     /*if (response.similar.length > 0) {
                         // Filtrar el propio registro en caso de estar en los resultados
                         const registrosSimilares = response.similar.filter(sim => sim.id !== entidadId);
@@ -869,9 +1008,22 @@ Maestro de Entidades
                     }*/
                     if (response.similar.length > 0) {
                         // Mostrar mensaje de confirmación al usuario
-                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
+                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de modificar esta entidad de todas formas?`;
 
-                        if (!confirm(similarMessage)) {
+                        const { isConfirmed: confirmSimilar } = await Swal.fire({
+                            target: document.getElementById('ModalModificarEntidad'),
+                            title: 'Registros similares encontrados',
+                            text: similarMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Modificar de todas formas',
+                            cancelButtonText: 'Cancelar',
+                            allowOutsideClick: false,
+                        });
+
+                        if (!confirmSimilar) {
                             return; // Detener la ejecución si el usuario cancela
                         }
                     }
@@ -887,7 +1039,17 @@ Maestro de Entidades
 
         function registrarEntidad() {
             var formData = new FormData(document.getElementById("ModalEntidad"));
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({
+                target: document.getElementById('ModalEntidad'),
+                title: 'Enviando datos para registro de Entidad',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             $.ajax({
                 url: "{{ route('admin.registrar_entidad') }}",
@@ -898,19 +1060,44 @@ Maestro de Entidades
                 contentType: false,
                 processData: false
             }).done(function (res) {
-                $('#carga').hide();
-                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.fire({
+                    target: document.getElementById('ModalEntidad'),
+                    icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                    title: 'Éxito',
+                    text: res.success,
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 location.reload(); // Recargar la página
             }).fail(function (res) {
-                $('#carga').hide();
+                //$('#carga').hide();
+                Swal.close();
 
                 if (res.status === 422) {
                     let errors = res.responseJSON;
                     if (errors.error) {
-                        alert(errors.error);
+                        //alert(errors.error);
+                        Swal.fire({ 
+                            target: document.getElementById('ModalEntidad'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: errors.error,
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 } else {
-                    alert("Ocurrió un error al registrar la entidad.");
+                    //alert("Ocurrió un error al registrar la entidad.");
+                    Swal.fire({ 
+                        target: document.getElementById('ModalEntidad'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al registrar la entidad',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 }
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
@@ -919,7 +1106,17 @@ Maestro de Entidades
 
         function modificarEntidad() {
             var formData = new FormData(document.getElementById("ModalModificarEntidad"));
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({
+                target: document.getElementById('ModalModificarEntidad'),
+                title: 'Enviando datos para la moificación de la Entidad',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             $.ajax({
                 url: "{{ route('admin.modificar_entidad') }}",
@@ -930,19 +1127,43 @@ Maestro de Entidades
                 contentType: false,
                 processData: false
             }).done(function (res) {
-                $('#carga').hide();
-                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.fire({
+                    target: document.getElementById('ModalModificarEntidad'),
+                    icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                    title: 'Éxito',
+                    text: res.success,
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 location.reload(); // Recargar la página
             }).fail(function (res) {
-                $('#carga').hide();
+                //$('#carga').hide();
 
                 if (res.status === 422) {
                     let errors = res.responseJSON;
                     if (errors.error) {
-                        alert(errors.error);
+                        //alert(errors.error);
+                        Swal.fire({ 
+                            target: document.getElementById('ModalModificarEntidad'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: errors.error,
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 } else {
-                    alert("Ocurrió un error al modificar la entidad.");
+                    //alert("Ocurrió un error al modificar la entidad.");
+                    Swal.fire({ 
+                        target: document.getElementById('ModalEntidad'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al modificar la entidad',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 }
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
@@ -957,7 +1178,16 @@ Maestro de Entidades
 
             console.log('Cargo ID:', entidadId);  
 
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({ 
+                title: 'Cargando datos de la Entidad',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             
             $.ajax({
@@ -1010,23 +1240,43 @@ Maestro de Entidades
                         $('#canton_mod').val('-1').change();
                     }
                    
-                    $('#carga').hide();
+                    //$('#carga').hide();
+                    Swal.close();
                     $('#ModalModificarEntidad').modal('show');
                 },
                 error: function(xhr, status, error) {
+                    Swal.close();
                     console.error(xhr.responseText);
                 }
             });
         });
 
-        $(document).on('click', '.delete-entidad', function() {
+        $(document).on('click', '.delete-entidad', async function() {
             var button = $(this); 
             var entidadId = button.data('id'); 
 
-            // Mostrar la confirmación antes de proceder con la eliminación
-            var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+            const result = await Swal.fire({
+                    title: '¿Está seguro de que desea eliminar este registro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
 
-            if (confirmDelete) {
+            if (result.isConfirmed) { 
+                Swal.fire({
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
                 $.ajax({
                     url: '/administrador/entidad/eliminar/' + entidadId,
                     method: 'POST',
@@ -1034,13 +1284,27 @@ Maestro de Entidades
                         _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
                     },
                     success: function(response) {
-                        alert('Registro eliminado correctamente.'); 
-                        // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
+                        Swal.close();
+                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                        Swal.fire({ 
+                            icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                            title: 'Éxito',
+                            text: 'Registro eliminado correctamente.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                         location.reload(); // O cualquier otra lógica para actualizar la interfaz
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
-                        alert('Hubo un problema al eliminar el Registro.');
+                        //alert('Hubo un problema al eliminar el Registro.');
+                        Swal.fire({ 
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un problema al eliminar el Registro.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 });
             } else {
