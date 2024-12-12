@@ -9,12 +9,22 @@ use App\Traits\LogsActivity;
 class EntidadObligacion extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'entidades_obligaciones'; 
+    protected $table = 'entidades_obligaciones';
     protected $fillable = [
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
         'fecha_presentacion',
-        'estado' 
-    ];  
+        'estado'
+    ];
+
+    public function entidad()
+    {
+        return $this->belongsTo(Entidad::class, 'id_entidad', 'id');
+    }
+
+    public function obligacion()
+    {
+        return $this->belongsTo(Obligacion::class, 'id_obligacion', 'id');
+    }
 }
