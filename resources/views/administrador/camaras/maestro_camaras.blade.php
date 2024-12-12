@@ -1671,13 +1671,21 @@
                 }
             });
 
-            $("#btn-register-camara").click(function() {
+            $("#btn-register-camara").click(async function() {
 
                 //alert($('#hiddenSelectedItems').val());
                 //return;
 
                 if ($('#fecha_ingreso').val() == "") {
-                    alert('Debe ingresar la Fecha de Ingreso de la Cámara');
+                    //alert('Debe ingresar la Fecha de Ingreso de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Ingreso de la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#fecha_ingreso').focus();
                     return;
@@ -1687,14 +1695,30 @@
                     /*$("#error-ruc").show();
                     isValid = false;*/
                     $("#error-ruc").show();
-                    alert('El RUC debe tener 13 dígitos');
+                    //alert('El RUC debe tener 13 dígitos');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El RUC debe tener 13 dígitos',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#ruc').focus();
                     return;
                 }
 
                 if ($('#razon_social').val() == "") {
-                    alert('Debe ingresar la Razón Social');
+                    //alert('Debe ingresar la Razón Social');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Razón Social',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#razon_social').focus();
                     return;
@@ -1704,28 +1728,60 @@
                     /*$("#error-ruc").show();
                     isValid = false;*/
                     $("#error-cedula").show();
-                    alert('La Cédula del Representante Legal debe tener 10 dígitos');
+                    //alert('La Cédula del Representante Legal debe tener 10 dígitos');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'La Cédula del Representante Legal debe tener 10 dígitos',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#cedula_representante_legal').focus();
                     return;
                 }
 
                 if ($('#nombres_representante_legal').val() == "") {
-                    alert('Debe ingresar los Nombres del Representante Legal');
+                    //alert('Debe ingresar los Nombres del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Nombres del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#nombres_representante_legal').focus();
                     return;
                 }
 
                 if ($('#apellidos_representante_legal').val() == "") {
-                    alert('Debe ingresar los Apellidos del Representante Legal');
+                    //alert('Debe ingresar los Apellidos del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Apellidos del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#apellidos_representante_legal').focus();
                     return;
                 }
 
                 if ($('#telefono_representante_legal').val() == "") {
-                    alert('Debe ingresar el Teléfono del Representante Legal');
+                    //alert('Debe ingresar el Teléfono del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Teléfono del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#telefono_representante_legal').focus();
                     return;
@@ -1737,42 +1793,90 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#correo_representante_legal').focus();
                     return;
                 }
 
                 if ($('#cargo_representante_legal').val() == "") {
-                    alert('Debe ingresar el Cargo del Representante Legal');
+                    //alert('Debe ingresar el Cargo del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Cargo del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#cargo_representante_legal').focus();
                     return;
                 }
 
                 if ($('#direccion_representante_legal').val() == "") {
-                    alert('Debe ingresar la Dirección del Representante Legal');
+                    //alert('Debe ingresar la Dirección del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Dirección del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales"]').tab('show');
                     $('#direccion_representante_legal').focus();
                     return;
                 }
 
                 if ($('#tipo_regimen').val() == "-1") {
-                    alert('Debe seleccionar un Tipo de Régimen');
+                    //alert('Debe seleccionar un Tipo de Régimen');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar un Tipo de Régimen',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#tipo_regimen').focus();
                     return;
                 }
 
                 if ($('#fecha_registro').val() == "") {
-                    alert('Debe ingresar la Fecha de Registro de la Cámara');
+                    //alert('Debe ingresar la Fecha de Registro de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Registro de la Cámaran',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#fecha_registro').focus();
                     return;
                 }
 
                 if ($('#fecha_constitucion').val() == "") {
-                    alert('Debe ingresar la Fecha de Constitución de la Cámara');
+                    //alert('Debe ingresar la Fecha de Constitución de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Constitución de la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#fecha_constitucion').focus();
                     return;
@@ -1798,104 +1902,226 @@
                     // Validar si las fechas son válidas
                     if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
                         if (fechaConstitucionDate >= fechaRegistroDate) {
-                            alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                            //alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                            await Swal.fire({ 
+                                target: document.getElementById('ModalCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'La Fecha de Constitución debe ser menor a la Fecha de Registro',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                             $('#error-fecha-constitucion').show();
                             $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                             $('#fecha_constitucion').focus();
                             return;
                         }
-                    } else {
-                        alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
+                    } /*else {
+                        //alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
+                        await Swal.fire({ 
+                                target: document.getElementById('ModalCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Una o ambas fechas no son válidas. Por favor, verifica los campos.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         return;
-                    }
+                    }*/
                 }
 
                 if ($('#agente_retencion').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Agente de Retención');
+                    //alert('Debe indicar si la Cámara es o no un Agente de Retención');
+                    await Swal.fire({ 
+                                target: document.getElementById('ModalCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Debe indicar si la Cámara es o no un Agente de Retención',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#agente_retencion').focus();
                     return;
                 }
 
                 if ($('#contribuyente_especial').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
+                    //alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
+                    await Swal.fire({ 
+                                target: document.getElementById('ModalCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Debe indicar si la Cámara es o no un Contribuyente Especial',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#contribuyente_especial').focus();
                     return;
                 }
 
                 if ($('#pais').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#pais').focus();
                     return;
                 }
 
                 if ($('#provincia').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
+                    //alert('Debe seleccionar la Provincia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#provincia').focus();
                     return;
                 }
 
                 if ($('#canton').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#canton').focus();
                     return;
                 }
 
                 if ($('#parroquia').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#parroquia').focus();
                     return;
                 }
 
                 if ($('#calle').val() == "") {
-                    alert('Debe ingresar la Calle en la Dirección Tributaria');
+                    //alert('Debe ingresar la Calle en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#calle').focus();
                     return;
                 }
 
                 if ($('#manzana').val() == "") {
-                    alert('Debe ingresar la Manzana en la Dirección Tributaria');
+                    //alert('Debe ingresar la Manzana en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#manzana').focus();
                     return;
                 }
 
                 if ($('#numero').val() == "") {
-                    alert('Debe ingresar el Número en la Dirección Tributaria');
+                   // alert('Debe ingresar el Número en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#numero').focus();
                     return;
                 }
 
                 if ($('#interseccion').val() == "") {
-                    alert('Debe ingresar la Intersección en la Dirección Tributaria');
+                    //alert('Debe ingresar la Intersección en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#interseccion').focus();
                     return;
                 }
 
                 if ($('#referencia').val() == "") {
-                    alert('Debe ingresar la Referencia en la Dirección Tributaria');
+                    //alert('Debe ingresar la Referencia en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#referencia').focus();
                     return;
                 }
 
                 if ($('#hiddenSelectedItems').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#hiddenSelectedItems').focus();
                     return;
                 }
 
                 var formData = new FormData(document.getElementById("ModalCamara"));
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalCamara'),
+                    title: 'Enviando datos para registro de Cámara',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 $.ajax({
                     url: "{{ route('admin.registrar_camara') }}",
@@ -1906,8 +2132,17 @@
                     contentType: false,
                     processData: false
                 }).done(function(res) {
-                    $('#carga').hide();
-                    alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    //$('#carga').hide();
+                    Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: res.success,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    }); 
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
                     $('#carga').hide();
@@ -1916,11 +2151,27 @@
                         // Mostrar mensaje de error de validación
                         let errors = res.responseJSON;
                         if (errors.error) {
-                            alert(errors.error);
+                            //alert(errors.error); 
+                            Swal.fire({ 
+                                target: document.getElementById('ModalCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: errors.error,
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
-                        alert("Ocurrió un error al registrar la cámara.");
+                        //alert("Ocurrió un error al registrar la cámara.");
+                        Swal.fire({ 
+                            target: document.getElementById('ModalCamara'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al registrar la cámara.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
 
                     console.log(res
@@ -2008,7 +2259,16 @@
 
                 console.log('Cargo ID:', camaraId);
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({ 
+                    title: 'Cargando información de Cámara',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // **LIMPIAR EL SELECT Y EL INPUT HIDDEN ANTES DE CARGAR DATOS**
                 selectedItemsMod = []; // Vaciar el array de actividades económicas seleccionadas
@@ -2254,11 +2514,19 @@
                         //console.log('Valor cargo_id:', camaraIdInput.val()); // Verificar que el valor se asigna
                         //console.log('Valor cargoname:', CargoInput.val()); // Verificar que el valor se asigna 
 
-                        $('#carga').hide();
+                        //$('#carga').hide();
+                        Swal.close();
                         $('#ModalModificarCamara').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
+                        Swal.fire({  
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al momento de Cargar la Cámara',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 });
             });
@@ -2346,13 +2614,21 @@
             }
 
 
-            $('#btn-modificar-camara').on('click', function() {
+            $('#btn-modificar-camara').on('click', async function() {
 
                 //alert($('#hiddenSelectedItemsMod').val());
                 //return;
 
                 if ($('#fecha_ingreso_mod').val() == "") {
-                    alert('Debe ingresar la Fecha de Ingreso de la Cámara');
+                    //alert('Debe ingresar la Fecha de Ingreso de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Ingreso de la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#fecha_ingreso_mod').focus();
                     return;
@@ -2362,14 +2638,30 @@
                     /*$("#error-ruc").show();
                     isValid = false;*/
                     $("#error-ruc-mod").show();
-                    alert('El RUC debe tener 13 dígitos');
+                    //alert('El RUC debe tener 13 dígitos');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El RUC debe tener 13 dígitos',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#ruc_mod').focus();
                     return;
                 }
 
                 if ($('#razon_social_mod').val() == "") {
-                    alert('Debe ingresar la Razón Social');
+                    //alert('Debe ingresar la Razón Social');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Razón Social',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#razon_social_mod').focus();
                     return;
@@ -2379,28 +2671,60 @@
                     /*$("#error-ruc").show();
                     isValid = false;*/
                     $("#error-cedula-mod").show();
-                    alert('La Cédula del Representante Legal debe tener 10 dígitos');
+                    //alert('La Cédula del Representante Legal debe tener 10 dígitos');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'La Cédula del Representante Legal debe tener 10 dígitos',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#cedula_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#nombres_representante_legal_mod').val() == "") {
-                    alert('Debe ingresar los Nombres del Representante Legal');
+                    //alert('Debe ingresar los Nombres del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Nombres del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#nombres_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#apellidos_representante_legal_mod').val() == "") {
-                    alert('Debe ingresar los Apellidos del Representante Legal');
+                    //alert('Debe ingresar los Apellidos del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Apellidos del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#apellidos_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#telefono_representante_legal_mod').val() == "") {
-                    alert('Debe ingresar el Teléfono del Representante Legal');
+                    //alert('Debe ingresar el Teléfono del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Teléfono del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#telefono_representante_legal_mod').focus();
                     return;
@@ -2412,42 +2736,90 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo-mod").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#correo_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#cargo_representante_legal_mod').val() == "") {
-                    alert('Debe ingresar el Cargo del Representante Legal');
+                    //alert('Debe ingresar el Cargo del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Cargo del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#cargo_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#direccion_representante_legal_mod').val() == "") {
-                    alert('Debe ingresar la Dirección del Representante Legal');
+                    //alert('Debe ingresar la Dirección del Representante Legal');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Dirección del Representante Legal',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_generales_mod"]').tab('show');
                     $('#direccion_representante_legal_mod').focus();
                     return;
                 }
 
                 if ($('#tipo_regimen_mod').val() == "-1") {
-                    alert('Debe seleccionar un Tipo de Régimen');
+                    //alert('Debe seleccionar un Tipo de Régimen');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar un Tipo de Régimen',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#tipo_regimen_mod').focus();
                     return;
                 }
 
                 if ($('#fecha_registro_mod').val() == "") {
-                    alert('Debe ingresar la Fecha de Registro de la Cámara');
+                    //alert('Debe ingresar la Fecha de Registro de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Registro de la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#fecha_registro_mod').focus();
                     return;
                 }
 
                 if ($('#fecha_constitucion_mod').val() == "") {
-                    alert('Debe ingresar la Fecha de Constitución de la Cámara');
+                    //alert('Debe ingresar la Fecha de Constitución de la Cámara');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de Constitución de la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#fecha_constitucion_mod').focus();
                     return;
@@ -2473,103 +2845,217 @@
                     // Validar si las fechas son válidas
                     if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
                         if (fechaConstitucionDate >= fechaRegistroDate) {
-                            alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                            //alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
+                            await Swal.fire({ 
+                                target: document.getElementById('ModalModificarCamara'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'La Fecha de Constitución debe ser menor a la Fecha de Registro',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                             $('#error-fecha-constitucion-mod').show();
                             $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                             $('#fecha_constitucion_mod').focus();
                             return;
                         }
-                    } else {
+                    } /*else {
                         alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
                         return;
-                    }
+                    }*/
                 }
 
                 if ($('#agente_retencion_mod').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Agente de Retención');
+                    //alert('Debe indicar si la Cámara es o no un Agente de Retención');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe indicar si la Cámara es o no un Agente de Retención',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#agente_retencion_mod').focus();
                     return;
                 }
 
                 if ($('#contribuyente_especial_mod').val() == "-1") {
-                    alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
+                    //alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe indicar si la Cámara es o no un Contribuyente Especial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#contribuyente_especial_mod').focus();
                     return;
                 }
 
                 if ($('#pais_mod').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#pais_mod').focus();
                     return;
                 }
 
                 if ($('#provincia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
+                    //alert('Debe seleccionar la Provincia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#provincia_mod').focus();
                     return;
                 }
 
                 if ($('#canton_mod').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#canton_mod').focus();
                     return;
                 }
 
                 if ($('#parroquia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#parroquia_mod').focus();
                     return;
                 }
 
                 if ($('#calle_mod').val() == "") {
-                    alert('Debe ingresar la Calle en la Dirección Tributaria');
+                    //alert('Debe ingresar la Calle en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#calle_mod').focus();
                     return;
                 }
 
                 if ($('#manzana_mod').val() == "") {
-                    alert('Debe ingresar la Manzana en la Dirección Tributaria');
+                    //alert('Debe ingresar la Manzana en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#manzana_mod').focus();
                     return;
                 }
 
                 if ($('#numero_mod').val() == "") {
-                    alert('Debe ingresar el Número en la Dirección Tributaria');
+                    //alert('Debe ingresar el Número en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#numero_mod').focus();
                     return;
                 }
 
                 if ($('#interseccion_mod').val() == "") {
-                    alert('Debe ingresar la Intersección en la Dirección Tributaria');
+                    //alert('Debe ingresar la Intersección en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#interseccion_mod').focus();
                     return;
                 }
 
                 if ($('#referencia_mod').val() == "") {
-                    alert('Debe ingresar la Referencia en la Dirección Tributaria');
+                    //alert('Debe ingresar la Referencia en la Dirección Tributaria');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia en la Dirección Tributaria',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#referencia_mod').focus();
                     return;
                 }
 
                 if ($('#hiddenSelectedItemsMod').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
                     $('#hiddenSelectedItemsMod').focus();
                     return;
                 }
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalModificarCamara'),
+                    title: 'Enviando datos para modificación de Cámara',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // Aquí puedes añadir la lógica para enviar el formulario modificado
                 var formData = new FormData(document.getElementById("ModalModificarCamara"));
@@ -2583,24 +3069,67 @@
                     processData: false
                 }).done(function(res) {
                     msg = JSON.parse(res).response.msg
-                    alert(msg);
+                    Swal.close();
+                    Swal.fire({ 
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: res.success,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    }); 
+                    //alert(msg);
                     location.reload();
                     $('#carga').hide();
-                }).fail(function(res) {
-                    console.log(res)
+                }).fail(function(res) { 
+                    let errorMessage = 'Ocurrió un error inesperado.'; 
+                    // Si la respuesta contiene datos JSON
+                    if (res.responseJSON && res.responseJSON.message) {
+                        errorMessage = res.responseJSON.message; // Obtener mensaje del servidor
+                    } else if (res.responseText) {
+                        errorMessage = res.responseText; // Fallback al texto de la respuesta
+                    }
+                    
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al modificar la Cámara',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 });
-                $('#carga').hide();
+                //$('#carga').hide();
+                Swal.close();
                 $('#ModalModificarCamara').modal('hide'); // Cerrar el modal después de guardar
             });
 
-            $(document).on('click', '.delete-camara', function() {
+            $(document).on('click', '.delete-camara', async function() {
                 var button = $(this);
                 var camaraId = button.data('id');
 
                 // Mostrar la confirmación antes de proceder con la eliminación
-                var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                //var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                const result = await Swal.fire({
+                    title: '¿Está seguro de que desea eliminar este registro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
 
-                if (confirmDelete) {
+                if (result.isConfirmed) { 
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
                     $.ajax({
                         url: '/administrador/camara/eliminar/' + camaraId,
                         method: 'POST',
@@ -2608,14 +3137,29 @@
                             _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
                         },
                         success: function(response) {
-                            alert('Registro eliminado correctamente.');
+                            //alert('Registro eliminado correctamente.');
+                            Swal.close();
+                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                            Swal.fire({ 
+                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                                title: 'Éxito',
+                                text: 'Registro eliminado correctamente.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
-                            location
-                                .reload(); // O cualquier otra lógica para actualizar la interfaz
+                            location.reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            alert('Hubo un problema al eliminar el Registro.');
+                            //alert('Hubo un problema al eliminar el Registro.');
+                            Swal.fire({ 
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al eliminar el Registro.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     });
                 } else {

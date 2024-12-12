@@ -682,7 +682,17 @@
     <script>
         $(document).ready(function() {
             var actividadesEconomicas = @json($actividadesEconomicas);
-            var camaras = @json($camaras);
+            var camaras = @json($camaras); 
+
+            Swal.fire({ 
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             var table = $('#dataTable').DataTable({
                 destroy: true,
@@ -698,7 +708,10 @@
                     },
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
-                    }
+                    },
+                    complete: function(response) { 
+                        Swal.close();
+                    },
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
@@ -735,7 +748,7 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() {
+            /*$('#camara').change(function() {
                 let selectedCamera = $(this).val();
                 let filtered = camaras.find(function(camara) {
                     return camara.id == selectedCamera;
@@ -762,7 +775,7 @@
                         `<option value=${actividad.id}>${actividad.descripcion}</option>`
                     );
                 });
-            });
+            });*/
 
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
@@ -772,7 +785,15 @@
                 var nombreCamaraSeleccionada = $('#camara option:selected').text();
 
                 if (camaraSeleccionada === '-1') {
-                    alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
+                    //alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
+                    Swal.fire({ 
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor, selecciona una Cámara para poder registrar un Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 } else {
                     // Mostrar el nombre de la cámara seleccionada en el modal
                     $('#nombreCamaraSeleccionada').text(nombreCamaraSeleccionada);
@@ -791,14 +812,56 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() {
-                var selectedCamera = $(this).val();
-
+            $('#camara').change(function() { 
+                let selectedCamera = $(this).val();
                 if (selectedCamera === '-1') {
-                    alert('Por favor selecciona una cámara válida.');
+                    //alert('Por favor selecciona una cámara válida.');
+                    Swal.fire({  
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor selecciona una cámara válida.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    table.ajax.reload();
                 } else {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
                     table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
                 }
+
+                let filtered = camaras.find(function(camara) {
+                    return camara.id == selectedCamera;
+                });
+                let filteredActividades = filtered.datos_tributarios.actividades_economicas;
+
+                let actividades = Object.keys(actividadesEconomicas).map(function(key) {
+                    return {
+                        id: key,
+                        descripcion: actividadesEconomicas[key]
+                    };
+                });
+                let filteredActivities = actividades.filter(function(actividad) {
+                    return filteredActividades.includes(actividad.id);
+                });
+
+                $('#actividad_economica').empty();
+                $('#actividad_economica_mod').empty();
+                filteredActivities.forEach(function(actividad) {
+                    $('#actividad_economica').append(
+                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
+                    );
+                    $('#actividad_economica_mod').append(
+                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
+                    );
+                });  
             });
 
             // Inicializar Select2 con búsqueda habilitada
@@ -1158,73 +1221,161 @@
             });
 
 
-            $("#btn-register-establecimiento").click(function() {
+            $("#btn-register-establecimiento").click(async function() {
 
                 //alert($('#hiddenSelectedItems').val());
                 //return; 
 
                 if ($('#nombre_comercial').val() == "") {
-                    alert('Debe ingresar el Nombre Comercial');
+                    //alert('Debe ingresar el Nombre Comercial');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Nombre Comercial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#nombre_comercial').focus();
                     return;
                 }
 
                 if ($('#fecha_inicio_actividades').val() == "") {
-                    alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de inicio de actividades del Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio_actividades').focus();
                     return;
                 }
 
                 if ($('#pais').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#pais').focus();
                     return;
                 }
 
                 if ($('#provincia').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
+                    //alert('Debe seleccionar la Provincia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#provincia').focus();
                     return;
                 }
 
                 if ($('#canton').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#canton').focus();
                     return;
                 }
 
                 if ($('#parroquia').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#parroquia').focus();
                     return;
                 }
 
                 if ($('#calle').val() == "") {
-                    alert('Debe ingresar la Calle');
+                    //alert('Debe ingresar la Calle');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#calle').focus();
                     return;
                 }
 
                 if ($('#manzana').val() == "") {
-                    alert('Debe ingresar la Manzana');
+                    //alert('Debe ingresar la Manzana');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#manzana').focus();
                     return;
                 }
 
                 if ($('#numero').val() == "") {
-                    alert('Debe ingresar el Número');
+                    //alert('Debe ingresar el Número');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#numero').focus();
                     return;
                 }
 
                 if ($('#interseccion').val() == "") {
-                    alert('Debe ingresar la Intersección');
+                    //alert('Debe ingresar la Intersección');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#interseccion').focus();
                     return;
                 }
 
                 if ($('#referencia').val() == "") {
-                    alert('Debe ingresar la Referencia');
+                    //alert('Debe ingresar la Referencia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#referencia').focus();
                     return;
                 }
@@ -1233,24 +1384,58 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#correo').focus();
                     return;
                 }
 
-                if ($('#telefono1').val() == "") {
-                    alert('Debe ingresar al menos 1 número de Teléfono');
+                if (($('#telefono1').val() == "")&&($('#telefono2').val() == "")&&($('#telefono3').val() == "")) {
+                    //alert('Debe ingresar al menos 1 número de Teléfono');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar al menos 1 número de Teléfono',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#telefono1').focus();
                     return;
                 }
 
                 if ($('#hiddenSelectedItems').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
                 }
 
                 var formData = new FormData(document.getElementById("ModalEstablecimiento"));
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalEstablecimiento'),
+                    title: 'Enviando datos para registro del Establecimiento',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 $.ajax({
                     url: "{{ route('admin.registrar_establecimiento') }}",
@@ -1261,21 +1446,43 @@
                     contentType: false,
                     processData: false
                 }).done(function(res) {
-                    $('#carga').hide();
-                    alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: res.success,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    }); 
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
-                    $('#carga').hide();
-
                     if (res.status === 422) {
                         // Mostrar mensaje de error de validación
                         let errors = res.responseJSON;
                         if (errors.error) {
-                            alert(errors.error);
+                            //alert(errors.error);
+                            Swal.fire({
+                                target: document.getElementById('ModalEstablecimiento'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: errors.error,
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
-                        alert("Ocurrió un error al registrar el establecimiento.");
+                        //alert("Ocurrió un error al registrar el establecimiento.");
+                        Swal.fire({
+                            target: document.getElementById('ModalEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al registrar el Establecimiento.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
 
                     console.log(res
@@ -1320,6 +1527,13 @@
                 language: 'es' // Asegúrate de establecer el idioma correcto
             });
 
+            $('#fecha_inicio_actividades_mod').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+                todayHighlight: true, // Resalta la fecha actual
+                language: 'es' // Asegúrate de establecer el idioma correcto
+            });
+
 
 
             // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
@@ -1330,7 +1544,16 @@
 
                 console.log('Cargo ID:', establecimientoId);
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // **LIMPIAR EL SELECT Y EL INPUT HIDDEN ANTES DE CARGAR DATOS**
                 selectedItemsMod = []; // Vaciar el array de actividades económicas seleccionadas
@@ -1485,11 +1708,19 @@
                             );
                         }
 
-                        $('#carga').hide();
+                        //$('#carga').hide();
+                        Swal.close();
                         $('#ModalModificarEstablecimiento').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
+                        Swal.fire({ 
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un problema al cargar el Establecimiento.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 });
             });
@@ -1577,73 +1808,161 @@
             }
 
 
-            $('#btn-modificar-camara').on('click', function() {
+            $('#btn-modificar-camara').on('click', async function() {
 
                 //alert($('#hiddenSelectedItemsMod').val());
                 //return;
 
                 if ($('#nombre_comercial_mod').val() == "") {
-                    alert('Debe ingresar el Nombre Comercial');
+                    //alert('Debe ingresar el Nombre Comercial'); 
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Nombre Comercial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#nombre_comercial_mod').focus();
                     return;
                 }
 
                 if ($('#fecha_inicio_actividades_mod').val() == "") {
-                    alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Fecha de inicio de actividades del Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio_actividades_mod').focus();
                     return;
                 }
 
                 if ($('#pais_mod').val() == "-1") {
-                    alert('Debe seleccionar el País');
+                    //alert('Debe seleccionar el País');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el País',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#pais_mod').focus();
                     return;
                 }
 
                 if ($('#provincia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Provincia');
-                    $('#provincia_mod').focus();
+                    //alert('Debe seleccionar la Provincia');
+                    //$('#provincia_mod').focus();
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Provincia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
                 }
 
                 if ($('#canton_mod').val() == "-1") {
-                    alert('Debe seleccionar el Cantón');
+                    //alert('Debe seleccionar el Cantón');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Cantón',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#canton_mod').focus();
                     return;
                 }
 
                 if ($('#parroquia_mod').val() == "-1") {
-                    alert('Debe seleccionar la Parroquia');
+                    //alert('Debe seleccionar la Parroquia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar la Parroquia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#parroquia_mod').focus();
                     return;
                 }
 
                 if ($('#calle_mod').val() == "") {
-                    alert('Debe ingresar la Calle');
+                    //alert('Debe ingresar la Calle');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Calle',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#calle_mod').focus();
                     return;
                 }
 
                 if ($('#manzana_mod').val() == "") {
-                    alert('Debe ingresar la Manzana');
+                    //alert('Debe ingresar la Manzana');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Manzana',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#manzana_mod').focus();
                     return;
                 }
 
                 if ($('#numero_mod').val() == "") {
-                    alert('Debe ingresar el Número');
+                    //alert('Debe ingresar el Número');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Número',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#numero_mod').focus();
                     return;
                 }
 
                 if ($('#interseccion_mod').val() == "") {
-                    alert('Debe ingresar la Intersección');
+                    //alert('Debe ingresar la Intersección');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Intersección',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#interseccion_mod').focus();
                     return;
                 }
 
                 if ($('#referencia_mod').val() == "") {
-                    alert('Debe ingresar la Referencia');
+                    //alert('Debe ingresar la Referencia');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar la Referencia',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#referencia_mod').focus();
                     return;
                 }
@@ -1652,23 +1971,57 @@
                     /*$("#error-correo").show();
                     isValid = false;*/
                     $("#error-correo-mod").show();
-                    alert('Debe registrar un correo con formato válido');
+                    //alert('Debe registrar un correo con formato válido');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#correo_mod').focus();
                     return;
                 }
-
-                if ($('#telefono1_mod').val() == "") {
-                    alert('Debe ingresar al menos 1 número de Teléfono');
+ 
+                if (($('#telefono1_mod').val() == "")&&($('#telefono2_mod').val() == "")&&($('#telefono3_mod').val() == "")) {
+                    //alert('Debe ingresar al menos 1 número de Teléfono');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#telefono1_mod').focus();
                     return;
                 }
 
                 if ($('#hiddenSelectedItemsMod').val() == "") {
-                    alert('Debe seleccionar al menos una Actividad Económica');
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    await Swal.fire({ 
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     return;
                 }
 
-                $('#carga').show();
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalModificarEstablecimiento'),
+                    title: 'Enviando datos para modificación de Establecimiento',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
 
                 // Aquí puedes añadir la lógica para enviar el formulario modificado
                 var formData = new FormData(document.getElementById("ModalModificarEstablecimiento"));
@@ -1682,24 +2035,61 @@
                     processData: false
                 }).done(function(res) {
                     msg = JSON.parse(res).response.msg
-                    alert(msg);
+                    //alert(msg);
+                    //location.reload();
+ 
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({ 
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: msg,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     location.reload();
-                    $('#carga').hide();
+                    //$('#carga').hide();
                 }).fail(function(res) {
-                    console.log(res)
+                    console.log(res);
+                    Swal.fire({  
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al modificar el Registro.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 });
-                $('#carga').hide();
+                //$('#carga').hide();
                 $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
             });
 
-            $(document).on('click', '.delete-establecimiento', function() {
+            $(document).on('click', '.delete-establecimiento', async function() {
                 var button = $(this);
                 var establecimientoId = button.data('id');
 
                 // Mostrar la confirmación antes de proceder con la eliminación
-                var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                //var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                const { confirmDelete } = await Swal.fire({
+                        title: '¿Está seguro de que desea eliminar este registro?',
+                        text: "Esta acción no se puede deshacer.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Aceptar',
+                        cancelButtonText: 'Cancelar',
+                        allowOutsideClick: false,
+                    });
 
                 if (confirmDelete) {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
                     $.ajax({
                         url: '/administrador/establecimiento/eliminar/' + establecimientoId,
                         method: 'POST',
@@ -1707,14 +2097,28 @@
                             _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
                         },
                         success: function(response) {
-                            alert('Registro eliminado correctamente.');
-                            // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
-                            location
-                                .reload(); // O cualquier otra lógica para actualizar la interfaz
+                            //alert('Registro eliminado correctamente.');
+                            Swal.close();
+                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                            Swal.fire({ 
+                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                                title: 'Éxito',
+                                text: 'Registro eliminado correctamente.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
+                            location.reload(); 
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            alert('Hubo un problema al eliminar el Registro.');
+                            //alert('Hubo un problema al eliminar el Registro.');
+                            Swal.fire({ 
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al eliminar el Registro.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     });
                 } else {
