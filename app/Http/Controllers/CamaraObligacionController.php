@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\CamaraObligaciones;
+use App\Models\CamaraObligacion;
 use App\Models\Camara;
-use App\Models\Obligacion;
 use App\Models\Entidad;
 use Carbon\Carbon;
 
 
-class CamaraObligacionesController extends Controller
+class CamaraObligacionController extends Controller
 {
     public function obligaciones_camara(Request $request)
     {
@@ -43,7 +42,7 @@ class CamaraObligacionesController extends Controller
             'with_camara' => 'sometimes|boolean|nullable',
         ]);
         Log::info($request->all());
-        $camaraObligaciones = CamaraObligaciones::when(isset($request['id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
+        $camaraObligaciones = CamaraObligacion::when(isset($request['id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
             ->when(isset($request['id_camara']), fn($q) => $q->where('id_camara', $request['id_camara']))
             ->when(isset($request['id_obligacion']), fn($q) => $q->where('id_obligacion', $request['id_obligacion']))
             ->when(isset($request['fecha_inicio']), fn($q) => $q->where('fecha_inicio', $request['fecha_inicio']))
@@ -84,7 +83,7 @@ class CamaraObligacionesController extends Controller
 
         return response()->json([
             'draw' => intval($request['draw']) ?? 1,
-            'recordsTotal' => CamaraObligaciones::count(),
+            'recordsTotal' => CamaraObligacion::count(),
             'recordsFiltered' => $total_filtered,
             'data' => $response
         ]);
@@ -101,7 +100,7 @@ class CamaraObligacionesController extends Controller
                 'fecha_presentacion' => 'sometimes|nullable|date_format:d/m/Y',
             ]);
             DB::beginTransaction();
-            $existeObligacion = CamaraObligaciones::where('id_camara', $data['id_camara'])
+            $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
                 ->where('id_entidad', $data['id_entidad'])
                 ->where('id_obligacion', $data['id_obligacion'])
                 ->first();
@@ -124,7 +123,7 @@ class CamaraObligacionesController extends Controller
             }
             $data['estado'] = 1;
             Log::info($data);
-            $camaraObligacion = CamaraObligaciones::create($data);
+            $camaraObligacion = CamaraObligacion::create($data);
             DB::commit();
         } catch (\Throwable $th) {
             Log::error($th);
@@ -146,7 +145,7 @@ class CamaraObligacionesController extends Controller
                 'sometimes|nullable|date_format:d/m/Y',
             ]);
             DB::beginTransaction();
-            $camaraObligacion = CamaraObligaciones::find($data['id']);
+            $camaraObligacion = CamaraObligacion::find($data['id']);
             if (!$camaraObligacion) {
                 return response()->json(['message' => 'La obligación no existe'], 400);
             }
@@ -173,7 +172,7 @@ class CamaraObligacionesController extends Controller
     {
         try {
             DB::beginTransaction();
-            $camaraObligacion = CamaraObligaciones::find($id);
+            $camaraObligacion = CamaraObligacion::find($id);
             if (!$camaraObligacion) {
                 return response()->json(['message' => 'La obligación no existe'], 400);
             }

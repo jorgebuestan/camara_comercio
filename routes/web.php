@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;
-use App\Http\Controllers\CamaraObligacionesController;
+use App\Http\Controllers\CamaraObligacionController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\EstablecimientoSocioController;
 use App\Http\Controllers\FuncionesGeneralesController;
@@ -74,18 +74,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/camara/modificar_establecimiento', [EstablecimientoController::class, 'modificar_establecimiento'])->middleware('auth')->name('admin.modificar_establecimiento');
 
     //Maestro de Obligaciones de Camara
-    Route::get('/administrador/camara/obligaciones_camara', [CamaraObligacionesController::class, 'obligaciones_camara'])->middleware('auth')->name('admin.obligaciones_camara');
-    Route::get('/administrador/obligacion_camara/index', [CamaraObligacionesController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_obligaciones_camara');
-    Route::post('/administrador/obligacion_camara/registrar_obligacion_camara', [CamaraObligacionesController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_camara');
-    Route::post('/administrador/obligacion_camara/modificar', [CamaraObligacionesController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_camara');
-    Route::post('/administrador/obligacion_camara/eliminar/{id}', [CamaraObligacionesController::class, 'eliminarObligacionCamara'])->middleware('auth')->name('admin.eliminar_obligacion_camara');;
+    Route::get('/administrador/camara/obligaciones_camara', [CamaraObligacionController::class, 'obligaciones_camara'])->middleware('auth')->name('admin.obligaciones_camara');
+    Route::get('/administrador/obligacion_camara/index', [CamaraObligacionController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_obligaciones_camara');
+    Route::post('/administrador/obligacion_camara/registrar_obligacion_camara', [CamaraObligacionController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_camara');
+    Route::post('/administrador/obligacion_camara/modificar', [CamaraObligacionController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_camara');
+    Route::post('/administrador/obligacion_camara/eliminar/{id}', [CamaraObligacionController::class, 'eliminarObligacionCamara'])->middleware('auth')->name('admin.eliminar_obligacion_camara');;
 
     //Maestro de Socios
-    Route::get('/administrador/maestro_socios', [App\Http\Controllers\SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
-    Route::get('/administrador/obtener_listado_socios', [App\Http\Controllers\SocioController::class, 'obtener_listado_socios'])->middleware('auth')->name('admin.obtener_listado_socios');
-    Route::post('/administrador/registrar_socio', [App\Http\Controllers\SocioController::class, 'registrar_socio'])->middleware('auth')->name('admin.registrar_socio');
-    Route::post('/administrador/actualizar_socio', [App\Http\Controllers\SocioController::class, 'modificar_socio'])->middleware('auth')->name('admin.actualizar_socio');
-    Route::post('/administrador/eliminar_socio', [App\Http\Controllers\SocioController::class, 'eliminar_socio'])->middleware('auth')->name('admin.eliminar_socio');
+    Route::get('/administrador/maestro_socios', [SocioController::class, 'maestro_socios'])->middleware('auth')->name('admin.maestro_socios');
+    Route::get('/administrador/obtener_listado_socios', [SocioController::class, 'obtener_listado_socios'])->middleware('auth')->name('admin.obtener_listado_socios');
+    Route::post('/administrador/registrar_socio', [SocioController::class, 'registrar_socio'])->middleware('auth')->name('admin.registrar_socio');
+    Route::post('/administrador/actualizar_socio', [SocioController::class, 'modificar_socio'])->middleware('auth')->name('admin.actualizar_socio');
+    Route::post('/administrador/eliminar_socio', [SocioController::class, 'eliminar_socio'])->middleware('auth')->name('admin.eliminar_socio');
 
     //Maestro de Establecimientos de Socios
     Route::get('/administrador/establecimientos_socio', [EstablecimientoSocioController::class, 'establecimientos_socio'])->middleware('auth')->name('admin.establecimientos_socio');

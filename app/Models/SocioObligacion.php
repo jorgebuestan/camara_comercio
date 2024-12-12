@@ -6,12 +6,12 @@ use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CamaraObligaciones extends Model
+class SocioObligacion extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'camaras_obligaciones';
+    protected $table = 'socios_obligaciones';
     protected $fillable = [
-        'id_camara',
+        'id_socio',
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
@@ -19,9 +19,9 @@ class CamaraObligaciones extends Model
         'estado'
     ];
 
-    public function camara()
+    public function socio()
     {
-        return $this->belongsTo(Camara::class, 'id_camara', 'id');
+        return $this->belongsTo(Socio::class, 'id_socio', 'id');
     }
 
     public function entidad()
