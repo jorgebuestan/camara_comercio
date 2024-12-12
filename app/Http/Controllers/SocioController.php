@@ -47,7 +47,7 @@ class SocioController extends Controller
         }
 
 
-        return view('administrador.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria'));
+        return view('administrador.socios.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria'));
     }
 
     public function obtener_listado_socios(Request $request)

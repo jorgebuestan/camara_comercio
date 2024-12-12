@@ -40,7 +40,7 @@ class CamaraController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
         
-        return view('administrador.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas') );
+        return view('administrador.camaras.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas') );
     }
 
     public function obtener_listado_camaras(Request $request)

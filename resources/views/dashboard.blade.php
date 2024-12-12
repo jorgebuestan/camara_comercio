@@ -388,21 +388,13 @@
                                                     Mantenimiento de Cámaras
                                                 </a>
                                             </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-building-house" aria-hidden="true"></i>
-                                            <span>Establecimientos</span>
-                                        </a>
-                                        <ul class="nav nav-children">
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_establecimientos') }}">
-                                                    Mantenimiento de Establecimientos
+                                                <a class="nav-link" href="{{ route('admin.establecimientos_camara') }}">
+                                                    Establecimientos por Cámara
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> 
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
                                             <i class="bx bxs-user" aria-hidden="true"></i>
@@ -412,6 +404,11 @@
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.maestro_socios') }}">
                                                     Mantenimiento de Socios
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.establecimientos_socio') }}">
+                                                    Establecimientos por Socios
                                                 </a>
                                             </li>
                                         </ul>

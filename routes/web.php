@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CamaraController;
 use App\Http\Controllers\EstablecimientoController;
+use App\Http\Controllers\EstablecimientoSocioController;
 use App\Http\Controllers\FuncionesGeneralesController;
 use App\Http\Controllers\SocioController;
 use App\Http\Controllers\EntidadesController;
@@ -63,9 +64,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/camara/detalle/{id}', [CamaraController::class, 'detalle_camara'])->middleware('auth')->name('admin.detalle_camara');
     Route::post('/administrador/camara/modificar_camara', [CamaraController::class, 'modificar_camara'])->middleware('auth')->name('admin.modificar_camara');
 
-    //Maestro de Establecimientos
-    Route::get('/administrador/maestro_establecimientos', [EstablecimientoController::class, 'maestro_establecimientos'])->middleware('auth')->name('admin.maestro_establecimientos');
-    Route::get('/administrador/obtener_listado_establecimientos', [EstablecimientoController::class, 'obtener_listado_establecimientos'])->middleware('auth')->name('admin.obtener_listado_establecimientos');
+    //Maestro de Establecimientos de Camara
+    Route::get('/administrador/establecimientos_camara', [EstablecimientoController::class, 'establecimientos_camara'])->middleware('auth')->name('admin.establecimientos_camara');
+    Route::get('/administrador/obtener_listado_establecimientos_camara', [EstablecimientoController::class, 'obtener_listado_establecimientos_camara'])->middleware('auth')->name('admin.obtener_listado_establecimientos_camara');
     Route::post('/administrador/registrar_establecimiento', [EstablecimientoController::class, 'registrar_establecimiento'])->middleware('auth')->name('admin.registrar_establecimiento');
     Route::post('/administrador/establecimiento/eliminar/{id}', [EstablecimientoController::class, 'eliminar_establecimiento'])->middleware('auth')->name('admin.eliminar_establecimiento');;
     Route::get('/administrador/establecimiento/detalle/{id}', [EstablecimientoController::class, 'detalle_establecimiento'])->middleware('auth')->name('admin.detalle_establecimiento');
@@ -77,6 +78,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/registrar_socio', [App\Http\Controllers\SocioController::class, 'registrar_socio'])->middleware('auth')->name('admin.registrar_socio');
     Route::post('/administrador/actualizar_socio', [App\Http\Controllers\SocioController::class, 'modificar_socio'])->middleware('auth')->name('admin.actualizar_socio');
     Route::post('/administrador/eliminar_socio', [App\Http\Controllers\SocioController::class, 'eliminar_socio'])->middleware('auth')->name('admin.eliminar_socio');
+
+    //Maestro de Establecimientos de Socios
+    Route::get('/administrador/establecimientos_socio', [EstablecimientoSocioController::class, 'establecimientos_socio'])->middleware('auth')->name('admin.establecimientos_socio');
+    Route::get('/administrador/obtener_listado_establecimientos_socio', [EstablecimientoSocioController::class, 'obtener_listado_establecimientos_socio'])->middleware('auth')->name('admin.obtener_listado_establecimientos_socio');
+    Route::post('/administrador/registrar_establecimiento_socio', [EstablecimientoSocioController::class, 'registrar_establecimiento_socio'])->middleware('auth')->name('admin.registrar_establecimiento_socio');
+    Route::post('/administrador/establecimiento_socio/eliminar/{id}', [EstablecimientoSocioController::class, 'eliminar_establecimiento_socio'])->middleware('auth')->name('admin.eliminar_establecimiento_socio');;
+    Route::get('/administrador/establecimiento_socio/detalle/{id}', [EstablecimientoSocioController::class, 'detalle_establecimiento_socio'])->middleware('auth')->name('admin.detalle_establecimiento_socio');
+    Route::post('/administrador/establecimiento/modificar_establecimiento_socio', [EstablecimientoSocioController::class, 'modificar_establecimiento_socio'])->middleware('auth')->name('admin.modificar_establecimiento_socio');
 
     //Maestro de Obligaciones
     Route::get('/administrador/maestro_obligaciones', [ObligacionesController::class, 'maestro_obligaciones'])->middleware('auth')->name('admin.maestro_obligaciones');

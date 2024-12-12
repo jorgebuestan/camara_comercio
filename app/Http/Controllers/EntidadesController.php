@@ -33,7 +33,7 @@ class EntidadesController extends Controller
             $cantones->put($cantonDefault->id, $cantonDefault->nombre); // Añadimos al listado
         }
         
-        return view('administrador.maestro_entidades', compact('paises', 'provincias', 'cantones', 'tipo_entidad') );
+        return view('administrador.entidades.maestro_entidades', compact('paises', 'provincias', 'cantones', 'tipo_entidad') );
     }
 
     public function obtener_listado_entidades(Request $request)
@@ -333,7 +333,7 @@ class EntidadesController extends Controller
         $tipo_presentacion = TipoPresentacion::pluck('descripcion', 'id');    
         $entidades = Entidad::pluck('entidad', 'id');   
 
-        return view('administrador.entidades_obligaciones', compact('entidades', 'tiempo_presentacion', 'tipo_presentacion') );
+        return view('administrador.entidades.entidades_obligaciones', compact('entidades', 'tiempo_presentacion', 'tipo_presentacion') );
     }
 
 }

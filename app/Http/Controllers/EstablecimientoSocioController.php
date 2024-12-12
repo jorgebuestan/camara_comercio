@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\Establecimiento;
+use App\Models\EstablecimientoSocio;
 use App\Models\TipoRegimen;
 use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
+use App\Models\Socio;
 use App\Models\Camara;
 
-class EstablecimientoController extends Controller
+class EstablecimientoSocioController extends Controller
 {
     //
-    public function establecimientos_camara()
+    public function establecimientos_socio()
     {
         $regimen = TipoRegimen::pluck('nombre', 'id');
         $paises = Pais::pluck('nombre', 'id');
@@ -25,9 +26,9 @@ class EstablecimientoController extends Controller
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
-        $camarasSelect = Camara::pluck('razon_social', 'id');
-        $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
-        Log::info($camaras);
+        $sociosSelect = Socio::pluck('razon_social', 'id');
+        $socios = Camara::with('datos_tributarios')->where('estado', 1)->get();
+        Log::info($socios);
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -44,44 +45,44 @@ class EstablecimientoController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
 
-        return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras'));
+        return view('administrador.socios.establecimientos_socio', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'sociosSelect', 'socios'));
     }
 
-    public function obtener_listado_establecimientos_camara(Request $request)
+    public function obtener_listado_establecimientos_socio(Request $request)
     {
         $columns = [
-            0 => 'establecimientos.id',
+            0 => 'establecimientos_socios.id',
             1 => 'acciones' 
         ];
 
-        $query = DB::table('establecimientos')
+        $query = DB::table('establecimientos_socios')
             ->select(
-                'establecimientos.id',
-                'establecimientos.fecha_inicio_actividades',
-                'establecimientos.nombre_comercial',
-                DB::raw('CONCAT(establecimientos.calle, " ", establecimientos.manzana, " ", establecimientos.numero, " ", establecimientos.interseccion) AS direccion'),
-                'establecimientos.correo'
+                'establecimientos_socios.id',
+                'establecimientos_socios.fecha_inicio_actividades',
+                'establecimientos_socios.nombre_comercial',
+                DB::raw('CONCAT(establecimientos_socios.calle, " ", establecimientos_socios.manzana, " ", establecimientos_socios.numero, " ", establecimientos_socios.interseccion) AS direccion'),
+                'establecimientos_socios.correo'
             )
-            ->where('establecimientos.estado', 1)
-            ->orderBy('establecimientos.nombre_comercial', 'asc');
+            ->where('establecimientos_socios.estado', 1)
+            ->orderBy('establecimientos_socios.nombre_comercial', 'asc');
 
         // Filtro de localidad 
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
             $query->where(function ($query) use ($search) {
-                $query->where('establecimientos.nombre_comercial', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.calle', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.manzana', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.numero', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.interseccion', 'LIKE', "%{$search}%")
-                    ->orWhere('establecimientos.correo', 'LIKE', "%{$search}%");
+                $query->where('establecimientos_socios.nombre_comercial', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos_socios.calle', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos_socios.manzana', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos_socios.numero', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos_socios.interseccion', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos_socios.correo', 'LIKE', "%{$search}%");
             });
         }
 
-        // **Filtrar por id_camara si está presente en el request**
-        if ($idCamara = $request->input('id_camara')) {
-            $query->where('establecimientos.id_camara', $idCamara);
+        // **Filtrar por id_socio si está presente en el request**
+        if ($idCamara = $request->input('id_socio')) {
+            $query->where('establecimientos_socios.id_socio', $idCamara);
         }
 
         $totalFiltered = $query->count();
@@ -103,9 +104,7 @@ class EstablecimientoController extends Controller
         $establecimientos = $query->get();
 
         $data = $establecimientos->map(function ($establecimiento) {
-            $boton = "";
-
-
+        $boton = "";  
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
@@ -127,7 +126,7 @@ class EstablecimientoController extends Controller
         return response()->json($json_data);
     }
 
-    public function registrar_establecimiento(Request $request)
+    public function registrar_establecimiento_socio(Request $request)
     {
 
         try {
@@ -140,9 +139,9 @@ class EstablecimientoController extends Controller
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
             // Crear registro en la base de datos
-            $establecimiento = Establecimiento::create([
+            $establecimiento = EstablecimientoSocio::create([
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
-                'id_camara' => strtoupper($request->input('camaraHidden')),
+                'id_socio' => strtoupper($request->input('socioHidden')),
                 'id_pais' => $request->input('pais'),
                 'id_provincia' => $request->input('provincia'),
                 'id_canton' => $request->input('canton'),
@@ -169,11 +168,10 @@ class EstablecimientoController extends Controller
         }
     }
 
-    public function eliminar_establecimiento($id)
+    public function eliminar_establecimiento_socio($id)
     {
         //$colaborador = Colaborador::find($id);
-        $establecimiento = Establecimiento::where('id', $id)->first();
-
+        $establecimiento = EstablecimientoSocio::where('id', $id)->first(); 
 
         if (!$establecimiento) {
             return response()->json(['error' => 'Establecimiento no encontrado'], 404);
@@ -186,40 +184,39 @@ class EstablecimientoController extends Controller
         return response()->json(['success' => 'Establecimiento eliminado correctamente']);
     }
 
-    public function detalle_establecimiento($id)
+    public function detalle_establecimiento_socio($id)
     {
         // Buscar la cámara por ID
-        $establecimiento = Establecimiento::find($id);
+        $establecimiento = EstablecimientoSocio::find($id);
 
         if (!$establecimiento) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
 
         // Convertir el modelo Establecimiento a un array
-        $establecimientoArray = $establecimiento->toArray();
+        $establecimientoArray = $establecimiento->toArray(); 
 
-
+        
         // Buscar el DatoTributario relacionado
-        $camara = Camara::where('id', $establecimientoArray["id_camara"])->first();
+        $socio = Socio::where('id', $establecimientoArray["id_socio"])->first();
 
         // Si existe un DatoTributario, agregarlo al array de respuesta
-        if ($camara) {
-            $establecimientoArray['camara'] = $camara->toArray();
+        if ($socio) {
+            $establecimientoArray['socio'] = $socio->toArray();
         }
 
         // Devolver la respuesta JSON
         return response()->json($establecimientoArray);
     }
 
-    public function modificar_establecimiento(Request $request)
+    public function modificar_establecimiento_socio(Request $request)
     {
-        try {
+        try { 
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
 
-            // Buscar el registro existente por ID
-            $camara = Camara::find($request->input('camaraHiddenMod'));
-            $establecimiento = Establecimiento::find($request->input('establecimiento_id'));
+            // Buscar el registro existente por ID 
+            $establecimiento = EstablecimientoSocio::find($request->input('establecimiento_id'));
 
             if (!$establecimiento) {
                 return response()->json(['error' => 'El establecimiento no existe.'], 404);
@@ -248,7 +245,7 @@ class EstablecimientoController extends Controller
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
 
-            ]);
+            ]); 
 
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             return response()->json([
@@ -262,4 +259,5 @@ class EstablecimientoController extends Controller
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
+
 }

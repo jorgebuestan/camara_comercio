@@ -20,7 +20,7 @@ class ObligacionesController extends Controller
         $tiempo_presentacion = TiempoPresentacion::pluck('descripcion', 'id');  
         $tipo_presentacion = TipoPresentacion::pluck('descripcion', 'id');    
         
-        return view('administrador.maestro_obligaciones', compact('tiempo_presentacion', 'tipo_presentacion') );
+        return view('administrador.obligaciones.maestro_obligaciones', compact('tiempo_presentacion', 'tipo_presentacion') );
     }
 
     public function obtener_listado_obligaciones(Request $request)
@@ -298,7 +298,7 @@ class ObligacionesController extends Controller
             return response()->json(['success' => 'Obligación registrada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
-                return response()->json(['error' => 'La Obligación ya existe en el grupo de obligaciones por Entidad, no se puede registrar las misma dos veces.'], 422);
+                return response()->json(['error' => 'La Obligación ya existe en el grupo de obligaciones por Entidad, no se puede registrar la misma dos veces.'], 422);
             }
             return response()->json(['error' => 'Error al registrar la Obligación: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {

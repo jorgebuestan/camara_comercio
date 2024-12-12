@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('pagename')
-    Maestro de Establecimientos
+    Establecimientos por Cámara
 @endsection
 
 @section('content')
@@ -114,7 +114,7 @@
             <div class="col-lg-12">
                 <section class="card" id="w3">
                     <header class="card-header">
-                        <h2 class="card-title">Gestión de Establecimientos</h2>
+                        <h2 class="card-title">Gestión de Establecimientos por Cámara</h2>
                     </header>
                     <div class="card-body">
                         <div class="row">
@@ -689,7 +689,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.obtener_listado_establecimientos') }}",
+                    url: "{{ route('admin.obtener_listado_establecimientos_camara') }}",
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
@@ -1765,6 +1765,13 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
+                }else {
+                    $('#provincia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#canton').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1850,6 +1857,144 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#pais_mod').change(function() {
+                let paisId = $(this).val();
+
+                if (paisId != -1) {
+                    $.ajax({
+                        url: '/get-provincias', // Ruta para obtener las provincias
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId
+                        },
+                        success: function(response) {
+                            let provincias = response.provincias;
+                            let $provinciaSelect = $('#provincia_mod');
+                            let $cantonSelect = $('#canton_mod');
+                            let $parroquiaSelect = $('#parroquia_mod');
+
+                            $provinciaSelect.empty(); // Limpiamos el select de provincias
+                            $provinciaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            $cantonSelect.empty(); // Limpiamos el select de provincias
+                            $cantonSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            $parroquiaSelect.empty(); // Limpiamos el select de provincias
+                            $parroquiaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos las provincias al select
+                            provincias.forEach(function(provincia) {
+                                $provinciaSelect.append(
+                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar las provincias.');
+                        }
+                    });
+                }else {
+                    $('#provincia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#canton_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#provincia_mod').change(function() {
+                let paisId = $('#pais_mod').val(); // ID del país seleccionado
+                let provinciaId = $(this).val(); // ID de la provincia seleccionada
+
+                if (paisId != -1 && provinciaId != -1) {
+                    $.ajax({
+                        url: '/get-cantones', // Ruta para obtener los cantones
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId, // Enviamos el ID del país
+                            id_provincia: provinciaId // Enviamos el ID de la provincia
+                        },
+                        success: function(response) {
+                            let cantones = response.cantones;
+                            let $cantonSelect = $('#canton_mod'); // Select de cantones
+                            let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+
+                            $cantonSelect.empty(); // Limpiamos el select de cantones
+                            $parroquiaSelect.empty().append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Limpiamos parroquias
+
+                            $cantonSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos los cantones al select
+                            cantones.forEach(function(canton) {
+                                $cantonSelect.append(
+                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar los cantones.');
+                        }
+                    });
+                } else {
+                    $('#canton_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                    $('#parroquia_mod').empty().append(
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                }
+            });
+
+            $('#canton_mod').change(function() {
+                let paisId = $('#pais_mod').val(); // ID del país seleccionado
+                let provinciaId = $('#provincia_mod').val(); // ID de la provincia seleccionada
+                let cantonId = $(this).val(); // ID del cantón seleccionado
+
+                if (paisId != -1 && provinciaId != -1 && cantonId != -1) {
+                    $.ajax({
+                        url: '/get-parroquias', // Ruta para obtener las parroquias
+                        method: 'GET',
+                        data: {
+                            id_pais: paisId, // Enviamos el ID del país
+                            id_provincia: provinciaId, // Enviamos el ID de la provincia
+                            id_canton: cantonId // Enviamos el ID del cantón
+                        },
+                        success: function(response) {
+                            let parroquias = response
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                            let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
+
+                            $parroquiaSelect.empty(); // Limpiamos el select de parroquias
+                            $parroquiaSelect.append(
+                                '<option value="-1">Seleccionar</option>'
+                            ); // Opción por defecto
+
+                            // Agregamos las parroquias al select
+                            parroquias.forEach(function(parroquia) {
+                                $parroquiaSelect.append(
+                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar las parroquias.');
+                        }
+                    });
+                } else {
+                    $('#parroquia_mod').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
