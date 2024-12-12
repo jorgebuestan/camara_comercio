@@ -41,7 +41,6 @@ class CamaraObligacionController extends Controller
             'with_obligacion' => 'sometimes|boolean|nullable',
             'with_camara' => 'sometimes|boolean|nullable',
         ]);
-        Log::info($request->all());
         $camaraObligaciones = CamaraObligacion::when(isset($request['id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
             ->when(isset($request['id_camara']), fn($q) => $q->where('id_camara', $request['id_camara']))
             ->when(isset($request['id_obligacion']), fn($q) => $q->where('id_obligacion', $request['id_obligacion']))

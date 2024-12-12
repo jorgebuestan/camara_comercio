@@ -11,6 +11,7 @@ use App\Http\Controllers\FuncionesGeneralesController;
 use App\Http\Controllers\SocioController;
 use App\Http\Controllers\EntidadesController;
 use App\Http\Controllers\ObligacionesController;
+use App\Http\Controllers\SocioObligacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +95,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/establecimiento_socio/eliminar/{id}', [EstablecimientoSocioController::class, 'eliminar_establecimiento_socio'])->middleware('auth')->name('admin.eliminar_establecimiento_socio');;
     Route::get('/administrador/establecimiento_socio/detalle/{id}', [EstablecimientoSocioController::class, 'detalle_establecimiento_socio'])->middleware('auth')->name('admin.detalle_establecimiento_socio');
     Route::post('/administrador/establecimiento/modificar_establecimiento_socio', [EstablecimientoSocioController::class, 'modificar_establecimiento_socio'])->middleware('auth')->name('admin.modificar_establecimiento_socio');
+
+    //Maestro de Obligaciones de Socios
+    Route::get('/administrador/obligaciones_socio', [SocioObligacionController::class, 'obligaciones_socio'])->middleware('auth')->name('admin.obligaciones_socio');
+    Route::get('/administrador/obligaciones_socio/index', [SocioObligacionController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_obligaciones_socio');
+    Route::post('/administrador/obligacion_socio/registrar_obligacion_socio', [SocioObligacionController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_socio');
+    Route::post('/administrador/obligacion_socio/modificar', [SocioObligacionController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_socio');
+    Route::post('/administrador/obligacion_socio/eliminar/{id}', [SocioObligacionController::class, 'eliminarObligacionSocio'])->middleware('auth')->name('admin.eliminar_obligacion_socio');;
 
     //Maestro de Obligaciones
     Route::get('/administrador/maestro_obligaciones', [ObligacionesController::class, 'maestro_obligaciones'])->middleware('auth')->name('admin.maestro_obligaciones');
