@@ -405,17 +405,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
-                                                    <div class="col-md-12 gap-1">
-                                                        <label>Obligaciones Tributarias y Demás</label>
-                                                        <select id="obligaciones_tributarias"
-                                                            name="obligaciones_tributarias[]"
-                                                            class="form-control populate" multiple>
-                                                            <option value=-1>Seleccionar</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-2">
                                                     <div class="col-md-6 gap-1">
                                                         <label>Pais</label>
                                                         <select id="pais" name="pais"
@@ -917,8 +906,7 @@
                     'fotoFile', 'adjuntos', 'razon_social', 'estado_sri', 'tipo_regimen',
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
-                    'contribuyente_especial',
-                    'obligaciones_tributarias', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
+                    'contribuyente_especial', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
                     'manzana',
                     'numero',
                     'interseccion', 'referencia'
@@ -1013,7 +1001,7 @@
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial',
-                    'obligaciones_tributarias', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
+                    'pais', 'provincia', 'canton', 'parroquia', 'calle',
                     'manzana',
                     'numero',
                     'interseccion', 'referencia'
@@ -1206,7 +1194,6 @@
                 $('#ModalSocio').find('#tipo_regimen').val(data.tipo_regimen);
                 $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
                 $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
-                $('#ModalSocio').find('#obligaciones_tributarias').val(data.obligaciones_tributarias);
                 $('#ModalSocio').find('#pais').val(data.id_pais).trigger('change');
 
                 // Cargar provincias y asignar provincia
@@ -1650,20 +1637,6 @@
                     $('#contribuyente_especial').focus();
                     return false;
                 }
-                /* if ($('#obligaciones_tributarias').val() == -1 || $('#obligaciones_tributarias').val() == []) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione las obligaciones tributarias.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#obligaciones_tributarias').focus();
-                    return false;
-                } */
                 if ($('#pais').val() == -1) {
                     Swal.fire({
                         target: document.getElementById('ModalSocio'),

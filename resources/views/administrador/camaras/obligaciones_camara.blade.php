@@ -435,8 +435,12 @@
                             allowOutsideClick: false,
                             confirmButtonText: 'Aceptar',
                             text: error.responseJSON?.error || "Error al cargar los datos.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
                         });
-                        console.error("Error al cargar los datos: ", error);
+                        return;
                     },
                     complete: function(response) {
                         camaraObligaciones = response.responseJSON.data;
@@ -528,12 +532,12 @@
                     $('#tiempo_presentacion').val(tiempo);
                     $('#tipo_presentacion').val(tipo);
 
-                    if (tiempo === 'CONSECUTIVA') {
-                        $('#fecha_presentacion').prop('disabled', false);
-                        $('#fecha_inicio').prop('disabled', true);
-                    } else if (tiempo === 'ÚNICA VEZ') {
+                    if (tiempo == 'CONSECUTIVA') {
                         $('#fecha_presentacion').prop('disabled', true);
                         $('#fecha_inicio').prop('disabled', false);
+                    } else if (tiempo == 'ÚNICA VEZ') {
+                        $('#fecha_presentacion').prop('disabled', false);
+                        $('#fecha_inicio').prop('disabled', true);
                     }
                 }
             });
@@ -541,7 +545,7 @@
             // Escuchar el evento change del select de cámaras
             $('#camara').change(function() {
                 let selectedCamara = $(this).val();
-                if (selectedCamara === -1) {
+                if (selectedCamara == -1) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -549,7 +553,14 @@
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
                         text: 'Por favor selecciona una cámara válida.',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Por favor selecciona una cámara válida.");
+                            table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
+                            camaraSelected = selectedCamara;
+                        }
                     });
+                    return;
                 }
                 camaraSelected = selectedCamara;
                 table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
@@ -562,7 +573,7 @@
                 var camaraSeleccionada = $('#camara').val();
                 var nombreCamaraSeleccionada = $('#camara option:selected').text();
 
-                if (camaraSeleccionada === -1) {
+                if (camaraSeleccionada == -1) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -570,7 +581,12 @@
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
                         text: 'Por favor selecciona una cámara válida.',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Por favor selecciona una cámara válida.");
+                        }
                     });
+                    return;
                 } else {
 
                     $('#nombreCamaraSeleccionada').text(nombreCamaraSeleccionada);
@@ -580,6 +596,10 @@
                     $('#ModalObligacion').modal('show');
                 }
             });
+            $('.cerrar-modal').click(function() {
+                limpiarFormulario();
+                $('#ModalObligacion').modal('hide'); // Cerrar el modal
+            });
 
             $('.cerrar-modal-mod').click(function() {
                 limpiarObligacion();
@@ -588,8 +608,10 @@
 
             $('#entidad').on('change', function() {
                 let selected = $(this).val();
+                limpiarObligacion();
                 if (selected == -1) {
                     filteredObligaciones = [];
+                    tableObligaciones.clear().rows.add(filteredObligaciones).draw();
                     Swal.fire({
                         target: document.getElementById('ModalObligacion'),
                         icon: 'error',
@@ -598,6 +620,10 @@
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
                         text: 'Por favor, selecciona una entidad.',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Por favor, selecciona una entidad.");
+                        }
                     });
                     return;
                 }
@@ -620,7 +646,7 @@
             });
 
             $('#agregar_obligacion').click(function() {
-                if (!validarRegistro('#ModalObligacion', 0)) return false;
+                if (!validarRegistro('ModalObligacion', 0)) return false;
 
                 let obligacion = $('#obligacion').val();
                 let tiempo_presentacion = $('#tiempo_presentacion').val();
@@ -679,12 +705,10 @@
                                 target: document.getElementById('ModalObligacion'),
                                 icon: 'error',
                                 title: 'Error',
-                                text: error.responseJSON?.error ||
-                                    "Error al agregar la obligación.",
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al agregar la obligación.",
                             });
                             console.error("Error al agregar la obligación: ",
@@ -736,16 +760,21 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al eliminar la obligación.",
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al eliminar la obligación.",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.error(
+                                        "Error al eliminar la obligación: ",
+                                        error);
+                                }
                             });
-                            console.error("Error al eliminar la obligación: ",
-                                error);
+                            return;
                         });
                     }
                 });
@@ -766,7 +795,7 @@
                 let fecha_inicio = data.fecha_inicio ?? 'N/A';
 
                 function convertirFecha(fecha) {
-                    if (fecha === 'N/A') {
+                    if (fecha == 'N/A') {
                         return fecha;
                     }
                     let fechaArray = fecha.split('-');
@@ -786,21 +815,21 @@
                 obligacionSelected = data.id_obligacion;
                 entidadSelected = data.id_entidad;
 
-                if (tiempo_presentacion === 'CONSECUTIVA') {
-                    $('#ModalModificarObligacion').find('#fecha_presentacion_mod').prop('disabled', false);
-                    $('#ModalModificarObligacion').find('#fecha_inicio_mod').prop('disabled', true);
-                } else if (tiempo_presentacion === 'ÚNICA VEZ') {
+                if (tiempo_presentacion == 'CONSECUTIVA') {
                     $('#ModalModificarObligacion').find('#fecha_presentacion_mod').prop('disabled', true);
                     $('#ModalModificarObligacion').find('#fecha_inicio_mod').prop('disabled', false);
+                } else if (tiempo_presentacion == 'ÚNICA VEZ') {
+                    $('#ModalModificarObligacion').find('#fecha_presentacion_mod').prop('disabled', false);
+                    $('#ModalModificarObligacion').find('#fecha_inicio_mod').prop('disabled', true);
                 }
 
                 $('#ModalModificarObligacion').modal('show');
             });
             $('#modificar_obligacion').click(function() {
-                if (!validarRegistro('#ModalModificarObligacion', 1)) return;
+                if (!validarRegistro('ModalModificarObligacion', 1)) return;
                 let fecha_inicio = $('#ModalModificarObligacion').find('#fecha_inicio_mod').val();
                 let fecha_presentacion = $('#ModalModificarObligacion').find('#fecha_presentacion_mod')
-                .val();
+                    .val();
                 let data = {
                     id: camaraObligacionSelected,
                     id_obligacion: obligacionSelected,
@@ -857,11 +886,16 @@
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al modificar la obligación.",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.error(
+                                        "Error al modificar la obligación: ",
+                                        error);
+                                }
                             });
-                            console.error("Error al modificar la obligación: ",
-                                error);
+                            return;
                         });
                     }
                 });
@@ -897,9 +931,9 @@
                 var anio = parseInt(partes[2], 10);
                 var fechaObj = new Date(anio, mes, dia);
                 return (
-                    fechaObj.getDate() === dia &&
-                    fechaObj.getMonth() === mes &&
-                    fechaObj.getFullYear() === anio
+                    fechaObj.getDate() == dia &&
+                    fechaObj.getMonth() == mes &&
+                    fechaObj.getFullYear() == anio
                 );
             }
 
@@ -964,20 +998,7 @@
                     return false;
                 }
 
-                if (tiempo_presentacion == 'CONSECUTIVA' && fecha_presentacion == '') {
-                    Swal.fire({
-                        target: document.getElementById(idModal),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, selecciona una fecha de presentación.',
-                    });
-                    return false;
-                }
-
-                if (tiempo_presentacion == 'ÚNICA VEZ' && fecha_inicio == '') {
+                if (tiempo_presentacion == 'CONSECUTIVA' && fecha_inicio == '') {
                     Swal.fire({
                         target: document.getElementById(idModal),
                         icon: 'error',
@@ -990,7 +1011,7 @@
                     return false;
                 }
 
-                if (tiempo_presentacion == 'CONSECUTIVA' && !esFechaValida(fecha_presentacion)) {
+                if (tiempo_presentacion == 'ÚNICA VEZ' && fecha_presentacion == '') {
                     Swal.fire({
                         target: document.getElementById(idModal),
                         icon: 'error',
@@ -998,12 +1019,12 @@
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: 'Por favor, selecciona una fecha de presentación válida.',
+                        text: 'Por favor, selecciona una fecha de presentación.',
                     });
                     return false;
                 }
 
-                if (tiempo_presentacion == 'ÚNICA VEZ' && !esFechaValida(fecha_inicio)) {
+                if (tiempo_presentacion == 'CONSECUTIVA' && !esFechaValida(fecha_inicio)) {
                     Swal.fire({
                         target: document.getElementById(idModal),
                         icon: 'error',
@@ -1015,11 +1036,21 @@
                     });
                     return false;
                 }
+
+                if (tiempo_presentacion == 'ÚNICA VEZ' && !esFechaValida(fecha_presentacion)) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona una fecha de presentación válida.',
+                    });
+                    return false;
+                }
                 return true;
             }
-
-
-
         });
     </script>
 @endsection

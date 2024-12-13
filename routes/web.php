@@ -9,10 +9,10 @@ use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\EstablecimientoSocioController;
 use App\Http\Controllers\FuncionesGeneralesController;
 use App\Http\Controllers\SocioController;
-use App\Http\Controllers\EntidadesController; 
-use App\Http\Controllers\ObligacionesController; 
-use App\Http\Controllers\ObligacionesEntidadController; 
-use App\Http\Controllers\SocioObligacionController; 
+use App\Http\Controllers\EntidadesController;
+use App\Http\Controllers\ObligacionesController;
+use App\Http\Controllers\ObligacionesEntidadController;
+use App\Http\Controllers\SocioObligacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,8 +133,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/entidades_obligaciones/eliminar/{id}', [ObligacionesEntidadController::class, 'eliminar_entidad_obligacion'])->middleware('auth')->name('admin.eliminar_entidad_obligacion');;
     Route::get('/administrador/entidad_obligacion/detalle/{id}', [ObligacionesEntidadController::class, 'detalle_entidad_obligacion'])->middleware('auth')->name('admin.detalle_entidad_obligacion');
     Route::post('/administrador/entidad_obligacion/modificar_entidad_obligacion', [ObligacionesEntidadController::class, 'modificar_entidad_obligacion'])->middleware('auth')->name('admin.modificar_entidad_obligacion');
-
- 
 });
 
 require __DIR__ . '/auth.php';
