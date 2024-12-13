@@ -207,7 +207,7 @@ Maestro de Obligaciones
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Modificar Entidad</b></h5>
+                        <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Modificar Obligación</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button> --> 
@@ -484,28 +484,60 @@ Maestro de Obligaciones
             $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal después de guardar
         });
 
-        $("#btn-register-obligacion").click(function () {
+        $("#btn-register-obligacion").click(async function () {
 
             if ($('#obligacion').val() == "") {
-                alert('Debe ingresar el nombre de la Obligación');
+                //alert('Debe ingresar el nombre de la Obligación');
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el nombre de la Obligación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#obligacion').focus();
                 return;
             } 
 
             if ($('#tiempo_presentacion').val() == "-1") {
-                alert('Debe seleccionar el Tiempo de Presentación');
+                //alert('Debe seleccionar el Tiempo de Presentación');
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar el Tiempo de Presentación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#tiempo_presentacion').focus();
                 return;
             }
 
             if ($('#tiempo_presentacion').val() == "2") {
                 if ($('#tipo_presentacion').val() == "-1") {
-                    alert('Debe seleccionar el Tipo de Presentación');
+                    //alert('Debe seleccionar el Tipo de Presentación');
+                    Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Tipo de Presentación',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#tipo_presentacion').focus();
                     return;
                 }
                 if($('#fecha_inicio').val() == ""){
-                    alert('Debe registrar la Fecha de Inicio');
+                    //alert('Debe registrar la Fecha de Inicio');
+                    await Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar la Fecha de Inicio',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio').focus();
                     return;
                 }
@@ -514,11 +546,19 @@ Maestro de Obligaciones
             if ($('#tiempo_presentacion').val() == "1") { 
 
                 if($('#fecha_presentacion').val() == ""){
-                    alert('Debe registrar la Fecha de Presentación');
+                    //alert('Debe registrar la Fecha de Presentación');
+                    await Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar la Fecha de Presentación',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_presentacion').focus();
                     return;
                 }
-            } 
+            }  
 
             // Verificar si hay registros similares antes de proceder
             const obligacion = $('#obligacion').val(); 
@@ -530,47 +570,100 @@ Maestro de Obligaciones
                     obligacion: obligacion, 
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) {
+                success: async function (response) {
                     if (response.similar.length > 0) {
                         // Mostrar mensaje de confirmación al usuario
-                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
+                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta Obligación de todas formas?`;
 
-                        if (!confirm(similarMessage)) {
+                        const { isConfirmed: confirmSimilar } = await Swal.fire({
+                            target: document.getElementById('ModalObligacion'),
+                            title: 'Registros similares encontrados',
+                            text: similarMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Registrar de todas formas',
+                            cancelButtonText: 'Cancelar',
+                            allowOutsideClick: false,
+                        });
+
+                        if (!confirmSimilar) {
                             return; // Detener la ejecución si el usuario cancela
                         }
                     }
 
                     // Si no hay similitudes o el usuario confirma, proceder con el registro
-                    registrarEntidad();
+                    registrarObligacion();
                 },
                 error: function () {
-                    alert('Error al verificar registros similares. Intente nuevamente.');
+                    //alert('Error al verificar registros similares. Intente nuevamente.');
+                    Swal.fire({ 
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al verificar registros similares. Intente nuevamente.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 }
             });
         });
 
-        $("#btn-modificar-obligacion").click(function () {
+        $("#btn-modificar-obligacion").click(async function () {
 
             if ($('#obligacion_mod').val() == "") {
-                alert('Debe ingresar el nombre de la Obligación');
+                //alert('Debe ingresar el nombre de la Obligación');
+                Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar el nombre de la Obligación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#obligacion_mod').focus();
                 return;
             } 
 
             if ($('#tiempo_presentacion_mod').val() == "-1") {
-                alert('Debe seleccionar el Tiempo de Presentación');
+                //alert('Debe seleccionar el Tiempo de Presentación');
+                Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar el Tiempo de Presentación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 $('#tiempo_presentacion_mod').focus();
                 return;
             }
 
             if ($('#tiempo_presentacion_mod').val() == "2") {
                 if ($('#tipo_presentacion_mod').val() == "-1") {
-                    alert('Debe seleccionar el Tipo de Presentación');
+                    //alert('Debe seleccionar el Tipo de Presentación');
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Tipo de Presentación',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#tipo_presentacion_mod').focus();
                     return;
                 }
                 if($('#fecha_inicio_mod').val() == ""){
-                    alert('Debe registrar la Fecha de Inicio');
+                    //alert('Debe registrar la Fecha de Inicio');
+                    await Swal.fire({
+                        target: document.getElementById('ModalModificarObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar la Fecha de Inicio',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_inicio_mod').focus();
                     return;
                 }
@@ -579,7 +672,15 @@ Maestro de Obligaciones
             if ($('#tiempo_presentacion_mod').val() == "1") { 
 
                 if($('#fecha_presentacion_mod').val() == ""){
-                    alert('Debe registrar la Fecha de Presentación');
+                    //alert('Debe registrar la Fecha de Presentación');
+                    await Swal.fire({
+                        target: document.getElementById('ModalModificarObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar la Fecha de Presentación',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('#fecha_presentacion_mod').focus();
                     return;
                 }
@@ -595,13 +696,26 @@ Maestro de Obligaciones
                     obligacion: obligacion, 
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function (response) { 
+                success: async function (response) { 
 
                     if (response.similar.length > 0) {
                         // Mostrar mensaje de confirmación al usuario
-                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de registrar esta entidad de todas formas?`;
+                        const similarMessage = `Se encontraron registros similares:\n- ${response.similar.join('\n- ')}\n\n¿Está seguro de modificar esta Obligación de todas formas?`;
 
-                        if (!confirm(similarMessage)) {
+                        const { isConfirmed: confirmSimilar } = await Swal.fire({
+                            target: document.getElementById('ModalModificarObligacion'),
+                            title: 'Registros similares encontrados',
+                            text: similarMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Modificar de todas formas',
+                            cancelButtonText: 'Cancelar',
+                            allowOutsideClick: false,
+                        });
+
+                        if (!confirmSimilar) {
                             return; // Detener la ejecución si el usuario cancela
                         }
                     }
@@ -615,9 +729,19 @@ Maestro de Obligaciones
             });
         }); 
 
-        function registrarEntidad() {
+        function registrarObligacion() {
             var formData = new FormData(document.getElementById("ModalObligacion"));
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({
+                target: document.getElementById('ModalObligacion'),
+                title: 'Enviando datos para registro de la Obligación',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             $.ajax({
                 url: "{{ route('admin.registrar_obligacion') }}",
@@ -628,20 +752,45 @@ Maestro de Obligaciones
                 contentType: false,
                 processData: false
             }).done(function (res) {
-                $('#carga').hide();
-                alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                    title: 'Éxito',
+                    text: res.success,
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 location.reload(); // Recargar la página
             }).fail(function (res) {
-                $('#carga').hide();
+                //$('#carga').hide();
+                Swal.close();
 
                 if (res.status === 422) {
                     let errors = res.responseJSON;
                     if (errors.error) {
-                        alert(errors.error);
+                        //alert(errors.error);
+                        Swal.fire({ 
+                            target: document.getElementById('ModalObligacion'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: errors.error,
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 } else {
-                    alert("Ocurrió un error al registrar la obligacion."); 
-                }
+                    //alert("Ocurrió un error al registrar la entidad.");
+                    Swal.fire({ 
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al registrar la entidad',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                } 
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
             });
@@ -649,7 +798,17 @@ Maestro de Obligaciones
 
         function modificarObligacion() {
             var formData = new FormData(document.getElementById("ModalModificarObligacion"));
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({
+                target: document.getElementById('ModalModificarObligacion'),
+                title: 'Enviando datos para la modificación de la Obligación',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             $.ajax({
                 url: "{{ route('admin.modificar_obligacion') }}",
@@ -659,21 +818,43 @@ Maestro de Obligaciones
                 cache: false,
                 contentType: false,
                 processData: false
-            }).done(function (res) {
-                $('#carga').hide();
-                alert(res.success); // Mostrar el mensaje de éxito en un alert
+            }).done(async function (res) {
+                Swal.close();
+                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                    title: 'Éxito',
+                    text: res.success,
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
                 location.reload(); // Recargar la página
             }).fail(function (res) {
-                $('#carga').hide();
-
                 if (res.status === 422) {
                     let errors = res.responseJSON;
                     if (errors.error) {
-                        alert(errors.error);
+                        //alert(errors.error);
+                        Swal.fire({ 
+                            target: document.getElementById('ModalModificarObligacion'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: errors.error,
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 } else {
-                    alert("Ocurrió un error al modificar la obligación.");
-                }
+                    //alert("Ocurrió un error al modificar la entidad.");
+                    Swal.fire({ 
+                        target: document.getElementById('ModalModificarObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al modificar la Obligación',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                } 
 
                 console.log(res.responseText); // Muestra el error completo en la consola para depuración
             });
@@ -687,7 +868,16 @@ Maestro de Obligaciones
 
             console.log('Obligacion ID:', obligacionId);  
 
-            $('#carga').show();
+            //$('#carga').show();
+            Swal.fire({ 
+                title: 'Cargando datos de la Entidad',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
 
             
             $.ajax({
@@ -726,10 +916,12 @@ Maestro de Obligaciones
 
                     }
                    
-                    $('#carga').hide();
+                    //$('#carga').hide();
+                    Swal.close();
                     $('#ModalModificarObligacion').modal('show');
                 },
                 error: function(xhr, status, error) {
+                    Swal.close();
                     console.error(xhr.responseText);
                 }
             });

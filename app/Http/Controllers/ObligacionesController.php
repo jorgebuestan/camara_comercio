@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pais;
@@ -202,6 +204,13 @@ class ObligacionesController extends Controller
     {
         // Buscar la cámara por ID
         $obligacion = Obligacion::find($id);
+
+        if($obligacion->fecha_inicio){
+            $obligacion->fecha_inicio = Carbon::parse($obligacion->fecha_inicio)->format('d/m/Y');
+        }
+        if($obligacion->fecha_presentacion){
+            $obligacion->fecha_presentacion = Carbon::parse($obligacion->fecha_presentacion)->format('d/m/Y');
+        }
     
         if (!$obligacion) {
             return response()->json(['error' => 'Registro no encontrado'], 404);

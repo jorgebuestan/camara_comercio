@@ -871,7 +871,15 @@ Maestro de Entidades
                     registrarEntidad();
                 },
                 error: function () {
-                    alert('Error al verificar registros similares. Intente nuevamente.');
+                    //alert('Error al verificar registros similares. Intente nuevamente.');
+                    Swal.fire({ 
+                        target: document.getElementById('ModalEntidad'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al verificar registros similares. Intente nuevamente.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                 }
             });
         });

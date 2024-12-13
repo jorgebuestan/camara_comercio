@@ -435,25 +435,16 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                <a class="nav-link" href="{{ route('admin.maestro_obligaciones') }}">
+                                                    Mantenimiento de Obligaciones
+                                                </a>
+                                            <li>
                                                 <a class="nav-link" href="{{ route('admin.entidades_obligaciones') }}">
                                                     Obligaciones por Entidad
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-user-detail" aria-hidden="true"></i>
-                                            <span>Ogligaciones</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_obligaciones') }}">
-                                                    Mantenimiento de Obligaciones
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    </li> 
                                 @endcan
                                 @can('Camara')
                                     <li class="nav-parent">
