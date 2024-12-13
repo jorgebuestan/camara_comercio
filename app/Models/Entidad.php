@@ -9,7 +9,7 @@ use App\Traits\LogsActivity;
 class Entidad extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'entidades'; 
+    protected $table = 'entidades';
     protected $fillable = [
         'ruc',
         'entidad',
@@ -24,5 +24,10 @@ class Entidad extends Model
         'id_provincia',
         'id_canton',
         'estado'
-    ];  
+    ];
+
+    public function obligaciones()
+    {
+        return $this->hasMany(EntidadObligacion::class, 'id_entidad', 'id');
+    }
 }

@@ -2,21 +2,27 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsActivity;
 
-class EntidadObligacion extends Model
+class CamaraObligacion extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'entidades_obligaciones';
+    protected $table = 'camaras_obligaciones';
     protected $fillable = [
+        'id_camara',
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
         'fecha_presentacion',
         'estado'
     ];
+
+    public function camara()
+    {
+        return $this->belongsTo(Camara::class, 'id_camara', 'id');
+    }
 
     public function entidad()
     {

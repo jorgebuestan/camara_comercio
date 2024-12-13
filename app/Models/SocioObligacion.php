@@ -2,21 +2,27 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsActivity;
 
-class EntidadObligacion extends Model
+class SocioObligacion extends Model
 {
     use HasFactory, LogsActivity;
-    protected $table = 'entidades_obligaciones';
+    protected $table = 'socios_obligaciones';
     protected $fillable = [
+        'id_socio',
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
         'fecha_presentacion',
         'estado'
     ];
+
+    public function socio()
+    {
+        return $this->belongsTo(Socio::class, 'id_socio', 'id');
+    }
 
     public function entidad()
     {
