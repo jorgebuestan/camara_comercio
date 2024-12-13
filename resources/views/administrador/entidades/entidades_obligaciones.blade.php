@@ -239,6 +239,96 @@ Obligaciones por Entidad
         </div>
     </div>
 </form>  
+ 
+<form enctype="multipart/form-data" class="modal fade" id="ModalModificarObligacion" tabindex="-1" aria-labelledby="ModalModificarObligacionLabel" aria-hidden="true">
+    @csrf
+    <div class="modal-dialog modal-xl"> 
+        <div class="modal-content"> 
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Agregar una nueva Obligación a la Entidad</b></h5> 
+            </div>
+            <div class="modal-body">
+                <div class="form-group">  
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p><strong>Entidad Seleccionada:</strong> <span id="nombreEntidadSeleccionadaMod"></span></p> 
+                            <!-- Campo oculto para enviar el valor de la entidad --> 
+                            <input type="hidden" id="entidad_id_mod" name="entidad_id_mod" value="">
+                            <input type="hidden" id="obligacion_id_mod" name="obligacion_id_mod" value="">
+                        </div>
+                        <div class="col-lg-3">  
+                            &nbsp;
+                        </div> 
+                        <div class="col-lg-3 text-end">  
+                            <button type="button" id="agregarObligacion_mod" name="agregarObligacion_mod" class="btn btn-primary mb-3">Agregar Obligación</button>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">  
+                            Nombre
+                        </div> 
+                        <div class="col-md-10">  
+                            <input type="text" class="form-control" name="obligacion_mod" disabled id="obligacion_mod" placeholder="Obligación"> 
+                        </div>  
+                    </div>  
+                    <div class="row">
+                        &nbsp;
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-2">  
+                            Tiempo de Presentación
+                        </div> 
+                        <div class="col-md-4">  
+                            <select id="tiempo_presentacion_mod" name="tiempo_presentacion_mod" disabled class="form-control populate">
+                                <option value="-1">Seleccionar</option>
+                                @foreach($tiempo_presentacion as $id => $nombre)
+                                    <option value="{{ $id }}">
+                                        {{ $nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> 
+                        <div class="col-md-2">  
+                            Fecha de Presentación
+                        </div> 
+                        <div class="col-md-4">  
+                            <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_presentacion_mod" id="fecha_presentacion_mod" placeholder="Fecha de Presentación">
+                        </div> 
+                    </div> 
+                    <div class="row">
+                        &nbsp;
+                    </div>   
+                    <div class="row">
+                        <div class="col-md-2">  
+                            Tipo de Presentación
+                        </div> 
+                        <div class="col-md-4">  
+                            <select id="tipo_presentacion_mod" name="tipo_presentacion_mod" disabled class="form-control populate">
+                                <option value="-1">Seleccionar</option>
+                                @foreach($tipo_presentacion as $id => $nombre)
+                                    <option value="{{ $id }}">
+                                        {{ $nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> 
+                        <div class="col-md-2">  
+                            Fecha de Inicio
+                        </div> 
+                        <div class="col-md-4">  
+                        <input type="text" data-plugin-datepicker class="form-control" disabled name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
+                        </div> 
+                    </div>  
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
+                <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
+            </div>
+        </div>
+    </div>
+</form>  
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -510,7 +600,7 @@ $(document).ready(function(){
         }); 
     });
 
-    $("#agregarObligacion").click(function() {
+    $("#agregarObligacion").click(async function() {
 
         if ($('#obligacion_id').val() == "") {
             //alert('Debe debe seleccionar una Obligación'); 
@@ -528,7 +618,7 @@ $(document).ready(function(){
         if ($('#tiempo_presentacion').val() == "1") {
             if ($('#fecha_presentacion').val() == "") {
                 //alert('Debe ingresar la Fecha de Presentación'); 
-                Swal.fire({
+                await Swal.fire({
                     target: document.getElementById('ModalObligacion'),
                     icon: 'error',
                     title: 'Error',
@@ -544,7 +634,7 @@ $(document).ready(function(){
         if ($('#tiempo_presentacion').val() == "2") {
             if ($('#fecha_inicio').val() == "") {
                 //alert('Debe ingresar la Fecha de Inicio'); 
-                Swal.fire({
+                await Swal.fire({
                     target: document.getElementById('ModalObligacion'),
                     icon: 'error',
                     title: 'Error',
@@ -626,6 +716,67 @@ $(document).ready(function(){
         });
     });
  
+    $(document).on('click', '.delete-obligacion', async function() {
+        var button = $(this); 
+        var obligacionId = button.data('id'); 
+
+        const result = await Swal.fire({
+                title: '¿Está seguro de que desea eliminar este registro?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+            });
+
+        if (result.isConfirmed) { 
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            $.ajax({
+                url: '/administrador/entidades_obligaciones/eliminar/' + obligacionId,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                },
+                success: function(response) {
+                    Swal.close();
+                        //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                    Swal.fire({ 
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: 'Registro eliminado correctamente.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    location.reload(); // O cualquier otra lógica para actualizar la interfaz
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    //alert('Hubo un problema al eliminar el Registro.');
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al eliminar el Registro.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                }
+            });
+        } else {
+            // El usuario canceló la eliminación
+            console.log('Eliminación cancelada por el usuario.');
+        }
+    });
  
 });
 
