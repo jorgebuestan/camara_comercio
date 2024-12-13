@@ -421,6 +421,11 @@
                                                     Obligaciones por Socios
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.adherentes_socio') }}">
+                                                    Adherentes por Socios
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li class="nav-parent">
@@ -483,22 +488,22 @@
                                                 </a>
                                             </li>
                                             <!-- <li class="nav-parent">
-                                                                                <a class="nav-link" href="#">
-                                                                                                                                Socios
-                                                                                </a>
-                                                                                <ul class="nav nav-children">
-                                                                                <li>
-                                                                                          <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                                Solicitud de Herramientas
-                                                                                </a>
-                                                                                </li>
-                                                                                </ul>
-                                                                                </li>
-                                                                                <li>
-                                                                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                                Solicitudes en Proceso
-                                                                                </a>
-                                                                                </li>  -->
+                                                                                            <a class="nav-link" href="#">
+                                                                                                                                            Socios
+                                                                                            </a>
+                                                                                            <ul class="nav nav-children">
+                                                                                            <li>
+                                                                                                      <a class="nav-link" href="{{ route('dashboard') }}">
+                                                                                            Solicitud de Herramientas
+                                                                                            </a>
+                                                                                            </li>
+                                                                                            </ul>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                            <a class="nav-link" href="{{ route('dashboard') }}">
+                                                                                            Solicitudes en Proceso
+                                                                                            </a>
+                                                                                            </li>  -->
                                         </ul>
                                     </li>
                                 @endcan
