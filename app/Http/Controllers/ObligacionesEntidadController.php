@@ -85,7 +85,7 @@ class ObligacionesEntidadController extends Controller
                 'obligacion' => $obligacion->obligacion, 
                 'tiempo_presentacion' => $obligacion->tiempo_presentacion, 
                 'tipo_presentacion' => $obligacion->tipo_presentacion,  
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->id . '">Modificar</button>' .
+                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->register . '">Modificar</button>' .
                 '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar</button>'.
                 '&nbsp;&nbsp;&nbsp;' 
             ];
@@ -162,5 +162,22 @@ class ObligacionesEntidadController extends Controller
     
         return response()->json(['success' => 'Obligación por Entidad eliminada correctamente']);
     }
+
+    public function detalle_entidad_obligacion($id)
+    {
+        // Buscar la cámara por ID
+        $entidad = Entidad::find($id);
+    
+        if (!$entidad) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+    
+        // Convertir el modelo Camara a un array
+        $entidadArray = $entidad->toArray(); 
+    
+        // Devolver la respuesta JSON
+        return response()->json($entidadArray);
+    }
+
 
 }
