@@ -41,13 +41,13 @@ class CamaraObligacionController extends Controller
             'with_obligacion' => 'sometimes|boolean|nullable',
             'with_camara' => 'sometimes|boolean|nullable',
         ]);
-        $camaraObligaciones = CamaraObligacion::when(isset($request['id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
-            ->when(isset($request['id_camara']), fn($q) => $q->where('id_camara', $request['id_camara']))
-            ->when(isset($request['id_obligacion']), fn($q) => $q->where('id_obligacion', $request['id_obligacion']))
-            ->when(isset($request['fecha_inicio']), fn($q) => $q->where('fecha_inicio', $request['fecha_inicio']))
-            ->when(isset($request['fecha_presentacion']), fn($q) => $q->where('fecha_presentacion', $request['fecha_presentacion']))
-            ->when(isset($request['estado']), fn($q) => $q->where('estado', $request['estado']))
-            ->when(!isset($request['estado']), fn($q) => $q->where('estado', 1))
+        $camaraObligaciones = CamaraObligacion::when(isset($request['camaras_obligaciones.id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
+            ->when(isset($request['id_camara']), fn($q) => $q->where('camaras_obligaciones.id_camara', $request['id_camara']))
+            ->when(isset($request['id_obligacion']), fn($q) => $q->where('camaras_obligaciones.id_obligacion', $request['id_obligacion']))
+            ->when(isset($request['fecha_inicio']), fn($q) => $q->where('camaras_obligaciones.fecha_inicio', $request['fecha_inicio']))
+            ->when(isset($request['fecha_presentacion']), fn($q) => $q->where('camaras_obligaciones.fecha_presentacion', $request['fecha_presentacion']))
+            ->when(isset($request['estado']), fn($q) => $q->where('camaras_obligaciones.estado', $request['estado']))
+            ->when(!isset($request['estado']), fn($q) => $q->where('camaras_obligaciones.estado', 1))
             ->when(isset($request['with_entidad']), fn($q) => $q->with('entidad'))
             ->when(isset($request['with_obligacion']), fn($q) => $q->with('obligacion.tiempo_presentacion', 'obligacion.tipo_presentacion'))
             ->when(
