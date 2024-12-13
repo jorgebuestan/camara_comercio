@@ -707,12 +707,10 @@
                                 target: document.getElementById('ModalObligacion'),
                                 icon: 'error',
                                 title: 'Error',
-                                text: error.responseJSON?.error ||
-                                    "Error al agregar la obligación.",
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al agregar la obligación.",
                             }).then((result) => {
                                 if (result.isConfirmed) {
@@ -769,12 +767,10 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: error.responseJSON?.error ||
-                                    "Error al eliminar la obligación.",
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al eliminar la obligación.",
                             });
                             console.error("Error al eliminar la obligación: ",
@@ -890,7 +886,7 @@
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
-                                text: error.responseJSON?.error ||
+                                text: error.responseJSON?.message ||
                                     "Error al modificar la obligación.",
                             });
                             console.error("Error al modificar la obligación: ",
