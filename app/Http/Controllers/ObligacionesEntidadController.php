@@ -180,7 +180,7 @@ class ObligacionesEntidadController extends Controller
     
         if (!$entidadObligacion) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
-        }  
+        }   
 
         // Buscar el DatoTributario relacionado
         $entidad = Entidad::where('id', $entidadObligacion->id_entidad)->first();
