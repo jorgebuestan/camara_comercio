@@ -255,12 +255,10 @@ Obligaciones por Entidad
                             <!-- Campo oculto para enviar el valor de la entidad --> 
                             <input type="hidden" id="entidad_id_mod" name="entidad_id_mod" value="">
                             <input type="hidden" id="obligacion_id_mod" name="obligacion_id_mod" value="">
-                        </div>
-                        <div class="col-lg-3">  
-                            &nbsp;
+                            <input type="hidden" id="entidad_obligacion_id_mod" name="entidad_obligacion_id_mod" value="">
                         </div> 
-                        <div class="col-lg-3 text-end">  
-                            <button type="button" id="agregarObligacion_mod" name="agregarObligacion_mod" class="btn btn-primary mb-3">Agregar Obligación</button>
+                        <div class="col-lg-6 text-end">  
+                            <button type="button" id="modificarObligacion" name="modificarObligacion" class="btn btn-primary mb-3">Modificar Obligación</button>
                         </div> 
                     </div>
                     <div class="row">
@@ -323,7 +321,7 @@ Obligaciones por Entidad
             </div>
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
-                <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>
                 <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
             </div>
         </div>
@@ -498,6 +496,10 @@ $(document).ready(function(){
         $('#ModalObligacion').modal('hide'); // Cerrar el modal
     }); 
 
+    $('.cerrar-modal-mod').click(function () {
+        $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal
+    }); 
+
     //Manejo de Uppercase
     $('#nombre_comercial').on('input', function() {
         // Convierte el valor del campo a mayúsculas
@@ -532,6 +534,20 @@ $(document).ready(function(){
     });
 
     $('#fecha_inicio').datepicker('destroy').datepicker({
+        format: 'dd/mm/yyyy', // Define el formato de fecha
+        autoclose: true,      // Cierra automáticamente al seleccionar
+        todayHighlight: true, // Resalta la fecha actual
+        language: 'es'        // Asegúrate de establecer el idioma correcto
+    });
+
+    $('#fecha_presentacion_mod').datepicker('destroy').datepicker({
+        format: 'dd/mm/yyyy', // Define el formato de fecha
+        autoclose: true,      // Cierra automáticamente al seleccionar
+        todayHighlight: true, // Resalta la fecha actual
+        language: 'es'        // Asegúrate de establecer el idioma correcto
+    });
+
+    $('#fecha_inicio_mod').datepicker('destroy').datepicker({
         format: 'dd/mm/yyyy', // Define el formato de fecha
         autoclose: true,      // Cierra automáticamente al seleccionar
         todayHighlight: true, // Resalta la fecha actual
@@ -715,6 +731,75 @@ $(document).ready(function(){
             console.log(res.responseText); // Muestra el error completo en la consola para depuración
         });
     });
+
+    // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
+    $(document).on('click', '.open-modal', function() {
+        console.log('Botón clicado...');
+        var button = $(this); 
+        var obligacionId = button.data('id'); 
+
+        console.log('Cargo ID:', obligacionId);  
+
+        //$('#carga').show();
+        Swal.fire({ 
+            title: 'Cargando datos de la Obligación',
+            text: 'Por favor espere',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
+
+        
+        $.ajax({
+            url: '/administrador/entidad_obligacion/detalle/' + obligacionId,
+            method: 'GET',
+            success: function(response) {
+                console.log('Datos recibidos:', response);
+
+                var obligacionId = $('#obligacion_id_mod');
+                var entidadId = $('#entidad_id_mod');
+                var entidadobligacionId = $('#entidad_obligacion_id_mod');
+                var Obligacion = $('#obligacion_mod');   
+                var tiempoPresentacion = $('#tiempo_presentacion_mod'); 
+                var fechaPresentacion = $('#fecha_presentacion_mod'); 
+                var tipoPresentacion = $('#tipo_presentacion_mod');  
+                var fechaInicio = $('#fecha_inicio_mod');   
+ 
+
+                entidadobligacionId.val(response.id); 
+                Obligacion.val(response.obligacion.obligacion); 
+                tiempoPresentacion.val(response.obligacion.id_tiempo_presentacion); 
+                fechaPresentacion.val(response.fecha_presentacion); 
+                tipoPresentacion.val(response.obligacion.id_tipo_presentacion); 
+                fechaInicio.val(response.fecha_inicio);   
+
+                // Deshabilitar o habilitar los selects según el valor
+                //alert(response.id_tiempo_presentacion);
+                if (response.obligacion.id_tiempo_presentacion === 1) { // General
+
+                    $('#fecha_presentacion_mod').prop('disabled', false);  
+                    $('#fecha_inicio_mod').prop('disabled', true); 
+                    tipoPresentacion.val(-1);
+
+                } else if (response.obligacion.id_tiempo_presentacion === 2) { // Local
+
+                    $('#fecha_presentacion_mod').prop('disabled', true);    
+                    $('#fecha_inicio_mod').prop('disabled', false); 
+
+                }
+                
+                //$('#carga').hide();
+                Swal.close();
+                $('#ModalModificarObligacion').modal('show');
+            },
+            error: function(xhr, status, error) {
+                Swal.close();
+                console.error(xhr.responseText);
+            }
+        });
+    });
  
     $(document).on('click', '.delete-obligacion', async function() {
         var button = $(this); 
@@ -777,6 +862,96 @@ $(document).ready(function(){
             console.log('Eliminación cancelada por el usuario.');
         }
     });
+
+    $("#modificarObligacion").click(async function () {
+         
+        if ($('#tiempo_presentacion_mod').val() == "1") { 
+
+            if ($('#fecha_presentacion_mod').val() == "") {
+                //alert('Debe seleccionar la Clase de Entidad');
+                await Swal.fire({ 
+                    target: document.getElementById('ModalModificarObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Fecha de Presetnación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
+                $('#fecha_presentacion_mod').focus();
+                return;
+            }
+        }
+
+        if ($('#tiempo_presentacion_mod').val() == "2") { 
+
+            if ($('#fecha_inicio_mod').val() == "") {
+                //alert('Debe seleccionar la Clase de Entidad');
+                await Swal.fire({ 
+                    target: document.getElementById('ModalModificarObligacion'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar la Fecha de Inicio',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
+                $('#fecha_inicio_mod').focus();
+                return;
+            }
+        }      
+ 
+        Swal.fire({
+            target: document.getElementById('ModalModificarObligacion'),
+            title: 'Enviando datos para modificación de Obligación',
+            text: 'Por favor espere',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
+
+        // Aquí puedes añadir la lógica para enviar el formulario modificado
+        var formData = new FormData(document.getElementById("ModalModificarObligacion"));
+        $.ajax({
+            url: "{{ route('admin.modificar_entidad_obligacion') }}",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done(function(res) {
+            msg = JSON.parse(res).response.msg 
+            Swal.fire({ 
+                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                title: 'Éxito',
+                text: res.success,
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            }); 
+            //alert(msg);
+            location.reload(); 
+        }).fail(function(res) { 
+            let errorMessage = 'Ocurrió un error inesperado.'; 
+            // Si la respuesta contiene datos JSON
+            if (res.responseJSON && res.responseJSON.message) {
+                errorMessage = res.responseJSON.message; // Obtener mensaje del servidor
+            } else if (res.responseText) {
+                errorMessage = res.responseText; // Fallback al texto de la respuesta
+            }
+            
+            Swal.fire({ 
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al modificar la Cámara',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false
+            });
+        });
+        //$('#carga').hide();
+        Swal.close();
+        $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal después de guardar
+    }); 
  
 });
 

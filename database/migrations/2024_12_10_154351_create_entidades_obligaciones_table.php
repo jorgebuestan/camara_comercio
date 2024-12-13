@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('id_entidad');
             $table->integer('id_obligacion');
             $table->date('fecha_inicio')->nullable(); 
+            $table->date('fecha_vencimiento')->nullable();
             $table->date('fecha_presentacion')->nullable();
             $table->integer('estado');
             $table->timestamps();

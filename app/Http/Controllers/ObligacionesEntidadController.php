@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\EntidadObligacion; 
 use App\Models\Entidad; 
 use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
+use App\Models\Obligacion; 
 
 class ObligacionesEntidadController extends Controller
 {
@@ -166,18 +169,71 @@ class ObligacionesEntidadController extends Controller
     public function detalle_entidad_obligacion($id)
     {
         // Buscar la cámara por ID
-        $entidad = Entidad::find($id);
-    
-        if (!$entidad) {
-            return response()->json(['error' => 'Registro no encontrado'], 404);
+        $entidadObligacion = EntidadObligacion::find($id);
+
+        if($entidadObligacion->fecha_inicio){
+            $entidadObligacion->fecha_inicio = Carbon::parse($entidadObligacion->fecha_inicio)->format('d/m/Y');
+        }
+        if($entidadObligacion->fecha_presentacion){
+            $entidadObligacion->fecha_presentacion = Carbon::parse($entidadObligacion->fecha_presentacion)->format('d/m/Y');
         }
     
+        if (!$entidadObligacion) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }  
+
+        // Buscar el DatoTributario relacionado
+        $entidad = Entidad::where('id', $entidadObligacion->id_entidad)->first();
+        $obligacion = Obligacion::where('id', $entidadObligacion->id_obligacion)->first();
+
         // Convertir el modelo Camara a un array
-        $entidadArray = $entidad->toArray(); 
+        $entidadObligacionArray = $entidadObligacion->toArray(); 
+    
+        // Si existe un DatoTributario, agregarlo al array de respuesta
+        if ($entidad) {
+            $entidadObligacionArray['entidad'] = $entidad->toArray();
+        }
+
+        if ($obligacion) {
+            $entidadObligacionArray['obligacion'] = $obligacion->toArray();
+        }
     
         // Devolver la respuesta JSON
-        return response()->json($entidadArray);
-    }
+        return response()->json($entidadObligacionArray);
+    } 
 
+    public function modificar_entidad_obligacion(Request $request)
+    {  
+        try {
+            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+             
+            // Buscar el registro existente por ID
+            $entidad = EntidadObligacion::find($request->input('entidad_obligacion_id_mod'));
+        
+            if (!$entidad) {
+                return response()->json(['error' => 'La entidad no existe.'], 404);
+            }
 
+            $tiempo_presentacion = $request->input('tiempo_presentacion_mod');
+
+            $fechaPresentacion = $request->input('fecha_presentacion_mod') ? DateTime::createFromFormat('d/m/Y', $request->input('fecha_presentacion_mod') )->format('Y-m-d H:i:s') : null;
+            $fechaInicio = $request->input('fecha_inicio_mod') ? DateTime::createFromFormat('d/m/Y', $request->input('fecha_inicio_mod') )->format('Y-m-d H:i:s') : null;
+              
+            // Actualizar los campos del registro existente
+            $entidad->update([
+                'fecha_inicio' => $fechaInicio,
+                'fecha_presentacion' => $fechaPresentacion
+            ]);  
+
+            //return response()->json(['success' => 'Obligación modificada correctamente'], 200);
+            return response()->json(['response' => [
+                'msg' => "Registro modificado",
+                ]
+            ], 201);
+        } catch (\Illuminate\Database\QueryException $e) {  
+            return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
+        }
+    } 
 }

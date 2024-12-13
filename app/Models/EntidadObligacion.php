@@ -14,7 +14,8 @@ class EntidadObligacion extends Model
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
-        'fecha_presentacion',
+        'fecha_vencimiento',
+        'fecha_presentacion', 
         'estado'
     ];
 
