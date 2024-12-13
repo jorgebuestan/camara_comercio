@@ -24,9 +24,9 @@ class SocioObligacionController extends Controller
     public function index(Request $request)
     {
         $columns = [
-            0 => 'socios_obligaciones.id',
-            1 => 'socios_obligaciones.entidad',
-            3 => 'socios_obligaciones.obligacion',
+            0 => 'entidades.entidad',
+            1 => 'obligaciones.obligacion',
+            2 => 'socios_obligaciones.id',
         ];
         $data = $request->validate([
             'id_entidad' => 'sometimes|integer|nullable',
@@ -41,34 +41,38 @@ class SocioObligacionController extends Controller
             'with_obligacion' => 'sometimes|boolean|nullable',
             'with_socio' => 'sometimes|boolean|nullable',
         ]);
-        $socioObligaciones = SocioObligacion::when(isset($request['id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
-            ->when(isset($request['id_socio']), fn($q) => $q->where('id_socio', $request['id_socio']))
-            ->when(isset($request['id_obligacion']), fn($q) => $q->where('id_obligacion', $request['id_obligacion']))
-            ->when(isset($request['fecha_inicio']), fn($q) => $q->where('fecha_inicio', $request['fecha_inicio']))
-            ->when(isset($request['fecha_presentacion']), fn($q) => $q->where('fecha_presentacion', $request['fecha_presentacion']))
-            ->when(isset($request['estado']), fn($q) => $q->where('estado', $request['estado']))
-            ->when(!isset($request['estado']), fn($q) => $q->where('estado', 1))
+        $socioObligaciones = SocioObligacion::when(isset($request['id_entidad']), fn($q) => $q->where('socios_obligaciones.id_entidad', $request['id_entidad']))
+            ->when(isset($request['id_socio']), fn($q) => $q->where('socios_obligaciones.id_socio', $request['id_socio']))
+            ->when(isset($request['id_obligacion']), fn($q) => $q->where('socios_obligaciones.id_obligacion', $request['id_obligacion']))
+            ->when(isset($request['fecha_inicio']), fn($q) => $q->where('socios_obligaciones.fecha_inicio', $request['fecha_inicio']))
+            ->when(isset($request['fecha_presentacion']), fn($q) => $q->where('socios_obligaciones.fecha_presentacion', $request['fecha_presentacion']))
+            ->when(isset($request['estado']), fn($q) => $q->where('socios_obligaciones.estado', $request['estado']))
+            ->when(!isset($request['estado']), fn($q) => $q->where('socios_obligaciones.estado', 1))
             ->when(isset($request['with_entidad']), fn($q) => $q->with('entidad'))
             ->when(isset($request['with_obligacion']), fn($q) => $q->with('obligacion.tiempo_presentacion', 'obligacion.tipo_presentacion'))
             ->when(
                 isset($request['with_socio']),
                 fn($q) => $q->with('socio')
-            );
+            )
+            ->when(isset($request['order'][0]['column']), function ($q) use ($request, $columns) {
+                $orderColumnIndex = $request['order'][0]['column'];
+                $orderDir = $request['order'][0]['dir'];
+                $q->leftJoin('entidades', 'socios_obligaciones.id_entidad', '=', 'entidades.id')
+                    ->leftJoin('obligaciones', 'socios_obligaciones.id_obligacion', '=', 'obligaciones.id');
+                $q->select([
+                    'socios_obligaciones.*',
+                    'entidades.entidad as entidad_nombre',
+                    'obligaciones.obligacion as obligacion_nombre',
+                ]);
+                $q->orderBy($columns[$orderColumnIndex], $orderDir);
+            });
         $total_filtered = $socioObligaciones->count();
-        $orderColumnIndex = $request['order'][0]['column'] ?? 0;
-        $orderDir = $request['order'][0]['dir'] ?? 'asc';
-
-        if (isset($columns[$orderColumnIndex])) {
-            $orderColumn = $columns[$orderColumnIndex];
-            $socioObligaciones->orderBy($orderColumn, $orderDir);
-        }
 
         $start = $request['start'] ?? 0;
         $length = $request['length'] ?? 10;
         $socioObligaciones->skip($start)->take($length);
 
         $socioObligaciones = $socioObligaciones->get();
-
         $response = $socioObligaciones->map(function ($socioObligacion) {
             $boton = "";
             return array_merge($socioObligacion->toArray(), [

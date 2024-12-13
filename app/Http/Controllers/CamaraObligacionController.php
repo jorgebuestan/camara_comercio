@@ -24,9 +24,9 @@ class CamaraObligacionController extends Controller
     public function index(Request $request)
     {
         $columns = [
-            0 => 'camaras_obligaciones.id',
-            1 => 'camaras_obligaciones.entidad',
-            3 => 'camaras_obligaciones.obligacion',
+            0 => 'entidades.entidad',
+            1 => 'obligaciones.obligacion',
+            2 => 'camaras_obligaciones.id',
         ];
         $data = $request->validate([
             'id_entidad' => 'sometimes|integer|nullable',
@@ -53,15 +53,21 @@ class CamaraObligacionController extends Controller
             ->when(
                 isset($request['with_camara']),
                 fn($q) => $q->with('camara')
-            );
-        $total_filtered = $camaraObligaciones->count();
-        $orderColumnIndex = $request['order'][0]['column'] ?? 0;
-        $orderDir = $request['order'][0]['dir'] ?? 'asc';
+            )
+            ->when(isset($request['order'][0]['column']), function ($q) use ($request, $columns) {
+                $orderColumnIndex = $request['order'][0]['column'];
+                $orderDir = $request['order'][0]['dir'];
+                $q->leftJoin('entidades', 'camaras_obligaciones.id_entidad', '=', 'entidades.id')
+                    ->leftJoin('obligaciones', 'camaras_obligaciones.id_obligacion', '=', 'obligaciones.id');
+                $q->select([
+                    'camaras_obligaciones.*',
+                    'entidades.entidad as entidad_nombre',
+                    'obligaciones.obligacion as obligacion_nombre',
+                ]);
+                $q->orderBy($columns[$orderColumnIndex], $orderDir);
+            });
 
-        if (isset($columns[$orderColumnIndex])) {
-            $orderColumn = $columns[$orderColumnIndex];
-            $camaraObligaciones->orderBy($orderColumn, $orderDir);
-        }
+        $total_filtered = $camaraObligaciones->count();
 
         $start = $request['start'] ?? 0;
         $length = $request['length'] ?? 10;
