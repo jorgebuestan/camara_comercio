@@ -31,7 +31,6 @@ return new class extends Migration
             $table->text('numero');
             $table->text('interseccion');
             $table->text('referencia');
-            $table->json('obligaciones_tributarias')->nullable();
             $table->timestamps();
         });
     }
