@@ -1,53 +1,58 @@
 <?php
 
 namespace App\Exports;
- 
+
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings; 
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
-class SociosCamara implements FromCollection, WithHeadings, WithStyles
+class SociosCamara implements FromCollection, WithHeadings, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     protected $datos;
 
-    // Constructor para recibir los datos
     public function __construct(Collection $datos)
     {
         $this->datos = $datos;
     }
 
-    // Exportar la colección de datos
     public function collection()
     {
         return $this->datos;
     }
 
-    // Agregar encabezados al archivo Excel
     public function headings(): array
     {
         return [
-            'ID',
-            'Colaborador',
-            'Localidad',
-            'Área',
-            'Departamento',
-            'Cargo',
-            'Tipo de Contrato',
-            'Fecha Tentativa de Ingreso'
+            'Cámara',
+            'Fecha Afiliación',
+            'Socio',
+            'Identificación',
+            'Tipo Personería'
         ];
     }
-    
-    // Estilos para ajustar automáticamente el ancho según la palabra más larga
-    public function styles(Worksheet $sheet)
+
+    public function registerEvents(): array
     {
-        foreach (range('A', 'H') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
-        }
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+
+                // Ajustar automáticamente el ancho de todas las columnas
+                foreach (range('A', 'E') as $column) {
+                    $sheet->getColumnDimension($column)->setAutoSize(true);
+                }
+
+                // Aplicar formato de texto explícito a la columna "D"
+                $highestRow = $sheet->getHighestRow();
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    $cell = 'D' . $row;
+                    $value = $sheet->getCell($cell)->getValue();
+                    $sheet->setCellValueExplicit($cell, $value, DataType::TYPE_STRING);
+                }
+            },
+        ];
     }
 }

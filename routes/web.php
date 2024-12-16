@@ -15,6 +15,7 @@ use App\Http\Controllers\ObligacionesController;
 use App\Http\Controllers\ObligacionesEntidadController;
 use App\Http\Controllers\SocioObligacionController; 
 use App\Http\Controllers\CamaraSocioController; 
+use App\Http\Controllers\ReportesController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -147,13 +148,19 @@ Route::middleware(['auth'])->group(function () {
     //Maestro de Socios por Camara
     Route::get('/administrador/camara/socios_camara', [CamaraSocioController::class, 'socios_camara'])->middleware('auth')->name('admin.socios_camara');
     Route::get('/administrador/obtener_listado_socios_por_camara', [CamaraSocioController::class, 'obtener_listado_socios_por_camara'])->middleware('auth')->name('admin.obtener_listado_socios_por_camara');
-    Route::get('/administrador/obtener_listado_socios_registros_camara', [CamaraSocioController::class, 'obtener_listado_socios_registros_camara'])->middleware('auth')->name('admin.obtener_listado_socios_registros_camara');
+    Route::get('administrador/obtener_listado_socios_registros_camara', [CamaraSocioController::class, 'obtener_listado_socios_registros_camara'])->middleware('auth')->name('admin.obtener_listado_socios_registros_camara');
     Route::get('/administrador/socio/detalle/{id}', [CamaraSocioController::class, 'detalle_socio'])->middleware('auth')->name('admin.detalle_socio');
     Route::get('/administrador/socio_camara/detalle/{id}', [CamaraSocioController::class, 'detalle_socio_camara'])->middleware('auth')->name('admin.detalle_socio_camara');
     Route::post('/administrador/registrar_socio_camara', [CamaraSocioController::class, 'registrar_socio_camara'])->middleware('auth')->name('admin.registrar_socio_camara');
     Route::post('/administrador/socio_camara/eliminar/{id}', [CamaraSocioController::class, 'eliminar_socio_camara'])->middleware('auth')->name('admin.eliminar_socio_camara');;
     Route::post('/administrador/socio_camara/modificar_socio_camara', [CamaraSocioController::class, 'modificar_socio_camara'])->middleware('auth')->name('admin.modificar_socio_camara');
 
+    //Reportes
+    Route::get('/administrador/reportes/reporte_socios_camara', [ReportesController::class, 'reporte_socios_camara'])->middleware('auth')->name('admin.reporte_socios_camara');
+    Route::get('/administrador/obtener_listado_socios_camaras', [ReportesController::class, 'obtener_listado_socios_camaras'])->middleware('auth')->name('admin.obtener_listado_socios_camaras');
+    Route::get('/administrador/reportes/exportar_excel_socios_por_camara', [ReportesController::class, 'exportar_excel_socios_por_camara'])->middleware('auth')->name('admin.exportar_excel_socios_por_camara');
+    Route::get('/administrador/reportes/exportar_pdf_socios_por_camara', [ReportesController::class, 'exportar_pdf_socios_por_camara'])->middleware('auth')->name('admin.exportar_pdf_socios_por_camara');
+     
 });
 
 require __DIR__ . '/auth.php';

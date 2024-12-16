@@ -455,11 +455,24 @@
                                             </li>
                                         </ul>
                                     </li> 
+                                    <li class="nav-parent">
+                                        <a class="nav-link" href="#">
+                                            <i class="bx bxs-report" aria-hidden="true"></i>
+                                            <span>Reportes</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.reporte_socios_camara') }}">
+                                                    Socios por Cámara
+                                                </a>
+                                            </li> 
+                                        </ul>
+                                    </li> 
                                 @endcan
                                 @can('Camara')
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
-                                            <i class="bx bx-file" aria-hidden="true"></i>
+                                            <i class="bx bx-git-merge" aria-hidden="true"></i>
                                             <span>Gestor</span>
                                         </a>
                                         <ul class="nav nav-children"> 
@@ -477,24 +490,7 @@
                                                 <a class="nav-link" href="{{ route('dashboard') }}">
                                                     Establecimientos
                                                 </a>
-                                            </li>
-                                            <!-- <li class="nav-parent">
-                                                                                            <a class="nav-link" href="#">
-                                                                                                                                            Socios
-                                                                                            </a>
-                                                                                            <ul class="nav nav-children">
-                                                                                            <li>
-                                                                                                      <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                                            Solicitud de Herramientas
-                                                                                            </a>
-                                                                                            </li>
-                                                                                            </ul>
-                                                                                            </li>
-                                                                                            <li>
-                                                                                            <a class="nav-link" href="{{ route('dashboard') }}">
-                                                                                            Solicitudes en Proceso
-                                                                                            </a>
-                                                                                            </li>  -->
+                                            </li> 
                                         </ul>
                                     </li>
                                 @endcan
