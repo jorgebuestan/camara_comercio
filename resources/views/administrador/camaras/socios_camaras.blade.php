@@ -513,6 +513,7 @@ $(document).ready(function(){
     $(document).on('click', '.seleccionar-socio', function() {
         var button = $(this); 
         var socioId = button.data('id'); 
+        ///alert(socioId); return;
     
         Swal.fire({
             target: document.getElementById('ModalSocio'),

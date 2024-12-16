@@ -167,6 +167,18 @@ class CamaraSocioController extends Controller
         return response()->json($json_data);
     }
 
+    public function detalle_socio($id)
+    {
+        // Buscar la cámara por ID
+        $socio = Socio::find($id);  
+    
+        // Convertir el modelo socio a un array
+        $socioArray = $socio->toArray();    
+    
+        // Devolver la respuesta JSON
+        return response()->json($socioArray);
+    }
+
     public function detalle_socio_camara($id)
     {
         // Buscar la cámara por ID
