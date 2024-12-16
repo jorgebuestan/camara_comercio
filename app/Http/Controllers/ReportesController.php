@@ -51,9 +51,7 @@ class ReportesController extends Controller
                 'socios.razon_social as socio',
                 'tipo_personeria.descripcion as tipo_personeria'
             )
-            ->where('camaras_socios.estado', 1);
-
-        // Filtro de localidad 
+            ->where('camaras_socios.estado', 1);  
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
