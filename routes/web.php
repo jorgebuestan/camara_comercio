@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdherenteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -104,6 +105,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/administrador/obligacion_socio/registrar_obligacion_socio', [SocioObligacionController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_socio');
     Route::post('/administrador/obligacion_socio/modificar', [SocioObligacionController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_socio');
     Route::post('/administrador/obligacion_socio/eliminar/{id}', [SocioObligacionController::class, 'eliminarObligacionSocio'])->middleware('auth')->name('admin.eliminar_obligacion_socio');;
+
+    //Maestro de Adherentes de Socios
+    Route::get('/administrador/adherentes_socio', [AdherenteController::class, 'adherentes_socio'])->middleware('auth')->name('admin.adherentes_socio');
+    Route::get('/administrador/adherentes_socio/index', [AdherenteController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_adherentes_socio');
+    Route::post('/administrador/adherente_socio/registrar_adherente_socio', [AdherenteController::class, 'store'])->middleware('auth')->name('admin.registrar_adherente_socio');
+    Route::post('/administrador/adherente_socio/modificar', [AdherenteController::class, 'update'])->middleware('auth')->name('admin.modificar_adherente_socio');
+    Route::post('/administrador/adherente_socio/reafiliar_adherente', [AdherenteController::class, 'reafiliarAdherente'])->middleware('auth')->name('admin.reafiliar_adherente_socio');
+    Route::post('/administrador/adherente_socio/eliminar/{id}', [AdherenteController::class, 'eliminarAdherente'])->middleware('auth')->name('admin.eliminar_adherente_socio');;
 
     //Maestro de Obligaciones
     Route::get('/administrador/maestro_obligaciones', [ObligacionesController::class, 'maestro_obligaciones'])->middleware('auth')->name('admin.maestro_obligaciones');

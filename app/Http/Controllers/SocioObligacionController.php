@@ -159,7 +159,6 @@ class SocioObligacionController extends Controller
                 $data['fecha_presentacion'] =
                     Carbon::createFromFormat('d/m/Y', $data['fecha_presentacion'])->format('Y-m-d');
             }
-            Log::info($data);
             $socioObligacion->update($data);
             DB::commit();
             return response()->json(['message' => 'Obligación actualizada correctamente'], 200);
