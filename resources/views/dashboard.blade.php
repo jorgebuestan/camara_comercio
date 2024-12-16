@@ -398,6 +398,11 @@
                                                     Obligaciones por Cámara
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.socios_camara') }}">
+                                                    Socios por Cámara
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li class="nav-parent">
@@ -452,12 +457,7 @@
                                             <i class="bx bx-file" aria-hidden="true"></i>
                                             <span>Gestor</span>
                                         </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                                    Cámara
-                                                </a>
-                                            </li>
+                                        <ul class="nav nav-children"> 
                                             <li>
                                                 <a class="nav-link" href="{{ route('dashboard') }}">
                                                     Cámara
