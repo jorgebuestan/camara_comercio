@@ -16,6 +16,10 @@ use App\Http\Controllers\ObligacionesEntidadController;
 use App\Http\Controllers\SocioObligacionController; 
 use App\Http\Controllers\CamaraSocioController; 
 use App\Http\Controllers\ReportesController; 
+use App\Http\Controllers\ArchivoObligacionCamaraController; 
+use App\Http\Controllers\ArchivoObligacionSocioController; 
+
+
 
 /*
 |--------------------------------------------------------------------------

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\CamaraObligacion;
 use App\Models\Camara;
 use App\Models\Entidad;
-use Carbon\Carbon;
+use Carbon\Carbon; 
+use App\Models\ArchivoObligacionCamara;
 
 
 class CamaraObligacionController extends Controller
@@ -129,6 +130,14 @@ class CamaraObligacionController extends Controller
             $data['estado'] = 1;
             Log::info($data);
             $camaraObligacion = CamaraObligacion::create($data);
+            $archivoObligacionCamara = ArchivoObligacionCamara::create([
+                'id_camara' => $camaraObligacion->id_camara,
+                'id_entidad' => $camaraObligacion->id_entidad,
+                'id_obligacion' => $camaraObligacion->id_obligacion, 
+                'ruta_archivo' => '',
+                'validado' => 0,
+                'estado' => 1
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             Log::error($th);
@@ -183,6 +192,14 @@ class CamaraObligacionController extends Controller
             }
             $camaraObligacion->estado = 0;
             $camaraObligacion->save();
+
+            $archivoObligacionCamara = ArchivoObligacionCamara::where('id_camara', $camaraObligacion->id_camara)
+            ->where('id_entidad', $camaraObligacion->id_entidad)
+            ->where('id_obligacion', $camaraObligacion->id_obligacion)
+            ->first(); 
+            $archivoObligacionCamara->estado = 0;
+            $archivoObligacionCamara->save();
+
             DB::commit();
             return response()->json(['message' => 'Obligación eliminada correctamente'], 200);
         } catch (\Throwable $th) {

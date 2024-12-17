@@ -366,16 +366,14 @@
 
                 <div class="nano">
                     <div class="nano-content">
-                        <nav id="menu" class="nav-main" role="navigation">
-
+                        <nav id="menu" class="nav-main" role="navigation"> 
                             <ul class="nav nav-main">
                                 <li class="nav-active">
                                     <a class="nav-link" href="{{ route('dashboard') }}">
                                         <i class="bx bx-home-alt" aria-hidden="true"></i>
                                         <span>Inicio</span>
                                     </a>
-                                </li>
-
+                                </li> 
                                 @can('Admin')
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
@@ -448,6 +446,7 @@
                                                 <a class="nav-link" href="{{ route('admin.maestro_obligaciones') }}">
                                                     Mantenimiento de Obligaciones
                                                 </a>
+                                            </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.entidades_obligaciones') }}">
                                                     Obligaciones por Entidad
@@ -473,28 +472,22 @@
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
                                             <i class="bx bx-git-merge" aria-hidden="true"></i>
-                                            <span>Gestor</span>
+                                            <span>Subir archivos de Obligaciones</span>
                                         </a>
-                                        <ul class="nav nav-children"> 
+                                        <ul class="nav nav-children">
                                             <li>
                                                 <a class="nav-link" href="{{ route('dashboard') }}">
-                                                    Cámara
+                                                    Obligaciones por Cámara
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="nav-link" href="{{ route('dashboard') }}">
-                                                    Socios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                                    Establecimientos
+                                                    Obligaciones por Socios
                                                 </a>
                                             </li> 
                                         </ul>
-                                    </li>
+                                    </li>  
                                 @endcan
-
                             </ul>
                         </nav>
                     </div>

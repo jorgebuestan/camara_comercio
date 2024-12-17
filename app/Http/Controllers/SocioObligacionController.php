@@ -9,6 +9,7 @@ use App\Models\SocioObligacion;
 use App\Models\Socio;
 use App\Models\Entidad;
 use Carbon\Carbon;
+use App\Models\ArchivoObligacionSocio;
 
 class SocioObligacionController extends Controller
 {
@@ -126,6 +127,14 @@ class SocioObligacionController extends Controller
             $data['estado'] = 1;
             Log::info($data);
             $socioObligacion = SocioObligacion::create($data);
+            $archivoObligacionSocio = ArchivoObligacionSocio::create([
+                'id_socio' => $socioObligacion->id_socio,
+                'id_entidad' => $socioObligacion->id_entidad,
+                'id_obligacion' => $socioObligacion->id_obligacion, 
+                'ruta_archivo' => '',
+                'validado' => 0,
+                'estado' => 1
+            ]);
             DB::commit();
         } catch (\Throwable $th) {
             Log::error($th);
@@ -179,6 +188,14 @@ class SocioObligacionController extends Controller
             }
             $socioObligacion->estado = 0;
             $socioObligacion->save();
+
+            $archivoObligacionSocio = ArchivoObligacionSocio::where('id_socio', $socioObligacion->id_socio)
+            ->where('id_entidad', $socioObligacion->id_entidad)
+            ->where('id_obligacion', $socioObligacion->id_obligacion)
+            ->first(); 
+            $archivoObligacionSocio->estado = 0;
+            $archivoObligacionSocio->save();
+
             DB::commit();
             return response()->json(['message' => 'Obligación eliminada correctamente'], 200);
         } catch (\Throwable $th) {
