@@ -130,6 +130,9 @@ class EstablecimientoController extends Controller
     {
 
         try {
+
+            DB::beginTransaction();
+
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades'))->format('Y-m-d');
             //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
@@ -160,29 +163,49 @@ class EstablecimientoController extends Controller
                 'estado' => 1
             ]);
 
+            DB::commit();
+
             return response()->json(['success' => 'Establecimiento registrado correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
 
     public function eliminar_establecimiento($id)
     {
-        //$colaborador = Colaborador::find($id);
-        $establecimiento = Establecimiento::where('id', $id)->first();
+        try{
+
+            DB::beginTransaction();
+            //$colaborador = Colaborador::find($id);
+            $establecimiento = Establecimiento::where('id', $id)->first();
 
 
-        if (!$establecimiento) {
-            return response()->json(['error' => 'Establecimiento no encontrado'], 404);
-        }
+            if (!$establecimiento) {
+                return response()->json(['error' => 'Establecimiento no encontrado'], 404);
+            }
 
-        // Cambiar el valor del campo 'activo' a 0
-        $establecimiento->estado = 0;
-        $establecimiento->save();
+            // Cambiar el valor del campo 'activo' a 0
+            $establecimiento->estado = 0;
+            $establecimiento->save();
 
-        return response()->json(['success' => 'Establecimiento eliminado correctamente']);
+            DB::commit();
+
+            return response()->json(['success' => 'Establecimiento eliminado correctamente']);
+
+        }catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al eliminar el Establecimiento: ' . $e->getMessage()], 500);
+        } 
+        
     }
 
     public function detalle_establecimiento($id)
@@ -213,6 +236,8 @@ class EstablecimientoController extends Controller
     public function modificar_establecimiento(Request $request)
     {
         try {
+
+            DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
 
@@ -249,15 +274,23 @@ class EstablecimientoController extends Controller
 
             ]);
 
+            DB::commit();
+
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             return response()->json([
                 'response' => [
                     'msg' => "Registro modificado",
                 ]
             ], 201);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) { 
+            
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+            
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         }
     }

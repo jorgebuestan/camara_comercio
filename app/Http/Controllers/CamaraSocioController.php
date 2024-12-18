@@ -9,6 +9,7 @@ use App\Models\Camara;
 use App\Models\Socio; 
 use App\Models\CamaraSocio; 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CamaraSocioController extends Controller
 {
@@ -200,6 +201,8 @@ class CamaraSocioController extends Controller
 
         try { 
 
+            DB::beginTransaction();
+
             $fecha_afiliacion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_afiliacion'))->format('Y-m-d');
              
              
@@ -211,38 +214,58 @@ class CamaraSocioController extends Controller
                 'estado' => 1
             ]); 
 
+            DB::commit();
+
             return response()->json(['success' => 'Socio registrado correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'El Socio ya existe en el registro de Socios por Cámara, no se puede registrar el mismo dos veces.'], 422);
             }
             return response()->json(['error' => 'Error al registrar el Socio: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar el Socio: ' . $e->getMessage()], 500);
         }
     }
 
     public function eliminar_socio_camara($id)
     {
-        //$colaborador = Colaborador::find($id);
-        $camara_socio = CamaraSocio::where('id', $id)->first();
+        try{
 
+            DB::beginTransaction();
 
-        if (!$camara_socio) {
-            return response()->json(['error' => 'Socio no encontrado'], 404);
-        }
-    
-        // Cambiar el valor del campo 'activo' a 0
-        $camara_socio->estado = 0;
-        $camara_socio->save();
-    
-        return response()->json(['success' => 'Socio por Cámara eliminado correctamente']);
+            //$colaborador = Colaborador::find($id);
+            $camara_socio = CamaraSocio::where('id', $id)->first(); 
+
+            if (!$camara_socio) {
+                return response()->json(['error' => 'Socio no encontrado'], 404);
+            }
+        
+            // Cambiar el valor del campo 'activo' a 0
+            $camara_socio->estado = 0;
+            $camara_socio->save();
+
+            DB::commit();
+        
+            return response()->json(['success' => 'Socio por Cámara eliminado correctamente']);
+
+        }catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+        } 
     }
 
     public function modificar_socio_camara(Request $request)
     {  
         try {
-            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
+
+            DB::beginTransaction(); 
              
             // Buscar el registro existente por ID
             $camaraSocio = CamaraSocio::find($request->input('socio_camara_id_mod'));
@@ -258,14 +281,21 @@ class CamaraSocioController extends Controller
                 'fecha_afiliacion' => $fecha_afiliacion 
             ]);  
 
-            //return response()->json(['success' => 'Obligación modificada correctamente'], 200);
+            DB::commit();
+ 
             return response()->json(['response' => [
                 'msg' => "Registro modificado",
                 ]
             ], 201);
         } catch (\Illuminate\Database\QueryException $e) {  
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el Socio de la Cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+            
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el Socio de la Cámara: ' . $e->getMessage()], 500);
         }
     } 

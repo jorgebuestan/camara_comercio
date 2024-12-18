@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
@@ -195,6 +196,8 @@ class EntidadesController extends Controller
 
         try {
             
+            DB::beginTransaction();
+
             $pais = 0;
             $provincia = 0;
             $canton = 0;
@@ -224,32 +227,52 @@ class EntidadesController extends Controller
                 'estado' => 1
             ]); 
 
+            DB::commit();
+
             return response()->json(['success' => 'Entidad registrada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'El RUC o nombre de Entidad ingresado ya existe en el Sistema.'], 422);
             }
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         }
     }
 
     public function eliminar_entidad($id)
     {
-        //$colaborador = Colaborador::find($id);
-        $entidad = Entidad::where('id', $id)->first();
+        try{
+
+            DB::beginTransaction();
+            //$colaborador = Colaborador::find($id);
+            $entidad = Entidad::where('id', $id)->first();
 
 
-        if (!$entidad) {
-            return response()->json(['error' => 'Entidad no encontrada'], 404);
-        }
-    
-        // Cambiar el valor del campo 'activo' a 0
-        $entidad->estado = 0;
-        $entidad->save();
-    
-        return response()->json(['success' => 'Entidad eliminada correctamente']);
+            if (!$entidad) {
+                return response()->json(['error' => 'Entidad no encontrada'], 404);
+            }
+        
+            // Cambiar el valor del campo 'activo' a 0
+            $entidad->estado = 0;
+            $entidad->save();
+
+            DB::commit();
+        
+            return response()->json(['success' => 'Entidad eliminada correctamente']);
+
+        }catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al eliminar la Entidad: ' . $e->getMessage()], 500);
+        } 
+        
     }
 
     public function detalle_entidad($id)
@@ -271,6 +294,8 @@ class EntidadesController extends Controller
     public function modificar_entidad(Request $request)
     {  
         try {
+
+            DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
              
             // Buscar el registro existente por ID
@@ -316,13 +341,21 @@ class EntidadesController extends Controller
                 'msg' => "Registro modificado",
                 ]
             ], 201);*/
+
+            DB::commit();
             return response()->json(['success' => 'Entidad modificada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) { 
+
+            Log::error($e);
+            DB::rollBack();
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'El RUC o nombre de Entidad que intenta modificar ya existe en el Sistema.'], 422);
             }
             return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
         }
     } 

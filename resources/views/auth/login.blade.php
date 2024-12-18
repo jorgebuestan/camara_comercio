@@ -6,14 +6,14 @@
         @csrf
 
         <!-- Email Address -->
-        <div>
+        <!-- <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        </div> -->
 
         <!-- Password -->
-        <div class="mt-4">
+        <!-- <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input id="password" class="block mt-1 w-full"
@@ -22,7 +22,41 @@
                             required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div> -->
+
+        <!-- Email Address -->
+        <div>
+            <!-- Etiqueta del campo -->
+            <label for="login">Email o Usuario</label>
+            
+            <!-- Campo de entrada -->
+            <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
+            
+            <!-- Mostrar errores relacionados con 'login' -->
+            <x-input-error :messages="$errors->get('login')" class="mt-2" />
         </div>
+
+        <!-- Password -->
+        <div class="mt-4">
+            <!-- <x-input-label for="password" :value="__('Password')" /> -->
+            <label for="password">Contraseña</label>
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- <div>
+            <label for="login">Email o Usuario</label>
+            <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus>
+        </div>
+
+        <div>
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" name="password" required>
+        </div> -->
 
         <!-- Remember Me -->
         <div class="block mt-4">

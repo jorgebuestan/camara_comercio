@@ -130,6 +130,8 @@ class EstablecimientoSocioController extends Controller
     {
 
         try {
+
+            DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades'))->format('Y-m-d');
             //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
@@ -160,28 +162,47 @@ class EstablecimientoSocioController extends Controller
                 'estado' => 1
             ]);
 
+            DB::commit();
+
             return response()->json(['success' => 'Establecimiento registrado correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
 
     public function eliminar_establecimiento_socio($id)
     {
-        //$colaborador = Colaborador::find($id);
-        $establecimiento = EstablecimientoSocio::where('id', $id)->first(); 
+        try{
 
-        if (!$establecimiento) {
-            return response()->json(['error' => 'Establecimiento no encontrado'], 404);
-        }
+            DB::beginTransaction();
+            //$colaborador = Colaborador::find($id);
+            $establecimiento = EstablecimientoSocio::where('id', $id)->first(); 
 
-        // Cambiar el valor del campo 'activo' a 0
-        $establecimiento->estado = 0;
-        $establecimiento->save();
+            if (!$establecimiento) {
+                return response()->json(['error' => 'Establecimiento no encontrado'], 404);
+            }
 
-        return response()->json(['success' => 'Establecimiento eliminado correctamente']);
+            // Cambiar el valor del campo 'activo' a 0
+            $establecimiento->estado = 0;
+            $establecimiento->save();
+
+            DB::commit();
+
+            return response()->json(['success' => 'Establecimiento eliminado correctamente']);
+
+        }catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al eliminar el Establecimiento por Socio: ' . $e->getMessage()], 500);
+        }  
     }
 
     public function detalle_establecimiento_socio($id)
@@ -212,6 +233,8 @@ class EstablecimientoSocioController extends Controller
     public function modificar_establecimiento_socio(Request $request)
     {
         try { 
+
+            DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
 
@@ -247,6 +270,8 @@ class EstablecimientoSocioController extends Controller
 
             ]); 
 
+            DB::commit();
+
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             return response()->json([
                 'response' => [
@@ -254,8 +279,14 @@ class EstablecimientoSocioController extends Controller
                 ]
             ], 201);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
