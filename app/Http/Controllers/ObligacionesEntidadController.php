@@ -6,6 +6,7 @@ use DateTime;
 use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\EntidadObligacion; 
 use App\Models\Entidad; 
 use App\Models\TiempoPresentacion;
@@ -109,6 +110,7 @@ class ObligacionesEntidadController extends Controller
 
         try {
             
+            DB::beginTransaction();
             $id_tipo_presentacion = 0; 
             if($request->input('tiempo_presentacion')){
                 $id_tipo_presentacion = $request->input('tipo_presentacion');
@@ -138,32 +140,50 @@ class ObligacionesEntidadController extends Controller
                 'estado' => 1
             ]); 
 
+            DB::commit();
             return response()->json(['success' => 'Obligación registrada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
+
+            Log::error($e);
+            DB::rollBack();
             if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'La Obligación ya existe en el grupo de obligaciones por Entidad, no se puede registrar la misma dos veces.'], 422);
             }
             return response()->json(['error' => 'Error al registrar la Obligación: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar la Obligación: ' . $e->getMessage()], 500);
         }
     }
 
     public function eliminar_entidad_obligacion($id)
     {
-        //$colaborador = Colaborador::find($id);
-        $entidad = EntidadObligacion::where('id', $id)->first();
+        try{
+
+            DB::beginTransaction();
+            //$colaborador = Colaborador::find($id);
+            $entidad = EntidadObligacion::where('id', $id)->first();
 
 
-        if (!$entidad) {
-            return response()->json(['error' => 'Obligación no encontrada'], 404);
-        }
-    
-        // Cambiar el valor del campo 'activo' a 0
-        $entidad->estado = 0;
-        $entidad->save();
-    
-        return response()->json(['success' => 'Obligación por Entidad eliminada correctamente']);
+            if (!$entidad) {
+                return response()->json(['error' => 'Obligación no encontrada'], 404);
+            }
+        
+            // Cambiar el valor del campo 'activo' a 0
+            $entidad->estado = 0;
+            $entidad->save();
+        
+            DB::commit();
+
+            return response()->json(['success' => 'Obligación por Entidad eliminada correctamente']);
+
+        }catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al eliminar la Obligacion de la Entidad: ' . $e->getMessage()], 500);
+        }  
     }
 
     public function detalle_entidad_obligacion($id)
@@ -205,6 +225,8 @@ class ObligacionesEntidadController extends Controller
     public function modificar_entidad_obligacion(Request $request)
     {  
         try {
+
+            DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
              
             // Buscar el registro existente por ID
@@ -225,14 +247,21 @@ class ObligacionesEntidadController extends Controller
                 'fecha_presentacion' => $fechaPresentacion
             ]);  
 
+            DB::commit();
             //return response()->json(['success' => 'Obligación modificada correctamente'], 200);
             return response()->json(['response' => [
                 'msg' => "Registro modificado",
                 ]
             ], 201);
         } catch (\Illuminate\Database\QueryException $e) {  
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al modificar la Obligación: ' . $e->getMessage()], 500);
         }
     } 
