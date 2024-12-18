@@ -67,9 +67,6 @@ class AdherenteController extends Controller
                     ->leftJoin('socios', 'socios_adherentes.id_socio', '=', 'socios.id')
                     ->select([
                         'socios_adherentes.*',
-                        'adherentes.identificacion',
-                        'adherentes.nombres',
-                        'adherentes.apellidos',
                     ])
                     ->orderBy($columns[$orderColumnIndex], $orderDir);
             });
@@ -79,19 +76,44 @@ class AdherenteController extends Controller
         $length = $request['length'] ?? 10;
         $socioAdherentes->skip($start)->take($length);
 
-        $socioAdherentes = $socioAdherentes->get();
-        $response = $socioAdherentes->map(function ($socioAdherente) {
-            $btnAfiliar = $socioAdherente->estado == 0 ? '<button class="btn btn-info mb-1 reafiliar-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Reafiliar</button>' : '';
-            return array_merge($socioAdherente->toArray(), [
-                'identificacion' => $socioAdherente->adherente->identificacion,
-                'nombres' => $socioAdherente->adherente->nombres,
-                'apellidos' => $socioAdherente->adherente->apellidos,
-                'estado' => $socioAdherente->estado ? 'Activo' : 'Inactivo',
-                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2">' . $btnAfiliar .
-                    '<button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Modificar</button>' .
-                    '<button class="btn btn-warning mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Eliminar</button></div>'
-            ]);
+        $socioAdherentes = $socioAdherentes->get()->filter(function ($socioAdherente) {
+            return isset($socioAdherente->adherente);
         });
+
+        if ($socioAdherentes->isEmpty()) {
+            return response()->json([
+                'draw' => intval($request['draw']) ?? 1,
+                'recordsTotal' => SocioAdherente::count(),
+                'recordsFiltered' => 0,
+                'data' => []
+            ]);
+        }
+        $response = $socioAdherentes->map(function ($socioAdherente) {
+            $otros_socios = SocioAdherente::where('id_adherente', $socioAdherente->id_adherente)
+                ->where('estado', 1)
+                ->where('id', '!=', $socioAdherente->id)
+                ->exists();
+            if (!$otros_socios) {
+                $btnAfiliar = $socioAdherente->estado == 0 ? '<button class="btn btn-info mb-1 reafiliar-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Reafiliar</button>' : '<button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Modificar</button>';
+                $btnEliminar = $socioAdherente->estado == 1 ? '<button class="btn btn-danger mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Eliminar</button>' : '';
+                $socioAdherente->adherente->fecha_ingreso = Carbon::createFromFormat('Y-m-d', $socioAdherente->adherente->fecha_ingreso)->format('d/m/Y');
+                return array_merge($socioAdherente->toArray(), [
+                    'identificacion' => $socioAdherente->adherente->identificacion ?? '',
+                    'nombres' => $socioAdherente->adherente->nombres ?? '',
+                    'apellidos' => $socioAdherente->adherente->apellidos ?? '',
+                    'estado' => $socioAdherente->estado == 1 ? 'Afiliado' : 'No Afiliado',
+                    'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2">' . $btnAfiliar . $btnEliminar . '</div>'
+                ]);
+            }
+        })->filter()->values();
+        if ($response->isEmpty()) {
+            return response()->json([
+                'draw' => intval($request['draw']) ?? 1,
+                'recordsTotal' => SocioAdherente::count(),
+                'recordsFiltered' => 0,
+                'data' => []
+            ]);
+        }
 
         return response()->json([
             'draw' => intval($request['draw']) ?? 1,
@@ -107,8 +129,8 @@ class AdherenteController extends Controller
         try {
             $data = $request->validate([
                 'id_socio' => 'required|integer',
-                'foto' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
-                'fecha_ingreso' => 'required|date',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'fecha_ingreso' => 'required|date_format:d/m/Y',
                 'id_tipo_identificacion' => 'required|integer',
                 'identificacion' => 'required|string',
                 'ruc' => 'sometimes|string|nullable',
@@ -128,7 +150,6 @@ class AdherenteController extends Controller
                 'observaciones' => 'sometimes|string|nullable',
                 'adjuntos' => 'sometimes|array|nullable',
             ]);
-            $data['foto'] = ''; //cambiar luego
             $data['adjuntos'] = ''; //cambiar luego
             DB::beginTransaction();
             $existeAdherente = Adherente::where('identificacion', $data['identificacion'])->first();
@@ -138,8 +159,8 @@ class AdherenteController extends Controller
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $data['fecha_ingreso'] = $fecha_ingreso;
             $rutaFoto = 'prueba';
-            if ($request->hasFile('file')) {
-                $archivoFoto = $request->file('file');
+            if ($request->hasFile('foto')) {
+                $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
                 $storedFilePath = "fotos_adherentes/" . $data['identificacion'] . '/' . $nombreArchivo;
                 $rutaFoto = "fotos_adherentes/" . $nombreArchivo;
@@ -147,6 +168,7 @@ class AdherenteController extends Controller
             }
 
             $data['estado'] = 1;
+            $data['foto'] = $rutaFoto ?? null;
             $adherente = Adherente::create($data);
             $adherenteId = $adherente->id;
 
@@ -181,11 +203,12 @@ class AdherenteController extends Controller
     public function update(Request $request)
     {
         $storedFilePath = null;
+        $contents = null;
         try {
             $data = $request->validate([
                 'id' => 'required|integer',
-                'foto' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
-                'fecha_ingreso' => 'sometimes|date',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'fecha_ingreso' => 'sometimes|date_format:d/m/Y',
                 'id_tipo_identificacion' => 'sometimes|integer',
                 'identificacion' => 'sometimes|string',
                 'ruc' => 'sometimes|string|nullable',
@@ -207,27 +230,29 @@ class AdherenteController extends Controller
             ]);
 
             DB::beginTransaction();
+            $adherente = Adherente::find($data['id']);
+            if (!$adherente) return response()->json(['message' => 'Adherente no existe'], 404);
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $data['fecha_ingreso'] = $fecha_ingreso;
-            $rutaFoto = 'prueba';
-            if ($request->hasFile('file')) {
-                $archivoFoto = $request->file('file');
+            $rutaFoto = '';
+            $contents = Storage::disk('public')->get($adherente->foto);
+            if ($request->hasFile('foto')) {
+                $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
                 $storedFilePath = "fotos_adherentes/" . $data['identificacion'] . '/' . $nombreArchivo;
                 $rutaFoto = "fotos_adherentes/" . $nombreArchivo;
                 $archivoFoto->storeAs("fotos_adherentes/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
-            $adherente = Adherente::find($data['id']);
-            if (!$adherente) return response()->json(['message' => 'Adherente no existe'], 404);
+            $data['foto'] = $rutaFoto ?? $adherente->foto;
             $adherente->update($data);
             DB::commit();
             return response()->json(['message' => 'Adherente actualizado correctamente'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             DB::rollBack();
-            if ($storedFilePath && Storage::disk('public')->exists($storedFilePath)) {
-                Storage::disk('public')->delete($storedFilePath);
+            if ($contents && Storage::disk('public')->exists($storedFilePath)) {
+                Storage::disk('public')->put($storedFilePath, $contents);
             }
             return response()->json(['message' => 'Error al actualizar el adherente'], 500);
         }
@@ -237,7 +262,7 @@ class AdherenteController extends Controller
     {
         try {
             $data = $request->validate([
-                'id_socio' => 'sometimes|integer',
+                'id_socio' => 'sometimes|integer|nullable',
                 'id_adherente' => 'required|integer',
                 'id_socio_adherente' => 'required|integer',
                 'motivo_reafiliacion' => 'required|string|max:255',
@@ -255,8 +280,9 @@ class AdherenteController extends Controller
             if (!$socioAdherente) return response()->json(['message' => 'El Adherente no se encuentra conectado con el Socio']);
             $socioAdherente->estado = isset($data['id_socio']) ? 0 : 1;
             $socioAdherente->save();
-
+            $socio = null;
             if (isset($data['id_socio'])) {
+                $socio = Socio::find($data['id_socio']);
                 $nuevoSocioAdherente = SocioAdherente::create([
                     'id_socio' => $data['id_socio'],
                     'id_adherente' => $data['id_adherente'],
@@ -266,8 +292,11 @@ class AdherenteController extends Controller
                     'id_socio_anterior' => isset($data['id_socio']) ? $socioAdherente->id_socio : null
                 ]);
                 $historial = HistorialSocioAdherente::create([
+                    'id_socio_adherente' => $nuevoSocioAdherente->id,
                     'id_socio' => $data['id_socio'],
                     'id_adherente' => $data['id_adherente'],
+                    'fecha_reafiliacion' => $data['fecha_reafiliacion'],
+                    'motivo_reafiliacion' => $data['motivo_reafiliacion'],
                     'estado' => 1
                 ]);
             } else {
@@ -275,10 +304,11 @@ class AdherenteController extends Controller
                     'fecha_reafiliacion' => $data['fecha_reafiliacion'],
                     'motivo_reafiliacion' => $data['motivo_reafiliacion']
                 ]);
+                $socio = Socio::find($socioAdherente->id_socio);
             }
 
             DB::commit();
-            return response()->json(['message' => 'Adherente eliminado correctamente'], 200);
+            return response()->json(['message' => 'Adherente eliminado correctamente', 'socio' => $socio->razon_social], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             DB::rollback();
@@ -301,16 +331,17 @@ class AdherenteController extends Controller
             ]);
             DB::beginTransaction();
             $data['fecha_desafiliacion'] = Carbon::createFromFormat('d/m/Y', $data['fecha_desafiliacion'])->format('Y-m-d');
+            $socioAdherente = SocioAdherente::find($data['id_socio_adherente']);
+            if (!$socioAdherente) return response()->json(['message' => 'El Adherente no se encuentra conectado con el Socio'], 404);
+            $socioAdherente->estado = 0;
+            $socioAdherente->save();
+
             $adherente = Adherente::find($data['id_adherente']);
-            if (!$adherente) return response()->json(['message' => 'Adherente no existe'], 400);
+            if (!$adherente) return response()->json(['message' => 'Adherente no existe'], 404);
             if ($adherente->fecha_ingreso > $data['fecha_desafiliacion']) return response()->json(['message' => 'Fecha de Desafiliacion no puede ser menor que la fecha de ingreso del adherente'], 400);
             $adherente->estado = 0;
             $adherente->save();
 
-            $socioAdherente = SocioAdherente::find($data['id_socio_adherente']);
-            if (!$socioAdherente) return response()->json(['message' => 'El Adherente no se encuentra conectado con el Socio']);
-            $socioAdherente->estado = 0;
-            $socioAdherente->save();
 
             $historial = HistorialSocioAdherente::where('id_socio_adherente', $socioAdherente->id)->update([
                 'motivo_desafiliacion' => $data['motivo_desafiliacion'],

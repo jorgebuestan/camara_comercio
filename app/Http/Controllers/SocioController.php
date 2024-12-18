@@ -157,7 +157,7 @@ class SocioController extends Controller
         try {
             $request->validate([
                 'fecha_ingreso' => 'required|date_format:d/m/Y',
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
                 'tipo_personeria' => 'required|integer',
                 'identificacion' => 'required|string',
@@ -195,10 +195,10 @@ class SocioController extends Controller
                 return response()->json(['error' => 'El socio con estos datos ya existe en el sistema.'], 422);
             }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
-            $rutaFoto = 'prueba';
+            $rutaFoto = '';
 
-            if ($request->hasFile('file')) {
-                $archivoFoto = $request->file('file');
+            if ($request->hasFile('foto')) {
+                $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
 
                 $storedFilePath = "fotos_socios/" . $data['identificacion'] . "/" . $nombreArchivo;
@@ -302,7 +302,7 @@ class SocioController extends Controller
         try {
             $request->validate([
                 'fecha_ingreso' => 'sometimes|date_format:d/m/Y',
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
                 'tipo_personeria' => 'sometimes|integer',
                 'identificacion' => 'sometimes|string',
@@ -337,7 +337,6 @@ class SocioController extends Controller
             $data = $request->all();
             $socioId = $request->socio_id;
             $socioId = intval($socioId);
-            Log::info($request->all());
 
             $socio = Socio::find($socioId);
             if (!$socio) {
@@ -349,15 +348,15 @@ class SocioController extends Controller
                 $query->where('identificacion', $data['identificacion'])
                     ->orWhere('razon_social', $data['razon_social']);
             })->where('id', '!=', $socioId)->count();
-            Log::info($socioExiste);
             if ($socioExiste > 0) {
                 return response()->json(['error' => 'Existe un socio con estos datos en el sistema.'], 422);
             }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
-            $rutaFoto = 'prueba';
+            $rutaFoto = null;
+            $contents = Storage::disk('public')->get($socio->logo);
 
-            if ($request->hasFile('file')) {
-                $archivoFoto = $request->file('file');
+            if ($request->hasFile('foto')) {
+                $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
 
                 $storedFilePath = "fotos_socios/" . $data['identificacion'] . "/" . $nombreArchivo;
@@ -389,6 +388,8 @@ class SocioController extends Controller
             } else if ($data['tipo_personeria'] == 2) {
                 $data['fecha_nacimiento'] = null;
             }
+            $data['foto'] = $rutaFoto ?? $socio->foto;
+
             $socio->update([
                 'logo' => $rutaFoto,
                 'fecha_ingreso' => $fecha_ingreso,
@@ -439,8 +440,8 @@ class SocioController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             DB::rollBack();
-            if ($storedFilePath && Storage::disk('public')->exists($storedFilePath)) {
-                Storage::disk('public')->delete($storedFilePath);
+            if ($contents && Storage::disk('public')->exists($storedFilePath)) {
+                Storage::disk('public')->put($storedFilePath, $contents);
             }
             return response()->json(
                 [

@@ -933,7 +933,7 @@
                     formData.append(field, value);
                 });
                 if ($('#fotoFile')[0].files.length > 0) {
-                    formData.append('file', $('#fotoFile')[0].files[0]);
+                    formData.append('foto', $('#fotoFile')[0].files[0]);
                 }
                 if ($('#adjuntos')[0].files.length > 0) {
                     $.each($('#adjuntos')[0].files, function(i, file) {
@@ -1028,7 +1028,7 @@
                     formData.append(field, value);
                 });
                 if ($('#fotoFile')[0].files.length > 0) {
-                    formData.append('file', $('#fotoFile')[0].files[0]);
+                    formData.append('foto', $('#fotoFile')[0].files[0]);
                 }
                 if ($('#adjuntos')[0].files.length > 0) {
                     $.each($('#adjuntos')[0].files, function(i, file) {
@@ -1051,8 +1051,8 @@
                     url: "{{ route('admin.actualizar_socio') }}",
                     type: "post",
                     data: formData,
-                    processData: false, // Prevent jQuery from automatically transforming the FormData object
-                    contentType: false, // Prevent jQuery from setting the `Content-Type` header
+                    processData: false,
+                    contentType: false,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
                             'content') // Ensure CSRF token is passed if needed
@@ -1153,11 +1153,15 @@
             $(document).on('click', '.edit-modal', async function() {
                 let button = $(this);
                 socioSelected = button.data('id');
+                limpiarFormulario();
 
                 $('.nav-tabs a[href="#datos_generales"]').tab('show');
 
                 let data = socios.find(socio => socio.id == socioSelected);
-                console.log(data);
+                if (data.logo) {
+                    let logoPath = data.logo;
+                    //Logic to show the image in the modal
+                }
                 // Populate modal fields with the row data
                 $('#ModalSocio').find('#fecha_ingreso').val(data.fecha_ingreso);
                 $('#ModalSocio').find('#tipo_personeria').val(data.id_tipo_personeria).trigger(
@@ -1194,16 +1198,16 @@
                 $('#ModalSocio').find('#tipo_regimen').val(data.tipo_regimen);
                 $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
                 $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
-                $('#ModalSocio').find('#pais').val(data.id_pais).trigger('change');
+                $('#ModalSocio').find('#pais').val(data.id_pais ?? -1).trigger('change');
 
                 // Cargar provincias y asignar provincia
-                cargarProvincias(data.id_pais).then(() => {
-                    $('#provincia').val(data.id_provincia).trigger('change');
+                cargarProvincias(data.id_pais ?? -1).then(() => {
+                    $('#provincia').val(data.id_provincia ?? -1).trigger('change');
 
                     // Cargar cantones y asignar cantón
                     cargarCantones(data.id_pais, data
                         .id_provincia).then(() => {
-                        $('#canton').val(data.id_canton).trigger('change');
+                        $('#canton').val(data.id_canton ?? -1).trigger('change');
 
                         // Cargar parroquias y asignar parroquia
                         cargarParroquias(
@@ -1212,16 +1216,10 @@
                             data.id_canton
                         ).then(() => {
                             $('#parroquia').val(data
-                                .dato_tributario
-                                .id_parroquia);
+                                .id_parroquia ?? -1);
                         });
                     });
                 });
-                $('#ModalSocio').find('#provincia').val(data.id_provincia);
-                $('#ModalSocio').find('#canton').val(data.id_canton);
-                $('#ModalSocio').find('#parroquia').val(data.id_parroquia);
-
-
                 $('#ModalSocio').find('#calle').val(data.calle);
                 $('#ModalSocio').find('#manzana').val(data.manzana);
                 $('#ModalSocio').find('#numero').val(data.numero);
@@ -1899,6 +1897,61 @@
                 }
             });
 
+            function aniosVencimiento(id_fecha_ingreso, id_fecha_vencimiento, id_resultado) {
+                $('#' + id_fecha_ingreso + ', #' + id_fecha_vencimiento).on('change', function() {
+                    let fechaIngreso = $('#' + id_fecha_ingreso).val()
+                    let vencimiento = $('#' + id_fecha_vencimiento).val();
+
+                    function parseDate(str) {
+                        let mdy = str.split('/');
+                        return new Date(parseInt(mdy[2], 10), parseInt(mdy[1], 10) - 1, parseInt(mdy[0],
+                            10));
+                    }
+                    if (fechaIngreso && vencimiento) {
+                        let fechaInicio = parseDate(fechaIngreso);
+                        let fechaFin = parseDate(vencimiento);
+
+                        if (fechaFin <= fechaInicio) {
+                            Swal.fire({
+                                target: document.getElementById('ModalSocio'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'La fecha de vencimiento del nombramiento no puede ser menor o igual a la fecha de ingreso.',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                            });
+                            $('#' + id_fecha_vencimiento).val('');
+                            return;
+                        }
+                    }
+                    if (vencimiento) {
+                        let today = new Date();
+                        let fechaFin = parseDate(vencimiento);
+                        let years = fechaFin.getFullYear() - today.getFullYear();
+                        let months = fechaFin.getMonth() - today.getMonth();
+                        let days = fechaFin.getDate() - today.getDate();
+
+                        if (days < 0) {
+                            months--;
+                            const monthDays = new Date(fechaFin.getFullYear(), fechaFin.getMonth(), 0)
+                                .getDate();
+                            days += monthDays;
+                        }
+                        if (months < 0) {
+                            years--;
+                            months += 12;
+                        }
+
+                        if (fechaFin <= today) {
+                            $('#' + id_resultado).val('0 años 0 meses. Vencido');
+                            return;
+                        }
+                        $('#' + id_resultado).val(years + ' años ' + months + ' meses');
+                    }
+                });
+            }
+
             function calcularDuracion(id_inicio, id_fin, alertText, id_resultado) {
                 $('#' + id_inicio + ', #' + id_fin).on('change', function() {
                     let fechaIngreso = $('#' + id_inicio).val()
@@ -1987,9 +2040,9 @@
             validarTelefono(
                 'telefono_representante', 'error_telefono_representante');
 
-            calcularDuracion('fecha_ingreso', 'vencimiento_nombramiento',
-                'La fecha de vencimiento del nombramiento no puede ser menor a la fecha de ingreso.',
+            aniosVencimiento('fecha_ingreso', 'vencimiento_nombramiento',
                 'anios_nombramiento');
+
             calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
                 'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
             );
