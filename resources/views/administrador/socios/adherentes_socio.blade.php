@@ -193,7 +193,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalAdherenteLabel"><b>Agregar un nuevo Adherente</b></h5>
+                    <h5 class="modal-title" id="ModalAdherenteLabel"></h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -555,6 +555,7 @@
 
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
+                $('#ModalAdherenteLabel').html('<b>Agregar un nuevo Adherente</b>');
                 $('#ModalAdherente').find('#agregar_adherente').show();
                 $('#ModalAdherente').find('#actualizar_adherente').hide();
                 // Verificar si se seleccionó una opción válida en el select
@@ -1146,7 +1147,7 @@
                 let button = $(this);
                 let id = button.data('id');
                 limpiarFormulario();
-
+                $('#ModalAdherenteLabel').html('<b>Modificar Adherente</b>');
                 let data = socioAdherentes.find(adherente => adherente.id == id);
 
                 let nombreSocioSeleccionado = $('#socio option:selected').text();
