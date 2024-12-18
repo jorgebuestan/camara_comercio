@@ -322,6 +322,9 @@ class CamaraController extends Controller
     public function modificar_camara(Request $request)
     {  
         try {
+
+            DB::beginTransaction();
+
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso_mod'))->format('Y-m-d');
         
@@ -393,16 +396,74 @@ class CamaraController extends Controller
                 'referencia' => strtoupper($request->input('referencia_mod')),
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
+
+            $usuario = User::where('username', $camara->ruc)->first(); 
+            $usuario->name = strtoupper($request->input('razon_social_mod'));
+            $usuario->email = strtoupper($request->input('correo_representante_legal_mod'));
+            $usuario->username = strtoupper($request->input('ruc_mod'));
+            $usuario->save();
+
+            DB::commit();
         
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             return response()->json(['response' => [
                 'msg' => "Registro modificado",
                 ]
             ], 201);
-        } catch (\Illuminate\Database\QueryException $e) { 
+        } /*catch (\Illuminate\Database\QueryException $e) { 
             return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
+        }*/
+        catch (\Illuminate\Database\QueryException $e) {
+            Log::error($e);
+            DB::rollBack();
+        
+            if ($e->getCode() == 23000) { // Código de error para violaciones de restricción única
+                $errorMessage = $e->getMessage();
+                Log::error("Mensaje de error SQL: " . $errorMessage); // Registro detallado para depuración
+        
+                // Analizar el mensaje para determinar el índice violado
+                if (preg_match("/Duplicate entry '.*' for key '(?:.*\.)?([^']+)'/", $errorMessage, $matches)) {
+                    $indexName = $matches[1]; // Extraer el nombre del índice violado
+        
+                    // Mapear el índice con el campo correspondiente
+                    $fieldMap = [
+                        'users_email_unique' => 'email',
+                        'users_username_unique' => 'username',
+                        'camaras_ruc_unique' => 'RUC',
+                        // Agrega más índices según tu esquema de base de datos
+                    ];
+        
+                    if (isset($fieldMap[$indexName])) {
+                        $fieldName = $fieldMap[$indexName];
+        
+                        // Respuesta en caso de un valor duplicado
+                        return response()->json([
+                            'error' => "El valor ingresado para el campo '{$fieldName}' ya existe en el sistema.",
+                            'debug' => app()->isLocal() ? $errorMessage : null // Incluir detalles solo en entornos locales
+                        ], 422);
+                    }
+                }
+        
+                // Respuesta genérica si no se puede determinar el campo afectado
+                return response()->json([
+                    'error' => 'Se ha producido un error de restricción única en la base de datos.',
+                    'debug' => app()->isLocal() ? $errorMessage : null // Incluir detalles solo en entornos locales
+                ], 422);
+            }
+        
+            // Respuesta genérica para otros errores de base de datos
+            return response()->json([
+                'error' => 'Error al modificar el registro: ' . $e->getMessage()
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json([
+                'error' => 'Error al modificar la Cámara: ' . $e->getMessage(),
+                'debug' => app()->isLocal() ? $errorMessage : null // Incluir detalles solo en entornos locales
+            ], 500);
         }
     }
 }

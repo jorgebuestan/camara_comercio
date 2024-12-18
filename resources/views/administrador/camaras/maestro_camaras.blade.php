@@ -3080,19 +3080,26 @@
                     //alert(msg);
                     location.reload();
                     $('#carga').hide();
-                }).fail(function(res) { 
-                    let errorMessage = 'Ocurrió un error inesperado.'; 
-                    // Si la respuesta contiene datos JSON
-                    if (res.responseJSON && res.responseJSON.message) {
-                        errorMessage = res.responseJSON.message; // Obtener mensaje del servidor
+                }).fail(function(res) {  
+                    let errorMessage = 'Ocurrió un error inesperado.';
+
+                    // Verifica si la respuesta contiene JSON válido y el campo "error"
+                    if (res.responseJSON && res.responseJSON.error) {
+                        errorMessage = res.responseJSON.error; // Solo el mensaje de error
                     } else if (res.responseText) {
-                        errorMessage = res.responseText; // Fallback al texto de la respuesta
+                        try {
+                            const response = JSON.parse(res.responseText);
+                            errorMessage = response.error || errorMessage; // Si existe, muestra el campo "error"
+                        } catch (e) {
+                            errorMessage = res.responseText; // Texto plano de la respuesta
+                        }
                     }
-                    
+
+                    // Muestra el mensaje de error en SweetAlert
                     Swal.fire({ 
                         icon: 'error',
                         title: 'Error',
-                        text: 'Error al modificar la Cámara',
+                        text: errorMessage,
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
