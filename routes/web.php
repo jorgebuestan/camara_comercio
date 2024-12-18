@@ -165,6 +165,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/reportes/exportar_excel_socios_por_camara', [ReportesController::class, 'exportar_excel_socios_por_camara'])->middleware('auth')->name('admin.exportar_excel_socios_por_camara');
     Route::get('/administrador/reportes/exportar_pdf_socios_por_camara', [ReportesController::class, 'exportar_pdf_socios_por_camara'])->middleware('auth')->name('admin.exportar_pdf_socios_por_camara');
      
+    //Manejo de Archivos de Obligaciones
+    Route::get('/camara/archivos/archivos_obligaciones_camara', [ArchivoObligacionCamaraController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_camara');
+    Route::get('/camara/archivos/archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_socio');
+    
 });
 
 require __DIR__ . '/auth.php';

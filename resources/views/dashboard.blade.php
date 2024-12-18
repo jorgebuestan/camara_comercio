@@ -476,12 +476,12 @@
                                         </a>
                                         <ul class="nav nav-children">
                                             <li>
-                                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                                <a class="nav-link" href="{{ route('camara.archivos_obligaciones_camara') }}">
                                                     Obligaciones por Cámara
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                                <a class="nav-link" href="{{ route('camara.archivos_obligaciones_socio') }}">
                                                     Obligaciones por Socios
                                                 </a>
                                             </li> 

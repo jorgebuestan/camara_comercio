@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request; 
 use App\Models\Camara;
 use App\Models\DatoTributario;
 use App\Models\TipoRegimen;
@@ -12,6 +11,10 @@ use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CamaraController extends Controller
 {
@@ -156,7 +159,7 @@ class CamaraController extends Controller
                 $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
             }
 
-            
+            DB::beginTransaction();
 
             // Crear registro en la base de datos
             $camara = Camara::create([
@@ -203,13 +206,58 @@ class CamaraController extends Controller
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
 
+            User::create([
+                'name' => strtoupper($request->input('razon_social')),
+                'email' => strtoupper($request->input('correo_representante_legal')),
+                'username' => strtoupper($request->input('ruc')),
+                'password' => bcrypt('1234'),
+                'estado' => 1
+            ])->assignRole('camara');
+
+            DB::commit();
             return response()->json(['success' => 'Cámara registrada correctamente'], 200);
         } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
+            Log::error($e);
+            DB::rollBack();
+            /*if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'El RUC ingresado ya existe en el sistema.'], 422);
+            }*/
+             // Verificar si es un error de restricción única
+             // Verificar si es un error de restricción única
+            if ($e->getCode() == 23000) { 
+                $errorMessage = $e->getMessage();
+                Log::error("Mensaje de error SQL: " . $errorMessage); // Depurar mensaje completo
+        
+                // Analizar el mensaje para determinar el índice violado
+                if (preg_match("/Duplicate entry '.*' for key '(?:.*\.)?([^']+)'/", $errorMessage, $matches)) {
+                    $indexName = $matches[1]; // Nombre del índice que falló (sin el prefijo de tabla)
+        
+                    // Mapear el índice con el campo correspondiente
+                    $fieldMap = [
+                        'users_email_unique' => 'email',
+                        'users_username_unique' => 'username',
+                        'camaras_ruc_unique' => 'RUC',
+                        // Ajusta los nombres de índices según los resultados del diagnóstico
+                    ];
+        
+                    if (isset($fieldMap[$indexName])) {
+                        $fieldName = $fieldMap[$indexName];
+                        return response()->json([
+                            'error' => "El valor ingresado para el campo '{$fieldName}' ya existe en el sistema.",
+                            'debug' => $errorMessage // Incluye el mensaje completo para depuración en ambiente de desarrollo
+                        ], 422);
+                    }
+                }
+        
+                return response()->json([
+                    'error' => 'Se ha producido un error de restricción única en la base de datos.',
+                    'debug' => $errorMessage // Incluye el mensaje completo para depuración en ambiente de desarrollo
+                ], 422);
             }
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         }
     }
@@ -217,18 +265,34 @@ class CamaraController extends Controller
     public function eliminar_camara($id)
     {
         //$colaborador = Colaborador::find($id);
-        $camara = Camara::where('id', $id)->first();
+        try{
 
+            DB::beginTransaction();
 
-        if (!$camara) {
-            return response()->json(['error' => 'Camara no encontrada'], 404);
+            $camara = Camara::where('id', $id)->first(); 
+
+            if (!$camara) {
+                return response()->json(['error' => 'Camara no encontrada'], 404);
+            }
+        
+            // Cambiar el valor del campo 'activo' a 0
+            $camara->estado = 0;
+            $camara->save();
+
+            $usuario = User::where('username', $camara->ruc)->first(); 
+            $usuario->estado = 0;
+            $usuario->save();
+
+            DB::commit();
+        
+            return response()->json(['success' => 'Cámara eliminada correctamente']);
+
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return response()->json(['error' => 'Error al modificar la Cámara: ' . $e->getMessage()], 500);
         }
-    
-        // Cambiar el valor del campo 'activo' a 0
-        $camara->estado = 0;
-        $camara->save();
-    
-        return response()->json(['success' => 'Cámara eliminada correctamente']);
+        
     }
 
     public function detalle_camara($id)
