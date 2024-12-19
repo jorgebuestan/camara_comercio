@@ -7,6 +7,9 @@ use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
+use App\Models\CamaraObligacion;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FuncionesGeneralesController extends Controller
 {
@@ -74,6 +77,27 @@ class FuncionesGeneralesController extends Controller
         // Formato de respuesta esperado
         return response()->json([
             'parroquias' => $parroquias->map(function ($nombre, $id) {
+                return ['id' => $id, 'nombre' => $nombre];
+            })->values(),
+        ]);
+    }
+
+    public function get_obligaciones_camara(Request $request)
+    {  
+        $id_camara = request('id_camara');
+        // Obtener las obligaciones con el concat deseado
+        $obligaciones = CamaraObligacion::select(
+                            'camaras_obligaciones.id',
+                            DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
+                        )
+                        ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
+                        ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
+                        ->where('camaras_obligaciones.id_camara', $id_camara)
+                        ->pluck('nombre', 'id');
+  
+        // Formato de respuesta esperado
+        return response()->json([
+            'obligaciones' => $obligaciones->map(function ($nombre, $id) {
                 return ['id' => $id, 'nombre' => $nombre];
             })->values(),
         ]);

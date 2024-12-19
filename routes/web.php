@@ -64,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-cantones', [FuncionesGeneralesController::class, 'get_cantones'])->middleware('auth')->name('funciones_generales.get_cantones');
     Route::get('/get-parroquias', [FuncionesGeneralesController::class, 'get_parroquias'])->middleware('auth')->name('funciones_generales.get_parroquias');
 
+    Route::get('/get-obligaciones-camaras', [FuncionesGeneralesController::class, 'get_obligaciones_camara'])->middleware('auth')->name('funciones_generales.get_obligaciones_camara');
+
     //Funciones Administrador
 
     //Maestro de Camaras
@@ -165,8 +167,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/reportes/exportar_excel_socios_por_camara', [ReportesController::class, 'exportar_excel_socios_por_camara'])->middleware('auth')->name('admin.exportar_excel_socios_por_camara');
     Route::get('/administrador/reportes/exportar_pdf_socios_por_camara', [ReportesController::class, 'exportar_pdf_socios_por_camara'])->middleware('auth')->name('admin.exportar_pdf_socios_por_camara');
      
-    //Manejo de Archivos de Obligaciones
+    //Manejo de Archivos de Obligaciones por Camara
     Route::get('/camara/archivos/archivos_obligaciones_camara', [ArchivoObligacionCamaraController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_camara');
+    Route::post('/camara/archivos/guardar_archivo_camara', [ArchivoObligacionCamaraController::class, 'guardar_archivo_camara'])->name('camara.guardar_archivo_camara');
+
+    //Manejo de Archivos de Obligaciones por Socio
     Route::get('/camara/archivos/archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_socio');
     
 });
