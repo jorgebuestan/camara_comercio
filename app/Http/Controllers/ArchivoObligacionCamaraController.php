@@ -8,14 +8,62 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User; 
 use App\Models\ArchivoObligacionCamara;
 use App\Models\Camara;
+use App\Models\CamaraObligacion;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ArchivoObligacionCamaraController extends Controller
 {
     //
+    /*public function index()
+    {   
+        //$usuarios = Auth::user()->hasRole('admin') ? User::all() : null;
+        $camaras = Camara::pluck('razon_social', 'id');
+        return view('camara.archivos.obligaciones_camaras', compact('camaras') );
+    }*/
+
     public function index()
+    {
+        if (Auth::user()->hasRole('admin')) {
+            $camaras = Camara::pluck('razon_social', 'id');
+            $obligaciones = []; // Vacío inicialmente porque el admin seleccionará la cámara
+        } else {
+            $usuario = Auth::user(); // Obtiene el objeto completo del usuario autenticado
+            $camara = Camara::where('ruc', $usuario->username)->first(); 
+
+            $camaras = []; // El select de cámaras no se mostrará
+            $obligaciones = CamaraObligacion::select(
+                                'camaras_obligaciones.id',
+                                DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
+                            )
+                            ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
+                            ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
+                            ->where('camaras_obligaciones.id_camara', $camara->id)
+                            ->pluck('nombre', 'id');
+        }
+
+        return view('camara.archivos.obligaciones_camaras', compact('camaras', 'obligaciones'));
+    }
+
+    public function get_obligaciones_camara(Request $request)
     {  
-        $usuarios = Auth::user()->hasRole('admin') ? User::all() : null;
-        return view('camara.archivos.obligaciones_camaras', compact('usuarios') );
+        $id_camara = request('id_camara'); 
+        // Obtener las obligaciones con el concat deseado 
+        $obligaciones = CamaraObligacion::select(
+                            'camaras_obligaciones.id',
+                            DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
+                        )
+                        ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
+                        ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
+                        ->where('camaras_obligaciones.id_camara', $id_camara)
+                        ->pluck('nombre', 'id');
+  
+        // Formato de respuesta esperado
+        return response()->json([
+            'obligaciones' => $obligaciones->map(function ($nombre, $id) {
+                return ['id' => $id, 'nombre' => $nombre];
+            })->values(),
+        ]);
     }
 
     public function guardar_archivo_camara(Request $request)
