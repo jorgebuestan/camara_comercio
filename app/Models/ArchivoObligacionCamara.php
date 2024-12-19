@@ -16,7 +16,7 @@ class ArchivoObligacionCamara extends Model
         'id_obligacion',
         'ruta_archivo',
         'validado',
+        'subido_por',
         'estado' 
-    ];
- 
+    ]; 
 }

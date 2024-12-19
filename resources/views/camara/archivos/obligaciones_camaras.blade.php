@@ -5,7 +5,7 @@ Archivos de Obligaciones por Cámara
 @endsection
 
 @section('content') 
-<form action="{{ route('dashboard') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('camara.guardar_archivo_camara') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     @if(Auth::user()->hasRole('admin'))

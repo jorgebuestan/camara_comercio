@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('id_obligacion');
             $table->text('ruta_archivo')->nullable();
             $table->integer('validado');
-            $table->integer('estado');
+            $table->unsignedBigInteger('subido_por'); // Usuario que subió el archivo
+            $table->integer('estado'); 
             $table->timestamps();
 
             $table->unique(['id_camara', 'id_entidad', 'id_obligacion'], 'unique_archivos_camaras');
