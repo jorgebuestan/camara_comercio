@@ -204,7 +204,7 @@ class SocioController extends Controller
 
                 $storedFilePath = "fotos_socios/" . $data['identificacion'] . "/" . $nombreArchivo;
 
-                $rutaFoto = "fotos_socios/" . $nombreArchivo;
+                $rutaFoto = $storedFilePath;
                 $archivoFoto->storeAs("fotos_socios/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
@@ -365,7 +365,7 @@ class SocioController extends Controller
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
 
                 $storedFilePath = "fotos_socios/" . $data['identificacion'] . "/" . $nombreArchivo;
-                $rutaFoto = "fotos_socios/" . $nombreArchivo;
+                $rutaFoto = $storedFilePath;
                 $archivoFoto->storeAs("fotos_socios/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
