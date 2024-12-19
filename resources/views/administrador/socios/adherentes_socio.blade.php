@@ -143,36 +143,48 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
-                                <section class="card">
-                                    <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
-                                        <h2 class="card-title">Listado de Adherentes Registradas del Socio</h2>
-                                    </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Identificación</th>
-                                                    <th>Nombres</th>
-                                                    <th>Apellidos</th>
-                                                    <th>Estado</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+                            <div class="col-md-12 text-end">
+                                <label class="inline-flex items-center justify-center cursor-pointer">
+                                    <input type="checkbox" value="1" class="sr-only peer" id="mostrar_no_afiliados">
+                                    <div
+                                        class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
                                     </div>
-                                </section>
+                                    <span class="ms-3 text-xs text-gray-900 dark:text-gray-300">Mostrar No Afiliados</span>
+                                </label>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <section class="card">
+                                <header class="card-header">
+                                    <div class="card-actions">
+                                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                                    </div>
+
+                                    <h2 class="card-title">Listado de Adherentes Registradas del Socio</h2>
+                                </header>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Identificación</th>
+                                                <th>Nombres</th>
+                                                <th>Apellidos</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
             </div>
-            </section>
         </div>
+        </section>
+    </div>
     </div>
     <!-- Modal -->
     <form enctype="multipart/form-data" class="modal fade" id="ModalAdherente" tabindex="-1"
@@ -181,7 +193,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalAdherenteLabel"><b>Agregar un nuevo Adherente</b></h5>
+                    <h5 class="modal-title" id="ModalAdherenteLabel"></h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -190,7 +202,12 @@
                                 <p><strong>Socio Seleccionado:</strong> <span id="nombreSocioSeleccionado"></span></p>
                             </div>
                         </div>
-                        <hr>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5 class="font-bold">Datos del Adherente</h5>
+                                <hr>
+                            </div>
+                        </div>
                         <div class="row mb-2">
                             <div class="col-md-6 gap-1 flex flex-col">
                                 <label>
@@ -442,6 +459,7 @@
                         d.id_socio = $('#socio').val();
                         d.with_adherente = 1;
                         d.with_socio = 1;
+                        d.estado = $('#mostrar_no_afiliados').is(':checked') ? 0 : 1;
                     },
                     error: function(error) {
                         Swal.fire({
@@ -494,10 +512,10 @@
                     [0, "asc"]
                 ],
                 createdRow: function(row, data, dataIndex) {
-                    var td = $(row).find(".truncate");
+                    let td = $(row).find(".truncate");
                     td.attr("title", td.text());
 
-                    var td2 = $(row).find(".truncate2");
+                    let td2 = $(row).find(".truncate2");
                     td2.attr("title", td2.text());
                 }
             });
@@ -530,12 +548,19 @@
                 table.ajax.reload(); // Recargar la tabla con el socio seleccionado
             });
 
+            // Escuchar el evento de change del checkbox para mostrar los no afiliados
+            $('#mostrar_no_afiliados').change(function() {
+                table.ajax.reload(null, false); // Recargar la tabla sin reiniciar la paginación
+            });
+
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
-
+                $('#ModalAdherenteLabel').html('<b>Agregar un nuevo Adherente</b>');
+                $('#ModalAdherente').find('#agregar_adherente').show();
+                $('#ModalAdherente').find('#actualizar_adherente').hide();
                 // Verificar si se seleccionó una opción válida en el select
-                var socioSeleccionado = $('#socio').val();
-                var nombreSocioSeleccionado = $('#socio option:selected').text();
+                let socioSeleccionado = $('#socio').val();
+                let nombreSocioSeleccionado = $('#socio option:selected').text();
 
                 if (socioSeleccionado == -1) {
                     Swal.fire({
@@ -559,13 +584,10 @@
                 }
             });
 
+
+
             $('.cerrar-modal').click(function() {
                 limpiarFormulario();
-                $('#ModalAdherente').modal('hide'); // Cerrar el modal
-            });
-
-            $('.cerrar-modal-mod').click(function() {
-                limpiarObligacion();
                 $('#ModalAdherente').modal('hide'); // Cerrar el modal
             });
 
@@ -626,8 +648,8 @@
                     },
                     success: function(response) {
                         let provincias = response.provincias;
-                        let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        let $provinciaSelect = $('#provincia');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
@@ -652,8 +674,8 @@
                     },
                     success: function(response) {
                         let cantones = response.cantones;
-                        let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        let $cantonSelect = $('#canton');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
@@ -678,8 +700,8 @@
                     },
                     success: function(response) {
                         let parroquias = response.parroquias;
-                        let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        let $parroquiaSelect = $('#parroquia');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
@@ -777,9 +799,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -820,42 +842,37 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
             $('#agregar_adherente').click(function() {
                 if (!validarRegistro('ModalAdherente')) return false;
-                let adjuntosData = [];
-                let adjuntos = $('#adjuntos')[0].files;
-                for (let i = 0; i < adjuntos.length; i++) {
-                    adjuntosData[i] = adjuntos[i];
-                }
 
-                let fotoFile = $('#fotoFile')[0].files[0];
-                let data = {
-                    foto: fotoFile,
-                    adjuntos: adjuntosData,
-                    id_socio: $('#socio').val(),
-                    fecha_ingreso: $('#fecha_ingreso').val(),
-                    id_tipo_identificacion: $('#tipo_identificacion').val(),
-                    identificacion: $('#identificacion').val(),
-                    nombres: $('#nombres').val(),
-                    apellidos: $('#apellidos').val(),
-                    correo: $('#correo').val(),
-                    telefono: $('#telefono').val(),
-                    id_pais: $('#pais').val(),
-                    id_provincia: $('#provincia').val(),
-                    id_canton: $('#canton').val(),
-                    id_parroquia: $('#parroquia').val(),
-                    calle: $('#calle').val(),
-                    manzana: $('#manzana').val(),
-                    numero: $('#numero').val(),
-                    interseccion: $('#interseccion').val(),
-                    referencia: $('#referencia').val(),
-                    observaciones: $('#observaciones').val()
-                }
+                let formData = new FormData();
 
+                formData.append('foto', $('#fotoFile')[0].files[0]);
+                formData.append('id_socio', $('#socio').val());
+                formData.append('fecha_ingreso', $('#fecha_ingreso').val());
+                formData.append('id_tipo_identificacion', $('#tipo_identificacion').val());
+                formData.append('identificacion', $('#identificacion').val());
+                formData.append('nombres', $('#nombres').val());
+                formData.append('apellidos', $('#apellidos').val());
+                formData.append('correo', $('#correo').val());
+                formData.append('telefono', $('#telefono').val());
+                formData.append('id_pais', $('#pais').val());
+                formData.append('id_provincia', $('#provincia').val());
+                formData.append('id_canton', $('#canton').val());
+                formData.append('id_parroquia', $('#parroquia').val());
+                formData.append('calle', $('#calle').val());
+                formData.append('manzana', $('#manzana').val());
+                formData.append('numero', $('#numero').val());
+                formData.append('interseccion', $('#interseccion').val());
+                formData.append('referencia', $('#referencia').val());
+                formData.append('observaciones', $('#observaciones').val());
+                // Adjuntos
+                if ($('#tipo_identificacion').val() == 1)
+                    formData.append('ruc', $('#identificacion').val());
 
                 Swal.fire({
                     target: document.getElementById('ModalAdherente'),
@@ -872,7 +889,9 @@
                         $.ajax({
                             url: "{{ route('admin.registrar_adherente_socio') }}",
                             type: 'POST',
-                            data: data,
+                            data: formData,
+                            processData: false,
+                            contentType: false,
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
                                     'content')
@@ -915,26 +934,86 @@
                 });
             });
 
-            $(document).on('click', '.delete-socio-obligacion', function() {
+            function parseDate(str) {
+                let mdy = str.split('/');
+                return new Date(parseInt(mdy[2], 10), parseInt(mdy[1], 10) - 1, parseInt(mdy[0],
+                    10));
+            }
+            $(document).on('click', '.reafiliar-socio-adherente', function() {
                 let button = $(this);
                 let id = button.data('id');
+                let data = socioAdherentes.find(adherente => adherente.id == id);
+                let fecha_ingreso = parseDate(data.adherente.fecha_ingreso);
 
                 Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "¿Deseas eliminar esta obligación del socio seleccionado?",
+                    title: "Reafiliación de Adherente",
                     icon: 'warning',
+                    html: `
+                        <label for="socio_afiliacion">Socio</label>
+                        <select id="socio_afiliacion" name="socio_afiliacion" class="form-control">
+                            <option value=-1>Seleccionar</option>
+                            @foreach ($sociosSelect as $id => $razon_social)
+                                <option value={{ $id }}>{{ $razon_social }}</option>
+                            @endforeach
+                        </select>
+                        <label for="motivo_reafiliacion">Motivo</label>
+                        <textarea class="form-control" id="motivo_reafiliacion" name="motivo_reafiliacion" rows="3" required style="text-transform: uppercase;"></textarea>
+                        <label for="fecha_reafiliacion">Fecha de Reafiliación</label>
+                        <input type="text" data-plugin-datepicker class="form-control" name="fecha_reafiliacion" id="fecha_reafiliacion" placeholder="Fecha de Afiliación" required />
+                    `,
+                    focusConfirm: false,
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
                     confirmButtonText: 'Sí',
                     cancelButtonText: 'No',
+                    didOpen: () => {
+                        $('#socio_afiliacion').val(data.socio.id ?? -1);
+                        $('#fecha_reafiliacion').datepicker('destroy').datepicker({
+                            format: 'dd/mm/yyyy',
+                            autoclose: true,
+                            todayHighlight: true,
+                            language: 'es'
+                        });
+                    },
+                    preConfirm: () => {
+                        const socio_afiliacion = Swal.getPopup().querySelector(
+                            '#socio_afiliacion').value;
+                        const motivo_reafiliacion = Swal.getPopup().querySelector(
+                            '#motivo_reafiliacion').value;
+                        const fecha_reafiliacion = Swal.getPopup().querySelector(
+                            '#fecha_reafiliacion').value;
+                        if (socio_afiliacion == -1 || !motivo_reafiliacion || !
+                            fecha_reafiliacion) {
+                            Swal.showValidationMessage('Por favor, completa todos los campos.');
+                        } else if (parseDate(fecha_reafiliacion) <= fecha_ingreso) {
+                            console.log("raro");
+                            Swal.showValidationMessage(
+                                'La fecha de afiliación no puede ser menor o igual a la fecha de ingreso.'
+                            );
+                        } else {
+                            return {
+                                socio_afiliacion,
+                                motivo_reafiliacion,
+                                fecha_reafiliacion
+                            };
+                        }
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        const {
+                            socio_afiliacion,
+                            motivo_reafiliacion,
+                            fecha_reafiliacion
+                        } = result.value;
                         $.ajax({
-                            url: "/administrador/obligacion_socio/eliminar/" + id,
+                            url: "{{ route('admin.reafiliar_adherente_socio') }}",
                             type: 'POST',
                             data: {
-                                id: id
+                                id_socio_adherente: id,
+                                id_adherente: data.adherente.id,
+                                id_socio: socio_afiliacion == data.socio.id ? null :
+                                    socio_afiliacion,
+                                motivo_reafiliacion,
+                                fecha_reafiliacion,
                             },
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
@@ -944,7 +1023,8 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Éxito',
-                                text: 'Adherente eliminada correctamente.',
+                                text: 'Adherente reafiliado correctamente al socio ' +
+                                    response.socio,
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
@@ -961,9 +1041,102 @@
                                 allowOutsideClick: false,
                                 confirmButtonText: 'Aceptar',
                                 text: error.responseJSON?.message ||
-                                    "Error al eliminar al adherente.",
+                                    "Error al reafiliar al adherente.",
                             });
-                            console.error("Error al eliminar al adherente: ",
+                            console.error("Error al reafiliar al adherente: ",
+                                error);
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '.delete-socio-adherente', function() {
+                let button = $(this);
+                let id = button.data('id');
+                let data = socioAdherentes.find(adherente => adherente.id == id);
+                let fecha_ingreso = parseDate(data.adherente.fecha_ingreso);
+                Swal.fire({
+                    title: "Desafiliación de Adherente",
+                    icon: 'warning',
+                    html: `
+                        <label for="motivo">Motivo de desafiliación</label>
+                        <textarea class="form-control" id="motivo" name="motivo" rows="3" required style="text-transform: uppercase;"></textarea>
+                        <label for="fecha_desafiliacion">Fecha de desafiliación</label>
+                        <input type="text" data-plugin-datepicker class="form-control" name="fecha_desafiliacion" id="fecha_desafiliacion" placeholder="Fecha de Desafiliación" required />
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí',
+                    cancelButtonText: 'No',
+                    didOpen: () => {
+                        $('#fecha_desafiliacion').datepicker('destroy').datepicker({
+                            format: 'dd/mm/yyyy',
+                            autoclose: true,
+                            todayHighlight: true,
+                            language: 'es'
+                        });
+                    },
+                    preConfirm: () => {
+                        const motivo = Swal.getPopup().querySelector('#motivo').value;
+                        const fecha_desafiliacion = Swal.getPopup().querySelector(
+                            '#fecha_desafiliacion').value;
+                        if (!motivo || !fecha_desafiliacion) {
+                            Swal.showValidationMessage('Por favor, completa todos los campos.');
+                        } else if (parseDate(fecha_desafiliacion) <= fecha_ingreso) {
+                            Swal.showValidationMessage(
+                                'La fecha de desafiliación no puede ser menor o igual a la fecha de ingreso.'
+                            );
+                        } else {
+                            return {
+                                motivo,
+                                fecha_desafiliacion
+                            };
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const {
+                            motivo,
+                            fecha_desafiliacion
+                        } = result.value;
+                        $.ajax({
+                            url: "/administrador/adherente_socio/eliminar/" + id,
+                            type: 'POST',
+                            data: {
+                                id_socio_adherente: id,
+                                id_adherente: data.adherente.id,
+                                id_socio: data.socio.id,
+                                motivo_desafiliacion: motivo,
+                                fecha_desafiliacion,
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                        }).done(function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: 'Adherente desafiliado correctamente.',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    table.ajax.reload(null, false);
+                                }
+                            });
+                        }).fail(function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                                text: error.responseJSON?.message ||
+                                    "Error al desafiliar al adherente.",
+                            });
+                            console.error("Error al desafiliar al adherente: ",
                                 error);
                         });
                     }
@@ -973,66 +1146,103 @@
             $(document).on('click', '.edit-modal', function() {
                 let button = $(this);
                 let id = button.data('id');
-
-                let data = socioAdherentes.find(obligacion => obligacion.id == id);
+                limpiarFormulario();
+                $('#ModalAdherenteLabel').html('<b>Modificar Adherente</b>');
+                let data = socioAdherentes.find(adherente => adherente.id == id);
 
                 let nombreSocioSeleccionado = $('#socio option:selected').text();
                 $('#socioModSeleccionado').text(nombreSocioSeleccionado);
 
-                let tiempo_presentacion = data.obligacion.tiempo_presentacion?.descripcion ?? 'N/A';
-                let tipo_presentacion = data.obligacion.tipo_presentacion?.descripcion ?? 'N/A';
-                let fecha_presentacion = data.fecha_presentacion ?? 'N/A';
-                let fecha_inicio = data.fecha_inicio ?? 'N/A';
+                $('#ModalAdherente').find('#agregar_adherente').hide();
+                $('#ModalAdherente').find('#actualizar_adherente').show();
 
-                function convertirFecha(fecha) {
-                    if (fecha == 'N/A') {
-                        return fecha;
-                    }
-                    let fechaArray = fecha.split('-');
-                    return `${fechaArray[2]}/${fechaArray[1]}/${fechaArray[0]}`;
+                if (data.adherente.foto) {
+                    let fotoPath = data.adherente.foto;
+                    //Logic to show the image in the modal
                 }
 
-                fecha_inicio = convertirFecha(fecha_inicio);
-                fecha_presentacion = convertirFecha(fecha_presentacion);
+                $('#ModalAdherente').find('#fecha_ingreso').val(data.adherente.fecha_ingreso ?? '');
+                $('#ModalAdherente').find('#tipo_identificacion').val(data.adherente
+                    .id_tipo_identificacion ?? -1);
+                $('#ModalAdherente').find('#identificacion').val(data.adherente.identificacion ?? '');
+                $('#ModalAdherente').find('#nombres').val(data.adherente.nombres ?? '');
+                $('#ModalAdherente').find('#apellidos').val(data.adherente.apellidos ?? '');
+                $('#ModalAdherente').find('#correo').val(data.adherente.correo ?? '');
+                $('#ModalAdherente').find('#telefono').val(data.adherente.telefono ?? '');
+                $('#ModalAdherente').find('#pais').val(data.adherente.id_pais ?? -1).trigger('change');
 
-                $('#ModalAdherente').find('#entidad_mod').val(data.nombre_entidad);
-                $('#ModalAdherente').find('#obligacion_mod').val(data.nombre_obligacion);
-                $('#ModalAdherente').find('#tiempo_presentacion_mod').val(tiempo_presentacion);
-                $('#ModalAdherente').find('#tipo_presentacion_mod').val(tipo_presentacion);
-                $('#ModalAdherente').find('#fecha_presentacion_mod').val(fecha_presentacion);
-                $('#ModalAdherente').find('#fecha_inicio_mod').val(fecha_inicio);
+                // Cargar provincias y asignar provincia
+                cargarProvincias(data.adherente.id_pais).then(() => {
+                    $('#provincia').val(data.adherente.id_provincia ?? -1).trigger('change');
+
+                    // Cargar cantones y asignar cantón
+                    cargarCantones(data.adherente.id_pais, data
+                        .id_provincia).then(() => {
+                        $('#canton').val(data.adherente.id_canton ?? -1).trigger('change');
+
+                        // Cargar parroquias y asignar parroquia
+                        cargarParroquias(
+                            data.adherente.id_pais,
+                            data.adherente.id_provincia,
+                            data.adherente.id_canton
+                        ).then(() => {
+                            $('#parroquia').val(data
+                                .adherente.id_parroquia ?? -1);
+                        });
+                    });
+                });
+                $('#ModalAdherente').find('#calle').val(data.adherente.calle ?? '');
+                $('#ModalAdherente').find('#manzana').val(data.adherente.manzana ?? '');
+                $('#ModalAdherente').find('#numero').val(data.adherente.numero ?? '');
+                $('#ModalAdherente').find('#interseccion').val(data.adherente.interseccion ?? '');
+                $('#ModalAdherente').find('#referencia').val(data.adherente.referencia ?? '');
+                $('#ModalAdherente').find('#observaciones').val(data.adherente.observaciones ?? '');
+
+                if (data.adherente.adjuntos && data.adherente.adjuntos.length > 0) {
+                    let adjuntosList = $('#adjuntos');
+                    adjuntosList.empty();
+                    data.adherente.adjuntos.forEach(function(adjunto, index) {
+                        adjuntosList.append(
+                            `<li><a href="${adjunto.url}" target="_blank">Adjunto ${index + 1}</a></li>`
+                        );
+                    });
+                } else {
+                    $('#adjuntosList').empty().append('<li>No hay datos adjuntos</li>');
+                }
                 socioAdherenteSelected = id;
-                obligacionSelected = data.id_obligacion;
-                entidadSelected = data.id_entidad;
-
-                if (tiempo_presentacion == 'CONSECUTIVA') {
-                    $('#ModalAdherente').find('#fecha_presentacion_mod').prop('disabled', true);
-                    $('#ModalAdherente').find('#fecha_inicio_mod').prop('disabled', false);
-                } else if (tiempo_presentacion == 'ÚNICA VEZ') {
-                    $('#ModalAdherente').find('#fecha_presentacion_mod').prop('disabled', false);
-                    $('#ModalAdherente').find('#fecha_inicio_mod').prop('disabled', true);
-                }
-
                 $('#ModalAdherente').modal('show');
             });
-            $('#modificar_obligacion').click(function() {
+
+            $('#actualizar_adherente').click(function() {
                 if (!validarRegistro('ModalAdherente')) return;
-                let fecha_inicio = $('#ModalAdherente').find('#fecha_inicio_mod').val();
-                let fecha_presentacion = $('#ModalAdherente').find('#fecha_presentacion_mod')
-                    .val();
-                let data = {
-                    id: socioAdherenteSelected,
-                    id_obligacion: obligacionSelected,
-                    id_entidad: entidadSelected,
-                    id_socio: $('#socio').val(),
-                    tiempo_presentacion: $('#ModalAdherente').find('#tiempo_presentacion_mod')
-                        .val(),
-                    tipo_presentacion: $('#ModalAdherente').find('#tipo_presentacion_mod')
-                        .val(),
-                    fecha_presentacion: fecha_presentacion == 'N/A' ? null : fecha_presentacion,
-                    fecha_inicio: fecha_inicio ==
-                        'N/A' ? null : fecha_inicio,
-                };
+
+                let formData = new FormData();
+
+                formData.append('id', socioAdherenteSelected);
+                if ($('#fotoFile')[0].files.length > 0) {
+                    formData.append('foto', $('#fotoFile')[0].files[0]);
+                }
+                formData.append('fecha_ingreso', $('#fecha_ingreso').val());
+                formData.append('id_tipo_identificacion', $('#tipo_identificacion').val());
+                formData.append('identificacion', $('#identificacion').val());
+                formData.append('nombres', $('#nombres').val());
+                formData.append('apellidos', $('#apellidos').val());
+                formData.append('correo', $('#correo').val());
+                formData.append('telefono', $('#telefono').val());
+                formData.append('id_pais', $('#pais').val());
+                formData.append('id_provincia', $('#provincia').val());
+                formData.append('id_canton', $('#canton').val());
+                formData.append('id_parroquia', $('#parroquia').val());
+                formData.append('calle', $('#calle').val());
+                formData.append('manzana', $('#manzana').val());
+                formData.append('numero', $('#numero').val());
+                formData.append('interseccion', $('#interseccion').val());
+                formData.append('referencia', $('#referencia').val());
+                formData.append('observaciones', $('#observaciones').val());
+                formData.append('_token', '{{ csrf_token() }}');
+
+                //formData.append('adjuntos', $('#adjuntos')[0].files);
+
                 Swal.fire({
                     target: document.getElementById('ModalAdherente'),
                     title: '¿Estás seguro?',
@@ -1044,9 +1254,11 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('admin.modificar_obligacion_socio') }}",
+                            url: "{{ route('admin.modificar_adherente_socio') }}",
                             type: 'POST',
-                            data: data,
+                            data: formData,
+                            processData: false,
+                            contentType: false,
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
                                     'content')
@@ -1089,25 +1301,11 @@
              * Functions
              */
             function limpiarFormulario() {
-                $('#fotoFile').val('');
-                $('#fecha_ingreso').val('');
-                $('#tipo_identificacion').val(-1);
-                $('#identificacion').val('');
-                $('#nombres').val('');
-                $('#apellidos').val('');
-                $('#correo').val('');
-                $('#telefono').val('');
-                $('#pais').val(-1);
-                $('#provincia').val(-1);
-                $('#canton').val(-1);
-                $('#parroquia').val(-1);
-                $('#calle').val('');
-                $('#manzana').val('');
-                $('#numero').val('');
-                $('#interseccion').val('');
-                $('#referencia').val('');
-                $('#observaciones').val('');
-                $('#adjuntos').val('');
+                $('#ModalAdherente').find('input, select, textarea').val('');
+                $('#ModalAdherente').find(
+                        '#tipo_identificacion, #pais, #provincia, #canton, #parroquia'
+                    )
+                    .val(-1);
             }
 
             function validarRegistro(idModal) {
@@ -1132,7 +1330,20 @@
                 let validRuc = /^\d{13}$/.test(identificacion);
                 let validCedula = /^\d{10}$/.test(identificacion);
                 let validOtros = /^\d{5,20}$/.test(identificacion);
+                let fotoFile = $('#fotoFile')[0].files[0];
 
+                if (fotoFile && !/\.(jpg|jpeg|png|gif)$/i.test(fotoFile.name)) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'El archivo de foto debe ser una imagen (jpg, jpeg, png, gif).',
+                    });
+                    return false;
+                }
                 if (fecha_ingreso == '') {
                     Swal.fire({
                         target: document.getElementById(idModal),
@@ -1417,18 +1628,18 @@
             }
 
             function esFechaValida(fecha) {
-                var regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+                let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
                 if (!regex.test(fecha)) {
                     return false;
                 }
 
-                var partes = fecha.split('/');
-                var dia = parseInt(partes[0], 10);
-                var mes = parseInt(partes[1], 10) - 1;
-                var anio = parseInt(partes[2], 10);
+                let partes = fecha.split('/');
+                let dia = parseInt(partes[0], 10);
+                let mes = parseInt(partes[1], 10) - 1;
+                let anio = parseInt(partes[2], 10);
 
-                var fechaObj = new Date(anio, mes, dia);
+                let fechaObj = new Date(anio, mes, dia);
                 return (
                     fechaObj.getDate() == dia &&
                     fechaObj.getMonth() == mes &&
