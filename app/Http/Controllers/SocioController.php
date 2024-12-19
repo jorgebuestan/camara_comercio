@@ -9,13 +9,12 @@ use App\Models\Canton;
 use App\Models\DatoTributarioSocio;
 use App\Models\Parroquia;
 use App\Models\Socio;
-use App\Models\TipoPersona;
 use App\Models\TipoPersoneria;
-use App\Models\TipoIdentificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 class SocioController extends Controller
@@ -155,7 +154,7 @@ class SocioController extends Controller
     {
         $storedFilePath = null;
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'fecha_ingreso' => 'required|date_format:d/m/Y',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
@@ -187,12 +186,14 @@ class SocioController extends Controller
                 'interseccion' => 'required|string|max:255',
                 'referencia' => 'required|string|max:255',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
-            $data = $request->all();
-
             $socioExiste = Socio::where('identificacion', $data['identificacion'])->orWhere('razon_social', $data['razon_social'])->first();
             if ($socioExiste) {
-                return response()->json(['error' => 'El socio con estos datos ya existe en el sistema.'], 422);
+                return response()->json(['message' => 'El socio con estos datos ya existe en el sistema.'], 422);
             }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $rutaFoto = '';
@@ -300,7 +301,8 @@ class SocioController extends Controller
     {
         $storedFilePath = null;
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
+                'socio_id' => 'required|integer',
                 'fecha_ingreso' => 'sometimes|date_format:d/m/Y',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
@@ -333,14 +335,17 @@ class SocioController extends Controller
                 'interseccion' => 'sometimes|string|max:255',
                 'referencia' => 'sometimes|string|max:255',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
-            $data = $request->all();
             $socioId = $request->socio_id;
             $socioId = intval($socioId);
 
             $socio = Socio::find($socioId);
             if (!$socio) {
-                return response()->json(['error' => 'Socio no encontrado.'], 404);
+                return response()->json(['message' => 'Socio no encontrado.'], 404);
             }
 
 
@@ -349,7 +354,7 @@ class SocioController extends Controller
                     ->orWhere('razon_social', $data['razon_social']);
             })->where('id', '!=', $socioId)->count();
             if ($socioExiste > 0) {
-                return response()->json(['error' => 'Existe un socio con estos datos en el sistema.'], 422);
+                return response()->json(['message' => 'Existe un socio con estos datos en el sistema.'], 422);
             }
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $rutaFoto = null;
@@ -457,14 +462,22 @@ class SocioController extends Controller
     public function eliminar_socio(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'socio_id' => 'required|integer',
+                'motivo' => 'required|string|max:255',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
 
-            $socioId = $request->input('socio_id');
-            $motivo = $request->input('motivo');
+            $socioId = $data['socio_id'];
+            $motivo = $data['motivo'];
             $socio = Socio::find($socioId);
 
             if (!$socio) {
-                return response()->json(['error' => 'Socio no encontrado.'], 404);
+                return response()->json(['message' => 'Socio no encontrado.'], 404);
             }
 
             $socio->estado = 0;

@@ -547,7 +547,7 @@
             /**
              * DataTable - Initial Load of Socios
              */
-            Swal.fire({
+            let loadingSwal = Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
                 icon: 'info',
@@ -568,19 +568,24 @@
                         d.length = d.length || 10;
                     },
                     error: function(error) {
+                        loadingSwal.close();
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             showConfirmButton: true,
                             allowOutsideClick: false,
                             confirmButtonText: 'Aceptar',
-                            text: error.responseJSON?.error || "Error al cargar los datos.",
+                            text: error.responseJSON?.message || "Error al cargar los datos.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
                         });
-                        console.error("Error al cargar los datos: ", error);
+                        return;
                     },
                     complete: function(response) {
                         socios = response.responseJSON.data;
-                        Swal.close();
+                        loadingSwal.close();
                     },
                 },
                 pageLength: 10,
@@ -978,7 +983,7 @@
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: error.responseJSON?.error ||
+                        text: error.responseJSON?.message ||
                             "Error al registrar el socio.",
                         showConfirmButton: true,
                         allowOutsideClick: false,
@@ -1037,7 +1042,7 @@
                 }
                 formData.append('_token', '{{ csrf_token() }}');
                 formData.append('socio_id', socioSelected);
-                Swal.fire({
+                let loadingSwal = Swal.fire({
                     target: document.getElementById('ModalSocio'),
                     title: 'Cargando',
                     text: 'Por favor espere',
@@ -1058,6 +1063,7 @@
                             'content') // Ensure CSRF token is passed if needed
                     },
                 }).done(async function(response) {
+                    loadingSwal.close();
                     await Swal.fire({
                         target: document.getElementById('ModalSocio'),
                         icon: 'success',
@@ -1077,10 +1083,14 @@
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: error.responseJSON?.error ||
+                        text: error.responseJSON?.message ||
                             "Error al actualizar el socio.",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Error al actualizar los datos: ", error);
+                        }
                     });
-                    console.error("Error al actualizar el socio: ", error);
+                    return;
                 });
             });
 
@@ -1109,7 +1119,7 @@
                     allowOutsideClick: false,
                 });
                 if (motivo) {
-                    Swal.fire({
+                    let loadingSwal = Swal.fire({
                         title: 'Cargando',
                         text: 'Por favor espere',
                         icon: 'info',
@@ -1127,6 +1137,7 @@
                             _token: '{{ csrf_token() }}'
                         },
                     }).done(async function(response) {
+                        loadingSwal.close();
                         await Swal.fire({
                             icon: 'success',
                             title: 'Éxito',
@@ -1137,16 +1148,21 @@
                         });
                         table.ajax.reload(null, false);
                     }).fail(function(error) {
+                        loadingSwal.close();
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             showConfirmButton: true,
                             allowOutsideClick: false,
                             confirmButtonText: 'Aceptar',
-                            text: error.responseJSON?.error ||
+                            text: error.responseJSON?.message ||
                                 "Error al eliminar el socio.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
                         });
-                        console.error("Error al eliminar el socio: ", error);
+                        return;
                     });
                 }
             });
