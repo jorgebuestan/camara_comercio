@@ -5,7 +5,7 @@ Archivos de Obligaciones por Cámara
 @endsection
 
 @section('content') 
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -16,7 +16,7 @@ Archivos de Obligaciones por Cámara
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <form action="{{ route('camara.guardar_archivo_camara') }}" method="POST" enctype="multipart/form-data">
+                            <form  method="POST"  id="ModalArchivoObligacion" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="form-group"> 
@@ -44,6 +44,7 @@ Archivos de Obligaciones por Cámara
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label for="obligacion">Selecciona la Obligación:</label> 
+                                                    <input type="hidden" id="camara_id" name="camara_id" value="{{ $id_camara }}">
                                                     <select id="obligacion" name="obligacion" data-plugin-selectTwo class="form-control populate">
                                                         <option value="-1">Seleccionar</option>
                                                         @foreach ($obligaciones as $id => $nombre)
@@ -70,12 +71,23 @@ Archivos de Obligaciones por Cámara
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <button type="submit" class="btn btn-primary">Subir</button>
+                                                    <!-- button type="submit" class="btn btn-primary">Subir</button> -->
+                                                    <button type="button" class="btn btn-primary" id="btn-subir-archivo-obligacion">Guardar</button>
                                                 </div>
                                             </div> 
                                         </div>
                                         <div class="col-6">
-                                              Datatable
+                                            <div class="card-body">
+                                                <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Entidad</th>
+                                                            <th>Obligación</th>
+                                                            <th>Archivo</th> 
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div> 
                                         </div>
                                     </div> 
                                 </div>
@@ -96,8 +108,69 @@ Archivos de Obligaciones por Cámara
 
 <script>
     $(document).ready(function() {
+
+        Swal.fire({
+            title: 'Cargando',
+            text: 'Por favor espere',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        }); 
+
+        var table = $('#dataTable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('admin.obtener_listado_archivos_obligaciones_camara') }}",
+                type: "GET",
+                data: function(d) {
+                    d.start = d.start || 0;
+                    d.length = d.length || 10;
+                    d.id_camara = $('#camara_id').val();     
+                },
+                error: function(error) {
+                    console.error("Error al cargar los datos: ", error);
+                },
+                complete: function(response) { 
+                    Swal.close();
+                },
+            },
+            pageLength: 10, // Establece el número de registros por página
+            columns: [{
+                    data: 'entidad',
+                    width: '45%'
+                },
+                {
+                    data: 'obligacion',
+                    width: '45%'
+                },
+                {
+                    data: 'archivo',
+                    width: '10%'
+                } 
+            ],
+            order: [
+                [0, "asc"]
+            ] 
+        });
+
         $('#camara').change(function() {
             let camaraId = $(this).val();
+            $('#camara_id').val(camaraId); // Asigna correctamente el valor al input hidden
+
+            //alert($('#camara_id').val()); // Verifica que el valor se actualice correctamente
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            }); 
 
             if (camaraId != -1) {
                 $.ajax({
@@ -133,7 +206,84 @@ Archivos de Obligaciones por Cámara
                 $obligacionSelect.append(
                     '<option value="-1">Seleccionar</option>'
                 ); // Opción por defecto
-    }
+            }
+            table.ajax.reload();
+        });
+
+        $("#btn-subir-archivo-obligacion").click(function() {
+            var formData = new FormData(document.getElementById("ModalArchivoObligacion")); 
+            let obligacionSelect =$('#obligacion').val();
+            if(obligacionSelect == -1){
+                //alert('Debe seleccionar una Obligación');
+                Swal.fire({ 
+                    target: document.getElementById('ModalCamara'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar una Obligación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
+                return;
+            }
+
+            Swal.fire({ 
+                title: 'Enviando archivo de Obligación para su Registro',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+
+            $.ajax({
+                url: "{{ route('camara.guardar_archivo_camara') }}",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function(res) {
+                if (res.success) {
+                    //alert(res.message); // Mostrar mensaje exitoso 
+                    Swal.fire({ 
+                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                        title: 'Éxito',
+                        text: res.message,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    }); 
+                    location.reload();  // Recargar la página
+                } else {
+                    //alert("Error: " + res.message); // Mostrar mensaje de error si existe
+                    let errorMessage = 'Ocurrió un error inesperado.';
+
+                    // Verifica si la respuesta contiene JSON válido y el campo "error"
+                    if (res.responseJSON && res.responseJSON.error) {
+                        errorMessage = res.responseJSON.error; // Solo el mensaje de error
+                    } else if (res.responseText) {
+                        try {
+                            const response = JSON.parse(res.responseText);
+                            errorMessage = response.error || errorMessage; // Si existe, muestra el campo "error"
+                        } catch (e) {
+                            errorMessage = res.responseText; // Texto plano de la respuesta
+                        }
+                    }
+
+                    // Muestra el mensaje de error en SweetAlert
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: 'Error',
+                        text: errorMessage,
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                }
+            }).fail(function(res) {
+                console.log(res.responseText); // Mostrar el error en consola
+                alert("Hubo un error al subir el archivo."); // Mensaje de error general
+            });
         });
     });
 </script>
