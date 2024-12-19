@@ -437,7 +437,7 @@
             /**
              * DataTable - Initial Load of Socios
              */
-            Swal.fire({
+            let loadingSwal = Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
                 icon: 'info',
@@ -459,9 +459,11 @@
                         d.id_socio = $('#socio').val();
                         d.with_adherente = 1;
                         d.with_socio = 1;
-                        d.estado = $('#mostrar_no_afiliados').is(':checked') ? 0 : 1;
+                        d.estado = 1;
+                        d.mostrar_no_afiliados = $('#mostrar_no_afiliados').is(':checked') ? 1 : 0;
                     },
                     error: function(error) {
+                        loadingSwal.close();
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -478,8 +480,8 @@
                     },
                     complete: function(response) {
                         socioAdherentes = response.responseJSON.data;
-                        Swal.close();
-                    }
+                        loadingSwal.close();
+                    },
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
@@ -943,8 +945,9 @@
                 let button = $(this);
                 let id = button.data('id');
                 let data = socioAdherentes.find(adherente => adherente.id == id);
-                let fecha_ingreso = parseDate(data.adherente.fecha_ingreso);
-
+                let socio_anterior = data.socio_anterior;
+                let fecha_ingreso = parseDate(data.fecha_ingreso);
+                let fecha_desafiliacion = socio_anterior.historial.fecha_desafiliacion;
                 Swal.fire({
                     title: "Reafiliación de Adherente",
                     icon: 'warning',
@@ -966,12 +969,13 @@
                     confirmButtonText: 'Sí',
                     cancelButtonText: 'No',
                     didOpen: () => {
-                        $('#socio_afiliacion').val(data.socio.id ?? -1);
+                        $('#socio_afiliacion').val(socio_anterior.id_socio ?? -1);
                         $('#fecha_reafiliacion').datepicker('destroy').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
                             todayHighlight: true,
-                            language: 'es'
+                            language: 'es',
+                            minDate: new Date(fecha_desafiliacion),
                         });
                     },
                     preConfirm: () => {
@@ -985,9 +989,13 @@
                             fecha_reafiliacion) {
                             Swal.showValidationMessage('Por favor, completa todos los campos.');
                         } else if (parseDate(fecha_reafiliacion) <= fecha_ingreso) {
-                            console.log("raro");
                             Swal.showValidationMessage(
-                                'La fecha de afiliación no puede ser menor o igual a la fecha de ingreso.'
+                                'La fecha de reafiliación no puede ser menor o igual a la fecha de ingreso.'
+                            );
+                        } else if (parseDate(fecha_reafiliacion) < new Date(
+                                fecha_desafiliacion)) {
+                            Swal.showValidationMessage(
+                                'La fecha de reafiliación no puede ser menor a la fecha de desafiliación anterior.'
                             );
                         } else {
                             return {
@@ -1008,10 +1016,8 @@
                             url: "{{ route('admin.reafiliar_adherente_socio') }}",
                             type: 'POST',
                             data: {
-                                id_socio_adherente: id,
-                                id_adherente: data.adherente.id,
-                                id_socio: socio_afiliacion == data.socio.id ? null :
-                                    socio_afiliacion,
+                                id_adherente: id,
+                                id_socio: socio_afiliacion,
                                 motivo_reafiliacion,
                                 fecha_reafiliacion,
                             },
@@ -1073,7 +1079,8 @@
                             format: 'dd/mm/yyyy',
                             autoclose: true,
                             todayHighlight: true,
-                            language: 'es'
+                            language: 'es',
+                            minDate: new Date(fecha_ingreso),
                         });
                     },
                     preConfirm: () => {
