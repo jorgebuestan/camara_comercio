@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Establecimiento;
 use App\Models\TipoRegimen;
@@ -53,7 +54,7 @@ class EstablecimientoController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
 
-        return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras'));
+        return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras', 'isAdmin'));
     }
 
     public function obtener_listado_establecimientos_camara(Request $request)
@@ -157,7 +158,7 @@ class EstablecimientoController extends Controller
                 'telefono2' => 'sometimes|string|nullable',
                 'telefono3' => 'sometimes|string|nullable',
                 'fecha_inicio_actividades' => 'required|date_format:d/m/Y',
-                'actividad_economica_seleccionados' => 'required|array',
+                'actividad_economica_seleccionados' => 'required|string',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->first()], 422);
@@ -282,7 +283,7 @@ class EstablecimientoController extends Controller
                 'telefono2_mod' => 'sometimes|string|nullable',
                 'telefono3_mod' => 'sometimes|string|nullable',
                 'fecha_inicio_actividades_mod' => 'required|date_format:d/m/Y',
-                'actividad_economica_seleccionados_mod' => 'required|array',
+                'actividad_economica_seleccionados_mod' => 'required|string',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->first()], 422);

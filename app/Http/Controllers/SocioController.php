@@ -176,6 +176,7 @@ class SocioController extends Controller
                 'agente_retencion' => 'required|integer',
                 'contribuyente_especial' => 'required|integer',
                 'fecha_nacimiento' => 'required_if:tipo_personeria,1|nullable|date_format:d/m/Y',
+                'pais' => 'required|integer',
                 'provincia' => 'required|integer',
                 'canton' => 'required|integer',
                 'parroquia' => 'required|integer',
