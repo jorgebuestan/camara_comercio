@@ -44,28 +44,8 @@ class ArchivoObligacionCamaraController extends Controller
                             ->pluck('nombre', 'id');
         } 
         return view('camara.archivos.obligaciones_camaras', compact('camaras', 'obligaciones', 'id_camara'));
-    }
-
-    public function get_obligaciones_camara(Request $request)
-    {  
-        $id_camara = request('id_camara'); 
-        // Obtener las obligaciones con el concat deseado 
-        $obligaciones = CamaraObligacion::select(
-                            'camaras_obligaciones.id',
-                            DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
-                        )
-                        ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
-                        ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
-                        ->where('camaras_obligaciones.id_camara', $id_camara)
-                        ->pluck('nombre', 'id');
-  
-        // Formato de respuesta esperado
-        return response()->json([
-            'obligaciones' => $obligaciones->map(function ($nombre, $id) {
-                return ['id' => $id, 'nombre' => $nombre];
-            })->values(),
-        ]);
-    }
+    } 
+    
 
     public function guardar_archivo_camara(Request $request)
     {
@@ -197,7 +177,7 @@ class ArchivoObligacionCamaraController extends Controller
 
         $json_data = [
             "draw" => intval($request->input('draw')),
-            "recordsTotal" => DB::table('establecimientos')->count(),
+            "recordsTotal" => DB::table('archivos_obligaciones_camaras')->count(),
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];

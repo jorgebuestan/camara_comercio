@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/get-obligaciones-camaras', [FuncionesGeneralesController::class, 'get_obligaciones_camara'])->middleware('auth')->name('funciones_generales.get_obligaciones_camara');
     Route::get('/get-obligaciones-socios', [FuncionesGeneralesController::class, 'get_obligaciones_socio'])->middleware('auth')->name('funciones_generales.get_obligaciones_socio');
+    Route::get('/get-camaras-socios', [FuncionesGeneralesController::class, 'get_socios_por_camara'])->middleware('auth')->name('funciones_generales.get_socios_por_camara');
 
     //Funciones Administrador
 
@@ -175,6 +176,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Manejo de Archivos de Obligaciones por Socio
     Route::get('/camara/archivos/archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_socio');
+    Route::get('/administrador/obtener_listado_archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'obtener_listado_archivos_obligaciones_socio'])->middleware('auth')->name('admin.obtener_listado_archivos_obligaciones_socio');
+    Route::post('/camara/archivos/guardar_archivo_socio', [ArchivoObligacionSocioController::class, 'guardar_archivo_socio'])->name('socio.guardar_archivo_socio');
+    
 });
 
 require __DIR__ . '/auth.php';

@@ -8,6 +8,8 @@ use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\CamaraObligacion;
+use App\Models\Socio;
+use App\Models\SocioObligacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -103,11 +105,31 @@ class FuncionesGeneralesController extends Controller
         ]);
     } 
 
+    public function get_socios_por_camara(Request $request)
+    {  
+        $id_camara = request('id_camara');
+        // Obtener las obligaciones con el concat deseado
+        $socios = Socio::select(
+                            'socios.id',
+                            'socios.razon_social as nombre'
+                        )
+                        ->join('camaras_socios', 'camaras_socios.id_socio', '=', 'socios.id') 
+                        ->where('camaras_socios.id_camara', $id_camara)
+                        ->pluck('nombre', 'id');
+  
+        // Formato de respuesta esperado
+        return response()->json([
+            'socios' => $socios->map(function ($nombre, $id) {
+                return ['id' => $id, 'nombre' => $nombre];
+            })->values(),
+        ]);
+    }
+
     public function get_obligaciones_socio(Request $request)
     {  
         $id_socio = request('id_socio');
         // Obtener las obligaciones con el concat deseado
-        $obligaciones = CamaraObligacion::select(
+        $obligaciones = SocioObligacion::select(
                             'socios_obligaciones.id',
                             DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
                         )

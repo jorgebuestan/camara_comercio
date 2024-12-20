@@ -59,8 +59,9 @@ Archivos de Obligaciones por Socios
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <label for="obligacion">Selecciona la Obligación:</label> 
+                                                <label for="obligacion">Selecciona la Obligación:</label> 
                                                     <input type="hidden" id="camara_id" name="camara_id" value="{{ $id_camara }}">
+                                                    <input type="hidden" id="socio_id" name="socio_id" value="">
                                                     <select id="obligacion" name="obligacion" data-plugin-selectTwo class="form-control populate">
                                                         <option value="-1">Seleccionar</option>
                                                         @foreach ($obligaciones as $id => $nombre)
@@ -68,7 +69,7 @@ Archivos de Obligaciones por Socios
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> 
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     &nbsp;
@@ -140,12 +141,12 @@ Archivos de Obligaciones por Socios
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('admin.obtener_listado_archivos_obligaciones_camara') }}",
+                url: "{{ route('admin.obtener_listado_archivos_obligaciones_socio') }}",
                 type: "GET",
                 data: function(d) {
                     d.start = d.start || 0;
                     d.length = d.length || 10;
-                    d.id_camara = $('#camara_id').val();     
+                    d.id_socio = $('#socio_id').val();     
                 },
                 error: function(error) {
                     console.error("Error al cargar los datos: ", error);
@@ -177,6 +178,9 @@ Archivos de Obligaciones por Socios
             let camaraId = $(this).val();
             $('#camara_id').val(camaraId); // Asigna correctamente el valor al input hidden
 
+            let socioId = -1;
+            $('#socio_id').val(socioId); 
+
             //alert($('#camara_id').val()); // Verifica que el valor se actualice correctamente
             Swal.fire({
                 title: 'Cargando',
@@ -190,10 +194,79 @@ Archivos de Obligaciones por Socios
 
             if (camaraId != -1) {
                 $.ajax({
-                    url: '/get-obligaciones-camaras', // Ruta para obtener las obligaciones por camara
+                    url: '/get-camaras-socios', // Ruta para obtener los socios por camara
                     method: 'GET',
                     data: {
                         id_camara: camaraId
+                    },
+                    success: function(response) {
+                        let socios = response.socios;
+                        let $sociosSelect = $('#socio'); 
+
+                        $sociosSelect.empty(); // Limpiamos el select de provincias
+                        $sociosSelect.append(
+                            '<option value="-1">Seleccionar</option>'
+                        ); // Opción por defecto
+
+                        
+                        // Agregamos los socios al Select
+                        socios.forEach(function(socio) {
+                            $sociosSelect.append(
+                                `<option value="${socio.id}">${socio.nombre}</option>`
+                            );
+                        });
+                    },
+                    error: function() {
+                        //alert('Hubo un error al cargar las obligaciones.');
+                        Swal.fire({ 
+                            target: document.getElementById('ModalCamara'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un error al cargar los Socios por Cámara',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
+                    }
+                });
+            }else{
+                let socioSelect = $('#socio'); 
+                let obligacionSelect = $('#obligacion'); 
+
+                socioSelect.empty(); // Limpiamos el select de provincias
+                socioSelect.append(
+                    '<option value="-1">Seleccionar</option>'
+                ); // Opción por defecto
+                
+                obligacionSelect.empty(); // Limpiamos el select de provincias
+                obligacionSelect.append(
+                    '<option value="-1">Seleccionar</option>'
+                ); // Opción por defecto
+            }
+            //Swal.close();
+            table.ajax.reload();
+        });
+
+        $('#socio').change(function() {
+            let socioId = $(this).val();
+            $('#socio_id').val(socioId); // Asigna correctamente el valor al input hidden
+
+            //alert($('#camara_id').val()); // Verifica que el valor se actualice correctamente
+            Swal.fire({
+                title: 'Cargando',
+                text: 'Por favor espere',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            }); 
+
+            if (socioId != -1) {
+                $.ajax({
+                    url: '/get-obligaciones-socios', // Ruta para obtener las obligaciones por camara
+                    method: 'GET',
+                    data: {
+                        id_socio: socioId
                     },
                     success: function(response) {
                         let obligaciones = response.obligaciones;
@@ -213,7 +286,15 @@ Archivos de Obligaciones por Socios
                         });
                     },
                     error: function() {
-                        alert('Hubo un error al cargar las obligaciones.');
+                        //alert('Hubo un error al cargar las obligaciones.');
+                        Swal.fire({ 
+                            target: document.getElementById('ModalCamara'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un error al cargar las obligaciones',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
                     }
                 });
             }else{
@@ -233,8 +314,7 @@ Archivos de Obligaciones por Socios
 
             if(obligacionSelect == -1){
                 //alert('Debe seleccionar una Obligación');
-                Swal.fire({ 
-                    target: document.getElementById('ModalCamara'),
+                Swal.fire({  
                     icon: 'error',
                     title: 'Error',
                     text: 'Debe seleccionar una Obligación',
@@ -267,7 +347,7 @@ Archivos de Obligaciones por Socios
             });
 
             $.ajax({
-                url: "{{ route('camara.guardar_archivo_camara') }}",
+                url: "{{ route('socio.guardar_archivo_socio') }}",
                 type: "POST",
                 data: formData,
                 dataType: "json",
@@ -322,6 +402,7 @@ Archivos de Obligaciones por Socios
                 });
             });
         });
+        
     });
 </script>
 @endsection
