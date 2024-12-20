@@ -85,9 +85,11 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" data-plugin-selectTwo
-                                            class="form-control populate" disabled={{ $isAdmin ? 'false' : 'true' }}>
-                                            {{ $isAdmin ? '<option value=-1>Seleccionar Cámara</option>' : '' }}
+                                        <select id="camara" name="camara" class="form-control populate"
+                                            @if (!$isAdmin) disabled @endif>
+                                            @if ($isAdmin)
+                                                <option value=-1>Seleccionar Cámara</option>
+                                            @endif
                                             @foreach ($camaras as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
@@ -363,9 +365,9 @@
 
             // Escuchar el evento change del select de cámaras
             $('#camara').change(function() {
-                var selectedEntidad = $(this).val();
+                let selectedCamara = $(this).val();
 
-                if (selectedEntidad === '-1') {
+                if (selectedCamara === '-1') {
                     //alert('Por favor selecciona una cámara válida.');
                     Swal.fire({
                         icon: 'error',

@@ -30,7 +30,7 @@ class CamaraObligacionController extends Controller
         $entidades = Entidad::with('obligaciones.obligacion.tiempo_presentacion', 'obligaciones.obligacion.tipo_presentacion')->where('estado', 1)->get();
         $entidadesSelect = $entidades->pluck('entidad', 'id');
 
-        return view('administrador.camaras.obligaciones_camara', compact('camarasSelect', 'entidadesSelect', 'entidades'));
+        return view('administrador.camaras.obligaciones_camara', compact('camarasSelect', 'entidadesSelect', 'entidades', 'isAdmin'));
     }
     public function index(Request $request)
     {

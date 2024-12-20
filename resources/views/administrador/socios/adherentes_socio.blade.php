@@ -364,15 +364,6 @@
                                     placeholder="Observaciones" />
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-md-12 flex flex-col gap-1">
-                                <label>
-                                    Datos adjuntos (máximo 5)
-                                </label>
-                                <input type="file" class="form-control-file" id="adjuntos" name="adjuntos[]"
-                                    multiple />
-                            </div>
-                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
                             <button type="button" class="btn btn-primary" id="agregar_adherente">Agregar
@@ -872,7 +863,6 @@
                 formData.append('interseccion', $('#interseccion').val());
                 formData.append('referencia', $('#referencia').val());
                 formData.append('observaciones', $('#observaciones').val());
-                // Adjuntos
                 if ($('#tipo_identificacion').val() == 1)
                     formData.append('ruc', $('#identificacion').val());
 
@@ -1205,17 +1195,6 @@
                 $('#ModalAdherente').find('#referencia').val(data.adherente.referencia ?? '');
                 $('#ModalAdherente').find('#observaciones').val(data.adherente.observaciones ?? '');
 
-                if (data.adherente.adjuntos && data.adherente.adjuntos.length > 0) {
-                    let adjuntosList = $('#adjuntos');
-                    adjuntosList.empty();
-                    data.adherente.adjuntos.forEach(function(adjunto, index) {
-                        adjuntosList.append(
-                            `<li><a href="${adjunto.url}" target="_blank">Adjunto ${index + 1}</a></li>`
-                        );
-                    });
-                } else {
-                    $('#adjuntosList').empty().append('<li>No hay datos adjuntos</li>');
-                }
                 socioAdherenteSelected = id;
                 $('#ModalAdherente').modal('show');
             });
@@ -1247,8 +1226,6 @@
                 formData.append('referencia', $('#referencia').val());
                 formData.append('observaciones', $('#observaciones').val());
                 formData.append('_token', '{{ csrf_token() }}');
-
-                //formData.append('adjuntos', $('#adjuntos')[0].files);
 
                 Swal.fire({
                     target: document.getElementById('ModalAdherente'),

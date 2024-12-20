@@ -131,9 +131,11 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <select id="camara" name="camara" class="form-control populate"
-                                            disabled={{ $isAdmin ? 'false' : 'true' }}>
-                                            {{ $isAdmin ? '<option value=-1>Seleccionar Cámara</option>' : '' }}
-                                            @foreach ($camaras as $id => $descripcion)
+                                            @if (!$isAdmin) disabled @endif>
+                                            @if ($isAdmin)
+                                                <option value=-1>Seleccionar Cámara</option>
+                                            @endif
+                                            @foreach ($camarasSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
@@ -186,8 +188,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEstablecimientoLabel"><b>Agregar un nuevo Establecimiento</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -429,8 +431,8 @@
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -684,6 +686,34 @@
         $(document).ready(function() {
             var actividadesEconomicas = @json($actividadesEconomicas);
             var camaras = @json($camaras);
+            if (!@json($isAdmin)) {
+                let selectedCamera = $('#camara').val();
+                let filtered = camaras.find(function(camara) {
+                    return camara.id == selectedCamera;
+                });
+                let filteredActividades = filtered.datos_tributarios.actividades_economicas;
+
+                let actividades = Object.keys(actividadesEconomicas).map(function(key) {
+                    return {
+                        id: key,
+                        descripcion: actividadesEconomicas[key]
+                    };
+                });
+                let filteredActivities = actividades.filter(function(actividad) {
+                    return filteredActividades.includes(actividad.id);
+                });
+
+                $('#actividad_economica').empty();
+                $('#actividad_economica_mod').empty();
+                filteredActivities.forEach(function(actividad) {
+                    $('#actividad_economica').append(
+                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
+                    );
+                    $('#actividad_economica_mod').append(
+                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
+                    );
+                });
+            }
 
             Swal.fire({
                 title: 'Cargando',

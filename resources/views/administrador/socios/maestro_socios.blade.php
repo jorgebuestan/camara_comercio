@@ -318,15 +318,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-md-12 flex flex-col gap-1">
-                                                        <label>
-                                                            Datos adjuntos (máximo 5)
-                                                        </label>
-                                                        <input type="file" class="form-control-file" id="adjuntos"
-                                                            name="adjuntos[]" multiple />
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div id="datos_tributarios" class="tab-pane">
                                                 <div class="row mb-2">
@@ -908,7 +899,7 @@
 
                 const commonFields = [
                     'fecha_ingreso', 'tipo_personeria', 'identificacion',
-                    'fotoFile', 'adjuntos', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen',
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
@@ -939,11 +930,6 @@
                 });
                 if ($('#fotoFile')[0].files.length > 0) {
                     formData.append('foto', $('#fotoFile')[0].files[0]);
-                }
-                if ($('#adjuntos')[0].files.length > 0) {
-                    $.each($('#adjuntos')[0].files, function(i, file) {
-                        formData.append('adjuntos[]', file);
-                    });
                 }
                 formData.append('_token', '{{ csrf_token() }}');
                 Swal.fire({
@@ -1002,7 +988,7 @@
 
                 const commonFields = [
                     'fecha_ingreso', 'tipo_personeria', 'identificacion',
-                    'fotoFile', 'adjuntos', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen',
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial',
@@ -1034,11 +1020,6 @@
                 });
                 if ($('#fotoFile')[0].files.length > 0) {
                     formData.append('foto', $('#fotoFile')[0].files[0]);
-                }
-                if ($('#adjuntos')[0].files.length > 0) {
-                    $.each($('#adjuntos')[0].files, function(i, file) {
-                        formData.append('adjuntos[]', file);
-                    });
                 }
                 formData.append('_token', '{{ csrf_token() }}');
                 formData.append('socio_id', socioSelected);
@@ -1763,7 +1744,6 @@
                     $('#referencia').focus();
                     return false;
                 }
-                //validacion para datos adjuntos y foto.
                 return true;
             }
 

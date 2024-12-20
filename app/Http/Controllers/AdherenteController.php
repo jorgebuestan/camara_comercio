@@ -197,14 +197,12 @@ class AdherenteController extends Controller
                 'interseccion' => 'required|string|nullable',
                 'referencia' => 'sometimes|string|nullable',
                 'observaciones' => 'sometimes|string|nullable',
-                'adjuntos' => 'sometimes|array|nullable',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first()], 422);
             }
 
             $data = $validator->validated();
-            $data['adjuntos'] = ''; //cambiar luego
             DB::beginTransaction();
             $existeAdherente = Adherente::where('identificacion', $data['identificacion'])->first();
             if ($existeAdherente) {
@@ -280,7 +278,6 @@ class AdherenteController extends Controller
                 'interseccion' => 'sometimes|string|nullable',
                 'referencia' => 'sometimes|string|nullable',
                 'observaciones' => 'sometimes|string|nullable',
-                'archivos_adjuntos' => 'sometimes|string|nullable',
             ]);
 
             DB::beginTransaction();
