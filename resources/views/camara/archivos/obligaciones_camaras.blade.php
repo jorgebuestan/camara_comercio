@@ -213,6 +213,8 @@ Archivos de Obligaciones por Cámara
         $("#btn-subir-archivo-obligacion").click(function() {
             var formData = new FormData(document.getElementById("ModalArchivoObligacion")); 
             let obligacionSelect =$('#obligacion').val();
+            let archivoInput = document.getElementById("archivo");
+
             if(obligacionSelect == -1){
                 //alert('Debe seleccionar una Obligación');
                 Swal.fire({ 
@@ -220,6 +222,18 @@ Archivos de Obligaciones por Cámara
                     icon: 'error',
                     title: 'Error',
                     text: 'Debe seleccionar una Obligación',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
+                return;
+            }
+
+            if (!archivoInput.files || archivoInput.files.length === 0) {
+                Swal.fire({ 
+                    target: document.getElementById('ModalCamara'),
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe seleccionar un archivo',
                     confirmButtonText: 'Aceptar',
                     allowOutsideClick: false
                 });
@@ -282,7 +296,14 @@ Archivos de Obligaciones por Cámara
                 }
             }).fail(function(res) {
                 console.log(res.responseText); // Mostrar el error en consola
-                alert("Hubo un error al subir el archivo."); // Mensaje de error general
+               // alert("Hubo un error al subir el archivo."); // Mensaje de error general
+                Swal.fire({ 
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al subir el archivo.',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false
+                });
             });
         });
     });

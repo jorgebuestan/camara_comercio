@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-parroquias', [FuncionesGeneralesController::class, 'get_parroquias'])->middleware('auth')->name('funciones_generales.get_parroquias');
 
     Route::get('/get-obligaciones-camaras', [FuncionesGeneralesController::class, 'get_obligaciones_camara'])->middleware('auth')->name('funciones_generales.get_obligaciones_camara');
+    Route::get('/get-obligaciones-socios', [FuncionesGeneralesController::class, 'get_obligaciones_socio'])->middleware('auth')->name('funciones_generales.get_obligaciones_socio');
 
     //Funciones Administrador
 

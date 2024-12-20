@@ -101,5 +101,26 @@ class FuncionesGeneralesController extends Controller
                 return ['id' => $id, 'nombre' => $nombre];
             })->values(),
         ]);
+    } 
+
+    public function get_obligaciones_socio(Request $request)
+    {  
+        $id_socio = request('id_socio');
+        // Obtener las obligaciones con el concat deseado
+        $obligaciones = CamaraObligacion::select(
+                            'socios_obligaciones.id',
+                            DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
+                        )
+                        ->join('obligaciones', 'obligaciones.id', '=', 'socios_obligaciones.id_obligacion')
+                        ->join('entidades', 'entidades.id', '=', 'socios_obligaciones.id_entidad')
+                        ->where('socios_obligaciones.id_socio', $id_socio)
+                        ->pluck('nombre', 'id');
+  
+        // Formato de respuesta esperado
+        return response()->json([
+            'obligaciones' => $obligaciones->map(function ($nombre, $id) {
+                return ['id' => $id, 'nombre' => $nombre];
+            })->values(),
+        ]);
     }
 }

@@ -138,7 +138,9 @@ class SocioObligacionController extends Controller
             DB::commit();
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['message' => 'Error al guardar la obligación del socio'], 500);
+            return response()->json(['message' => 'Error al guardar la obligación del socio',
+            'debug' => $th // Incluye el mensaje completo para depuración en ambiente de desarrollo
+        ], 500);
         }
     }
 
