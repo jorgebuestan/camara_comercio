@@ -20,22 +20,17 @@ class ArchivoObligacionSocioController extends Controller
         $id_camara = "";
         if (Auth::user()->hasRole('admin')) {
             $camaras = Camara::pluck('razon_social', 'id');
+            $socios = [];
             $obligaciones = []; // Vacío inicialmente porque el admin seleccionará la cámara
         } else {
             $usuario = Auth::user(); // Obtiene el objeto completo del usuario autenticado
             $camara = Camara::where('ruc', $usuario->username)->first(); 
             $id_camara = $camara->id;
 
+            $socios = [];
             $camaras = []; // El select de cámaras no se mostrará
-            $obligaciones = CamaraObligacion::select(
-                                'camaras_obligaciones.id',
-                                DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
-                            )
-                            ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
-                            ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
-                            ->where('camaras_obligaciones.id_camara', $camara->id)
-                            ->pluck('nombre', 'id');
+            $obligaciones = [];
         } 
-        return view('camara.archivos.obligaciones_socios' );
+        return view('camara.archivos.obligaciones_socios', compact('camaras', 'socios', 'obligaciones', 'id_camara'));
     }
 }
