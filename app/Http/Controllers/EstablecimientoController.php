@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Establecimiento;
 use App\Models\TipoRegimen;
 use App\Models\Pais;
@@ -19,13 +20,22 @@ class EstablecimientoController extends Controller
     //
     public function establecimientos_camara()
     {
+        $isAdmin = Auth::user()->hasRole('admin');
+        $camarasSelect = [];
+        if ($isAdmin) {
+            $camarasSelect = Camara::pluck('razon_social', 'id');
+        } else {
+            $camarasSelect = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
+            if (!$camarasSelect || $camarasSelect->isEmpty()) {
+                return redirect()->route('dashboard')->with('error', 'No tiene permisos para acceder a esta sección');
+            }
+        }
         $regimen = TipoRegimen::pluck('nombre', 'id');
         $paises = Pais::pluck('nombre', 'id');
         $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
-        $camarasSelect = Camara::pluck('razon_social', 'id');
         $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
@@ -130,7 +140,28 @@ class EstablecimientoController extends Controller
     {
 
         try {
-
+            $validator = Validator::make($request->all(), [
+                'nombre_comercial' => 'required|string',
+                'camaraHidden' => 'required|integer',
+                'pais' => 'required|string',
+                'provincia' => 'required|string',
+                'canton' => 'required|string',
+                'parroquia' => 'required|string',
+                'calle' => 'required|string',
+                'manzana' => 'required|string',
+                'numero' => 'required|string',
+                'interseccion' => 'required|string',
+                'referencia' => 'required|string',
+                'correo' => 'required|email',
+                'telefono1' => 'required|string',
+                'telefono2' => 'sometimes|string|nullable',
+                'telefono3' => 'sometimes|string|nullable',
+                'fecha_inicio_actividades' => 'required|date_format:d/m/Y',
+                'actividad_economica_seleccionados' => 'required|array',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->first()], 422);
+            }
             DB::beginTransaction();
 
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
@@ -181,8 +212,7 @@ class EstablecimientoController extends Controller
 
     public function eliminar_establecimiento($id)
     {
-        try{
-
+        try {
             DB::beginTransaction();
             //$colaborador = Colaborador::find($id);
             $establecimiento = Establecimiento::where('id', $id)->first();
@@ -199,13 +229,11 @@ class EstablecimientoController extends Controller
             DB::commit();
 
             return response()->json(['success' => 'Establecimiento eliminado correctamente']);
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al eliminar el Establecimiento: ' . $e->getMessage()], 500);
-        } 
-        
+        }
     }
 
     public function detalle_establecimiento($id)
@@ -236,7 +264,29 @@ class EstablecimientoController extends Controller
     public function modificar_establecimiento(Request $request)
     {
         try {
-
+            $validator = Validator::make($request->all(), [
+                'establecimiento_id' => 'required|integer',
+                'nombre_comercial_mod' => 'required|string',
+                'camaraHiddenMod' => 'required|integer',
+                'pais_mod' => 'required|string',
+                'provincia_mod' => 'required|string',
+                'canton_mod' => 'required|string',
+                'parroquia_mod' => 'required|string',
+                'calle_mod' => 'required|string',
+                'manzana_mod' => 'required|string',
+                'numero_mod' => 'required|string',
+                'interseccion_mod' => 'required|string',
+                'referencia_mod' => 'required|string',
+                'correo_mod' => 'required|email',
+                'telefono1_mod' => 'required|string',
+                'telefono2_mod' => 'sometimes|string|nullable',
+                'telefono3_mod' => 'sometimes|string|nullable',
+                'fecha_inicio_actividades_mod' => 'required|date_format:d/m/Y',
+                'actividad_economica_seleccionados_mod' => 'required|array',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->first()], 422);
+            }
             DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
@@ -282,13 +332,13 @@ class EstablecimientoController extends Controller
                     'msg' => "Registro modificado",
                 ]
             ], 201);
-        } catch (\Illuminate\Database\QueryException $e) { 
-            
+        } catch (\Illuminate\Database\QueryException $e) {
+
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
-            
+
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);

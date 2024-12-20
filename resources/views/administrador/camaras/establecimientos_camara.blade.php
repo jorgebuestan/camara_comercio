@@ -130,9 +130,10 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" class="form-control populate">
-                                            <option value="-1">Seleccionar</option>
-                                            @foreach ($camarasSelect as $id => $descripcion)
+                                        <select id="camara" name="camara" class="form-control populate"
+                                            disabled={{ $isAdmin ? 'false' : 'true' }}>
+                                            {{ $isAdmin ? '<option value=-1>Seleccionar Cámara</option>' : '' }}
+                                            @foreach ($camaras as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
@@ -185,8 +186,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEstablecimientoLabel"><b>Agregar un nuevo Establecimiento</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                            </button> -->
+                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -204,9 +205,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="pais" name="pais" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($paises as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 57 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -217,9 +218,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="provincia" name="provincia" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($provincias as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -235,9 +236,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="canton" name="canton" class="form-control populate">
-                                        <option value="-1" selected>Seleccionar</option>
+                                        <option value=-1 selected>Seleccionar</option>
                                         @foreach ($cantones as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -248,9 +249,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="parroquia" name="parroquia" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($parroquias as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -428,8 +429,8 @@
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                            </button> -->
+                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -449,9 +450,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="pais_mod" name="pais_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($paises as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 57 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -462,9 +463,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="provincia_mod" name="provincia_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($provincias as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -480,9 +481,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="canton_mod" name="canton_mod" class="form-control populate">
-                                        <option value="-1" selected>Seleccionar</option>
+                                        <option value=-1 selected>Seleccionar</option>
                                         @foreach ($cantones as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -493,9 +494,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="parroquia_mod" name="parroquia_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($parroquias as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -682,9 +683,9 @@
     <script>
         $(document).ready(function() {
             var actividadesEconomicas = @json($actividadesEconomicas);
-            var camaras = @json($camaras); 
+            var camaras = @json($camaras);
 
-            Swal.fire({ 
+            Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
                 icon: 'info',
@@ -709,7 +710,7 @@
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
                     },
-                    complete: function(response) { 
+                    complete: function(response) {
                         Swal.close();
                     },
                 },
@@ -786,7 +787,7 @@
 
                 if (camaraSeleccionada === '-1') {
                     //alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
-                    Swal.fire({ 
+                    Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -812,11 +813,11 @@
             });
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() { 
+            $('#camara').change(function() {
                 let selectedCamera = $(this).val();
                 if (selectedCamera === '-1') {
                     //alert('Por favor selecciona una cámara válida.');
-                    Swal.fire({  
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Por favor selecciona una cámara válida.',
@@ -861,7 +862,7 @@
                     $('#actividad_economica_mod').append(
                         `<option value=${actividad.id}>${actividad.descripcion}</option>`
                     );
-                });  
+                });
             });
 
             // Inicializar Select2 con búsqueda habilitada
@@ -1228,7 +1229,7 @@
 
                 if ($('#nombre_comercial').val() == "") {
                     //alert('Debe ingresar el Nombre Comercial');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1242,7 +1243,7 @@
 
                 if ($('#fecha_inicio_actividades').val() == "") {
                     //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1256,7 +1257,7 @@
 
                 if ($('#pais').val() == "-1") {
                     //alert('Debe seleccionar el País');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1270,7 +1271,7 @@
 
                 if ($('#provincia').val() == "-1") {
                     //alert('Debe seleccionar la Provincia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1284,7 +1285,7 @@
 
                 if ($('#canton').val() == "-1") {
                     //alert('Debe seleccionar el Cantón');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1298,7 +1299,7 @@
 
                 if ($('#parroquia').val() == "-1") {
                     //alert('Debe seleccionar la Parroquia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1312,7 +1313,7 @@
 
                 if ($('#calle').val() == "") {
                     //alert('Debe ingresar la Calle');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1326,7 +1327,7 @@
 
                 if ($('#manzana').val() == "") {
                     //alert('Debe ingresar la Manzana');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1340,7 +1341,7 @@
 
                 if ($('#numero').val() == "") {
                     //alert('Debe ingresar el Número');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1354,7 +1355,7 @@
 
                 if ($('#interseccion').val() == "") {
                     //alert('Debe ingresar la Intersección');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1368,7 +1369,7 @@
 
                 if ($('#referencia').val() == "") {
                     //alert('Debe ingresar la Referencia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1385,7 +1386,7 @@
                     isValid = false;*/
                     $("#error-correo").show();
                     //alert('Debe registrar un correo con formato válido');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1397,9 +1398,10 @@
                     return;
                 }
 
-                if (($('#telefono1').val() == "")&&($('#telefono2').val() == "")&&($('#telefono3').val() == "")) {
+                if (($('#telefono1').val() == "") && ($('#telefono2').val() == "") && ($('#telefono3')
+                        .val() == "")) {
                     //alert('Debe ingresar al menos 1 número de Teléfono');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1413,7 +1415,7 @@
 
                 if ($('#hiddenSelectedItems').val() == "") {
                     //alert('Debe seleccionar al menos una Actividad Económica');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1455,7 +1457,7 @@
                         text: res.success,
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
-                    }); 
+                    });
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
                     if (res.status === 422) {
@@ -1486,7 +1488,8 @@
                     }
 
                     console.log(res
-                        .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText
+                    ); // Muestra el error completo en la consola para depuración
                 });
             });
 
@@ -1714,7 +1717,7 @@
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
-                        Swal.fire({ 
+                        Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Hubo un problema al cargar el Establecimiento.',
@@ -1741,11 +1744,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -1767,11 +1770,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -1793,11 +1796,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -1815,7 +1818,7 @@
 
                 if ($('#nombre_comercial_mod').val() == "") {
                     //alert('Debe ingresar el Nombre Comercial'); 
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1829,7 +1832,7 @@
 
                 if ($('#fecha_inicio_actividades_mod').val() == "") {
                     //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1843,7 +1846,7 @@
 
                 if ($('#pais_mod').val() == "-1") {
                     //alert('Debe seleccionar el País');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1858,7 +1861,7 @@
                 if ($('#provincia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Provincia');
                     //$('#provincia_mod').focus();
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1871,7 +1874,7 @@
 
                 if ($('#canton_mod').val() == "-1") {
                     //alert('Debe seleccionar el Cantón');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1885,7 +1888,7 @@
 
                 if ($('#parroquia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Parroquia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1899,7 +1902,7 @@
 
                 if ($('#calle_mod').val() == "") {
                     //alert('Debe ingresar la Calle');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1913,7 +1916,7 @@
 
                 if ($('#manzana_mod').val() == "") {
                     //alert('Debe ingresar la Manzana');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1927,7 +1930,7 @@
 
                 if ($('#numero_mod').val() == "") {
                     //alert('Debe ingresar el Número');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1941,7 +1944,7 @@
 
                 if ($('#interseccion_mod').val() == "") {
                     //alert('Debe ingresar la Intersección');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1955,7 +1958,7 @@
 
                 if ($('#referencia_mod').val() == "") {
                     //alert('Debe ingresar la Referencia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1972,7 +1975,7 @@
                     isValid = false;*/
                     $("#error-correo-mod").show();
                     //alert('Debe registrar un correo con formato válido');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1983,10 +1986,11 @@
                     $('#correo_mod').focus();
                     return;
                 }
- 
-                if (($('#telefono1_mod').val() == "")&&($('#telefono2_mod').val() == "")&&($('#telefono3_mod').val() == "")) {
+
+                if (($('#telefono1_mod').val() == "") && ($('#telefono2_mod').val() == "") && ($(
+                        '#telefono3_mod').val() == "")) {
                     //alert('Debe ingresar al menos 1 número de Teléfono');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -2000,7 +2004,7 @@
 
                 if ($('#hiddenSelectedItemsMod').val() == "") {
                     //alert('Debe seleccionar al menos una Actividad Económica');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -2037,9 +2041,9 @@
                     msg = JSON.parse(res).response.msg
                     //alert(msg);
                     //location.reload();
- 
+
                     //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                    Swal.fire({ 
+                    Swal.fire({
                         icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                         title: 'Éxito',
                         text: msg,
@@ -2050,7 +2054,7 @@
                     //$('#carga').hide();
                 }).fail(function(res) {
                     console.log(res);
-                    Swal.fire({  
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Hubo un problema al modificar el Registro.',
@@ -2068,17 +2072,19 @@
 
                 // Mostrar la confirmación antes de proceder con la eliminación
                 //var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
-                const { confirmDelete } = await Swal.fire({
-                        title: '¿Está seguro de que desea eliminar este registro?',
-                        text: "Esta acción no se puede deshacer.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Aceptar',
-                        cancelButtonText: 'Cancelar',
-                        allowOutsideClick: false,
-                    });
+                const {
+                    confirmDelete
+                } = await Swal.fire({
+                    title: '¿Está seguro de que desea eliminar este registro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
 
                 if (confirmDelete) {
                     Swal.fire({
@@ -2100,19 +2106,19 @@
                             //alert('Registro eliminado correctamente.');
                             Swal.close();
                             //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                            Swal.fire({ 
+                            Swal.fire({
                                 icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                                 title: 'Éxito',
                                 text: 'Registro eliminado correctamente.',
                                 confirmButtonText: 'Aceptar',
                                 allowOutsideClick: false
                             });
-                            location.reload(); 
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                             //alert('Hubo un problema al eliminar el Registro.');
-                            Swal.fire({ 
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'Hubo un problema al eliminar el Registro.',
@@ -2145,23 +2151,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -2169,13 +2175,13 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
-                }else {
+                } else {
                     $('#provincia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2198,17 +2204,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -2218,9 +2224,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2245,13 +2251,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -2261,7 +2267,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2283,23 +2289,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -2307,13 +2313,13 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
-                }else {
+                } else {
                     $('#provincia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2336,17 +2342,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -2356,9 +2362,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2383,13 +2389,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -2399,7 +2405,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

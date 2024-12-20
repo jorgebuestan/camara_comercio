@@ -217,7 +217,7 @@ class AdherenteController extends Controller
                 $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
                 $storedFilePath = "fotos_adherentes/" . $data['identificacion'] . '/' . $nombreArchivo;
-                $rutaFoto = "fotos_adherentes/" . $nombreArchivo;
+                $rutaFoto = $storedFilePath;;
                 $archivoFoto->storeAs("fotos_adherentes/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
@@ -294,7 +294,7 @@ class AdherenteController extends Controller
                 $archivoFoto = $request->file('foto');
                 $nombreArchivo = $data['identificacion'] . '.' . $archivoFoto->getClientOriginalExtension();
                 $storedFilePath = "fotos_adherentes/" . $data['identificacion'] . '/' . $nombreArchivo;
-                $rutaFoto = "fotos_adherentes/" . $nombreArchivo;
+                $rutaFoto = $storedFilePath;
                 $archivoFoto->storeAs("fotos_adherentes/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 

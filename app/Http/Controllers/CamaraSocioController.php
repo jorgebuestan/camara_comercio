@@ -3,39 +3,48 @@
 namespace App\Http\Controllers;
 
 use DateTime;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Camara; 
-use App\Models\Socio; 
-use App\Models\CamaraSocio; 
+use App\Models\Camara;
+use App\Models\Socio;
+use App\Models\CamaraSocio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CamaraSocioController extends Controller
 {
     // 
     public function socios_camara()
-    {       
-        $camaras = Camara::pluck('razon_social', 'id');   
-
-        return view('administrador.camaras.socios_camaras', compact('camaras') );
+    {
+        $camaras = [];
+        $isAdmin = Auth::user()->hasRole('admin');
+        if ($isAdmin) {
+            $camaras = Camara::pluck('razon_social', 'id');
+        } else {
+            $camaras = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
+            if (!$camaras || $camaras->isEmpty()) {
+                return redirect()->route('dashboard')->with('error', 'No tiene permisos para acceder a esta sección');
+            }
+        }
+        return view('administrador.camaras.socios_camaras', compact('camaras', 'isAdmin'));
     }
 
     public function obtener_listado_socios_por_camara(Request $request)
     {
         $columns = [
-            0 => 'camaras_socios.id', 
-            1 => 'camaras_socios.fecha_afiliacion', 
-            2 => 'socios.identificacion', 
-            3 => 'socios.razon_social' 
+            0 => 'camaras_socios.id',
+            1 => 'camaras_socios.fecha_afiliacion',
+            2 => 'socios.identificacion',
+            3 => 'socios.razon_social'
         ];
 
-        $query = DB::table('socios')  
-            ->join('camaras_socios', 'camaras_socios.id_socio', '=', 'socios.id') 
-            ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria') 
+        $query = DB::table('socios')
+            ->join('camaras_socios', 'camaras_socios.id_socio', '=', 'socios.id')
+            ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria')
             ->select(
-                'camaras_socios.id', 
-                 DB::raw("DATE_FORMAT(camaras_socios.fecha_afiliacion, '%d/%m/%Y') as fecha_afiliacion"),
+                'camaras_socios.id',
+                DB::raw("DATE_FORMAT(camaras_socios.fecha_afiliacion, '%d/%m/%Y') as fecha_afiliacion"),
                 'socios.identificacion',
                 'socios.razon_social',
                 'tipo_personeria.descripcion as tipo_personeria'
@@ -47,9 +56,9 @@ class CamaraSocioController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('socios.razon_social', 'LIKE', "%{$search}%")  
-                    ->orWhere('socios.identificacion', 'LIKE', "%{$search}%"); 
+            $query->where(function ($query) use ($search) {
+                $query->where('socios.razon_social', 'LIKE', "%{$search}%")
+                    ->orWhere('socios.identificacion', 'LIKE', "%{$search}%");
             });
         }
 
@@ -77,16 +86,16 @@ class CamaraSocioController extends Controller
         $socios = $query->get();
 
         $data = $socios->map(function ($socio) {
-        $boton = "";  
-             
+            $boton = "";
+
             return [
-                'fecha_afiliacion' => $socio->fecha_afiliacion, 
-                'identificacion' => $socio->identificacion, 
-                'razon_social' => $socio->razon_social,  
-                'tipo_personeria' => $socio->tipo_personeria,  
+                'fecha_afiliacion' => $socio->fecha_afiliacion,
+                'identificacion' => $socio->identificacion,
+                'razon_social' => $socio->razon_social,
+                'tipo_personeria' => $socio->tipo_personeria,
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $socio->id . '">Modificar</button>' .
-                '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-socio" data-id="' . $socio->id . '">Eliminar</button>'.
-                '&nbsp;&nbsp;&nbsp;' 
+                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-socio" data-id="' . $socio->id . '">Eliminar</button>' .
+                    '&nbsp;&nbsp;&nbsp;'
             ];
         });
 
@@ -96,22 +105,22 @@ class CamaraSocioController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
     }
 
     public function obtener_listado_socios_registros_camara(Request $request)
     {
         $columns = [
-            0 => 'socios.id',  
-            1 => 'socios.identificacion', 
-            2 => 'socios.razon_social' 
+            0 => 'socios.id',
+            1 => 'socios.identificacion',
+            2 => 'socios.razon_social'
         ];
 
-        $query = DB::table('socios')   
-            ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria') 
+        $query = DB::table('socios')
+            ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria')
             ->select(
-                'socios.id',  
+                'socios.id',
                 'socios.identificacion',
                 'socios.razon_social',
                 'tipo_personeria.descripcion as tipo_personeria'
@@ -123,11 +132,11 @@ class CamaraSocioController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('socios.razon_social', 'LIKE', "%{$search}%")  
-                    ->orWhere('socios.identificacion', 'LIKE', "%{$search}%"); 
+            $query->where(function ($query) use ($search) {
+                $query->where('socios.razon_social', 'LIKE', "%{$search}%")
+                    ->orWhere('socios.identificacion', 'LIKE', "%{$search}%");
             });
-        } 
+        }
 
         $totalFiltered = $query->count();
 
@@ -148,13 +157,13 @@ class CamaraSocioController extends Controller
         $socios = $query->get();
 
         $data = $socios->map(function ($socio) {
-        $boton = "";  
-        
-        return [ 
-                'identificacion' => $socio->identificacion, 
-                'razon_social' => $socio->razon_social,  
-                'tipo_personeria' => $socio->tipo_personeria,  
-                'btn' => '<button type="button" class="btn btn-primary mb-3 seleccionar-socio" data-id="' . $socio->id . '">Seleccionar</button>'  
+            $boton = "";
+
+            return [
+                'identificacion' => $socio->identificacion,
+                'razon_social' => $socio->razon_social,
+                'tipo_personeria' => $socio->tipo_personeria,
+                'btn' => '<button type="button" class="btn btn-primary mb-3 seleccionar-socio" data-id="' . $socio->id . '">Seleccionar</button>'
             ];
         });
 
@@ -164,18 +173,18 @@ class CamaraSocioController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
     }
 
     public function detalle_socio($id)
     {
         // Buscar la cámara por ID
-        $socio = Socio::find($id);  
-    
+        $socio = Socio::find($id);
+
         // Convertir el modelo socio a un array
-        $socioArray = $socio->toArray();    
-    
+        $socioArray = $socio->toArray();
+
         // Devolver la respuesta JSON
         return response()->json($socioArray);
     }
@@ -183,36 +192,36 @@ class CamaraSocioController extends Controller
     public function detalle_socio_camara($id)
     {
         // Buscar la cámara por ID
-        $camara_socio = CamaraSocio::find($id); 
-        $socio = Socio::where('id', $camara_socio->id_socio)->first(); 
+        $camara_socio = CamaraSocio::find($id);
+        $socio = Socio::where('id', $camara_socio->id_socio)->first();
 
-        $camara_socio->fecha_afiliacion = Carbon::parse($camara_socio->fecha_afiliacion )->format('d/m/Y');
-    
+        $camara_socio->fecha_afiliacion = Carbon::parse($camara_socio->fecha_afiliacion)->format('d/m/Y');
+
         // Convertir el modelo socio a un array
-        $camaraArray = $camara_socio->toArray();   
-        $camaraArray['socio'] = $socio->toArray(); 
-    
+        $camaraArray = $camara_socio->toArray();
+        $camaraArray['socio'] = $socio->toArray();
+
         // Devolver la respuesta JSON
         return response()->json($camaraArray);
     }
 
     public function registrar_socio_camara(Request $request)
-    { 
+    {
 
-        try { 
+        try {
 
             DB::beginTransaction();
 
             $fecha_afiliacion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_afiliacion'))->format('Y-m-d');
-             
-             
+
+
             // Crear registro en la base de datos
-            $socioCamara = CamaraSocio::create([ 
+            $socioCamara = CamaraSocio::create([
                 'id_camara' => strtoupper($request->input('camara_id')),
-                'id_socio' => strtoupper($request->input('socio_id')), 
-                'fecha_afiliacion' => $fecha_afiliacion, 
+                'id_socio' => strtoupper($request->input('socio_id')),
+                'fecha_afiliacion' => $fecha_afiliacion,
                 'estado' => 1
-            ]); 
+            ]);
 
             DB::commit();
 
@@ -235,68 +244,68 @@ class CamaraSocioController extends Controller
 
     public function eliminar_socio_camara($id)
     {
-        try{
+        try {
 
             DB::beginTransaction();
 
             //$colaborador = Colaborador::find($id);
-            $camara_socio = CamaraSocio::where('id', $id)->first(); 
+            $camara_socio = CamaraSocio::where('id', $id)->first();
 
             if (!$camara_socio) {
                 return response()->json(['error' => 'Socio no encontrado'], 404);
             }
-        
+
             // Cambiar el valor del campo 'activo' a 0
             $camara_socio->estado = 0;
             $camara_socio->save();
 
             DB::commit();
-        
-            return response()->json(['success' => 'Socio por Cámara eliminado correctamente']);
 
-        }catch (\Exception $e) {
+            return response()->json(['success' => 'Socio por Cámara eliminado correctamente']);
+        } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
-        } 
+        }
     }
 
     public function modificar_socio_camara(Request $request)
-    {  
+    {
         try {
 
-            DB::beginTransaction(); 
-             
+            DB::beginTransaction();
+
             // Buscar el registro existente por ID
             $camaraSocio = CamaraSocio::find($request->input('socio_camara_id_mod'));
-        
+
             if (!$camaraSocio) {
                 return response()->json(['error' => 'El Socio no existe.'], 404);
-            } 
+            }
 
-            $fecha_afiliacion = $request->input('fecha_afiliacion_mod') ? DateTime::createFromFormat('d/m/Y', $request->input('fecha_afiliacion_mod') )->format('Y-m-d H:i:s') : null; 
-              
+            $fecha_afiliacion = $request->input('fecha_afiliacion_mod') ? DateTime::createFromFormat('d/m/Y', $request->input('fecha_afiliacion_mod'))->format('Y-m-d H:i:s') : null;
+
             // Actualizar los campos del registro existente
             $camaraSocio->update([
-                'fecha_afiliacion' => $fecha_afiliacion 
-            ]);  
+                'fecha_afiliacion' => $fecha_afiliacion
+            ]);
 
             DB::commit();
- 
-            return response()->json(['response' => [
-                'msg' => "Registro modificado",
+
+            return response()->json([
+                'response' => [
+                    'msg' => "Registro modificado",
                 ]
             ], 201);
-        } catch (\Illuminate\Database\QueryException $e) {  
+        } catch (\Illuminate\Database\QueryException $e) {
 
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar el Socio de la Cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
-            
+
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar el Socio de la Cámara: ' . $e->getMessage()], 500);
         }
-    } 
+    }
 }

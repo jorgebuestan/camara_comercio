@@ -366,14 +366,14 @@
 
                 <div class="nano">
                     <div class="nano-content">
-                        <nav id="menu" class="nav-main" role="navigation"> 
+                        <nav id="menu" class="nav-main" role="navigation">
                             <ul class="nav nav-main">
                                 <li class="nav-active">
                                     <a class="nav-link" href="{{ route('dashboard') }}">
                                         <i class="bx bx-home-alt" aria-hidden="true"></i>
                                         <span>Inicio</span>
                                     </a>
-                                </li> 
+                                </li>
                                 @can('Admin')
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
@@ -453,7 +453,7 @@
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li> 
+                                    </li>
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
                                             <i class="bx bxs-report" aria-hidden="true"></i>
@@ -464,9 +464,9 @@
                                                 <a class="nav-link" href="{{ route('admin.reporte_socios_camara') }}">
                                                     Socios por Cámara
                                                 </a>
-                                            </li> 
+                                            </li>
                                         </ul>
-                                    </li> 
+                                    </li>
                                 @endcan
                                 @can('Camara')
                                     <li class="nav-parent">
@@ -476,17 +476,19 @@
                                         </a>
                                         <ul class="nav nav-children">
                                             <li>
-                                                <a class="nav-link" href="{{ route('camara.archivos_obligaciones_camara') }}">
+                                                <a class="nav-link"
+                                                    href="{{ route('camara.archivos_obligaciones_camara') }}">
                                                     Obligaciones por Cámara
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('camara.archivos_obligaciones_socio') }}">
+                                                <a class="nav-link"
+                                                    href="{{ route('camara.archivos_obligaciones_socio') }}">
                                                     Obligaciones por Socios
                                                 </a>
-                                            </li> 
+                                            </li>
                                         </ul>
-                                    </li>  
+                                    </li>
                                 @endcan
                             </ul>
                         </nav>
@@ -610,7 +612,24 @@
         </aside>
 
     </section>
-
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let error = Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'Aceptar',
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.error('Error' + ' - {{ session('error') }}');
+                    }
+                });
+                return;
+            });
+        </script>
+    @endif
     <!-- Vendor -->
     <script src="{{ URL::asset('porto/vendor/jquery/jquery.js') }}"></script>
     <script src="{{ URL::asset('porto/vendor/jquery-browser-mobile/jquery.browser.mobile.js') }}"></script>
@@ -699,6 +718,7 @@
     <script src="{{ URL::asset('porto/js/examples/examples.datatables.row.with.details.js') }}"></script>
     <script src="{{ URL::asset('porto/js/examples/examples.datatables.tabletools.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
