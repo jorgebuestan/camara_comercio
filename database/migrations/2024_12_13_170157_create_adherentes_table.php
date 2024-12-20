@@ -32,7 +32,6 @@ return new class extends Migration
             $table->text('interseccion');
             $table->text('referencia')->nullable();
             $table->text('observaciones')->nullable();
-            $table->text('archivos_adjuntos')->nullable();
             $table->integer('estado');
             $table->timestamps();
         });

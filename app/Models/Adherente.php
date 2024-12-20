@@ -30,7 +30,6 @@ class Adherente extends Model
         'interseccion',
         'referencia',
         'observaciones',
-        'archivos_adjuntos',
         'estado'
     ];
 
@@ -57,25 +56,5 @@ class Adherente extends Model
     public function parroquia()
     {
         return $this->hasOne(Parroquia::class, 'id', 'id_parroquia');
-    }
-
-    public function getNombreCompletoAttribute()
-    {
-        return $this->nombres . ' ' . $this->apellidos;
-    }
-
-    public function getDireccionAttribute()
-    {
-        return $this->calle . ' ' . $this->manzana . ' ' . $this->numero . ' ' . $this->interseccion;
-    }
-
-    public function getUbicacionAttribute()
-    {
-        return $this->parroquia->nombre . ', ' . $this->canton->nombre . ', ' . $this->provincia->nombre . ', ' . $this->pais->nombre;
-    }
-
-    public function getEstadoAttribute($value)
-    {
-        return $value == 1 ? 'Activo' : 'Inactivo';
     }
 }

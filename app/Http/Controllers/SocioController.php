@@ -157,7 +157,6 @@ class SocioController extends Controller
             $validator = Validator::make($request->all(), [
                 'fecha_ingreso' => 'required|date_format:d/m/Y',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
                 'tipo_personeria' => 'required|integer',
                 'identificacion' => 'required|string',
                 'razon_social' => 'required|string|max:255',
@@ -305,7 +304,6 @@ class SocioController extends Controller
                 'socio_id' => 'required|integer',
                 'fecha_ingreso' => 'sometimes|date_format:d/m/Y',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'adjuntos' => 'nullable|array|max:5|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10240',
                 'tipo_personeria' => 'sometimes|integer',
                 'identificacion' => 'sometimes|string',
                 'razon_social' => 'sometimes|string|max:255',
