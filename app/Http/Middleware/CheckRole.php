@@ -4,10 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 
 class CheckRole
 {
@@ -38,16 +36,16 @@ class CheckRole
         $user = Auth::user(); // Obtener el usuario autenticado
         $roles = $user->getRoleNames(); // Esto devuelve una colección de nombres de roles
 
-        Log::info('Roles del usuario: ' . $roles); 
-    
+        Log::info('Roles del usuario: ' . $roles);
+
         $userRoles = Auth::user()->roles->pluck('name')->toArray();
         Log::info('Roles del usuario: ', $userRoles);
-    
+
         if (!array_intersect($rolesArray, $userRoles)) {
             Log::info('Usuario no tiene ninguno de los roles necesarios');
-            return redirect('/dashboard');
+            return redirect()->route('dashboard')->with('error', 'El usuario no tiene autorización para este módulo');
         }
-    
+
         return $next($request);
     }
 }
