@@ -70,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     //Funciones Administrador
 
     //Maestro de Camaras
-    Route::get('/administrador/maestro_camaras', [CamaraController::class, 'maestro_camaras'])->middleware('auth')->name('admin.maestro_camaras');
+    Route::get('/administrador/maestro_camaras', [CamaraController::class, 'maestro_camaras'])->middleware('auth')->middleware('check.role:admin')->name('admin.maestro_camaras');
     Route::get('/administrador/obtener_listado_camaras', [CamaraController::class, 'obtener_listado_camaras'])->middleware('auth')->name('admin.obtener_listado_camaras');
     Route::post('/administrador/registrar_camara', [CamaraController::class, 'registrar_camara'])->middleware('auth')->name('admin.registrar_camara');
     Route::post('/administrador/camara/eliminar/{id}', [CamaraController::class, 'eliminar_camara'])->middleware('auth')->name('admin.eliminar_camara');;
