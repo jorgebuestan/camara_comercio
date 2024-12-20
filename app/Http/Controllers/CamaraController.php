@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Models\Camara;
 use App\Models\DatoTributario;
 use App\Models\TipoRegimen;
@@ -12,6 +12,7 @@ use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -20,13 +21,16 @@ class CamaraController extends Controller
 {
     //
     public function maestro_camaras()
-    {  
-        $regimen = TipoRegimen::pluck('nombre', 'id'); 
-        $paises = Pais::pluck('nombre', 'id');  
+    {
+        if (!Auth::user()->hasRole('admin')) {
+            return view('not_authorized');
+        }
+        $regimen = TipoRegimen::pluck('nombre', 'id');
+        $paises = Pais::pluck('nombre', 'id');
         $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');  
+        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -42,18 +46,18 @@ class CamaraController extends Controller
         if ($parroquiaDefault) {
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
-        
-        return view('administrador.camaras.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas') );
+
+        return view('administrador.camaras.maestro_camaras', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas'));
     }
 
     public function obtener_listado_camaras(Request $request)
     {
         $columns = [
-            0 => 'camaras.id', 
+            0 => 'camaras.id',
             1 => 'acciones'
         ];
 
-        $query = DB::table('camaras')  
+        $query = DB::table('camaras')
             ->select(
                 'camaras.id',
                 'camaras.fecha_ingreso',
@@ -70,12 +74,12 @@ class CamaraController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('camaras.ruc', 'LIKE', "%{$search}%") 
+            $query->where(function ($query) use ($search) {
+                $query->where('camaras.ruc', 'LIKE', "%{$search}%")
                     ->orWhere('camaras.razon_social', 'LIKE', "%{$search}%")
                     ->orWhere('camaras.cedula_representante_legal', 'LIKE', "%{$search}%")
                     ->orWhere('camaras.nombres_representante_legal', 'LIKE', "%{$search}%")
-                    ->orWhere('camaras.apellidos_representante_legal', 'LIKE', "%{$search}%"); 
+                    ->orWhere('camaras.apellidos_representante_legal', 'LIKE', "%{$search}%");
             });
         }
 
@@ -98,19 +102,19 @@ class CamaraController extends Controller
         $camaras = $query->get();
 
         $data = $camaras->map(function ($camara) {
-            $boton = "";  
-            
-            $representante_legal = $camara->nombres_representante_legal . " ". $camara->apellidos_representante_legal;
-            
+            $boton = "";
+
+            $representante_legal = $camara->nombres_representante_legal . " " . $camara->apellidos_representante_legal;
+
             return [
-                'fecha_ingreso' => $camara->fecha_ingreso, 
-                'ruc' => $camara->ruc, 
-                'razon_social' => $camara->razon_social, 
-                'cedula_representante_legal' => $camara->cedula_representante_legal, 
-                'representante_legal' => $representante_legal, 
+                'fecha_ingreso' => $camara->fecha_ingreso,
+                'ruc' => $camara->ruc,
+                'razon_social' => $camara->razon_social,
+                'cedula_representante_legal' => $camara->cedula_representante_legal,
+                'representante_legal' => $representante_legal,
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $camara->id . '">Modificar</button>' .
-                '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar</button>'.
-                '&nbsp;&nbsp;&nbsp;' 
+                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar</button>' .
+                    '&nbsp;&nbsp;&nbsp;'
             ];
         });
 
@@ -120,13 +124,13 @@ class CamaraController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
     }
 
-    
-        // Validación de datos
-        /*$validated = $request->validate([
+
+    // Validación de datos
+    /*$validated = $request->validate([
             'fecha_ingreso' => 'required|string', // Validar como string inicialmente
             'ruc' => 'required|string|unique:camaras,ruc|max:20',
             'razon_social' => 'required|string|max:255',
@@ -140,7 +144,7 @@ class CamaraController extends Controller
             'file' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Acepta imágenes de hasta 2MB
         ]);*/
     public function registrar_camara(Request $request)
-    { 
+    {
 
         try {
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
@@ -182,14 +186,14 @@ class CamaraController extends Controller
 
 
             //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
-            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', ''); 
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', '');
             // Convertir la cadena en un array (si no está vacío)
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
 
-            
+
             DatoTributario::create([
                 'id_camara' => $camara->id,
-                'tipo_regimen' => strtoupper($request->input('tipo_regimen')), 
+                'tipo_regimen' => strtoupper($request->input('tipo_regimen')),
                 'fecha_registro_sri' => $fechaRegistro,
                 'fecha_constitucion' => $fechaConstitucion,
                 'agente_retencion' => strtoupper($request->input('agente_retencion')),
@@ -222,16 +226,16 @@ class CamaraController extends Controller
             /*if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
                 return response()->json(['error' => 'El RUC ingresado ya existe en el sistema.'], 422);
             }*/
-             // Verificar si es un error de restricción única
-             // Verificar si es un error de restricción única
-            if ($e->getCode() == 23000) { 
+            // Verificar si es un error de restricción única
+            // Verificar si es un error de restricción única
+            if ($e->getCode() == 23000) {
                 $errorMessage = $e->getMessage();
                 Log::error("Mensaje de error SQL: " . $errorMessage); // Depurar mensaje completo
-        
+
                 // Analizar el mensaje para determinar el índice violado
                 if (preg_match("/Duplicate entry '.*' for key '(?:.*\.)?([^']+)'/", $errorMessage, $matches)) {
                     $indexName = $matches[1]; // Nombre del índice que falló (sin el prefijo de tabla)
-        
+
                     // Mapear el índice con el campo correspondiente
                     $fieldMap = [
                         'users_email_unique' => 'email',
@@ -239,7 +243,7 @@ class CamaraController extends Controller
                         'camaras_ruc_unique' => 'RUC',
                         // Ajusta los nombres de índices según los resultados del diagnóstico
                     ];
-        
+
                     if (isset($fieldMap[$indexName])) {
                         $fieldName = $fieldMap[$indexName];
                         return response()->json([
@@ -248,7 +252,7 @@ class CamaraController extends Controller
                         ], 422);
                     }
                 }
-        
+
                 return response()->json([
                     'error' => 'Se ha producido un error de restricción única en la base de datos.',
                     'debug' => $errorMessage // Incluye el mensaje completo para depuración en ambiente de desarrollo
@@ -265,89 +269,87 @@ class CamaraController extends Controller
     public function eliminar_camara($id)
     {
         //$colaborador = Colaborador::find($id);
-        try{
+        try {
 
             DB::beginTransaction();
 
-            $camara = Camara::where('id', $id)->first(); 
+            $camara = Camara::where('id', $id)->first();
 
             if (!$camara) {
                 return response()->json(['error' => 'Camara no encontrada'], 404);
             }
-        
+
             // Cambiar el valor del campo 'activo' a 0
             $camara->estado = 0;
             $camara->save();
 
-            $usuario = User::where('username', $camara->ruc)->first(); 
+            $usuario = User::where('username', $camara->ruc)->first();
             $usuario->estado = 0;
             $usuario->save();
 
             DB::commit();
-        
-            return response()->json(['success' => 'Cámara eliminada correctamente']);
 
+            return response()->json(['success' => 'Cámara eliminada correctamente']);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar la Cámara: ' . $e->getMessage()], 500);
         }
-        
     }
 
     public function detalle_camara($id)
     {
         // Buscar la cámara por ID
         $camara = Camara::find($id);
-    
+
         if (!$camara) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
-    
+
         // Convertir el modelo Camara a un array
         $camaraArray = $camara->toArray();
-    
+
         // Buscar el DatoTributario relacionado
         $datoTributario = DatoTributario::where('id_camara', $id)->first();
-    
+
         // Si existe un DatoTributario, agregarlo al array de respuesta
         if ($datoTributario) {
             $camaraArray['dato_tributario'] = $datoTributario->toArray();
         }
-    
+
         // Devolver la respuesta JSON
         return response()->json($camaraArray);
     }
 
     public function modificar_camara(Request $request)
-    {  
+    {
         try {
 
             DB::beginTransaction();
 
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso_mod'))->format('Y-m-d');
-        
+
             $rutaLogo = 'default/default_logo.png'; // Ruta por defecto al logo
-        
+
             // Manejo del archivo de logo si existe
             if ($request->hasFile('file_mod')) {
                 $ruc = $request->input('ruc_mod');
                 $archivoLogo = $request->file('file_mod');
                 $nombreArchivo = "{$ruc}." . $archivoLogo->getClientOriginalExtension();
-        
+
                 // Crear carpeta con el nombre del RUC y guardar el archivo
                 $rutaLogo = "logos/{$ruc}/{$nombreArchivo}";
                 $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
             }
-        
+
             // Buscar el registro existente por ID
             $camara = Camara::find($request->input('camara_id'));
-        
+
             if (!$camara) {
                 return response()->json(['error' => 'La cámara no existe.'], 404);
             }
-        
+
             // Actualizar los campos del registro existente
             $camara->update([
                 'logo' => $rutaLogo,
@@ -362,20 +364,20 @@ class CamaraController extends Controller
                 'cargo_representante_legal' => strtoupper($request->input('cargo_representante_legal_mod')),
                 'direccion_representante_legal' => strtoupper($request->input('direccion_representante_legal_mod')),
                 'estado' => 1
-            ]); 
-        
+            ]);
+
             // Convertir fechas al formato MySQL (YYYY-MM-DD)
             $fechaRegistro = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_registro_mod'))->format('Y-m-d');
             $fechaConstitucion = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_constitucion_mod'))->format('Y-m-d');
-        
+
             // Buscar DatoTributario relacionado
             $datoTributario = DatoTributario::where('id_camara', $camara->id)->first();
-        
+
             if (!$datoTributario) {
                 return response()->json(['error' => 'Los datos tributarios no existen.'], 404);
             }
- 
-            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');  
+
+            $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
 
             // Actualizar DatoTributario
@@ -397,36 +399,36 @@ class CamaraController extends Controller
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
 
-            $usuario = User::where('username', $camara->ruc)->first(); 
+            $usuario = User::where('username', $camara->ruc)->first();
             $usuario->name = strtoupper($request->input('razon_social_mod'));
             $usuario->email = strtoupper($request->input('correo_representante_legal_mod'));
             $usuario->username = strtoupper($request->input('ruc_mod'));
             $usuario->save();
 
             DB::commit();
-        
+
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
-            return response()->json(['response' => [
-                'msg' => "Registro modificado",
+            return response()->json([
+                'response' => [
+                    'msg' => "Registro modificado",
                 ]
             ], 201);
         } /*catch (\Illuminate\Database\QueryException $e) { 
             return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al modificar la cámara: ' . $e->getMessage()], 500);
-        }*/
-        catch (\Illuminate\Database\QueryException $e) {
+        }*/ catch (\Illuminate\Database\QueryException $e) {
             Log::error($e);
             DB::rollBack();
-        
+
             if ($e->getCode() == 23000) { // Código de error para violaciones de restricción única
                 $errorMessage = $e->getMessage();
                 Log::error("Mensaje de error SQL: " . $errorMessage); // Registro detallado para depuración
-        
+
                 // Analizar el mensaje para determinar el índice violado
                 if (preg_match("/Duplicate entry '.*' for key '(?:.*\.)?([^']+)'/", $errorMessage, $matches)) {
                     $indexName = $matches[1]; // Extraer el nombre del índice violado
-        
+
                     // Mapear el índice con el campo correspondiente
                     $fieldMap = [
                         'users_email_unique' => 'email',
@@ -434,10 +436,10 @@ class CamaraController extends Controller
                         'camaras_ruc_unique' => 'RUC',
                         // Agrega más índices según tu esquema de base de datos
                     ];
-        
+
                     if (isset($fieldMap[$indexName])) {
                         $fieldName = $fieldMap[$indexName];
-        
+
                         // Respuesta en caso de un valor duplicado
                         return response()->json([
                             'error' => "El valor ingresado para el campo '{$fieldName}' ya existe en el sistema.",
@@ -445,14 +447,14 @@ class CamaraController extends Controller
                         ], 422);
                     }
                 }
-        
+
                 // Respuesta genérica si no se puede determinar el campo afectado
                 return response()->json([
                     'error' => 'Se ha producido un error de restricción única en la base de datos.',
                     'debug' => app()->isLocal() ? $errorMessage : null // Incluir detalles solo en entornos locales
                 ], 422);
             }
-        
+
             // Respuesta genérica para otros errores de base de datos
             return response()->json([
                 'error' => 'Error al modificar el registro: ' . $e->getMessage()

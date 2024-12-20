@@ -8,15 +8,25 @@ use Illuminate\Support\Facades\Log;
 use App\Models\CamaraObligacion;
 use App\Models\Camara;
 use App\Models\Entidad;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use App\Models\ArchivoObligacionCamara;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CamaraObligacionController extends Controller
 {
     public function obligaciones_camara(Request $request)
     {
-        $camarasSelect = Camara::pluck('razon_social', 'id');
+        $isAdmin = Auth::user()->hasRole('admin');
+        $camarasSelect = [];
+        if ($isAdmin) {
+            $camarasSelect = Camara::pluck('razon_social', 'id');
+        } else {
+            $camarasSelect = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
+            if (!$camarasSelect || $camarasSelect->isEmpty()) {
+                return redirect()->route('dashboard')->with('error', 'No tiene permisos para acceder a esta sección');
+            }
+        }
         $entidades = Entidad::with('obligaciones.obligacion.tiempo_presentacion', 'obligaciones.obligacion.tipo_presentacion')->where('estado', 1)->get();
         $entidadesSelect = $entidades->pluck('entidad', 'id');
 
@@ -98,13 +108,17 @@ class CamaraObligacionController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'id_camara' => 'required|integer',
                 'id_entidad' => 'required|integer',
                 'id_obligacion' => 'required|integer',
                 'fecha_inicio' => 'sometimes|nullable|date_format:d/m/Y',
                 'fecha_presentacion' => 'sometimes|nullable|date_format:d/m/Y',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'Datos incorrectos'], 400);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
             $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
                 ->where('id_entidad', $data['id_entidad'])
@@ -133,7 +147,7 @@ class CamaraObligacionController extends Controller
             $archivoObligacionCamara = ArchivoObligacionCamara::create([
                 'id_camara' => $camaraObligacion->id_camara,
                 'id_entidad' => $camaraObligacion->id_entidad,
-                'id_obligacion' => $camaraObligacion->id_obligacion, 
+                'id_obligacion' => $camaraObligacion->id_obligacion,
                 'ruta_archivo' => '',
                 'validado' => 0,
                 'estado' => 1
@@ -148,16 +162,18 @@ class CamaraObligacionController extends Controller
     public function update(Request $request)
     {
         try {
-
-            $data = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
                 'id_camara' => 'required|integer',
                 'id_entidad' => 'required|integer',
                 'id_obligacion' => 'required|integer',
                 'fecha_inicio' => 'sometimes|nullable|date_format:d/m/Y',
-                'fecha_presentacion' =>
-                'sometimes|nullable|date_format:d/m/Y',
+                'fecha_presentacion' => 'sometimes|nullable|date_format:d/m/Y',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'Datos incorrectos'], 400);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
             $camaraObligacion = CamaraObligacion::find($data['id']);
             if (!$camaraObligacion) {
@@ -194,9 +210,9 @@ class CamaraObligacionController extends Controller
             $camaraObligacion->save();
 
             $archivoObligacionCamara = ArchivoObligacionCamara::where('id_camara', $camaraObligacion->id_camara)
-            ->where('id_entidad', $camaraObligacion->id_entidad)
-            ->where('id_obligacion', $camaraObligacion->id_obligacion)
-            ->first(); 
+                ->where('id_entidad', $camaraObligacion->id_entidad)
+                ->where('id_obligacion', $camaraObligacion->id_obligacion)
+                ->first();
             $archivoObligacionCamara->estado = 0;
             $archivoObligacionCamara->save();
 

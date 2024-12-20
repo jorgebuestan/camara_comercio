@@ -13,11 +13,11 @@ use App\Http\Controllers\SocioController;
 use App\Http\Controllers\EntidadesController;
 use App\Http\Controllers\ObligacionesController;
 use App\Http\Controllers\ObligacionesEntidadController;
-use App\Http\Controllers\SocioObligacionController; 
-use App\Http\Controllers\CamaraSocioController; 
-use App\Http\Controllers\ReportesController; 
-use App\Http\Controllers\ArchivoObligacionCamaraController; 
-use App\Http\Controllers\ArchivoObligacionSocioController; 
+use App\Http\Controllers\SocioObligacionController;
+use App\Http\Controllers\CamaraSocioController;
+use App\Http\Controllers\ReportesController;
+use App\Http\Controllers\ArchivoObligacionCamaraController;
+use App\Http\Controllers\ArchivoObligacionSocioController;
 
 
 
@@ -166,15 +166,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/administrador/obtener_listado_socios_camaras', [ReportesController::class, 'obtener_listado_socios_camaras'])->middleware('auth')->name('admin.obtener_listado_socios_camaras');
     Route::get('/administrador/reportes/exportar_excel_socios_por_camara', [ReportesController::class, 'exportar_excel_socios_por_camara'])->middleware('auth')->name('admin.exportar_excel_socios_por_camara');
     Route::get('/administrador/reportes/exportar_pdf_socios_por_camara', [ReportesController::class, 'exportar_pdf_socios_por_camara'])->middleware('auth')->name('admin.exportar_pdf_socios_por_camara');
-     
+
     //Manejo de Archivos de Obligaciones por Camara
     Route::get('/camara/archivos/archivos_obligaciones_camara', [ArchivoObligacionCamaraController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_camara');
     Route::post('/camara/archivos/guardar_archivo_camara', [ArchivoObligacionCamaraController::class, 'guardar_archivo_camara'])->name('camara.guardar_archivo_camara');
     Route::get('/administrador/obtener_listado_archivos_obligaciones_camara', [ArchivoObligacionCamaraController::class, 'obtener_listado_archivos_obligaciones_camara'])->middleware('auth')->name('admin.obtener_listado_archivos_obligaciones_camara');
-    
+
     //Manejo de Archivos de Obligaciones por Socio
     Route::get('/camara/archivos/archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_socio');
-    
 });
 
 require __DIR__ . '/auth.php';

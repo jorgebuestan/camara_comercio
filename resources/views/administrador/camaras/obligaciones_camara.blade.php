@@ -132,9 +132,10 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" class="form-control populate">
-                                            <option value=-1>Seleccionar</option>
-                                            @foreach ($camarasSelect as $id => $descripcion)
+                                        <select id="camara" name="camara" class="form-control populate"
+                                            disabled={{ $isAdmin ? 'false' : 'true' }}>
+                                            {{ $isAdmin ? '<option value=-1>Seleccionar Cámara</option>' : '' }}
+                                            @foreach ($camaras as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
