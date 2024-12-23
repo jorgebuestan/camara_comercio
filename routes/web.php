@@ -17,7 +17,8 @@ use App\Http\Controllers\SocioObligacionController;
 use App\Http\Controllers\CamaraSocioController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ArchivoObligacionCamaraController;
-use App\Http\Controllers\ArchivoObligacionSocioController;
+use App\Http\Controllers\ArchivoObligacionSocioController; 
+use App\Http\Controllers\PasswordController; 
 
 
 
@@ -38,7 +39,17 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'password.change'])->name('dashboard');
+
+/*
+Route::group(['middleware' => ['auth', 'verified', 'password.change']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+*/
+
+Route::middleware(['log:requests'])->group(function () {
+    Route::post('password/change', [PasswordController::class, 'update'])->name('password.update2');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,18 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/usuarios', [UserController::class, 'index'])
-        ->middleware('permission:ver usuarios')
-        ->name('usuarios.index');
+Route::middleware('auth')->group(function () {
+    //Cambio de Password por primera vez
+    Route::get('password/change', [PasswordController::class, 'edit'])->name('password.change');
+    //Route::post('password/change', [PasswordController::class, 'update'])->name('password.update');
+    Route::put('password/change', [PasswordController::class, 'update'])->name('password.update2'); 
+});
 
-    Route::get('/usuarios/crear', [UserController::class, 'create'])
-        ->middleware('permission:crear usuarios')
-        ->name('usuarios.create');
-
-    Route::post('/usuarios', [UserController::class, 'store'])
-        ->middleware('permission:crear usuarios')
-        ->name('usuarios.store');
+Route::middleware(['auth'])->group(function () { 
+    
 
     //Funciones Generales
     Route::get('/get-provincias', [FuncionesGeneralesController::class, 'get_provincias'])->middleware('auth')->name('funciones_generales.get_provincias');
