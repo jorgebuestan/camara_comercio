@@ -369,7 +369,7 @@
 
             <!-- Main Content -->
             <section role="main" id="content-body"
-                class="content-body !flex-grow !flex !flex-col !w-screen !px-0 !pt-0 md:!ml-64 ml-0 min-h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden">
+                class="content-body !flex-grow !flex !flex-col !w-screen !px-0 !pt-0 md:!ml-64 ml-0 !overflow-y-auto !h-[calc(100vh-60px)]">
                 <header
                     class="py-3 px-4 border-b border-gray-300 flex flex-row items-center justify-start gap-4 content-header text-white">
                     <h4 class="font-bold">@yield('pagename', 'Dashboard')</h4>
@@ -397,10 +397,9 @@
                         {{ session('success') }}
                     </div>
                 @endif
+            </section>
         </div>
         <!-- end: page -->
-    </section>
-    </div>
     </section>
     @if (session('error'))
         <script>
