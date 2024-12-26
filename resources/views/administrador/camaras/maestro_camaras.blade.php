@@ -137,9 +137,8 @@
 
                                         <h2 class="card-title">Listado de Cámaras Registradas</h2>
                                     </header>
-                                    <div class="card-body w-full">
-                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                            style="display: block" id="dataTable">
+                                    <div class="card-body overflow-x-auto max-w-full">
+                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>
@@ -173,8 +172,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalCamaraLabel"><b>Agregar una Nueva Cámara de Comercio</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                    </button> -->
+                                                                                                                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">

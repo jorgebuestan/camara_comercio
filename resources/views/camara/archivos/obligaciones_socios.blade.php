@@ -102,9 +102,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="card-body">
-                                                    <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                                        style="display: block;" id="dataTable">
+                                                <div class="card-body overflow-x-auto max-w-full">
+                                                    <table class="table table-bordered table-striped mb-0" id="dataTable">
                                                         <thead>
                                                             <tr>
                                                                 <th>Entidad</th>

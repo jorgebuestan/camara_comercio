@@ -116,9 +116,8 @@
 
                                         <h2 class="card-title">Listado de Obligaciones registradas por Entidad</h2>
                                     </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                            style="display: block;" id="dataTable">
+                                    <div class="card-body overflow-x-auto max-w-full">
+                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Obligación</th>
@@ -196,8 +195,7 @@
                             </div>
                             <div class="col-md-4">
                                 <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_presentacion" id="fecha_presentacion"
-                                    placeholder="Fecha de Presentación">
+                                    name="fecha_presentacion" id="fecha_presentacion" placeholder="Fecha de Presentación">
                             </div>
                         </div>
                         <div class="row">
@@ -785,7 +783,8 @@
                     }
 
                     console.log(res
-                    .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText
+                        ); // Muestra el error completo en la consola para depuración
                 });
             });
 
@@ -901,7 +900,7 @@
                                 allowOutsideClick: false
                             });
                             location
-                        .reload(); // O cualquier otra lógica para actualizar la interfaz
+                                .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);

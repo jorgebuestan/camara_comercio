@@ -103,9 +103,8 @@
 
                                         <h2 class="card-title">Listado de Entidades creadas</h2>
                                     </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                            style="display: block;" id="dataTable">
+                                    <div class="card-body overflow-x-auto max-w-full">
+                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>
@@ -139,8 +138,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEntidadLabel"><b>Agregar una nueva Entidad</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                            <span aria-hidden="true">&times;</span>
+                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -309,8 +308,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarEntidadLabel"><b>Modificar Entidad</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                            <span aria-hidden="true">&times;</span>
+                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -1485,17 +1484,17 @@
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
@@ -1535,7 +1534,7 @@
 
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
@@ -1578,7 +1577,7 @@
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
@@ -1616,17 +1615,17 @@
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
@@ -1666,7 +1665,7 @@
 
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
@@ -1709,7 +1708,7 @@
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
