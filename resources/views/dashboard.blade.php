@@ -158,10 +158,10 @@
         <!-- start: header -->
         <header class="header flex items-center justify-between gap-2 w-full px-2 !fixed top-0 z-50 !h-[60px]">
             <div class="m-1 flex items-center">
-                <a href="../4.0.0" class="">
+                <!-- <a href="../4.0.0" class="">
                     <img src="{{ URL::asset('porto/img/logo.png') }}" width="75" height="35"
                         alt="CamaraAdmin" />
-                </a>
+                </a> -->
             </div>
             <div></div>
             <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse px-2 relative">
