@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'check.role' => \App\Http\Middleware\CheckRole::class,
+        'password.change' => \App\Http\Middleware\CheckPasswordChange::class, 
     ]; 
 }

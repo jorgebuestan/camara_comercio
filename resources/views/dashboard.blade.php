@@ -386,8 +386,15 @@
                 <main class="p-2 container">
                     @yield('content')
                 </main>
-            </section>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
         </div>
+        <!-- end: page -->
+    </section>
+    </div>
     </section>
     @if (session('error'))
         <script>

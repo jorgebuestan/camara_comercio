@@ -63,7 +63,7 @@ class AuthenticatedSessionController extends Controller
         // Regenerar sesión
         $request->session()->regenerate();
 
-        return redirect()->intended('/'); // Redirige al home o ruta protegida
+        return redirect()->intended('/dashboard'); // Redirige al home o ruta protegida
     }
     
     /**

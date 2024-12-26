@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-    ];
+        'password/change', // O la ruta completa que estás usando
+    ]; 
 }
