@@ -169,14 +169,14 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- <div class="col-md-2">
                                     Fecha de Presentación
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" data-plugin-datepicker class="form-control" disabled
                                         name="fecha_presentacion" id="fecha_presentacion"
                                         placeholder="Fecha de Presentación">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -196,13 +196,13 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- <div class="col-md-2">
                                     Fecha de Inicio
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" data-plugin-datepicker class="form-control" disabled
                                         name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -257,14 +257,14 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- <div class="col-md-2">
                                     Fecha de Presentación
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" data-plugin-datepicker class="form-control" disabled
                                         name="fecha_presentacion_mod" id="fecha_presentacion_mod"
                                         placeholder="Fecha de Presentación">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -284,13 +284,13 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- <div class="col-md-2">
                                     Fecha de Inicio
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" data-plugin-datepicker class="form-control" disabled
                                         name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                                </div>
+                                </div> --->
                             </div>
                         </div>
                     </div>
@@ -569,7 +569,7 @@
                         $('#tipo_presentacion').focus();
                         return;
                     }
-                    if ($('#fecha_inicio').val() == "") {
+                    /* if ($('#fecha_inicio').val() == "") {
                         //alert('Debe registrar la Fecha de Inicio');
                         await Swal.fire({
                             target: document.getElementById('ModalObligacion'),
@@ -581,10 +581,10 @@
                         });
                         $('#fecha_inicio').focus();
                         return;
-                    }
+                    } */
                 }
 
-                if ($('#tiempo_presentacion').val() == "1") {
+                /*if ($('#tiempo_presentacion').val() == "1") {
 
                     if ($('#fecha_presentacion').val() == "") {
                         //alert('Debe registrar la Fecha de Presentación');
@@ -599,7 +599,7 @@
                         $('#fecha_presentacion').focus();
                         return;
                     }
-                }
+                }*/
 
                 // Verificar si hay registros similares antes de proceder
                 const obligacion = $('#obligacion').val();

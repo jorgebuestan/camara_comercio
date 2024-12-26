@@ -191,14 +191,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <!-- <div class="col-md-2">
                                 Fecha de Presentación
                             </div>
                             <div class="col-md-4">
                                 <input type="text" data-plugin-datepicker class="form-control" disabled
                                     name="fecha_presentacion" id="fecha_presentacion"
                                     placeholder="Fecha de Presentación">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             &nbsp;
@@ -218,13 +218,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <!-- <div class="col-md-2">
                                 Fecha de Inicio
                             </div>
                             <div class="col-md-4">
                                 <input type="text" data-plugin-datepicker class="form-control" disabled
                                     name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -309,14 +309,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <!-- <div class="col-md-2">
                                 Fecha de Presentación
                             </div>
                             <div class="col-md-4">
                                 <input type="text" data-plugin-datepicker class="form-control" disabled
                                     name="fecha_presentacion_mod" id="fecha_presentacion_mod"
                                     placeholder="Fecha de Presentación">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             &nbsp;
@@ -336,13 +336,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <!-- <div class="col-md-2">
                                 Fecha de Inicio
                             </div>
                             <div class="col-md-4">
                                 <input type="text" data-plugin-datepicker class="form-control" disabled
                                     name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -687,7 +687,23 @@
                     return;
                 }
 
-                if ($('#tiempo_presentacion').val() == "1") {
+                if ($('#tiempo_presentacion').val() == "2") {
+                    if ($('#tipo_presentacion').val() == "-1") {
+                        //alert('Debe seleccionar el Tipo de Presentación');
+                        Swal.fire({
+                            target: document.getElementById('ModalObligacion'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Debe seleccionar el Tipo de Presentación',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
+                        $('#tipo_presentacion').focus();
+                        return;
+                    } 
+                }
+
+                /* if ($('#tiempo_presentacion').val() == "1") {
                     if ($('#fecha_presentacion').val() == "") {
                         //alert('Debe ingresar la Fecha de Presentación'); 
                         await Swal.fire({
@@ -701,9 +717,9 @@
                         $('#fecha_presentacion').focus();
                         return;
                     }
-                }
+                } */
 
-                if ($('#tiempo_presentacion').val() == "2") {
+                /* if ($('#tiempo_presentacion').val() == "2") {
                     if ($('#fecha_inicio').val() == "") {
                         //alert('Debe ingresar la Fecha de Inicio'); 
                         await Swal.fire({
@@ -717,7 +733,7 @@
                         $('#fecha_inicio').focus();
                         return;
                     }
-                }
+                } */
 
 
                 var formData = new FormData(document.getElementById("ModalObligacion"));
@@ -923,7 +939,7 @@
 
             $("#modificarObligacion").click(async function() {
 
-                if ($('#tiempo_presentacion_mod').val() == "1") {
+                /* if ($('#tiempo_presentacion_mod').val() == "1") {
 
                     if ($('#fecha_presentacion_mod').val() == "") {
                         //alert('Debe seleccionar la Clase de Entidad');
@@ -938,9 +954,9 @@
                         $('#fecha_presentacion_mod').focus();
                         return;
                     }
-                }
+                } */
 
-                if ($('#tiempo_presentacion_mod').val() == "2") {
+                /* if ($('#tiempo_presentacion_mod').val() == "2") {
 
                     if ($('#fecha_inicio_mod').val() == "") {
                         //alert('Debe seleccionar la Clase de Entidad');
@@ -955,7 +971,7 @@
                         $('#fecha_inicio_mod').focus();
                         return;
                     }
-                }
+                } */
 
                 Swal.fire({
                     target: document.getElementById('ModalModificarObligacion'),
