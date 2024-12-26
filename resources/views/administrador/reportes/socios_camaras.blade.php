@@ -80,10 +80,13 @@ Reporte de Socios por Cámara
                             <div class="col-8">  
                                 <div class="row">
                                     <div class="col-md-9">   
-                                        <select id="camara" name="camara" data-plugin-selectTwo class="form-control populate">
-                                            <option value="-1">Seleccionar Cámara</option>
-                                            @foreach($camaras as $id => $descripcion)
-                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                    <select id="camara" name="camara" class="form-control populate"
+                                            @if (!$isAdmin) disabled @endif>
+                                            @if ($isAdmin)
+                                                <option value="-1">Seleccionar Cámara</option>
+                                            @endif
+                                            @foreach ($camarasSelect as $id => $descripcion)
+                                                <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
                                     </div> 
@@ -198,8 +201,9 @@ $(document).ready(function(){
     // Escuchar el evento change del select de cámaras
     $('#camara').change(function () {
         var selectedEntidad = $(this).val();
+        //alert(selectedEntidad);
 
-        if (selectedEntidad === '-1') {
+        if (selectedEntidad === "-1") {
             //alert('Por favor selecciona una cámara válida.');
             /*Swal.fire({ 
                 icon: 'error',
@@ -315,7 +319,7 @@ $(document).ready(function(){
         window.location.href = url;
     }); 
  
-});
+}); 
 
 </script>
 @endsection

@@ -374,21 +374,28 @@
                                         <span>Inicio</span>
                                     </a>
                                 </li>
-                                @can('Admin')
+                                @can('Camara')
                                     <li class="nav-parent">
                                         <a class="nav-link" href="#">
                                             <i class="bx bxs-building" aria-hidden="true"></i>
                                             <span>Cámaras</span>
                                         </a>
                                         <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_camaras') }}">
-                                                    Mantenimiento de Cámaras
-                                                </a>
-                                            </li>
+                                            @can('Admin')
+                                                <li>
+                                                    <a class="nav-link" href="{{ route('admin.maestro_camaras') }}">
+                                                        Mantenimiento de Cámaras
+                                                    </a>
+                                                </li>
+                                            @endcan
                                             <li>
                                                 <a class="nav-link" href="{{ route('admin.establecimientos_camara') }}">
                                                     Establecimientos por Cámara
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link" href="{{ route('admin.socios_camara') }}">
+                                                    Socios por Cámara
                                                 </a>
                                             </li>
                                             <li>
@@ -397,8 +404,9 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.socios_camara') }}">
-                                                    Socios por Cámara
+                                                <a class="nav-link"
+                                                    href="{{ route('camara.archivos_obligaciones_camara') }}">
+                                                    Archivos por Obligación de Cámaras
                                                 </a>
                                             </li>
                                         </ul>
@@ -420,13 +428,19 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                <a class="nav-link" href="{{ route('admin.adherentes_socio') }}">
+                                                    Adherentes por Socios
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a class="nav-link" href="{{ route('admin.obligaciones_socio') }}">
                                                     Obligaciones por Socios
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="nav-link" href="{{ route('admin.adherentes_socio') }}">
-                                                    Adherentes por Socios
+                                                <a class="nav-link"
+                                                    href="{{ route('camara.archivos_obligaciones_socio') }}">
+                                                    Archivos por Obligación de Socios
                                                 </a>
                                             </li>
                                         </ul>
@@ -469,7 +483,7 @@
                                     </li>
                                 @endcan
                                 @can('Camara')
-                                    <li class="nav-parent">
+                                    <!-- <li class="nav-parent">
                                         <a class="nav-link" href="#">
                                             <i class="bx bx-git-merge" aria-hidden="true"></i>
                                             <span>Subir archivos de Obligaciones</span>
@@ -488,7 +502,7 @@
                                                 </a>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> -->
                                 @endcan
                             </ul>
                         </nav>

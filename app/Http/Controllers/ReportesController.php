@@ -9,7 +9,7 @@ use App\Models\Camara;
 use App\Models\Socio; 
 use App\Models\CamaraSocio; 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromCollection; 
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -24,9 +24,19 @@ class ReportesController extends Controller
     // 
     public function reporte_socios_camara()
     {       
+        $isAdmin = Auth::user()->hasRole('admin');
+        $camarasSelect = [];
+        if ($isAdmin) {
+            $camarasSelect = Camara::pluck('razon_social', 'id');
+        } else {
+            $camarasSelect = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
+            if (!$camarasSelect || $camarasSelect->isEmpty()) {
+                return redirect()->route('dashboard')->with('error', 'No tiene permisos para acceder a esta sección');
+            }
+        }
         $camaras = Camara::pluck('razon_social', 'id');   
 
-        return view('administrador.reportes.socios_camaras', compact('camaras') );
+        return view('administrador.reportes.socios_camaras', compact('camaras', 'camarasSelect', 'camaras', 'isAdmin') );
     }
 
     public function obtener_listado_socios_camaras(Request $request)
@@ -63,7 +73,7 @@ class ReportesController extends Controller
 
         // **Filtrar por id_camara si está presente en el request**
         $idEntidad = $request->input('id_camara');
-        if ($idEntidad != -1) {
+        if ($idEntidad) {
             $query->where('camaras_socios.id_camara', $idEntidad);
         }
 

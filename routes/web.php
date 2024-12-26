@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::put('password/change', [PasswordController::class, 'update'])->name('password.update2'); 
 });
 
-Route::middleware(['auth'])->group(function () { 
+Route::middleware(['auth', 'password.change'])->group(function () { 
     
 
     //Funciones Generales
