@@ -153,6 +153,59 @@
             /* Prevent text from overflowing */
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Constants for breakpoints and widths
+            const MOBILE_BREAKPOINT = 768;
+            const SIDEBAR_FULL_WIDTH = 'w-64';
+            const SIDEBAR_COLLAPSED_WIDTH = 'w-[59px]';
+
+            // Cache DOM elements
+            const sidebar = document.getElementById("sidebar-left");
+            const content = document.getElementById("content-body");
+            const sidebarRoutes = document.getElementById("sidebar-routes");
+            const sidebarTitle = document.getElementById("sidebar-title");
+            const overlay = document.createElement('div');
+            overlay.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'z-[999]');
+            overlay.style.display = 'none';
+            document.body.appendChild(overlay);
+
+            function isMobile() {
+                return $(window).width() < MOBILE_BREAKPOINT;
+            }
+
+            function updateSidebarState() {
+                if (isMobile()) {
+                    handleMobileState();
+                } else {
+                    handleDesktopState();
+                }
+            }
+
+            function handleMobileState() {
+                sidebar.classList.add(SIDEBAR_FULL_WIDTH);
+                sidebar.classList.add("hidden");
+                overlay.style.display = 'none';
+                content.classList.remove("md:!ml-64", "md:!ml-[59px]");
+
+                // Ensure proper stacking and positioning for mobile
+                sidebar.classList.add("fixed", "z-[1000]");
+            }
+
+            function handleDesktopState() {
+                sidebar.classList.remove("hidden");
+                overlay.style.display = 'none';
+
+                // Restore desktop layout
+                const isCollapsed = !sidebar.classList.contains(SIDEBAR_FULL_WIDTH);
+                content.classList.toggle("md:!ml-64", !isCollapsed);
+                content.classList.toggle("md:!ml-[59px]", isCollapsed);
+                sidebarRoutes.classList.toggle("hidden", isCollapsed);
+                sidebarTitle.classList.toggle("hidden", isCollapsed);
+            }
+        });
+    </script>
     <section class="body">
 
         <!-- start: header -->
@@ -227,7 +280,7 @@
         <div class="inner-wrapper !flex !min-h-[calc(100vh-60px)] !h-full !w-full !pt-[60px]">
             <!-- start: sidebar -->
             <aside id="sidebar-left"
-                class="!bg-[#242B4E] w-64 overflow-y-auto top-[60px] left-0 h-[calc(100vh-60px)] z-[1000] fixed hidden">
+                class="!bg-[#242B4E] w-64 overflow-y-auto top-[60px] left-0 h-[calc(100vh-60px)] z-[1000] fixed">
                 <div class="flex items-center justify-between p-3 border-b border-gray-700">
                     <div class="sidebar-toggle text-white text-lg hover:bg-gray-700 p-2 rounded-md cursor-pointer"
                         data-toggle-class="sidebar-left-collapsed" data-target="html"
