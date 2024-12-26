@@ -103,9 +103,8 @@
 
                                         <h2 class="card-title">Listado de Obligaciones creadas</h2>
                                     </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                            style="display: block;" id="dataTable">
+                                    <div class="card-body overflow-x-auto max-w-full">
+                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Obligación</th>
@@ -137,8 +136,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalObligacionLabel"><b>Agregar una nueva Obligación</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> -->
+                                    <span aria-hidden="true">&times;</span>
+                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -224,8 +223,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Modificar Obligación</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> -->
+                                    <span aria-hidden="true">&times;</span>
+                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -773,7 +772,8 @@
                     },
                     error: function() {
                         alert(
-                        'Error al verificar registros similares. Intente nuevamente.');
+                            'Error al verificar registros similares. Intente nuevamente.'
+                            );
                     }
                 });
             });
@@ -842,7 +842,7 @@
                     }
 
                     console.log(res
-                    .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText); // Muestra el error completo en la consola para depuración
                 });
             }
 
@@ -907,7 +907,7 @@
                     }
 
                     console.log(res
-                    .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText); // Muestra el error completo en la consola para depuración
                 });
             }
 
@@ -996,7 +996,7 @@
                             alert('Registro eliminado correctamente.');
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
                             location
-                        .reload(); // O cualquier otra lógica para actualizar la interfaz
+                                .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
@@ -1026,7 +1026,7 @@
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
                                 `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                );
+                            );
                         });
                     },
                     error: function() {
@@ -1078,7 +1078,7 @@
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
                                 `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                );
+                            );
                         });
                     },
                     error: function() {
@@ -1105,21 +1105,24 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
                                     `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1149,16 +1152,17 @@
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Limpiamos parroquias
+                            ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
                                     `<option value="${canton.id}">${canton.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1167,9 +1171,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1189,18 +1193,19 @@
                         },
                         success: function(response) {
                             let parroquias = response
-                            .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
                             let $parroquiaSelect = $('#parroquia'); // Select de parroquias
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
                                     `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1209,7 +1214,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1231,21 +1236,24 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
                                     `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1275,16 +1283,17 @@
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Limpiamos parroquias
+                            ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
                                     `<option value="${canton.id}">${canton.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1293,9 +1302,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1315,18 +1324,19 @@
                         },
                         success: function(response) {
                             let parroquias = response
-                            .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
                             let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
                                     `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1335,7 +1345,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

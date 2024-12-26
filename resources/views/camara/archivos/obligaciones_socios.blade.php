@@ -3,6 +3,7 @@
 @section('pagename')
     Archivos de Obligaciones por Socios
 @endsection
+<<<<<<< HEAD
  
 @section('content') 
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,6 +19,23 @@
                         <div class="col-12">
                             <form  method="POST"  id="ModalArchivoObligacion" enctype="multipart/form-data">
                                 @csrf 
+=======
+
+@section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <section class="card" id="w3">
+                    <header class="card-header">
+                        <h2 class="card-title">Archivos de Obligaciones por Cámara</h2>
+                    </header>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <form method="POST" id="ModalArchivoObligacion" enctype="multipart/form-data">
+                                    @csrf
+>>>>>>> origin/andres
 
                                     <div class="form-group">
 
@@ -102,9 +120,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="card-body">
-                                                    <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                                        style="display: block;" id="dataTable">
+                                                <div class="card-body overflow-x-auto max-w-full">
+                                                    <table class="table table-bordered table-striped mb-0" id="dataTable">
                                                         <thead>
                                                             <tr>
                                                                 <th>Entidad</th>
@@ -385,7 +402,7 @@
                             try {
                                 const response = JSON.parse(res.responseText);
                                 errorMessage = response.error ||
-                                errorMessage; // Si existe, muestra el campo "error"
+                                    errorMessage; // Si existe, muestra el campo "error"
                             } catch (e) {
                                 errorMessage = res.responseText; // Texto plano de la respuesta
                             }

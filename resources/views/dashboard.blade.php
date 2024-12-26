@@ -80,6 +80,12 @@
             color: white;
             /* Cambia el color del texto */
         }
+
+        .content-header {
+            background: linear-gradient(to right, #0399E3, #42AFA2, #73C070);
+            /* jbuestan */
+            box-shadow: 1px 3px 0 1px #CCCCCC;
+        }
     </style>
 
     <!-- Theme CSS -->
@@ -96,7 +102,6 @@
 
     <!-- jbuestan -->
     <link rel="stylesheet" href="{{ URL::asset('css/landing.css') }}">
-
 </head>
 
 <body>
@@ -111,525 +116,291 @@
             /* Otros estilos para el enlace si es necesario */
             font-family: 'Kanit';
         }
+
+        .header {
+            position: relative;
+            z-index: 10;
+        }
+
+        .header #user-dropdown {
+            position: absolute;
+            z-index: 9999;
+        }
+
+        #user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 200px;
+            max-width: 300px;
+            /* Limit the maximum width */
+            max-height: 300px;
+            /* Set max height for scrollable content */
+            overflow-y: auto;
+            /* Add vertical scroll if content exceeds max height */
+            margin-top: 0.5rem;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #user-dropdown span {
+            word-wrap: break-word;
+            /* Ensure long text wraps to the next line */
+            white-space: normal;
+            /* Prevent text from overflowing */
+        }
     </style>
     <section class="body">
 
         <!-- start: header -->
-        <header class="header">
-            <div class="logo-container">
-                <!-- <a href="../4.0.0" class="logo">
-      <img src="{{ URL::asset('porto/img/logo.png') }}" width="75" height="35" alt="Porto Admin" />
-     </a> -->
-
-                <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
-                    data-fire-event="sidebar-left-opened">
-                    <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
-                </div>
-
+        <header class="header flex items-center justify-between gap-2 w-full px-2 !fixed top-0 z-50 !h-[60px]">
+            <div class="m-1 flex items-center">
+                <a href="../4.0.0" class="">
+                    <img src="{{ URL::asset('porto/img/logo.png') }}" width="75" height="35"
+                        alt="CamaraAdmin" />
+                </a>
             </div>
+            <div></div>
+            <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse px-2 relative">
+                <!-- userbox -->
+                <button type="button"
+                    class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 hover:ring-gray-300 hover:ring-4"
+                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                    data-dropdown-placement="bottom">
+                    <span class="sr-only">Open user menu</span>
+                    <span
+                        class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-300 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-user text-xs md:text-sm"></i>
+                    </span>
+                </button>
 
-            <!-- start: search & user box -->
-            <div class="header-right">
-
-                <!-- <form action="pages-search-results.html" class="search nav-form">
-      <div class="input-group">
-       <input type="text" class="form-control" name="q" id="q" placeholder="Buscar...">
-       <button class="btn btn-default" type="submit"><i class="bx bx-search"></i></button>
-      </div>
-     </form> -->
-
-                <span class="separator"></span>
-
-                <ul class="notifications">
-                    <!--  <li>
-       <a href="#" class="dropdown-toggle notification-icon" data-bs-toggle="dropdown">
-        <i class="bx bx-list-ol"></i>
-        <span class="badge">3</span>
-       </a>
-
-       <div class="dropdown-menu notification-menu large">
-        <div class="notification-title">
-         <span class="float-end badge badge-default">3</span>
-         Tasks
-        </div>
-
-        <div class="content">
-         <ul>
-          <li>
-           <p class="clearfix mb-1">
-            <span class="message float-start">Generating Sales Report</span>
-            <span class="message float-end text-dark">60%</span>
-           </p>
-           <div class="progress progress-xs light">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-           </div>
-          </li>
-
-          <li>
-           <p class="clearfix mb-1">
-            <span class="message float-start">Importing Contacts</span>
-            <span class="message float-end text-dark">98%</span>
-           </p>
-           <div class="progress progress-xs light">
-            <div class="progress-bar" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" style="width: 98%;"></div>
-           </div>
-          </li>
-
-          <li>
-           <p class="clearfix mb-1">
-            <span class="message float-start">Uploading something big</span>
-            <span class="message float-end text-dark">33%</span>
-           </p>
-           <div class="progress progress-xs light mb-1">
-            <div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;"></div>
-           </div>
-          </li>
-         </ul>
-        </div>
-       </div>
-      </li> -->
-                    <li>
-                        <!--  <a href="#" class="dropdown-toggle notification-icon" data-bs-toggle="dropdown">
-        <i class="bx bx-envelope"></i>
-        <span class="badge">4</span>
-       </a>
-
-       <div class="dropdown-menu notification-menu">
-        <div class="notification-title">
-         <span class="float-end badge badge-default">230</span>
-         Mensajes
-        </div>
-
-        <div class="content">
-         <ul>
-          <li>
-           <a href="#" class="clearfix">
-            <figure class="image">
-             <img src="img/!sample-user.jpg" alt="Joseph Doe Junior" class="rounded-circle" />
-            </figure>
-            <span class="title">Joseph Doe</span>
-            <span class="message">Lorem ipsum dolor sit.</span>
-           </a>
-          </li>
-          <li>
-           <a href="#" class="clearfix">
-            <figure class="image">
-             <img src="img/!sample-user.jpg" alt="Joseph Junior" class="rounded-circle" />
-            </figure>
-            <span class="title">Joseph Junior</span>
-            <span class="message truncate">Truncated message. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacinia orci. Proin vestibulum eget risus non luctus. Nunc cursus lacinia lacinia. Nulla molestie malesuada est ac tincidunt. Quisque eget convallis diam, nec venenatis risus. Vestibulum blandit faucibus est et malesuada. Sed interdum cursus dui nec venenatis. Pellentesque non nisi lobortis, rutrum eros ut, convallis nisi. Sed tellus turpis, dignissim sit amet tristique quis, pretium id est. Sed aliquam diam diam, sit amet faucibus tellus ultricies eu. Aliquam lacinia nibh a metus bibendum, eu commodo eros commodo. Sed commodo molestie elit, a molestie lacus porttitor id. Donec facilisis varius sapien, ac fringilla velit porttitor et. Nam tincidunt gravida dui, sed pharetra odio pharetra nec. Duis consectetur venenatis pharetra. Vestibulum egestas nisi quis elementum elementum.</span>
-           </a>
-          </li>
-          <li>
-           <a href="#" class="clearfix">
-            <figure class="image">
-             <img src="img/!sample-user.jpg" alt="Joe Junior" class="rounded-circle" />
-            </figure>
-            <span class="title">Joe Junior</span>
-            <span class="message">Lorem ipsum dolor sit.</span>
-           </a>
-          </li>
-          <li>
-           <a href="#" class="clearfix">
-            <figure class="image">
-             <img src="img/!sample-user.jpg" alt="Joseph Junior" class="rounded-circle" />
-            </figure>
-            <span class="title">Joseph Junior</span>
-            <span class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacinia orci. Proin vestibulum eget risus non luctus. Nunc cursus lacinia lacinia. Nulla molestie malesuada est ac tincidunt. Quisque eget convallis diam.</span>
-           </a>
-          </li>
-         </ul>
-
-         <hr />
-
-         <div class="text-end">
-          <a href="#" class="view-more">View All</a>
-         </div>
-        </div>
-       </div> -->
-                    </li>
-                    <li>
-                        <!--   <a href="#" class="dropdown-toggle notification-icon" data-bs-toggle="dropdown">
-        <i class="bx bx-bell"></i>
-        <span class="badge">3</span>
-       </a>
-
-       <div class="dropdown-menu notification-menu">
-        <div class="notification-title">
-         <span class="float-end badge badge-default">3</span>
-         Alertas
-        </div>
-
-        <div class="content">
-         <ul>
-          <li>
-           <a href="#" class="clearfix">
-            <div class="image">
-             <i class="fas fa-thumbs-down bg-danger text-light"></i>
-            </div>
-            <span class="title">Server Caido!</span>
-            <span class="message">Justo ahora</span>
-           </a>
-          </li>
-          <li>
-           <a href="#" class="clearfix">
-            <div class="image">
-             <i class="bx bx-lock bg-warning text-light"></i>
-            </div>
-            <span class="title">Usuario bloqueado</span>
-            <span class="message">15 minutos atrás</span>
-           </a>
-          </li>
-          <li>
-           <a href="#" class="clearfix">
-            <div class="image">
-             <i class="fas fa-signal bg-success text-light"></i>
-            </div>
-            <span class="title">Conección restaurada</span>
-            <span class="message">10/10/2021</span>
-           </a>
-          </li>
-         </ul>
-
-         <hr />
-
-         <div class="text-end">
-          <a href="#" class="view-more">View All</a>
-         </div>
-        </div>
-       </div> -->
-                    </li>
-                </ul>
-
-                <span class="separator"></span>
-
-                <div id="userbox" class="userbox">
-                    <a href="#" data-bs-toggle="dropdown">
-                        <!-- <figure class="profile-picture">
-        <img src="img/!logged-user.jpg" alt="Joseph Doe" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />
-       </figure> -->
-                        <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
-                            <span class="name">{{ Auth::user()->name }}</span>
-                            <span class="role">
-                                @if (Auth::user()->hasRole('admin'))
-                                    <p>Administrador</p>
-                                @elseif(Auth::user()->hasRole('camara'))
-                                    <p>Cámara</p>
-                                @else
-                                    <p>Colaborador</p>
-                                @endif
-                            </span>
-                        </div>
-
-                        <i class="fa custom-caret"></i>
-                    </a>
-
-                    <div class="dropdown-menu">
-                        <ul class="list-unstyled mb-2">
-                            <li class="divider"></li>
-                            <li>
-                                <!-- <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="bx bx-user-circle"></i> My Profile</a> -->
-                                <a href="{{ route('profile.edit') }}">Perfil</a>
-                            </li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <a :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
-                                        {{ __('Cerrar sesión') }}
-                                    </a>
-                                </form>
-                            </li>
-                        </ul>
+                <div class="hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow"
+                    id="user-dropdown">
+                    <div class="px-4 py-3 flex flex-col gap-2">
+                        <span class="block text-xs text-gray-900">{{ Auth::user()->name }}</span>
+                        <span class="block text-xs text-gray-500 truncate">
+                            @if (Auth::user()->hasRole('admin'))
+                                Administrador
+                            @elseif(Auth::user()->hasRole('camara'))
+                                Cámara
+                            @else
+                                Colaborador
+                            @endif
+                        </span>
                     </div>
+                    <ul class="list-unstyled py-2" aria-labelledby="user-menu-button">
+                        <li>
+                            <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                href="{{ route('profile.edit') }}">Perfil</a>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                            this.closest('form').submit();">
+                                    {{ __('Cerrar sesión') }}
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
                 </div>
+                <button data-collapse-toggle="navbar-user" type="button"
+                    class="inline-flex items-center p-2 w-8 h-8 md:w-8 md:h-8 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened"
+                    aria-controls="navbar-user" aria-expanded="false" id="mobile-menu-open">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
             </div>
-            <!-- end: search & user box -->
         </header>
-        <!-- end: header -->
 
         <!--<div class="inner-wrapper"> -->
-        <div class="inner-wrapper" style="overflow: auto;max-height: 100vh;">
+        <div class="inner-wrapper !flex !min-h-[calc(100vh-60px)] !h-full !w-full !pt-[60px]">
             <!-- start: sidebar -->
-            <aside id="sidebar-left" class="sidebar-left">
-
-                <div class="sidebar-header">
-                    <div class="sidebar-title">
-                        Menu Principal
-                    </div>
-                    <div class="sidebar-toggle d-none d-md-block" data-toggle-class="sidebar-left-collapsed"
-                        data-target="html" data-fire-event="sidebar-left-toggle">
+            <aside id="sidebar-left"
+                class="!bg-[#242B4E] w-64 overflow-y-auto top-[60px] left-0 h-[calc(100vh-60px)] z-[1000] fixed hidden">
+                <div class="flex items-center justify-between p-3 border-b border-gray-700">
+                    <div class="sidebar-toggle text-white text-lg hover:bg-gray-700 p-2 rounded-md cursor-pointer"
+                        data-toggle-class="sidebar-left-collapsed" data-target="html"
+                        data-fire-event="sidebar-left-toggle">
                         <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
                     </div>
+                    <span id="sidebar-title" class="text-white font-bold">Menu Principal</span>
                 </div>
+                <nav class="mt-2 p-3 flex-1">
+                    <ul class="space-y-2 pl-0" id="sidebar-routes">
+                        <li>
+                            <a href="{{ route('dashboard') }}"
+                                class="flex items-center gap-3 text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                <i class="bx bx-home-alt"></i>
+                                <span>Inicio</span>
+                            </a>
+                        </li>
 
-                <div class="nano">
-                    <div class="nano-content">
-                        <nav id="menu" class="nav-main" role="navigation">
-                            <ul class="nav nav-main">
-                                <li class="nav-active">
-                                    <a class="nav-link" href="{{ route('dashboard') }}">
-                                        <i class="bx bx-home-alt" aria-hidden="true"></i>
-                                        <span>Inicio</span>
-                                    </a>
-                                </li>
-                                @can('Camara')
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-building" aria-hidden="true"></i>
+                        @can('Camara')
+                            <li>
+                                <details class="group">
+                                    <summary
+                                        class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                        <span class="flex items-center gap-3">
+                                            <i class="bx bxs-building"></i>
                                             <span>Cámaras</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            @can('Admin')
-                                                <li>
-                                                    <a class="nav-link" href="{{ route('admin.maestro_camaras') }}">
-                                                        Mantenimiento de Cámaras
-                                                    </a>
-                                                </li>
-                                            @endcan
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.establecimientos_camara') }}">
-                                                    Establecimientos por Cámara
-                                                </a>
+                                        </span>
+                                        <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <ul class="ml-1 mt-2 space-y-2">
+                                        @can('Admin')
+                                            <li><a href="{{ route('admin.maestro_camaras') }}"
+                                                    class="block text-gray-300 hover:text-white">Mantenimiento de Cámaras</a>
                                             </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.socios_camara') }}">
-                                                    Socios por Cámara
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.obligaciones_camara') }}">
-                                                    Obligaciones por Cámara
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link"
-                                                    href="{{ route('camara.archivos_obligaciones_camara') }}">
-                                                    Archivos por Obligación de Cámaras
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-user" aria-hidden="true"></i>
+                                        @endcan
+                                        <li><a href="{{ route('admin.establecimientos_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Establecimientos por
+                                                Cámara</a></li>
+                                        <li><a href="{{ route('admin.obligaciones_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Cámara</a>
+                                        </li>
+                                        <li><a href="{{ route('admin.socios_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Socios por Cámara</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="group">
+                                    <summary
+                                        class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                        <span class="flex items-center gap-3">
+                                            <i class="bx bxs-user"></i>
                                             <span>Socios</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_socios') }}">
-                                                    Mantenimiento de Socios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.establecimientos_socio') }}">
-                                                    Establecimientos por Socios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.adherentes_socio') }}">
-                                                    Adherentes por Socios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.obligaciones_socio') }}">
-                                                    Obligaciones por Socios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link"
-                                                    href="{{ route('camara.archivos_obligaciones_socio') }}">
-                                                    Archivos por Obligación de Socios
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-user-account" aria-hidden="true"></i>
+                                        </span>
+                                        <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <ul class="ml-4 mt-2 space-y-2">
+                                        <li><a href="{{ route('admin.maestro_socios') }}"
+                                                class="block text-gray-300 hover:text-white">Mantenimiento de Socios</a>
+                                        </li>
+                                        <li><a href="{{ route('admin.establecimientos_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Establecimientos por
+                                                Socios</a></li>
+                                        <li><a href="{{ route('admin.obligaciones_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
+                                        </li>
+                                        <li><a href="{{ route('admin.adherentes_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Adherentes por Socios</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="group">
+                                    <summary
+                                        class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                        <span class="flex items-center gap-3">
+                                            <i class="bx bxs-user-account"></i>
                                             <span>Entidades</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_entidades') }}">
-                                                    Mantenimiento de Entidades
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.maestro_obligaciones') }}">
-                                                    Mantenimiento de Obligaciones
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.entidades_obligaciones') }}">
-                                                    Obligaciones por Entidad
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bxs-report" aria-hidden="true"></i>
+                                        </span>
+                                        <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <ul class="ml-4 mt-2 space-y-2">
+                                        <li><a href="{{ route('admin.maestro_entidades') }}"
+                                                class="block text-gray-300 hover:text-white">Mantenimiento de Entidades</a>
+                                        </li>
+                                        <li><a href="{{ route('admin.maestro_obligaciones') }}"
+                                                class="block text-gray-300 hover:text-white">Mantenimiento de
+                                                Obligaciones</a></li>
+                                        <li><a href="{{ route('admin.entidades_obligaciones') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Entidad</a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="group">
+                                    <summary
+                                        class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                        <span class="flex items-center gap-3">
+                                            <i class="bx bxs-report"></i>
                                             <span>Reportes</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link" href="{{ route('admin.reporte_socios_camara') }}">
-                                                    Socios por Cámara
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                @endcan
-                                @can('Camara')
-                                    <!-- <li class="nav-parent">
-                                        <a class="nav-link" href="#">
-                                            <i class="bx bx-git-merge" aria-hidden="true"></i>
+                                        </span>
+                                        <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <ul class="ml-4 mt-2 space-y-2">
+                                        <li><a href="{{ route('admin.reporte_socios_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Socios por Cámara</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                        @endcan
+
+                        @can('Camara')
+                            {{-- <li>
+                                <details class="group">
+                                    <summary
+                                        class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+                                        <span class="flex items-center gap-3">
+                                            <i class="bx bx-git-merge"></i>
                                             <span>Subir archivos de Obligaciones</span>
-                                        </a>
-                                        <ul class="nav nav-children">
-                                            <li>
-                                                <a class="nav-link"
-                                                    href="{{ route('camara.archivos_obligaciones_camara') }}">
-                                                    Obligaciones por Cámara
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link"
-                                                    href="{{ route('camara.archivos_obligaciones_socio') }}">
-                                                    Obligaciones por Socios
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li> -->
-                                @endcan
-                            </ul>
-                        </nav>
-                    </div>
-
-                    <script>
-                        // Maintain Scroll Position
-                        if (typeof localStorage !== 'undefined') {
-                            if (localStorage.getItem('sidebar-left-position') !== null) {
-                                var initialPosition = localStorage.getItem('sidebar-left-position'),
-                                    sidebarLeft = document.querySelector('#sidebar-left .nano-content');
-
-                                sidebarLeft.scrollTop = initialPosition;
-                            }
-                        }
-                    </script>
-
-                </div>
-
+                                        </span>
+                                        <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                                    </summary>
+                                    <ul class="ml-4 mt-2 space-y-2">
+                                        <li><a href="{{ route('camara.archivos_obligaciones_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Cámara</a>
+                                        </li>
+                                        <li><a href="{{ route('camara.archivos_obligaciones_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li> --}}
+                        @endcan
+                    </ul>
+                </nav>
             </aside>
             <!-- end: sidebar -->
 
-            <section role="main" class="content-body">
-                <header class="page-header">
-                    <h2>@yield('pagename')</h2>
-
-                    <div class="right-wrapper text-end">
-                        <ol class="breadcrumbs">
-                            <li>
-                                <a href="{{ route('dashboard') }}">
-                                    <i class="bx bx-home-alt"></i>
-                                </a>
-                            </li>
-
-                            <li><span>Inicio</span></li>
-
-                            <!-- <li><span>Default</span></li> -->
-
-                        </ol>
-
-                        <a class="sidebar-right-toggle" data-open="sidebar-right"><i
-                                class="fas fa-chevron-left"></i></a>
-                    </div>
+            <!-- Main Content -->
+            <section role="main" id="content-body"
+                class="content-body !flex-grow !flex !flex-col !w-screen !px-0 !pt-0 md:!ml-64 ml-0 min-h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden">
+                <header
+                    class="py-3 px-4 border-b border-gray-300 flex flex-row items-center justify-start gap-4 content-header text-white">
+                    <h4 class="font-bold">@yield('pagename', 'Dashboard')</h4>
                 </header>
-
-                <!-- start: page -->
-
-                <div class="container">
+                <main class="p-2 w-full !max-w-full">
                     @yield('content')
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Bienvenido al Dashboard</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Esta es la página principal del sistema de la Cámara de Comercio. Utilice el
+                                            menú de la izquierda para navegar por las diferentes secciones.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    @endif
-                </div>
-                <!-- end: page -->
-            </section>
-        </div>
-
-        <aside id="sidebar-right" class="sidebar-right">
-            <div class="nano">
-                <div class="nano-content">
-                    <a href="#" class="mobile-close d-md-none">
-                        Collapse <i class="fas fa-chevron-right"></i>
-                    </a>
-
-                    <div class="sidebar-right-wrapper">
-
-                        <div class="sidebar-widget widget-calendar">
-                            <h6>Upcoming Tasks</h6>
-                            <div data-plugin-datepicker data-plugin-skin="dark"></div>
-
-                            <ul>
-                                <li>
-                                    <time datetime="2021-04-19T00:00+00:00">04/19/2021</time>
-                                    <span>Company Meeting</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="sidebar-widget widget-friends">
-                            <h6>Friends</h6>
-                            <ul>
-                                <li class="status-online">
-                                    <figure class="profile-picture">
-                                        <img src="img/!sample-user.jpg" alt="Joseph Doe" class="rounded-circle">
-                                    </figure>
-                                    <div class="profile-info">
-                                        <span class="name">Joseph Doe Junior</span>
-                                        <span class="title">Hey, how are you?</span>
-                                    </div>
-                                </li>
-                                <li class="status-online">
-                                    <figure class="profile-picture">
-                                        <img src="img/!sample-user.jpg" alt="Joseph Doe" class="rounded-circle">
-                                    </figure>
-                                    <div class="profile-info">
-                                        <span class="name">Joseph Doe Junior</span>
-                                        <span class="title">Hey, how are you?</span>
-                                    </div>
-                                </li>
-                                <li class="status-offline">
-                                    <figure class="profile-picture">
-                                        <img src="img/!sample-user.jpg" alt="Joseph Doe" class="rounded-circle">
-                                    </figure>
-                                    <div class="profile-info">
-                                        <span class="name">Joseph Doe Junior</span>
-                                        <span class="title">Hey, how are you?</span>
-                                    </div>
-                                </li>
-                                <li class="status-offline">
-                                    <figure class="profile-picture">
-                                        <img src="img/!sample-user.jpg" alt="Joseph Doe" class="rounded-circle">
-                                    </figure>
-                                    <div class="profile-info">
-                                        <span class="name">Joseph Doe Junior</span>
-                                        <span class="title">Hey, how are you?</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
-                </div>
-            </div>
-        </aside>
-
+                </main>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+        </div>
+        <!-- end: page -->
+    </section>
+    </div>
     </section>
     @if (session('error'))
         <script>
@@ -738,6 +509,116 @@
     <script src="{{ URL::asset('porto/js/examples/examples.datatables.tabletools.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            // Constants for breakpoints and widths
+            const MOBILE_BREAKPOINT = 768;
+            const SIDEBAR_FULL_WIDTH = 'w-64';
+            const SIDEBAR_COLLAPSED_WIDTH = 'w-[59px]';
+
+            // Cache DOM elements
+            const $sidebar = $("#sidebar-left");
+            const $content = $("#content-body");
+            const $sidebarRoutes = $("#sidebar-left #sidebar-routes");
+            const $sidebarTitle = $("#sidebar-title");
+            const $overlay = $('<div>')
+                .addClass("fixed inset-0 bg-black bg-opacity-50 z-[999]")
+                .hide()
+                .appendTo('body');
+
+            // Debounce function to limit rapid firing of resize events
+            function debounce(func, wait) {
+                let timeout;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+            }
+
+            function isMobile() {
+                return $(window).width() < MOBILE_BREAKPOINT;
+            }
+
+            function updateSidebarState() {
+                if (isMobile()) {
+                    handleMobileState();
+                } else {
+                    handleDesktopState();
+                }
+            }
+
+            function handleMobileState() {
+                $sidebar.addClass(SIDEBAR_FULL_WIDTH);
+                $sidebar.addClass("hidden");
+                $overlay.hide();
+                $content.removeClass(`md:!ml-64 md:!ml-[59px]`);
+
+                // Ensure proper stacking and positioning for mobile
+                $sidebar.addClass("fixed z-[1000]");
+            }
+
+            function handleDesktopState() {
+                $sidebar.removeClass("hidden");
+                $overlay.hide();
+
+                // Restore desktop layout
+                const isCollapsed = !$sidebar.hasClass(SIDEBAR_FULL_WIDTH);
+                $content.toggleClass("md:!ml-64", !isCollapsed)
+                    .toggleClass("md:!ml-[59px]", isCollapsed);
+                $sidebarRoutes.toggleClass("hidden", isCollapsed);
+                $sidebarTitle.toggleClass("hidden", isCollapsed);
+            }
+
+            // Event Handlers
+            const debouncedUpdateSidebar = debounce(updateSidebarState, 250);
+            $(window).on("resize", debouncedUpdateSidebar);
+
+            $("#mobile-menu-open").on("click", function() {
+                if (isMobile()) {
+                    $sidebar.toggleClass("hidden");
+                    $overlay.toggle(!$sidebar.hasClass("hidden"));
+                    $sidebarRoutes.removeClass("hidden");
+                    $sidebarTitle.removeClass("hidden");
+                }
+            });
+
+            $overlay.on("click", function() {
+                $sidebar.addClass("hidden");
+                $(this).hide();
+            });
+
+            $(".sidebar-toggle").on("click", function() {
+                if (isMobile()) {
+                    $sidebar.toggleClass("hidden");
+                    $overlay.toggle(!$sidebar.hasClass("hidden"));
+                } else {
+                    $sidebar.toggleClass(SIDEBAR_FULL_WIDTH);
+                    const isCollapsed = !$sidebar.hasClass(SIDEBAR_FULL_WIDTH);
+                    $content.toggleClass("md:!ml-64", !isCollapsed)
+                        .toggleClass("md:!ml-[59px]", isCollapsed);
+                    $sidebarRoutes.toggleClass("hidden", isCollapsed);
+                    $sidebarTitle.toggleClass("hidden", isCollapsed);
+                }
+            });
+
+            // User menu functionality
+            $("#user-menu-button").on("click", function(e) {
+                e.stopPropagation();
+                $("#user-dropdown").toggleClass("hidden");
+            });
+
+            $(document).on("click", function(e) {
+                if (!$(e.target).closest("#user-dropdown").length) {
+                    $("#user-dropdown").addClass("hidden");
+                }
+            });
+
+            // Initialize sidebar state on page load
+            updateSidebarState();
+        });
+    </script>
 </body>
 
 </html>

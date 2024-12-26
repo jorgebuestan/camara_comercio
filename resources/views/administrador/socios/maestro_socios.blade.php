@@ -111,9 +111,8 @@
 
                                         <h2 class="card-title">Listado de Socios Registrados</h2>
                                     </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
-                                            style="display: block;" id="dataTable">
+                                    <div class="card-body overflow-x-auto max-w-full">
+                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>
@@ -583,7 +582,7 @@
                 pageLength: 10,
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '10%'
+                        width: '20%'
                     },
                     {
                         data: 'identificacion',
@@ -595,7 +594,7 @@
                     },
                     {
                         data: 'tipo_personeria',
-                        width: '15%'
+                        width: '20%'
                     },
                     {
                         data: 'btn',
