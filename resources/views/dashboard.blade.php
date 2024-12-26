@@ -381,10 +381,25 @@
                 class="content-body !flex-grow !flex !flex-col !w-screen !px-0 !pt-0 md:!ml-64 ml-0 min-h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden">
                 <header
                     class="py-3 px-4 border-b border-gray-300 flex flex-row items-center justify-start gap-4 content-header text-white">
-                    <h4 class="font-bold">@yield('pagename')</h4>
+                    <h4 class="font-bold">@yield('pagename', 'Dashboard')</h4>
                 </header>
                 <main class="p-2 container">
                     @yield('content')
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Bienvenido al Dashboard</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Esta es la página principal del sistema de la Cámara de Comercio. Utilice el
+                                            menú de la izquierda para navegar por las diferentes secciones.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
                 @if (session('success'))
                     <div class="alert alert-success">
