@@ -155,7 +155,8 @@
                                         <h2 class="card-title">Listado de Establecimientos Registrados por Cámara</h2>
                                     </header>
                                     <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
+                                            style="display: block;" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Inicio de Actividades</th>
@@ -188,8 +189,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEstablecimientoLabel"><b>Agregar un nuevo Establecimiento</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                                                    </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -431,8 +432,8 @@
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                                                                </button> -->
+                                                                                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                                                                    </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
