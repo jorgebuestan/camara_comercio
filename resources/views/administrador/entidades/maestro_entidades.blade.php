@@ -139,8 +139,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEntidadLabel"><b>Agregar una nueva Entidad</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> -->
+                                    <span aria-hidden="true">&times;</span>
+                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -309,8 +309,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarEntidadLabel"><b>Modificar Entidad</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> -->
+                                    <span aria-hidden="true">&times;</span>
+                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -527,11 +527,11 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '15%'
+                        width: '20%'
                     },
                     {
                         data: 'entidad',
-                        width: '25%'
+                        width: '20%'
                     },
                     {
                         data: 'tipo_entidad',
@@ -539,15 +539,15 @@
                     },
                     {
                         data: 'direccion',
-                        width: '15%'
+                        width: '20%'
                     },
                     {
                         data: 'representante',
-                        width: '15%'
+                        width: '20%'
                     },
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '10%'
                     }
                 ],
                 order: [
@@ -623,21 +623,21 @@
                 if (tipoEntidad === '1') { // General
                     $('#pais, #provincia, #canton').prop('disabled', true);
                     $('#pais').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia').val('-1').change();
                     $('#canton').val('-1').change();
                 } else if (tipoEntidad === '2') { // Local
                     $('#pais, #provincia, #canton').prop('disabled', false);
                     // Seleccionar automáticamente el valor '1' en el combo de país
                     $('#pais').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia').val('-1').change();
                     $('#canton').val('-1').change();
                 } else {
                     // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
                     $('#pais, #provincia, #canton').prop('disabled', true);
                     $('#pais').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia').val('-1').change();
                     $('#canton').val('-1').change();
                 }
@@ -651,21 +651,21 @@
                 if (tipoEntidad === '1') { // General
                     $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
                     $('#pais_mod').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia_mod').val('-1').change();
                     $('#canton_mod').val('-1').change();
                 } else if (tipoEntidad === '2') { // Local
                     $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', false);
                     // Seleccionar automáticamente el valor '1' en el combo de país
                     $('#pais_mod').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia_mod').val('-1').change();
                     $('#canton_mod').val('-1').change();
                 } else {
                     // Si no se selecciona una opción válida, deshabilitamos los campos por defecto
                     $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
                     $('#pais_mod').val('-1')
-                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                     $('#provincia_mod').val('-1').change();
                     $('#canton_mod').val('-1').change();
                 }
@@ -695,85 +695,85 @@
 
             /*$("#btn-register-entidad").click(function() { 
 
-                if ($('#entidad').val() == "") {
-                    alert('Debe ingresar el nombre de la Entidad'); 
-                    $('#entidad').focus();
-                    return;
-                }
-
-                if (!/^\d{13}$/.test($('#ruc').val())) { 
-                    $("#error-ruc").show();
-                    alert('El RUC debe tener 13 dígitos'); 
-                    $('#ruc').focus();
-                    return;
-                }
-
-                if ($('#tipo_entidad').val() == "-1") {
-                    alert('Debe seleccionar la Clase de Entidad'); 
-                    $('#entidad').focus();
-                    return;
-                }
-
-                if ($('#alcance').val() == "-1") {
-                    alert('Debe seleccionar un alcance para la Entidad'); 
-                    $('#entidad').focus();
-                    return;
-                }
-
-                if ($('#direccion').val() == "") {
-                    alert('Debe ingresar la Dirección de la Entidad'); 
-                    $('#direccion').focus();
-                    return;
-                }
-
-                if ($('#telefono').val() == "") {
-                    alert('Debe ingresar el Teléfono de la Entidad'); 
-                    $('#telefono').focus();
-                    return;
-                }
-
-                if ($('#alcance').val() == "2") {
-
-                    if ($('#pais').val() == "-1" || $('#provincia').val() == "-1" || $('#canton').val() == "-1"){
-                        alert('Si seleccinó que alcance de la Entidad es local, debe seleccionar Pais, Provincia y Cantón');  
+                    if ($('#entidad').val() == "") {
+                        alert('Debe ingresar el nombre de la Entidad'); 
+                        $('#entidad').focus();
                         return;
-                    } 
-                }   
-         
-                //alert('Fin de validaciones');return;
-
-                var formData = new FormData(document.getElementById("ModalEntidad"));
-                $('#carga').show();
-
-                $.ajax({
-                    url: "{{ route('admin.registrar_entidad') }}",
-                    type: "POST",
-                    data: formData,
-                    dataType: "json",
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                }).done(function(res){
-                    $('#carga').hide(); 
-                    alert(res.success); // Mostrar el mensaje de éxito en un alert
-                    location.reload(); // Recargar la página
-                }).fail(function(res){
-                    $('#carga').hide(); 
-
-                    if (res.status === 422) {
-                        // Mostrar mensaje de error de validación
-                        let errors = res.responseJSON;
-                        if (errors.error) {
-                            alert(errors.error);
-                        }
-                    } else {
-                        // Mostrar mensaje genérico si no se recibió un error específico
-                        alert("Ocurrió un error al registrar la cámara.");
                     }
 
-                    console.log(res.responseText); // Muestra el error completo en la consola para depuración
-                });
-            });*/
+                    if (!/^\d{13}$/.test($('#ruc').val())) { 
+                        $("#error-ruc").show();
+                        alert('El RUC debe tener 13 dígitos'); 
+                        $('#ruc').focus();
+                        return;
+                    }
+
+                    if ($('#tipo_entidad').val() == "-1") {
+                        alert('Debe seleccionar la Clase de Entidad'); 
+                        $('#entidad').focus();
+                        return;
+                    }
+
+                    if ($('#alcance').val() == "-1") {
+                        alert('Debe seleccionar un alcance para la Entidad'); 
+                        $('#entidad').focus();
+                        return;
+                    }
+
+                    if ($('#direccion').val() == "") {
+                        alert('Debe ingresar la Dirección de la Entidad'); 
+                        $('#direccion').focus();
+                        return;
+                    }
+
+                    if ($('#telefono').val() == "") {
+                        alert('Debe ingresar el Teléfono de la Entidad'); 
+                        $('#telefono').focus();
+                        return;
+                    }
+
+                    if ($('#alcance').val() == "2") {
+
+                        if ($('#pais').val() == "-1" || $('#provincia').val() == "-1" || $('#canton').val() == "-1"){
+                            alert('Si seleccinó que alcance de la Entidad es local, debe seleccionar Pais, Provincia y Cantón');  
+                            return;
+                        } 
+                    }   
+             
+                    //alert('Fin de validaciones');return;
+
+                    var formData = new FormData(document.getElementById("ModalEntidad"));
+                    $('#carga').show();
+
+                    $.ajax({
+                        url: "{{ route('admin.registrar_entidad') }}",
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function(res){
+                        $('#carga').hide(); 
+                        alert(res.success); // Mostrar el mensaje de éxito en un alert
+                        location.reload(); // Recargar la página
+                    }).fail(function(res){
+                        $('#carga').hide(); 
+
+                        if (res.status === 422) {
+                            // Mostrar mensaje de error de validación
+                            let errors = res.responseJSON;
+                            if (errors.error) {
+                                alert(errors.error);
+                            }
+                        } else {
+                            // Mostrar mensaje genérico si no se recibió un error específico
+                            alert("Ocurrió un error al registrar la cámara.");
+                        }
+
+                        console.log(res.responseText); // Muestra el error completo en la consola para depuración
+                    });
+                });*/
 
             $('#btn-close').on('click', function() {
                 // Aquí puedes añadir la lógica para enviar el formulario modificado
@@ -1169,7 +1169,7 @@
                     }
 
                     console.log(res
-                    .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText); // Muestra el error completo en la consola para depuración
                 });
             }
 
@@ -1236,7 +1236,7 @@
                     }
 
                     console.log(res
-                    .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText); // Muestra el error completo en la consola para depuración
                 });
             }
 
@@ -1309,7 +1309,7 @@
                         } else {
                             $('#pais_mod, #provincia_mod, #canton_mod').prop('disabled', true);
                             $('#pais_mod').val('-1')
-                        .change(); // Llamamos a .change() para disparar eventos asociados si los hay
+                                .change(); // Llamamos a .change() para disparar eventos asociados si los hay
                             $('#provincia_mod').val('-1').change();
                             $('#canton_mod').val('-1').change();
                         }
@@ -1368,7 +1368,7 @@
                                 allowOutsideClick: false
                             });
                             location
-                        .reload(); // O cualquier otra lógica para actualizar la interfaz
+                                .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
@@ -1405,7 +1405,7 @@
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
                                 `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                );
+                            );
                         });
                     },
                     error: function() {
@@ -1457,7 +1457,7 @@
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
                                 `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                );
+                            );
                         });
                     },
                     error: function() {
@@ -1484,21 +1484,24 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
                                     `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1528,16 +1531,17 @@
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Limpiamos parroquias
+                            ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
                                     `<option value="${canton.id}">${canton.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1546,9 +1550,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1568,18 +1572,19 @@
                         },
                         success: function(response) {
                             let parroquias = response
-                            .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
                             let $parroquiaSelect = $('#parroquia'); // Select de parroquias
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
                                     `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1588,7 +1593,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1610,21 +1615,24 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
                                     `<option value="${provincia.id}">${provincia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1654,16 +1662,17 @@
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Limpiamos parroquias
+                            ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
                                     `<option value="${canton.id}">${canton.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1672,9 +1681,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1694,18 +1703,19 @@
                         },
                         success: function(response) {
                             let parroquias = response
-                            .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
+                                .parroquias; // Asegúrate de usar el nombre correcto en el JSON de respuesta
                             let $parroquiaSelect = $('#parroquia_mod'); // Select de parroquias
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                            '<option value="-1">Seleccionar</option>'); // Opción por defecto
+                                '<option value="-1">Seleccionar</option>'
+                                ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
                                     `<option value="${parroquia.id}">${parroquia.nombre}</option>`
-                                    );
+                                );
                             });
                         },
                         error: function() {
@@ -1714,7 +1724,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                    '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

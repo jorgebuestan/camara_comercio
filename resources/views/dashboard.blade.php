@@ -374,7 +374,7 @@
                     class="py-3 px-4 border-b border-gray-300 flex flex-row items-center justify-start gap-4 content-header text-white">
                     <h4 class="font-bold">@yield('pagename', 'Dashboard')</h4>
                 </header>
-                <main class="p-2 container">
+                <main class="p-2 w-full !max-w-full">
                     @yield('content')
                     <div class="container mt-5">
                         <div class="row">
@@ -511,88 +511,112 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            function updateSidebar() {
-                const isMobile = $(window).width() < 768;
-                const $sidebar = $("#sidebar-left");
-                const $content = $("#content-body");
-                const $sidebarRoutes = $("#sidebar-left #sidebar-routes");
-                const $overlay = $("#overlay");
+            // Constants for breakpoints and widths
+            const MOBILE_BREAKPOINT = 768;
+            const SIDEBAR_FULL_WIDTH = 'w-64';
+            const SIDEBAR_COLLAPSED_WIDTH = 'w-[59px]';
 
-                if (isMobile) {
-                    $sidebar.addClass("w-64 hidden");
-                    if (!$sidebar.hasClass("hidden")) {
-                        $overlay.show();
-                    }
-                } else {
-                    console.log("Desktop");
-                    $overlay.hide();
-                    $sidebar.removeClass("hidden");
-                    if ($sidebar.hasClass("hidden")) {
-                        $sidebar.removeClass("hidden");
-                    }
-                    if (!$sidebar.hasClass("w-64")) {
-                        $content.removeClass("md:!ml-64").addClass("md:!ml-[59px]");
-                        $sidebarRoutes.addClass("hidden");
-                    } else {
-                        $content.addClass("md:!ml-64").removeClass("md:!ml-[59px]");
-                        $sidebarRoutes.removeClass("hidden");
-                    }
-                }
-            }
-            updateSidebar();
-            $(window).on("resize", updateSidebar);
+            // Cache DOM elements
+            const $sidebar = $("#sidebar-left");
+            const $content = $("#content-body");
+            const $sidebarRoutes = $("#sidebar-left #sidebar-routes");
+            const $sidebarTitle = $("#sidebar-title");
             const $overlay = $('<div>')
                 .addClass("fixed inset-0 bg-black bg-opacity-50 z-[999]")
                 .hide()
                 .appendTo('body');
-            // User menu toggle
+
+            // Debounce function to limit rapid firing of resize events
+            function debounce(func, wait) {
+                let timeout;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+            }
+
+            function isMobile() {
+                return $(window).width() < MOBILE_BREAKPOINT;
+            }
+
+            function updateSidebarState() {
+                if (isMobile()) {
+                    handleMobileState();
+                } else {
+                    handleDesktopState();
+                }
+            }
+
+            function handleMobileState() {
+                $sidebar.addClass(SIDEBAR_FULL_WIDTH);
+                $sidebar.addClass("hidden");
+                $overlay.hide();
+                $content.removeClass(`md:!ml-64 md:!ml-[59px]`);
+
+                // Ensure proper stacking and positioning for mobile
+                $sidebar.addClass("fixed z-[1000]");
+            }
+
+            function handleDesktopState() {
+                $sidebar.removeClass("hidden");
+                $overlay.hide();
+
+                // Restore desktop layout
+                const isCollapsed = !$sidebar.hasClass(SIDEBAR_FULL_WIDTH);
+                $content.toggleClass("md:!ml-64", !isCollapsed)
+                    .toggleClass("md:!ml-[59px]", isCollapsed);
+                $sidebarRoutes.toggleClass("hidden", isCollapsed);
+                $sidebarTitle.toggleClass("hidden", isCollapsed);
+            }
+
+            // Event Handlers
+            const debouncedUpdateSidebar = debounce(updateSidebarState, 250);
+            $(window).on("resize", debouncedUpdateSidebar);
+
+            $("#mobile-menu-open").on("click", function() {
+                if (isMobile()) {
+                    $sidebar.toggleClass("hidden");
+                    $overlay.toggle(!$sidebar.hasClass("hidden"));
+                    $sidebarRoutes.removeClass("hidden");
+                    $sidebarTitle.removeClass("hidden");
+                }
+            });
+
+            $overlay.on("click", function() {
+                $sidebar.addClass("hidden");
+                $(this).hide();
+            });
+
+            $(".sidebar-toggle").on("click", function() {
+                if (isMobile()) {
+                    $sidebar.toggleClass("hidden");
+                    $overlay.toggle(!$sidebar.hasClass("hidden"));
+                } else {
+                    $sidebar.toggleClass(SIDEBAR_FULL_WIDTH);
+                    const isCollapsed = !$sidebar.hasClass(SIDEBAR_FULL_WIDTH);
+                    $content.toggleClass("md:!ml-64", !isCollapsed)
+                        .toggleClass("md:!ml-[59px]", isCollapsed);
+                    $sidebarRoutes.toggleClass("hidden", isCollapsed);
+                    $sidebarTitle.toggleClass("hidden", isCollapsed);
+                }
+            });
+
+            // User menu functionality
             $("#user-menu-button").on("click", function(e) {
                 e.stopPropagation();
                 $("#user-dropdown").toggleClass("hidden");
             });
 
-            // Close user menu on outside click
             $(document).on("click", function(e) {
                 if (!$(e.target).closest("#user-dropdown").length) {
                     $("#user-dropdown").addClass("hidden");
                 }
             });
 
-            // Mobile menu toggle
-            $("#mobile-menu-open").on("click", function() {
-                const $sidebar = $("#sidebar-left");
-                const $sidebarRoutes = $("#sidebar-left #sidebar-routes");
-                if ($sidebarRoutes.hasClass("hidden")) {
-                    $sidebarRoutes.removeClass("hidden");
-                    $("#sidebar-title").removeClass("hidden");
-                }
-                $sidebar.toggleClass("hidden");
-                $overlay.toggle(!$sidebar.hasClass("hidden"));
-            });
-
-            // Overlay click handler
-            $overlay.on("click", function() {
-                $("#sidebar-left").addClass("hidden");
-                $(this).hide();
-            });
-
-            // Sidebar toggle
-            $(".sidebar-toggle").on("click", function() {
-                const $sidebar = $("#sidebar-left");
-                const $content = $("#content-body");
-                const $sidebarRoutes = $("#sidebar-left #sidebar-routes");
-
-                if ($(window).width() < 768) {
-                    $sidebar.toggleClass("hidden");
-                    $overlay.toggle(!$sidebar.hasClass("hidden"));
-                    return;
-                }
-
-                $sidebar.toggleClass("w-64");
-                $content.toggleClass("md:!ml-64 md:!ml-[59px]");
-                $sidebarRoutes.toggleClass("hidden");
-                $("#sidebar-title").toggleClass("hidden");
-            });
+            // Initialize sidebar state on page load
+            updateSidebarState();
         });
     </script>
 </body>

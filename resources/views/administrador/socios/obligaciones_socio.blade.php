@@ -452,12 +452,12 @@
                 columns: [{
                         data: 'nombre_entidad',
                         title: 'Entidad',
-                        width: '15%'
+                        width: '40%'
                     },
                     {
                         data: 'nombre_obligacion',
                         title: 'Obligación',
-                        width: '20%'
+                        width: '40%'
                     },
                     {
                         data: 'btn',

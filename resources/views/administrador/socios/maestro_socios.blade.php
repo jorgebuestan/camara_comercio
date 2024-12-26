@@ -583,7 +583,7 @@
                 pageLength: 10,
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '10%'
+                        width: '20%'
                     },
                     {
                         data: 'identificacion',
@@ -595,7 +595,7 @@
                     },
                     {
                         data: 'tipo_personeria',
-                        width: '15%'
+                        width: '20%'
                     },
                     {
                         data: 'btn',
