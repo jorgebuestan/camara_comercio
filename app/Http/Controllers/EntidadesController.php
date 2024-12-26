@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Pais;
 use App\Models\Provincia;
 use App\Models\Canton;
-use App\Models\TipoEntidad; 
-use App\Models\Entidad; 
+use App\Models\TipoEntidad;
+use App\Models\Entidad;
+use App\Models\LogActivity;
 use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
 use App\Models\Obligacion;
@@ -18,11 +19,11 @@ class EntidadesController extends Controller
 {
     //
     public function maestro_entidades()
-    {   
-        $paises = Pais::pluck('nombre', 'id');  
+    {
+        $paises = Pais::pluck('nombre', 'id');
         $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $tipo_entidad = TipoEntidad::pluck('descripcion', 'id');   
+        $tipo_entidad = TipoEntidad::pluck('descripcion', 'id');
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -33,29 +34,29 @@ class EntidadesController extends Controller
         if ($cantonDefault) {
             $cantones->put($cantonDefault->id, $cantonDefault->nombre); // Añadimos al listado
         }
-        
-        return view('administrador.entidades.maestro_entidades', compact('paises', 'provincias', 'cantones', 'tipo_entidad') );
+
+        return view('administrador.entidades.maestro_entidades', compact('paises', 'provincias', 'cantones', 'tipo_entidad'));
     }
 
     public function obtener_listado_entidades(Request $request)
     {
         $columns = [
-            0 => 'entidades.id', 
-            1 => 'entidades.entidad', 
-            2 => 'tipo_entidad', 
-            3 => 'entidades.direccion', 
+            0 => 'entidades.id',
+            1 => 'entidades.entidad',
+            2 => 'tipo_entidad',
+            3 => 'entidades.direccion',
             4 => 'entidades.representante'
         ];
 
-        $query = DB::table('entidades')  
+        $query = DB::table('entidades')
             ->join('tipo_entidad', 'tipo_entidad.id', '=', 'entidades.id_tipo_entidad')
             ->select(
                 'entidades.id',
                 'entidades.entidad',
                 'tipo_entidad.descripcion as tipo_entidad',
-                'entidades.alcance', 
-                'entidades.direccion', 
-                'entidades.representante' , 
+                'entidades.alcance',
+                'entidades.direccion',
+                'entidades.representante',
                 'entidades.created_at'
             )
             ->where('entidades.estado', 1)
@@ -65,10 +66,10 @@ class EntidadesController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('entidades.entidad', 'LIKE', "%{$search}%")  
-                    ->orWhere('entidades.representante', 'LIKE', "%{$search}%") 
-                    ->orWhere('entidades.direccion', 'LIKE', "%{$search}%"); 
+            $query->where(function ($query) use ($search) {
+                $query->where('entidades.entidad', 'LIKE', "%{$search}%")
+                    ->orWhere('entidades.representante', 'LIKE', "%{$search}%")
+                    ->orWhere('entidades.direccion', 'LIKE', "%{$search}%");
             });
         }
 
@@ -91,17 +92,17 @@ class EntidadesController extends Controller
         $entidades = $query->get();
 
         $data = $entidades->map(function ($entidad) {
-            $boton = "";  
-             
+            $boton = "";
+
             return [
-                'fecha_ingreso' => $entidad->created_at, 
-                'entidad' => $entidad->entidad, 
-                'tipo_entidad' => $entidad->tipo_entidad, 
-                'direccion' => $entidad->direccion, 
-                'representante' => $entidad->representante, 
+                'fecha_ingreso' => $entidad->created_at,
+                'entidad' => $entidad->entidad,
+                'tipo_entidad' => $entidad->tipo_entidad,
+                'direccion' => $entidad->direccion,
+                'representante' => $entidad->representante,
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $entidad->id . '">Modificar</button>' .
-                '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar</button>'.
-                '&nbsp;&nbsp;&nbsp;' 
+                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar</button>' .
+                    '&nbsp;&nbsp;&nbsp;'
             ];
         });
 
@@ -111,7 +112,7 @@ class EntidadesController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
     }
 
@@ -192,26 +193,26 @@ class EntidadesController extends Controller
     }
 
     public function registrar_entidad(Request $request)
-    { 
+    {
 
         try {
-            
+
             DB::beginTransaction();
 
             $pais = 0;
             $provincia = 0;
             $canton = 0;
-            if($request->input('pais')){
+            if ($request->input('pais')) {
                 $pais = $request->input('pais');
             }
-            if($request->input('provincia')){
+            if ($request->input('provincia')) {
                 $provincia = $request->input('provincia');
             }
-            if($request->input('canton')){
+            if ($request->input('canton')) {
                 $canton = $request->input('canton');
             }
             // Crear registro en la base de datos
-            $camara = Entidad::create([ 
+            $camara = Entidad::create([
                 'ruc' => strtoupper($request->input('ruc')),
                 'entidad' => strtoupper($request->input('entidad')),
                 'entidad_busqueda' => strtoupper($request->input('entidad')),
@@ -225,7 +226,7 @@ class EntidadesController extends Controller
                 'id_provincia' => strtoupper($provincia),
                 'id_canton' => strtoupper($canton),
                 'estado' => 1
-            ]); 
+            ]);
 
             DB::commit();
 
@@ -248,7 +249,7 @@ class EntidadesController extends Controller
 
     public function eliminar_entidad($id)
     {
-        try{
+        try {
 
             DB::beginTransaction();
             //$colaborador = Colaborador::find($id);
@@ -258,49 +259,81 @@ class EntidadesController extends Controller
             if (!$entidad) {
                 return response()->json(['error' => 'Entidad no encontrada'], 404);
             }
-        
+
             // Cambiar el valor del campo 'activo' a 0
             $entidad->estado = 0;
             $entidad->save();
 
             DB::commit();
-        
-            return response()->json(['success' => 'Entidad eliminada correctamente']);
 
-        }catch (\Exception $e) {
+            return response()->json(['success' => 'Entidad eliminada correctamente']);
+        } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al eliminar la Entidad: ' . $e->getMessage()], 500);
-        } 
-        
+        }
     }
 
     public function detalle_entidad($id)
     {
         // Buscar la cámara por ID
         $entidad = Entidad::find($id);
-    
+
         if (!$entidad) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
-    
+
+        $logEntidadIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'entidades')->where('action', 'insert')->get();
+        $logEntidadMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'entidades')->where('action', 'update')->get();
+
+        $logEntidadIns = $logEntidadIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEntidadMod = $logEntidadMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEntidad = [
+            'insert' => $logEntidadIns[0] ?? null,
+            'update' => $logEntidadMod ?? null
+        ];
+
+        Log::info($logEntidad);
+
         // Convertir el modelo Camara a un array
-        $entidadArray = $entidad->toArray(); 
-    
+        $entidadArray = array_merge($entidad->toArray(), $logEntidad);
+
         // Devolver la respuesta JSON
         return response()->json($entidadArray);
     }
 
     public function modificar_entidad(Request $request)
-    {  
+    {
         try {
 
             DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
-             
+
             // Buscar el registro existente por ID
             $entidad = Entidad::find($request->input('entidad_id'));
-        
+
             if (!$entidad) {
                 return response()->json(['error' => 'La entidad no existe.'], 404);
             }
@@ -308,16 +341,16 @@ class EntidadesController extends Controller
             $pais = 0;
             $provincia = 0;
             $canton = 0;
-            if($request->input('pais_mod')){
+            if ($request->input('pais_mod')) {
                 $pais = $request->input('pais_mod');
             }
-            if($request->input('provincia_mod')){
+            if ($request->input('provincia_mod')) {
                 $provincia = $request->input('provincia_mod');
             }
-            if($request->input('canton_mod')){
+            if ($request->input('canton_mod')) {
                 $canton = $request->input('canton_mod');
             }
-        
+
             // Actualizar los campos del registro existente
             $entidad->update([
                 'ruc' => strtoupper($request->input('ruc_mod')),
@@ -333,9 +366,9 @@ class EntidadesController extends Controller
                 'id_provincia' => strtoupper($provincia),
                 'id_canton' => strtoupper($canton),
                 'estado' => 1
-            ]); 
-        
-            
+            ]);
+
+
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             /*return response()->json(['response' => [
                 'msg' => "Registro modificado",
@@ -344,7 +377,7 @@ class EntidadesController extends Controller
 
             DB::commit();
             return response()->json(['success' => 'Entidad modificada correctamente'], 200);
-        } catch (\Illuminate\Database\QueryException $e) { 
+        } catch (\Illuminate\Database\QueryException $e) {
 
             Log::error($e);
             DB::rollBack();
@@ -358,6 +391,5 @@ class EntidadesController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'Error al modificar la Entidad: ' . $e->getMessage()], 500);
         }
-    } 
-
+    }
 }

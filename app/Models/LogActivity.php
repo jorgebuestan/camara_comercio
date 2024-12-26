@@ -9,6 +9,12 @@ class LogActivity extends Model
 {
     use HasFactory;
     protected $table = 'log_activities';
-     // Definir los campos que se pueden llenar
-     protected $fillable = ['user_id', 'action', 'table_name', 'record_id', 'data', 'query'];
+    // Definir los campos que se pueden llenar
+    protected $fillable = ['user_id', 'action', 'table_name', 'record_id', 'data', 'query'];
+
+    // Relación con la tabla users
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

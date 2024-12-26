@@ -138,8 +138,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEntidadLabel"><b>Agregar una nueva Entidad</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button> -->
+                                                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -305,11 +305,11 @@
             @csrf
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header ">
                         <h5 class="modal-title" id="ModalModificarEntidadLabel"><b>Modificar Entidad</b></h5>
-                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button> -->
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -493,7 +493,7 @@
 
     <script>
         $(document).ready(function() {
-
+            let entidad_selected = null;
             Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
@@ -1263,6 +1263,7 @@
                     url: '/administrador/entidad/detalle/' + entidadId,
                     method: 'GET',
                     success: function(response) {
+                        entidad_selected = response;
                         console.log('Datos recibidos:', response);
 
                         var entidadId = $('#entidad_id');
@@ -1726,7 +1727,56 @@
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
+            $('#btn-more-info').on('click', function() {
+                let entidadLogInsert = entidad_selected.insert;
+                let entidadLogUpdate = entidad_selected.update;
+                if (!entidadLogUpdate) {
+                    entidadLogUpdate = {
+                        updated_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+                const lastItem = entidadLogUpdate[entidadLogUpdate.length - 1];
+                const formatDate = (dateString) => {
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
 
+                const formattedCreatedAt = formatDate(entidadLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarEntidad'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Creación</h5>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                                <p><strong>Usuario:</strong> ${entidadLogInsert.user.name}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Última modificación</h5>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                })
+            });
 
         });
     </script>
