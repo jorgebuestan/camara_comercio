@@ -112,7 +112,8 @@
                                         <h2 class="card-title">Listado de Socios Registrados</h2>
                                     </header>
                                     <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
+                                            style="display: block;" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>

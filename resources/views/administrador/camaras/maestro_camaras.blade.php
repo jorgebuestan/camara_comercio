@@ -95,12 +95,9 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-11 text-end">
-                &nbsp;
-            </div>
-            <div class="col-lg-1">
+            <div class="col-lg-12 text-end">
                 <a href="{{ route('dashboard') }}" id="videoLink">
-                    <button type="button" class="mb-1 mt-1 me-1 btn btn-primary">Regresar</button>
+                    <button type="button" class="mb-1 mt-1 btn btn-primary">Regresar</button>
                 </a>
             </div>
         </div>
@@ -140,8 +137,9 @@
 
                                         <h2 class="card-title">Listado de Cámaras Registradas</h2>
                                     </header>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                    <div class="card-body w-full">
+                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
+                                            style="display: block" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Ingreso</th>
@@ -175,8 +173,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalCamaraLabel"><b>Agregar una Nueva Cámara de Comercio</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                        </button> -->
+                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                    </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -591,9 +589,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarCamaraLabel"><b>Modificar Cámara</b></h5>
-                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -1024,8 +1019,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function() {
@@ -1039,7 +1033,7 @@
                 didOpen: () => {
                     Swal.showLoading()
                 }
-            }); 
+            });
 
             var table = $('#dataTable').DataTable({
                 destroy: true,
@@ -1050,7 +1044,7 @@
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
-                        d.length = d.length || 10; 
+                        d.length = d.length || 10;
                     },
                     error: function(error) {
                         Swal.fire({
@@ -1071,7 +1065,7 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '10%'
+                        width: '15%'
                     },
                     {
                         data: 'ruc',
@@ -1091,7 +1085,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '15%'
                     }
                 ],
                 order: [
@@ -1678,7 +1672,7 @@
 
                 if ($('#fecha_ingreso').val() == "") {
                     //alert('Debe ingresar la Fecha de Ingreso de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1696,7 +1690,7 @@
                     isValid = false;*/
                     $("#error-ruc").show();
                     //alert('El RUC debe tener 13 dígitos');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1711,7 +1705,7 @@
 
                 if ($('#razon_social').val() == "") {
                     //alert('Debe ingresar la Razón Social');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1729,7 +1723,7 @@
                     isValid = false;*/
                     $("#error-cedula").show();
                     //alert('La Cédula del Representante Legal debe tener 10 dígitos');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1744,7 +1738,7 @@
 
                 if ($('#nombres_representante_legal').val() == "") {
                     //alert('Debe ingresar los Nombres del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1759,7 +1753,7 @@
 
                 if ($('#apellidos_representante_legal').val() == "") {
                     //alert('Debe ingresar los Apellidos del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1774,7 +1768,7 @@
 
                 if ($('#telefono_representante_legal').val() == "") {
                     //alert('Debe ingresar el Teléfono del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1794,7 +1788,7 @@
                     isValid = false;*/
                     $("#error-correo").show();
                     //alert('Debe registrar un correo con formato válido');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1809,7 +1803,7 @@
 
                 if ($('#cargo_representante_legal').val() == "") {
                     //alert('Debe ingresar el Cargo del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1824,7 +1818,7 @@
 
                 if ($('#direccion_representante_legal').val() == "") {
                     //alert('Debe ingresar la Dirección del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1839,7 +1833,7 @@
 
                 if ($('#tipo_regimen').val() == "-1") {
                     //alert('Debe seleccionar un Tipo de Régimen');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1854,7 +1848,7 @@
 
                 if ($('#fecha_registro').val() == "") {
                     //alert('Debe ingresar la Fecha de Registro de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1869,7 +1863,7 @@
 
                 if ($('#fecha_constitucion').val() == "") {
                     //alert('Debe ingresar la Fecha de Constitución de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1900,10 +1894,11 @@
                     var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
 
                     // Validar si las fechas son válidas
-                    if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
+                    if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate
+                            .getTime())) {
                         if (fechaConstitucionDate >= fechaRegistroDate) {
                             //alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
-                            await Swal.fire({ 
+                            await Swal.fire({
                                 target: document.getElementById('ModalCamara'),
                                 icon: 'error',
                                 title: 'Error',
@@ -1916,30 +1911,31 @@
                             $('#fecha_constitucion').focus();
                             return;
                         }
-                    } /*else {
-                        //alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
-                        await Swal.fire({ 
-                                target: document.getElementById('ModalCamara'),
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Una o ambas fechas no son válidas. Por favor, verifica los campos.',
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
-                        return;
-                    }*/
+                    }
+                    /*else {
+                                           //alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
+                                           await Swal.fire({ 
+                                                   target: document.getElementById('ModalCamara'),
+                                                   icon: 'error',
+                                                   title: 'Error',
+                                                   text: 'Una o ambas fechas no son válidas. Por favor, verifica los campos.',
+                                                   confirmButtonText: 'Aceptar',
+                                                   allowOutsideClick: false
+                                               });
+                                           return;
+                                       }*/
                 }
 
                 if ($('#agente_retencion').val() == "-1") {
                     //alert('Debe indicar si la Cámara es o no un Agente de Retención');
-                    await Swal.fire({ 
-                                target: document.getElementById('ModalCamara'),
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Debe indicar si la Cámara es o no un Agente de Retención',
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
+                    await Swal.fire({
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe indicar si la Cámara es o no un Agente de Retención',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#agente_retencion').focus();
                     return;
@@ -1947,14 +1943,14 @@
 
                 if ($('#contribuyente_especial').val() == "-1") {
                     //alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
-                    await Swal.fire({ 
-                                target: document.getElementById('ModalCamara'),
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Debe indicar si la Cámara es o no un Contribuyente Especial',
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
+                    await Swal.fire({
+                        target: document.getElementById('ModalCamara'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe indicar si la Cámara es o no un Contribuyente Especial',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
                     $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
                     $('#contribuyente_especial').focus();
                     return;
@@ -1962,7 +1958,7 @@
 
                 if ($('#pais').val() == "-1") {
                     //alert('Debe seleccionar el País');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1977,7 +1973,7 @@
 
                 if ($('#provincia').val() == "-1") {
                     //alert('Debe seleccionar la Provincia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -1992,7 +1988,7 @@
 
                 if ($('#canton').val() == "-1") {
                     //alert('Debe seleccionar el Cantón');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2007,7 +2003,7 @@
 
                 if ($('#parroquia').val() == "-1") {
                     //alert('Debe seleccionar la Parroquia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2022,7 +2018,7 @@
 
                 if ($('#calle').val() == "") {
                     //alert('Debe ingresar la Calle en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2037,7 +2033,7 @@
 
                 if ($('#manzana').val() == "") {
                     //alert('Debe ingresar la Manzana en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2051,8 +2047,8 @@
                 }
 
                 if ($('#numero').val() == "") {
-                   // alert('Debe ingresar el Número en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    // alert('Debe ingresar el Número en la Dirección Tributaria');
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2067,7 +2063,7 @@
 
                 if ($('#interseccion').val() == "") {
                     //alert('Debe ingresar la Intersección en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2082,7 +2078,7 @@
 
                 if ($('#referencia').val() == "") {
                     //alert('Debe ingresar la Referencia en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2097,7 +2093,7 @@
 
                 if ($('#hiddenSelectedItems').val() == "") {
                     //alert('Debe seleccionar al menos una Actividad Económica');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2142,7 +2138,7 @@
                         text: res.success,
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
-                    }); 
+                    });
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
                     $('#carga').hide();
@@ -2152,7 +2148,7 @@
                         let errors = res.responseJSON;
                         if (errors.error) {
                             //alert(errors.error); 
-                            Swal.fire({ 
+                            Swal.fire({
                                 target: document.getElementById('ModalCamara'),
                                 icon: 'error',
                                 title: 'Error',
@@ -2164,7 +2160,7 @@
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
                         //alert("Ocurrió un error al registrar la cámara.");
-                        Swal.fire({ 
+                        Swal.fire({
                             target: document.getElementById('ModalCamara'),
                             icon: 'error',
                             title: 'Error',
@@ -2175,7 +2171,8 @@
                     }
 
                     console.log(res
-                        .responseText); // Muestra el error completo en la consola para depuración
+                        .responseText
+                    ); // Muestra el error completo en la consola para depuración
                 });
             });
 
@@ -2260,7 +2257,7 @@
                 console.log('Cargo ID:', camaraId);
 
                 //$('#carga').show();
-                Swal.fire({ 
+                Swal.fire({
                     title: 'Cargando información de Cámara',
                     text: 'Por favor espere',
                     icon: 'info',
@@ -2520,7 +2517,7 @@
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
-                        Swal.fire({  
+                        Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Error al momento de Cargar la Cámara',
@@ -2621,7 +2618,7 @@
 
                 if ($('#fecha_ingreso_mod').val() == "") {
                     //alert('Debe ingresar la Fecha de Ingreso de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2639,7 +2636,7 @@
                     isValid = false;*/
                     $("#error-ruc-mod").show();
                     //alert('El RUC debe tener 13 dígitos');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2654,7 +2651,7 @@
 
                 if ($('#razon_social_mod').val() == "") {
                     //alert('Debe ingresar la Razón Social');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2672,7 +2669,7 @@
                     isValid = false;*/
                     $("#error-cedula-mod").show();
                     //alert('La Cédula del Representante Legal debe tener 10 dígitos');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2687,7 +2684,7 @@
 
                 if ($('#nombres_representante_legal_mod').val() == "") {
                     //alert('Debe ingresar los Nombres del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2702,7 +2699,7 @@
 
                 if ($('#apellidos_representante_legal_mod').val() == "") {
                     //alert('Debe ingresar los Apellidos del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2717,7 +2714,7 @@
 
                 if ($('#telefono_representante_legal_mod').val() == "") {
                     //alert('Debe ingresar el Teléfono del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2737,7 +2734,7 @@
                     isValid = false;*/
                     $("#error-correo-mod").show();
                     //alert('Debe registrar un correo con formato válido');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2752,7 +2749,7 @@
 
                 if ($('#cargo_representante_legal_mod').val() == "") {
                     //alert('Debe ingresar el Cargo del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2767,7 +2764,7 @@
 
                 if ($('#direccion_representante_legal_mod').val() == "") {
                     //alert('Debe ingresar la Dirección del Representante Legal');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2782,7 +2779,7 @@
 
                 if ($('#tipo_regimen_mod').val() == "-1") {
                     //alert('Debe seleccionar un Tipo de Régimen');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2797,7 +2794,7 @@
 
                 if ($('#fecha_registro_mod').val() == "") {
                     //alert('Debe ingresar la Fecha de Registro de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2812,7 +2809,7 @@
 
                 if ($('#fecha_constitucion_mod').val() == "") {
                     //alert('Debe ingresar la Fecha de Constitución de la Cámara');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2843,10 +2840,11 @@
                     var fechaRegistroDate = convertirFechaAObjetoDate(fechaRegistro);
 
                     // Validar si las fechas son válidas
-                    if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate.getTime())) {
+                    if (!isNaN(fechaConstitucionDate.getTime()) && !isNaN(fechaRegistroDate
+                            .getTime())) {
                         if (fechaConstitucionDate >= fechaRegistroDate) {
                             //alert('La Fecha de Constitución debe ser menor a la Fecha de Registro');
-                            await Swal.fire({ 
+                            await Swal.fire({
                                 target: document.getElementById('ModalModificarCamara'),
                                 icon: 'error',
                                 title: 'Error',
@@ -2859,15 +2857,16 @@
                             $('#fecha_constitucion_mod').focus();
                             return;
                         }
-                    } /*else {
-                        alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
-                        return;
-                    }*/
+                    }
+                    /*else {
+                                           alert('Una o ambas fechas no son válidas. Por favor, verifica los campos.');
+                                           return;
+                                       }*/
                 }
 
                 if ($('#agente_retencion_mod').val() == "-1") {
                     //alert('Debe indicar si la Cámara es o no un Agente de Retención');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2882,7 +2881,7 @@
 
                 if ($('#contribuyente_especial_mod').val() == "-1") {
                     //alert('Debe indicar si la Cámara es o no un Contribuyente Especial');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2897,7 +2896,7 @@
 
                 if ($('#pais_mod').val() == "-1") {
                     //alert('Debe seleccionar el País');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2912,7 +2911,7 @@
 
                 if ($('#provincia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Provincia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2927,7 +2926,7 @@
 
                 if ($('#canton_mod').val() == "-1") {
                     //alert('Debe seleccionar el Cantón');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2942,7 +2941,7 @@
 
                 if ($('#parroquia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Parroquia');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2957,7 +2956,7 @@
 
                 if ($('#calle_mod').val() == "") {
                     //alert('Debe ingresar la Calle en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2972,7 +2971,7 @@
 
                 if ($('#manzana_mod').val() == "") {
                     //alert('Debe ingresar la Manzana en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -2987,7 +2986,7 @@
 
                 if ($('#numero_mod').val() == "") {
                     //alert('Debe ingresar el Número en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -3002,7 +3001,7 @@
 
                 if ($('#interseccion_mod').val() == "") {
                     //alert('Debe ingresar la Intersección en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -3017,7 +3016,7 @@
 
                 if ($('#referencia_mod').val() == "") {
                     //alert('Debe ingresar la Referencia en la Dirección Tributaria');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -3032,7 +3031,7 @@
 
                 if ($('#hiddenSelectedItemsMod').val() == "") {
                     //alert('Debe seleccionar al menos una Actividad Económica');
-                    await Swal.fire({ 
+                    await Swal.fire({
                         target: document.getElementById('ModalModificarCamara'),
                         icon: 'error',
                         title: 'Error',
@@ -3070,17 +3069,17 @@
                 }).done(function(res) {
                     msg = JSON.parse(res).response.msg
                     Swal.close();
-                    Swal.fire({ 
+                    Swal.fire({
                         icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                         title: 'Éxito',
                         text: res.success,
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
-                    }); 
+                    });
                     //alert(msg);
                     location.reload();
                     $('#carga').hide();
-                }).fail(function(res) {  
+                }).fail(function(res) {
                     let errorMessage = 'Ocurrió un error inesperado.';
 
                     // Verifica si la respuesta contiene JSON válido y el campo "error"
@@ -3089,14 +3088,15 @@
                     } else if (res.responseText) {
                         try {
                             const response = JSON.parse(res.responseText);
-                            errorMessage = response.error || errorMessage; // Si existe, muestra el campo "error"
+                            errorMessage = response.error ||
+                                errorMessage; // Si existe, muestra el campo "error"
                         } catch (e) {
                             errorMessage = res.responseText; // Texto plano de la respuesta
                         }
                     }
 
                     // Muestra el mensaje de error en SweetAlert
-                    Swal.fire({ 
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: errorMessage,
@@ -3127,7 +3127,7 @@
                     allowOutsideClick: false,
                 });
 
-                if (result.isConfirmed) { 
+                if (result.isConfirmed) {
                     Swal.fire({
                         title: 'Cargando',
                         text: 'Por favor espere',
@@ -3147,7 +3147,7 @@
                             //alert('Registro eliminado correctamente.');
                             Swal.close();
                             //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                            Swal.fire({ 
+                            Swal.fire({
                                 icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                                 title: 'Éxito',
                                 text: 'Registro eliminado correctamente.',
@@ -3155,12 +3155,13 @@
                                 allowOutsideClick: false
                             });
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
-                            location.reload(); // O cualquier otra lógica para actualizar la interfaz
+                            location
+                                .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                             //alert('Hubo un problema al eliminar el Registro.');
-                            Swal.fire({ 
+                            Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'Hubo un problema al eliminar el Registro.',

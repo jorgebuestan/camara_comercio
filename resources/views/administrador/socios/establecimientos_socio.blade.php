@@ -152,7 +152,8 @@
                                         <h2 class="card-title">Listado de Establecimientos Registrados por Socio</h2>
                                     </header>
                                     <div class="card-body">
-                                        <table class="table table-bordered table-striped mb-0" id="dataTable">
+                                        <table class="table table-bordered table-striped mb-0 overflow-x-auto"
+                                            style="display: block;" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Inicio de Actividades</th>
@@ -185,8 +186,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEstablecimientoLabel"><b>Agregar un nuevo Establecimiento</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                            </button> -->
+                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -371,42 +372,42 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                <div class="col-md-12">
-                                    <h2 class="card-title">Actividades Economicas</h2>
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select name="actividad_economica[]" id="actividad_economica" multiple
-                                        data-plugin-selectTwo>
-                                    </select>
-                                    <input type="hidden" id="hiddenSelectedItems"
-                                        name="actividad_economica_seleccionados">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-4">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-2">
-                                    &nbsp;
-                                </div>
-                                <div class="container-selected-items">
-                                    <div id="selectedItemsContainer" class="selected-items">
-                                        <strong>Seleccionados:</strong>
-                                        <div id="selectedList"></div>
+                                    <div class="col-md-12">
+                                        <h2 class="card-title">Actividades Economicas</h2>
                                     </div>
                                 </div>
                                 <div class="row">
                                     &nbsp;
                                 </div>
-                            </div> -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select name="actividad_economica[]" id="actividad_economica" multiple
+                                            data-plugin-selectTwo>
+                                        </select>
+                                        <input type="hidden" id="hiddenSelectedItems"
+                                            name="actividad_economica_seleccionados">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-4">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="container-selected-items">
+                                        <div id="selectedItemsContainer" class="selected-items">
+                                            <strong>Seleccionados:</strong>
+                                            <div id="selectedList"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -428,8 +429,8 @@
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                            </button> -->
+                                                                                                                                                                                                                                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -616,45 +617,46 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                <div class="col-md-12">
-                                    <h2 class="card-title">Actividades Economicas</h2>
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
-                                        data-plugin-selectTwo>
-                                    </select>
-                                    <input type="hidden" id="hiddenSelectedItemsMod"
-                                        name="actividad_economica_seleccionados_mod">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-4">
-                                    &nbsp;
-                                </div>
-                                <div class="col-md-2">
-                                    &nbsp;
-                                </div>
-                                <div class="container-selected-items">
-                                    <div id="selectedItemsContainer_mod" class="selected-items">
-                                        <strong>Seleccionados:</strong>
-                                        <div id="selectedList_mod"></div>
+                                    <div class="col-md-12">
+                                        <h2 class="card-title">Actividades Economicas</h2>
                                     </div>
                                 </div>
-                            </div> -->
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
+                                            data-plugin-selectTwo>
+                                        </select>
+                                        <input type="hidden" id="hiddenSelectedItemsMod"
+                                            name="actividad_economica_seleccionados_mod">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-4">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="container-selected-items">
+                                        <div id="selectedItemsContainer_mod" class="selected-items">
+                                            <strong>Seleccionados:</strong>
+                                            <div id="selectedList_mod"></div>
+                                        </div>
+                                    </div>
+                                </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
                             data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="btn-modificar-establecimiento">Guardar Cambios</button>
+                        <button type="button" class="btn btn-primary" id="btn-modificar-establecimiento">Guardar
+                            Cambios</button>
                     </div>
                 </div>
             </div>
@@ -709,7 +711,7 @@
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
                     },
-                    complete: function(response) { 
+                    complete: function(response) {
                         Swal.close();
                     },
                 },
@@ -786,7 +788,7 @@
 
                 if (socioSeleccionado === '-1') {
                     //alert('Por favor, selecciona un Socio para poder registrar un Establecimiento');
-                    Swal.fire({ 
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Por favor, selecciona un Socio para poder registrar un Establecimiento',
@@ -816,7 +818,7 @@
 
                 if (selectedSocio === '-1') {
                     //alert('Por favor selecciona un Socio válido.'); 
-                    await Swal.fire({ 
+                    await Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Por favor selecciona un Socio válido.',
@@ -824,7 +826,7 @@
                         allowOutsideClick: false
                     });
                     table.ajax.reload();
-                } else { 
+                } else {
                     Swal.fire({
                         title: 'Cargando',
                         text: 'Por favor espere',
@@ -1688,7 +1690,7 @@
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
-                        Swal.fire({ 
+                        Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Hubo un problema al cargar el Establecimiento.',
@@ -1789,7 +1791,7 @@
 
                 if ($('#nombre_comercial_mod').val() == "") {
                     //alert('Debe ingresar el Nombre Comercial');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1803,7 +1805,7 @@
 
                 if ($('#fecha_inicio_actividades_mod').val() == "") {
                     //alert('Debe ingresar la Fecha de inicio de actividades del Establecimiento');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1817,7 +1819,7 @@
 
                 if ($('#pais_mod').val() == "-1") {
                     //alert('Debe seleccionar el País');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1831,7 +1833,7 @@
 
                 if ($('#provincia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Provincia');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1845,7 +1847,7 @@
 
                 if ($('#canton_mod').val() == "-1") {
                     //alert('Debe seleccionar el Cantón');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1859,7 +1861,7 @@
 
                 if ($('#parroquia_mod').val() == "-1") {
                     //alert('Debe seleccionar la Parroquia');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1873,7 +1875,7 @@
 
                 if ($('#calle_mod').val() == "") {
                     //alert('Debe ingresar la Calle');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1887,7 +1889,7 @@
 
                 if ($('#manzana_mod').val() == "") {
                     //alert('Debe ingresar la Manzana');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1901,7 +1903,7 @@
 
                 if ($('#numero_mod').val() == "") {
                     //alert('Debe ingresar el Número');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1915,7 +1917,7 @@
 
                 if ($('#interseccion_mod').val() == "") {
                     //alert('Debe ingresar la Intersección');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1929,7 +1931,7 @@
 
                 if ($('#referencia_mod').val() == "") {
                     //alert('Debe ingresar la Referencia');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1946,7 +1948,7 @@
                     isValid = false;*/
                     $("#error-correo-mod").show();
                     //alert('Debe registrar un correo con formato válido');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -1960,7 +1962,7 @@
 
                 if ($('#telefono1_mod').val() == "") {
                     //alert('Debe ingresar al menos 1 número de Teléfono');
-                    Swal.fire({  
+                    Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
@@ -2011,9 +2013,9 @@
                     msg = JSON.parse(res).response.msg
                     //alert(msg);
                     //location.reload();
- 
+
                     //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                    Swal.fire({ 
+                    Swal.fire({
                         icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                         title: 'Éxito',
                         text: msg,
@@ -2024,7 +2026,7 @@
                     ///$('#carga').hide();
                 }).fail(function(res) {
                     console.log(res);
-                    Swal.fire({  
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Hubo un problema al modificar el Registro.',
@@ -2036,26 +2038,28 @@
                 $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
             });
 
-           // $(document).on('click', '.delete-establecimiento', function() {
-            $(document).on('click', '.delete-establecimiento', async function () {
+            // $(document).on('click', '.delete-establecimiento', function() {
+            $(document).on('click', '.delete-establecimiento', async function() {
                 var button = $(this);
                 var establecimientoId = button.data('id');
 
                 // Mostrar la confirmación antes de proceder con la eliminación
                 //var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
- 
 
-                const { isConfirmed } = await Swal.fire({
-                        title: '¿Está seguro de eliminar el Establecimiento del Socio?',
-                        text: "Esta acción no se puede deshacer.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Aceptar',
-                        cancelButtonText: 'Cancelar',
-                        allowOutsideClick: false,
-                    });
+
+                const {
+                    isConfirmed
+                } = await Swal.fire({
+                    title: '¿Está seguro de eliminar el Establecimiento del Socio?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
 
                 if (isConfirmed) {
                     Swal.fire({
@@ -2068,7 +2072,8 @@
                         }
                     });
                     $.ajax({
-                        url: '/administrador/establecimiento_socio/eliminar/' + establecimientoId,
+                        url: '/administrador/establecimiento_socio/eliminar/' +
+                            establecimientoId,
                         method: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
@@ -2078,7 +2083,7 @@
 
                             Swal.close();
                             //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                            Swal.fire({ 
+                            Swal.fire({
                                 icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
                                 title: 'Éxito',
                                 text: 'Registro eliminado correctamente.',
@@ -2086,18 +2091,19 @@
                                 allowOutsideClick: false
                             });
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
-                            location.reload(); // O cualquier otra lógica para actualizar la interfaz
+                            location
+                        .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                             //alert('Hubo un problema al eliminar el Registro.');
-                            Swal.fire({ 
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Hubo un problema al eliminar el Registro.',
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
-                        });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al eliminar el Registro.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     });
                 } else {
@@ -2148,7 +2154,7 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
-                }else {
+                } else {
                     $('#provincia').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton').empty().append(
@@ -2286,7 +2292,7 @@
                             alert('Hubo un error al cargar las provincias.');
                         }
                     });
-                }else {
+                } else {
                     $('#provincia_mod').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton_mod').empty().append(
