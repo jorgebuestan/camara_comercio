@@ -1730,16 +1730,25 @@
             $('#btn-more-info').on('click', function() {
                 let entidadLogInsert = entidad_selected.insert;
                 let entidadLogUpdate = entidad_selected.update;
-                if (!entidadLogUpdate) {
-                    entidadLogUpdate = {
-                        updated_at: 'No hay modificaciones',
+
+                // Manejo del caso cuando entidadLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(entidadLogUpdate) && entidadLogUpdate.length > 0) {
+                    lastItem = entidadLogUpdate[entidadLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
                         user: {
                             name: 'N/A'
                         }
                     };
                 }
-                const lastItem = entidadLogUpdate[entidadLogUpdate.length - 1];
+
+                // Función para formatear fechas
                 const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
                     const options = {
                         year: 'numeric',
                         month: 'long',
@@ -1748,9 +1757,11 @@
                     return new Date(dateString).toLocaleDateString('es-ES', options);
                 };
 
+                // Formatear las fechas
                 const formattedCreatedAt = formatDate(entidadLogInsert.created_at);
                 const formattedUpdatedAt = formatDate(lastItem?.created_at);
 
+                // Mostrar el modal con SweetAlert2
                 const swalInfo = Swal.fire({
                     target: document.getElementById('ModalModificarEntidad'),
                     title: 'Información adicional',
@@ -1758,16 +1769,16 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <h5>Creación</h5>
-                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                                <h5><strong>Creación</strong></h5>
                                 <p><strong>Usuario:</strong> ${entidadLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <h5>Última modificación</h5>
-                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                                <h5><strong>Última modificación</strong></h5>
                                 <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
                             </div>
                         </div>
                     </div>
@@ -1775,7 +1786,7 @@
                     showCloseButton: true,
                     showConfirmButton: true,
                     allowOutsideClick: false,
-                })
+                });
             });
 
         });
