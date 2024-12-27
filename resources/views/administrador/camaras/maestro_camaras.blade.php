@@ -588,6 +588,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarCamaraLabel"><b>Modificar Cámara</b></h5>
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -1023,6 +1026,7 @@
     <script>
         $(document).ready(function() {
 
+            let camara_selected = null;
             let camaras = [];
             Swal.fire({
                 title: 'Cargando',
@@ -2278,6 +2282,7 @@
                     url: '/administrador/camara/detalle/' + camaraId,
                     method: 'GET',
                     success: function(response) {
+                        camara_selected = response;
                         console.log('Datos recibidos:', response);
 
                         var CamaraId = $('#camara_id');
@@ -3435,6 +3440,68 @@
                     $('#parroquia_mod').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
+            });
+
+            $('#btn-more-info').on('click', function() {
+                let camaraLogInsert = camara_selected.insert;
+                let camaraLogUpdate = camara_selected.update;
+
+                // Manejo del caso cuando camaraLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(camaraLogUpdate) && camaraLogUpdate.length > 0) {
+                    lastItem = camaraLogUpdate[camaraLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(camaraLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarCamara'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${camaraLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
             });
 
         });

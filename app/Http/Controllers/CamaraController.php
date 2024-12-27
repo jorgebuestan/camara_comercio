@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Models\LogActivity;
 
 class CamaraController extends Controller
 {
@@ -316,6 +317,43 @@ class CamaraController extends Controller
         if ($datoTributario) {
             $camaraArray['dato_tributario'] = $datoTributario->toArray();
         }
+
+        $logCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'insert')->get();
+        $logCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'update')->get();
+
+        $logCamaraIns = $logCamaraIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamaraMod = $logCamaraMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamara = [
+            'insert' => $logCamaraIns[0] ?? null,
+            'update' => $logCamaraMod ?? null
+        ];
+
+        Log::info($logCamara);
+
+        // Convertir el modelo Camara a un array
+        $camaraArray = array_merge($camaraArray, $logCamara);
 
         // Devolver la respuesta JSON
         return response()->json($camaraArray);

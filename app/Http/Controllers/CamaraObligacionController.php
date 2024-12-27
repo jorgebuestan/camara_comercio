@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\ArchivoObligacionCamara;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LogActivity;
 
 class CamaraObligacionController extends Controller
 {
@@ -89,12 +90,46 @@ class CamaraObligacionController extends Controller
         $response = $camaraObligaciones->map(function ($camaraObligacion) {
             $boton = "";
 
+            $logCamaraObligacionIns = LogActivity::with('user')->where('record_id', $camaraObligacion->id)->where('table_name', 'camaras_obligaciones')->where('action', 'insert')->get();
+            $logCamaraObligacionMod = LogActivity::with('user')->where('record_id', $camaraObligacion->id)->where('table_name', 'camaras_obligaciones')->where('action', 'update')->get();
+
+            $logCamaraObligacionIns = $logCamaraObligacionIns->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logCamaraObligacionMod = $logCamaraObligacionMod->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logCamaraObligacion = [
+                'insert' => $logCamaraObligacionIns[0] ?? null,
+                'update' => $logCamaraObligacionMod ?? null
+            ];
+
+            Log::info($logCamaraObligacion); 
+
             return array_merge($camaraObligacion->toArray(), [
                 'nombre_entidad' => $camaraObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '',
                 'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Modificar</button>' .
                     '<button class="btn btn-warning mb-1 delete-camara-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Eliminar</button></div>'
-            ]);
+            ], $logCamaraObligacion);
         });
 
         return response()->json([

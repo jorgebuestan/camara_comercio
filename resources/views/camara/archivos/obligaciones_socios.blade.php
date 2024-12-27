@@ -2,8 +2,7 @@
 
 @section('pagename')
     Archivos de Obligaciones por Socios
-@endsection
-<<<<<<< HEAD
+@endsection 
  
 @section('content') 
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,24 +17,7 @@
                     <div class="row">
                         <div class="col-12">
                             <form  method="POST"  id="ModalArchivoObligacion" enctype="multipart/form-data">
-                                @csrf 
-=======
-
-@section('content')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <section class="card" id="w3">
-                    <header class="card-header">
-                        <h2 class="card-title">Archivos de Obligaciones por Cámara</h2>
-                    </header>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <form method="POST" id="ModalArchivoObligacion" enctype="multipart/form-data">
-                                    @csrf
->>>>>>> origin/andres
+                                @csrf  
 
                                     <div class="form-group">
 

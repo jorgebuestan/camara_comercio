@@ -15,6 +15,7 @@ use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
 use App\Models\Camara;
+use App\Models\LogActivity;
 
 class EstablecimientoController extends Controller
 {
@@ -257,6 +258,43 @@ class EstablecimientoController extends Controller
         if ($camara) {
             $establecimientoArray['camara'] = $camara->toArray();
         }
+
+        $logEstablecimientoCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'establecimientos')->where('action', 'insert')->get();
+        $logEstablecimientoCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'establecimientos')->where('action', 'update')->get();
+
+        $logEstablecimientoCamaraIns = $logEstablecimientoCamaraIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEstablecimientoCamaraMod = $logEstablecimientoCamaraMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEstablecimientoCamara = [
+            'insert' => $logEstablecimientoCamaraIns[0] ?? null,
+            'update' => $logEstablecimientoCamaraMod ?? null
+        ];
+
+        Log::info($logEstablecimientoCamara);
+
+        // Convertir el modelo Establecimiento Camara a un array
+        $establecimientoArray = array_merge($establecimientoArray, $logEstablecimientoCamara);
 
         // Devolver la respuesta JSON
         return response()->json($establecimientoArray);

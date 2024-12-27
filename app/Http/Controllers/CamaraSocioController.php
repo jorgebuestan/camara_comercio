@@ -11,6 +11,7 @@ use App\Models\CamaraSocio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LogActivity;
 
 class CamaraSocioController extends Controller
 {
@@ -199,7 +200,43 @@ class CamaraSocioController extends Controller
 
         // Convertir el modelo socio a un array
         $camaraArray = $camara_socio->toArray();
-        $camaraArray['socio'] = $socio->toArray();
+        $camaraArray['socio'] = $socio->toArray(); 
+
+        $logCamaraSocioIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_socios')->where('action', 'insert')->get();
+        $logCamaraSocioMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_socios')->where('action', 'update')->get();
+
+        $logCamaraSocioIns = $logCamaraSocioIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamaraSocioMod = $logCamaraSocioMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamaraSocio = [
+            'insert' => $logCamaraSocioIns[0] ?? null,
+            'update' => $logCamaraSocioMod ?? null
+        ];
+
+        Log::info($logCamaraSocio);
+
+        $camaraArray = array_merge($camaraArray, $logCamaraSocio);
 
         // Devolver la respuesta JSON
         return response()->json($camaraArray);

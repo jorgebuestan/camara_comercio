@@ -319,11 +319,15 @@
                                         <li><a href="{{ route('admin.establecimientos_camara') }}"
                                                 class="block text-gray-300 hover:text-white">Establecimientos por
                                                 Cámara</a></li>
+                                        <li><a href="{{ route('admin.socios_camara') }}"
+                                            class="block text-gray-300 hover:text-white">Socios por Cámara</a>
+                                        </li>
                                         <li><a href="{{ route('admin.obligaciones_camara') }}"
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Cámara</a>
                                         </li>
-                                        <li><a href="{{ route('admin.socios_camara') }}"
-                                                class="block text-gray-300 hover:text-white">Socios por Cámara</a></li>
+                                        <li><a href="{{ route('camara.archivos_obligaciones_camara') }}"
+                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por Cámara</a>
+                                        </li>
                                     </ul>
                                 </details>
                             </li>
@@ -344,11 +348,15 @@
                                         <li><a href="{{ route('admin.establecimientos_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Establecimientos por
                                                 Socios</a></li>
+                                        <li><a href="{{ route('admin.adherentes_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Adherentes por Socios</a>
+                                        </li>
                                         <li><a href="{{ route('admin.obligaciones_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
                                         </li>
-                                        <li><a href="{{ route('admin.adherentes_socio') }}"
-                                                class="block text-gray-300 hover:text-white">Adherentes por Socios</a></li>
+                                        <li><a href="{{ route('camara.archivos_obligaciones_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por Socios</a>
+                                        </li>
                                     </ul>
                                 </details>
                             </li>

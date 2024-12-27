@@ -269,6 +269,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalModificarObligacion"><b>Modificar Obligación</b></h5>
+                    <button type="button" class="btn btn-warning" id="btn-more-info">
+                        <i class="fas fa-info"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -374,6 +377,8 @@
             let camaraObligacionSelected = null;
             let camaraObligaciones = [];
             var filteredObligaciones = [];
+            let obligacionCamaraLogInsert = null; 
+            let obligacionCamaraLogUpdate = null; 
 
             $('#fecha_presentacion').datepicker('destroy').datepicker({
                 format: 'dd/mm/yyyy', // Define el formato de fecha
@@ -818,6 +823,9 @@
                 obligacionSelected = data.id_obligacion;
                 entidadSelected = data.id_entidad;
 
+                obligacionCamaraLogInsert = data.insert;
+                obligacionCamaraLogUpdate = data.update;
+
                 if (tiempo_presentacion == 'CONSECUTIVA') {
                     $('#ModalModificarObligacion').find('#fecha_presentacion_mod').prop('disabled', true);
                     $('#ModalModificarObligacion').find('#fecha_inicio_mod').prop('disabled', false);
@@ -1054,6 +1062,70 @@
                 }
                 return true;
             }
+
+            $('#btn-more-info').on('click', function() {
+                //alert('info');
+                //alert(obligacionCamaraLogInsert);
+                let obCamLogInsert = obligacionCamaraLogInsert;
+                let obCamLogUpdate = obligacionCamaraLogUpdate;
+
+                // Manejo del caso cuando obCamLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(obCamLogUpdate) && obCamLogUpdate.length > 0) {
+                    lastItem = obCamLogUpdate[obCamLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(obCamLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${obCamLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            });
         });
     </script>
 @endsection

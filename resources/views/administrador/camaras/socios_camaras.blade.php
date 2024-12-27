@@ -226,8 +226,10 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalModificarSocioLabel"><b>Modificar Socio del listado de la Cámara</b>
-                    </h5>
+                    <h5 class="modal-title" id="ModalModificarSocioLabel"><b>Modificar Socio del listado de la Cámara</b></h5>
+                    <button type="button" class="btn btn-warning" id="btn-more-info">
+                        <i class="fas fa-info"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -281,7 +283,7 @@
                 </div>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
-                    <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>
                     <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
                 </div>
             </div>
@@ -299,6 +301,7 @@
 
             //alert($('#camara').val());
             let establecimientos = [];
+            let camara_socio_selected = null;
             Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
@@ -486,7 +489,7 @@
             });
 
             $('.cerrar-modal-mod').click(function() {
-                $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal
+                $('#ModalModificarSocio').modal('hide'); // Cerrar el modal
             });
 
             //Manejo de Uppercase
@@ -734,6 +737,7 @@
                     method: 'GET',
                     success: function(response) {
                         console.log('Datos recibidos:', response);
+                        camara_socio_selected = response;
 
                         var socioCamaraId = $('#socio_camara_id_mod');
                         var socioId = $('#socio_id_mod');
@@ -893,6 +897,68 @@
                 //$('#carga').hide();
                 Swal.close();
                 $('#ModalModificarSocio').modal('hide'); // Cerrar el modal después de guardar
+            });
+
+            $('#btn-more-info').on('click', function() {
+                let camaraSocioLogInsert = camara_socio_selected.insert;
+                let camaraSocioLogUpdate = camara_socio_selected.update;
+
+                // Manejo del caso cuando camaraSocioLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(camaraSocioLogUpdate) && camaraSocioLogUpdate.length > 0) {
+                    lastItem = camaraSocioLogUpdate[camaraSocioLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(camaraSocioLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarSocio'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${camaraSocioLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
             });
 
         });

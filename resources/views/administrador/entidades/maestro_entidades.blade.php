@@ -1727,6 +1727,7 @@
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
+            
             $('#btn-more-info').on('click', function() {
                 let entidadLogInsert = entidad_selected.insert;
                 let entidadLogUpdate = entidad_selected.update;

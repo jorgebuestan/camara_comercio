@@ -427,9 +427,10 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
-                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                                                                                                            </button> -->
+                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> </button> -->
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -439,8 +440,7 @@
                                     </p>
                                     <!-- Campo oculto para enviar el valor de la cámara -->
                                     <input type="hidden" id="camaraHiddenMod" name="camaraHiddenMod" value="">
-                                    <input type="hidden" id="establecimiento_id" name="establecimiento_id"
-                                        value="">
+                                    <input type="hidden" id="establecimiento_id" name="establecimiento_id" value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -681,6 +681,7 @@
 
     <script>
         $(document).ready(function() {
+            let establecimiento_camara_selected = null;
             var actividadesEconomicas = @json($actividadesEconomicas);
             var camaras = @json($camaras);
             if (!@json($isAdmin)) {
@@ -1598,8 +1599,10 @@
                     method: 'GET',
                     success: function(response) {
                         console.log('Datos recibidos:', response);
+                        establecimiento_camara_selected = response;
 
                         var establecimientoId = $('#establecimiento_id');
+                        var camaraId = $('#camaraHiddenMod');
                         var FechaInicioACtividades = $('#fecha_inicio_actividades_mod');
 
                         var Pais = $('#pais_mod');
@@ -1623,8 +1626,8 @@
                         //console.log('Elemento cargo_id encontrado:', establecimientoIdInput.length); // Verificar que el elemento se encuentra
 
                         establecimientoId.val(response.id);
-                        FechaInicioACtividades.val(convertirFecha(response
-                            .fecha_inicio_actividades));
+                        camaraId.val(response.id_camara);
+                        FechaInicioACtividades.val(convertirFecha(response.fecha_inicio_actividades));
                         Pais.val(response.id_pais);
                         Provincia.val(response.id_provincia);
                         Canton.val(response.id_canton);
@@ -2434,6 +2437,68 @@
                     $('#parroquia_mod').empty().append(
                         '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
+            });
+
+            $('#btn-more-info').on('click', function() {
+                let establecimientoCamaraLogInsert = establecimiento_camara_selected.insert;
+                let establecimientoCamaraLogUpdate = establecimiento_camara_selected.update;
+
+                // Manejo del caso cuando establecimientoCamaraLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(establecimientoCamaraLogUpdate) && establecimientoCamaraLogUpdate.length > 0) {
+                    lastItem = establecimientoCamaraLogUpdate[establecimientoCamaraLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(establecimientoCamaraLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarEstablecimiento'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${establecimientoCamaraLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
             });
 
         });

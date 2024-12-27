@@ -14,6 +14,7 @@ use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
 use App\Models\Obligacion;  
 use App\Models\EntidadObligacion; 
+use App\Models\LogActivity;
 
 class ObligacionesController extends Controller
 {
@@ -237,9 +238,44 @@ class ObligacionesController extends Controller
         if (!$obligacion) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
+
+        $logObligacionIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'obligaciones')->where('action', 'insert')->get();
+        $logObligacionMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'obligaciones')->where('action', 'update')->get();
+
+        $logObligacionIns = $logObligacionIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logObligacionMod = $logObligacionMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logObligacion = [
+            'insert' => $logObligacionIns[0] ?? null,
+            'update' => $logObligacionMod ?? null
+        ];
+
+        Log::info($logObligacion);
     
-        // Convertir el modelo Camara a un array
-        $obligacionArray = $obligacion->toArray(); 
+        // Convertir el modelo Obligacion a un array
+        //$obligacionArray = $obligacion->toArray(); 
+        $obligacionArray = array_merge($obligacion->toArray(), $logObligacion);
     
         // Devolver la respuesta JSON
         return response()->json($obligacionArray);

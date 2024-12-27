@@ -12,6 +12,7 @@ use App\Models\Entidad;
 use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
 use App\Models\Obligacion; 
+use App\Models\LogActivity;
 
 class ObligacionesEntidadController extends Controller
 {
@@ -217,6 +218,43 @@ class ObligacionesEntidadController extends Controller
         if ($obligacion) {
             $entidadObligacionArray['obligacion'] = $obligacion->toArray();
         }
+
+        $logEntidadObligacionIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'entidades_obligaciones')->where('action', 'insert')->get();
+        $logEntidadObligacionMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'entidades_obligaciones')->where('action', 'update')->get();
+
+        $logEntidadObligacionIns = $logEntidadObligacionIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEntidadObligacionMod = $logEntidadObligacionMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEntidadObligacion = [
+            'insert' => $logEntidadObligacionIns[0] ?? null,
+            'update' => $logEntidadObligacionMod ?? null
+        ];
+
+        Log::info($logEntidadObligacion);
+
+        // Convertir el modelo EntidadObligacion a un array
+        $entidadObligacionArray = array_merge($entidadObligacionArray, $logEntidadObligacion);
     
         // Devolver la respuesta JSON
         return response()->json($entidadObligacionArray);
