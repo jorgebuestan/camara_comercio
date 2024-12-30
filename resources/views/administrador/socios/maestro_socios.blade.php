@@ -325,8 +325,12 @@
                                                 <div class="row mb-2">
                                                     <div class="col-md-6 gap-1">
                                                         <label>Estado SRI</label>
-                                                        <input type="text" class="form-control" name="estado_sri"
-                                                            id="estado_sri" readonly />
+                                                        <select class="form-control populate" name="estado_sri"
+                                                            id="estado_sri">
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>ACTIVO</option>
+                                                            <option value=0>INACTIVO</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-6 gap-1">
                                                         <label>Tipo Régimen</label>
@@ -632,6 +636,8 @@
                 $('#ModalSocioLabel').html('<b>Registro de Socio</b>');
                 $('#btn-more-info').hide();
                 $('#ModalSocio').find('#btn_update_socio').hide();
+                $('#estado_sri').val(1);
+                $('#estado_sri').prop('readonly', true);
                 $('#ModalSocio').modal('show');
             });
 
@@ -1156,6 +1162,7 @@
                 socioSelected = button.data('id');
                 limpiarFormulario();
                 $('#ModalSocioLabel').html('<b>Actualizar Socio</b>');
+                $('#estado_sri').prop('readonly', false);
                 $('#btn-more-info').show();
 
 

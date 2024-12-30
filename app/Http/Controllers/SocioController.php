@@ -166,6 +166,7 @@ class SocioController extends Controller
                     'razon_social' => $socio->razon_social,
                     'tipo_personeria' => $tipo_personeria,
                     'identificacion' => $socio->identificacion,
+                    'estado_sri' => $socio->datos_tributarios->estado_sri,
                     'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Modificar</button>' .
                         '<button class="btn btn-warning mb-1 delete-socio flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Eliminar</button></div>'
                 ]);
