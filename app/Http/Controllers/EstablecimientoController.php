@@ -115,8 +115,6 @@ class EstablecimientoController extends Controller
 
         $data = $establecimientos->map(function ($establecimiento) {
             $boton = "";
-
-
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
@@ -173,6 +171,28 @@ class EstablecimientoController extends Controller
             // Convertir la cadena en un array (si no está vacío)
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
+
+            if (empty($actividadesEconomicasSeleccionadasArray)) {
+                return response()->json(['error' => 'Debe seleccionar al menos una actividad económica'], 422);
+            }
+
+            if (count($actividadesEconomicasSeleccionadasArray) > 6) {
+                return response()->json(['error' => 'No puede seleccionar más de 6 actividades económicas'], 422);
+            }
+
+            if ($request->input('camaraHidden') !== null) {
+                $camara = Camara::find($request->input('camaraHidden'));
+                if (!$camara) {
+                    return response()->json(['error' => 'Cámara no encontrada'], 404);
+                }
+                $actividadesEconomicasCamara = $camara->actividades_economicas ? json_decode($camara->actividades_economicas, true) : [];
+
+                foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
+                    if (!in_array($actividadId, $actividadesEconomicasCamara)) {
+                        return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
+                    }
+                }
+            }
 
             // Crear registro en la base de datos
             $establecimiento = Establecimiento::create([
@@ -291,8 +311,6 @@ class EstablecimientoController extends Controller
             'update' => $logEstablecimientoCamaraMod ?? null
         ];
 
-        Log::info($logEstablecimientoCamara);
-
         // Convertir el modelo Establecimiento Camara a un array
         $establecimientoArray = array_merge($establecimientoArray, $logEstablecimientoCamara);
 
@@ -341,6 +359,27 @@ class EstablecimientoController extends Controller
             $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
+
+            if (empty($actividadesEconomicasSeleccionadasArray)) {
+                return response()->json(['error' => 'Debe seleccionar al menos una actividad económica'], 422);
+            }
+
+            if (count($actividadesEconomicasSeleccionadasArray) > 6) {
+                return response()->json(['error' => 'No puede seleccionar más de 6 actividades económicas'], 422);
+            }
+
+            if ($request->input('camaraHiddenMod') != null) {
+                $camara = Camara::find($request->input('camaraHiddenMod'));
+                if (!$camara) {
+                    return response()->json(['error' => 'Cámara no encontrada'], 404);
+                }
+                $actividadesEconomicasCamara = $camara->actividades_economicas ? json_decode($camara->actividades_economicas, true) : [];
+                foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
+                    if (!in_array($actividadId, $actividadesEconomicasCamara)) {
+                        return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
+                    }
+                }
+            }
 
             // Actualizar los campos del registro existente
             $establecimiento->update([

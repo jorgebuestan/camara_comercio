@@ -200,7 +200,7 @@ class CamaraSocioController extends Controller
 
         // Convertir el modelo socio a un array
         $camaraArray = $camara_socio->toArray();
-        $camaraArray['socio'] = $socio->toArray(); 
+        $camaraArray['socio'] = $socio->toArray();
 
         $logCamaraSocioIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_socios')->where('action', 'insert')->get();
         $logCamaraSocioMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_socios')->where('action', 'update')->get();
@@ -233,8 +233,6 @@ class CamaraSocioController extends Controller
             'insert' => $logCamaraSocioIns[0] ?? null,
             'update' => $logCamaraSocioMod ?? null
         ];
-
-        Log::info($logCamaraSocio);
 
         $camaraArray = array_merge($camaraArray, $logCamaraSocio);
 

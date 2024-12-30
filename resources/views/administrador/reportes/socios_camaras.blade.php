@@ -86,9 +86,9 @@
                                 <div class="row">
                                     <div class="col-md-9"> <select id="camara" name="camara" data-plugin-selectTwo
                                             class="form-control populate">
-                                            <option value="-1">Seleccionar Cámara</option>
+                                            <option value=-1>Seleccionar Cámara</option>
                                             @foreach ($camaras as $id => $descripcion)
-                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                                <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -111,11 +111,6 @@
                         <div class="col">
                             <section class="card">
                                 <header class="card-header">
-                                    <div class="card-actions">
-                                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                    </div>
-
                                     <h2 class="card-title">Listado de Socios Registrados por Cámara</h2>
                                 </header>
                                 <div class="card-body">

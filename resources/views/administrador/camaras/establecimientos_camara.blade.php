@@ -96,10 +96,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-11 text-end">
-                &nbsp;
-            </div>
-            <div class="col-lg-1">
+            <div class="col-lg-12 text-end">
                 <a href="{{ route('dashboard') }}" id="videoLink">
                     <button type="button" class="mb-1 mt-1 me-1 btn btn-primary">Regresar</button>
                 </a>
@@ -147,11 +144,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Establecimientos Registrados por Cámara</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -266,7 +258,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="nombre_comercial" id="nombre_comercial"
-                                        placeholder="Calle">
+                                        placeholder="Nombre Comercial">
                                 </div>
                                 <div class="col-md-2">
                                     Fecha de inicio de actividades
@@ -440,7 +432,8 @@
                                     </p>
                                     <!-- Campo oculto para enviar el valor de la cámara -->
                                     <input type="hidden" id="camaraHiddenMod" name="camaraHiddenMod" value="">
-                                    <input type="hidden" id="establecimiento_id" name="establecimiento_id" value="">
+                                    <input type="hidden" id="establecimiento_id" name="establecimiento_id"
+                                        value="">
                                 </div>
                             </div>
                             <div class="row">
@@ -682,8 +675,9 @@
     <script>
         $(document).ready(function() {
             let establecimiento_camara_selected = null;
-            var actividadesEconomicas = @json($actividadesEconomicas);
+            let actividadesEconomicas = @json($actividadesEconomicas);
             var camaras = @json($camaras);
+            let actividadesDisponibles = null;
             if (!@json($isAdmin)) {
                 let selectedCamera = $('#camara').val();
                 let filtered = camaras.find(function(camara) {
@@ -700,6 +694,8 @@
                 let filteredActivities = actividades.filter(function(actividad) {
                     return filteredActividades.includes(actividad.id);
                 });
+
+                actividadesDisponibles = filteredActivities;
 
                 $('#actividad_economica').empty();
                 $('#actividad_economica_mod').empty();
@@ -816,7 +812,6 @@
                 if (camaraSeleccionada === '-1') {
                     //alert('Por favor, selecciona una Cámara para poder registrar un Establecimiento');
                     Swal.fire({
-                        target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
                         text: 'Por favor, selecciona una Cámara para poder registrar un Establecimiento',
@@ -871,19 +866,21 @@
                 });
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
 
-                let actividades = Object.keys(actividadesEconomicas).map(function(key) {
-                    return {
-                        id: key,
-                        descripcion: actividadesEconomicas[key]
-                    };
-                });
-                let filteredActivities = actividades.filter(function(actividad) {
-                    return filteredActividades.includes(actividad.id);
-                });
+                let actividades = Object.keys(actividadesEconomicas)
+                    .filter(function(key) {
+                        return filteredActividades.includes(parseInt(key));
+                    })
+                    .map(function(key) {
+                        return {
+                            id: key,
+                            descripcion: actividadesEconomicas[key]
+                        };
+                    });
+                actividadesDisponibles = actividades;
 
                 $('#actividad_economica').empty();
                 $('#actividad_economica_mod').empty();
-                filteredActivities.forEach(function(actividad) {
+                actividades.forEach(function(actividad) {
                     $('#actividad_economica').append(
                         `<option value=${actividad.id}>${actividad.descripcion}</option>`
                     );
@@ -904,7 +901,6 @@
 
             function syncHiddenInput() {
                 $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
-                console.log('Contenido actualizado de selectedItems:', selectedItems);
             }
 
             let selectedItems = [];
@@ -943,7 +939,6 @@
 
                 // Eliminar el ID del array
                 selectedItems = selectedItems.filter(item => item !== id);
-                console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
 
                 // Eliminar visualmente el badge
                 badge.remove();
@@ -964,9 +959,6 @@
 
                 // Eliminar el ID del array
                 selectedItems = selectedItems.filter(item => item !== unselectedId);
-                console.log(
-                    `Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`
-                ); // Depuración
 
                 syncHiddenInput(); // Sincronizar el campo oculto
             });
@@ -979,7 +971,6 @@
 
             function syncHiddenInputMod() {
                 $('#hiddenSelectedItemsMod').val(selectedItemsMod.join(',')); // Actualizar el campo oculto
-                console.log('Contenido actualizado de selectedItemsMod:', selectedItemsMod);
             }
 
             let selectedItemsMod = [];
@@ -1019,10 +1010,6 @@
 
                 // Eliminar el ID del array
                 selectedItemsMod = selectedItemsMod.filter(item => item !== id);
-                console.log(
-                    `Eliminado del array Mod: ${id}, Nuevo contenido Mod: ${selectedItemsMod}`
-                ); // Depuración
-
                 // Eliminar visualmente el badge
                 badge.remove();
 
@@ -1042,9 +1029,6 @@
 
                 // Eliminar el ID del array
                 selectedItemsMod = selectedItemsMod.filter(item => item !== unselectedId);
-                console.log(
-                    `Eliminado desde dropdown Mod: ${unselectedId}, Nuevo contenido Mod: ${selectedItemsMod}`
-                ); // Depuración
 
                 syncHiddenInputMod(); // Sincronizar el campo oculto
             });
@@ -1499,8 +1483,14 @@
                                 title: 'Error',
                                 text: errors.error,
                                 confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                showConfirmButton: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.error('Error:', errors);
+                                }
                             });
+                            return;
                         }
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
@@ -1511,13 +1501,15 @@
                             title: 'Error',
                             text: 'Ocurrió un error al registrar el Establecimiento.',
                             confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
+                            allowOutsideClick: false,
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error('Error:', res.responseText);
+                            }
                         });
+                        return;
                     }
-
-                    console.log(res
-                        .responseText
-                    ); // Muestra el error completo en la consola para depuración
                 });
             });
 
@@ -1569,9 +1561,9 @@
 
             // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
             $(document).on('click', '.open-modal', function() {
-                console.log('Botón clicado...');
                 var button = $(this);
                 var establecimientoId = button.data('id');
+                let establecimiento_camara_selected = $('#camaraHiddenMod').val();
 
                 console.log('Cargo ID:', establecimientoId);
 
@@ -1622,12 +1614,10 @@
                         var ActividadEconomica = $('#actividad_economica_mod');
                         var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
-                        //console.log('Elemento Cargo encontrado:', CargoInput.length); // Verificar que el elemento se encuentra
-                        //console.log('Elemento cargo_id encontrado:', establecimientoIdInput.length); // Verificar que el elemento se encuentra
-
                         establecimientoId.val(response.id);
                         camaraId.val(response.id_camara);
-                        FechaInicioACtividades.val(convertirFecha(response.fecha_inicio_actividades));
+                        FechaInicioACtividades.val(convertirFecha(response
+                            .fecha_inicio_actividades));
                         Pais.val(response.id_pais);
                         Provincia.val(response.id_provincia);
                         Canton.val(response.id_canton);
@@ -1681,30 +1671,30 @@
                         // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
                         if (response.actividades_economicas) {
                             // Decodifica el JSON si es necesario
-                            let actividadesEconomicas = response.actividades_economicas;
+                            let actividadesEstablecimiento = response.actividades_economicas;
 
                             // Verifica si es un string y necesita ser decodificado
-                            if (typeof actividadesEconomicas === 'string') {
+                            if (typeof actividadesEstablecimiento === 'string') {
                                 try {
-                                    actividadesEconomicas = JSON.parse(actividadesEconomicas);
+                                    actividadesEstablecimiento = JSON.parse(
+                                        actividadesEstablecimiento);
                                 } catch (error) {
                                     console.error(
                                         "Error al decodificar actividades_economicas:",
                                         error);
-                                    actividadesEconomicas = [];
+                                    actividadesEstablecimiento = [];
                                 }
                             }
 
                             // Asegúrate de que ahora sea un array
-                            if (Array.isArray(actividadesEconomicas) && actividadesEconomicas
+                            if (Array.isArray(actividadesEstablecimiento) &&
+                                actividadesEstablecimiento
                                 .length > 0) {
-                                console.log("Actividades económicas recibidas:",
-                                    actividadesEconomicas);
-
-                                actividadesEconomicas.forEach(function(id) {
-                                    id = parseInt(
-                                        id); // Asegúrate de que el ID es una cadena
-
+                                actividadesEstablecimiento = actividadesEstablecimiento
+                                    .filter(id => actividadesDisponibles.some(actividad =>
+                                        parseInt(actividad.id) === parseInt(id)));
+                                actividadesEstablecimiento.forEach(function(id) {
+                                    id = parseInt(id);
                                     // Obtener el texto de la opción seleccionada
                                     var optionText = $(
                                         `#actividad_economica_mod option[value=${id}]`
@@ -1715,16 +1705,15 @@
 
                                     // Añadir el badge visualmente en la lista
                                     $('#selectedList_mod').append(`
-                                <span class="badge bg-primary me-2 selected-item" data-id=${id}>
-                                    ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-                                </span>
-                            `);
+                                            <span class="badge bg-primary me-2 selected-item" data-id=${id}>
+                                                ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                                            </span>
+                                        `);
 
                                     // Marcar la opción como seleccionada
                                     $(`#actividad_economica_mod option[value=${id}]`)
                                         .prop('selected', true);
                                 });
-
                                 // Actualiza el input oculto para sincronizar
                                 syncHiddenInputMod();
 
@@ -2081,19 +2070,29 @@
                         allowOutsideClick: false
                     });
                     location.reload();
+                    $('#ModalModificarEstablecimiento').modal(
+                        'hide'); // Cerrar el modal después de guardar
                     //$('#carga').hide();
                 }).fail(function(res) {
-                    console.log(res);
                     Swal.fire({
+                        target: document.getElementById(
+                            'ModalModificarEstablecimiento'),
                         icon: 'error',
                         title: 'Error',
-                        text: 'Hubo un problema al modificar el Registro.',
+                        text: res.responseText.error ||
+                            'Hubo un problema al modificar el Establecimiento',
                         confirmButtonText: 'Aceptar',
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error(res.responseText.error ||
+                                'Hubo un problema al modificar el Establecimiento');
+                        }
                     });
+                    return;
                 });
                 //$('#carga').hide();
-                $('#ModalModificarEstablecimiento').modal('hide'); // Cerrar el modal después de guardar
             });
 
             $(document).on('click', '.delete-establecimiento', async function() {
@@ -2445,7 +2444,8 @@
 
                 // Manejo del caso cuando establecimientoCamaraLogUpdate es vacío
                 let lastItem = null;
-                if (Array.isArray(establecimientoCamaraLogUpdate) && establecimientoCamaraLogUpdate.length > 0) {
+                if (Array.isArray(establecimientoCamaraLogUpdate) && establecimientoCamaraLogUpdate.length >
+                    0) {
                     lastItem = establecimientoCamaraLogUpdate[establecimientoCamaraLogUpdate.length - 1];
                 } else {
                     lastItem = {

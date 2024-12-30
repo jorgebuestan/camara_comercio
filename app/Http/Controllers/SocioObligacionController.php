@@ -10,6 +10,7 @@ use App\Models\Socio;
 use App\Models\Entidad;
 use Carbon\Carbon;
 use App\Models\ArchivoObligacionSocio;
+use App\Models\LogActivity;
 
 class SocioObligacionController extends Controller
 {
@@ -75,8 +76,39 @@ class SocioObligacionController extends Controller
 
         $socioObligaciones = $socioObligaciones->get();
         $response = $socioObligaciones->map(function ($socioObligacion) {
+            $logSocioObligacionIns = LogActivity::with('user')->where('record_id', $socioObligacion->id)->where('table_name', 'socios_obligaciones')->where('action', 'insert')->get();
+            $logSocioObligacionMod = LogActivity::with('user')->where('record_id', $socioObligacion->id)->where('table_name', 'socios_obligaciones')->where('action', 'update')->get();
+            $logSocioObligacionIns = $logSocioObligacionIns->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logSocioObligacionMod = $logSocioObligacionMod->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logSocioObligacion = [
+                'insert' => $logSocioObligacionIns[0] ?? null,
+                'update' => $logSocioObligacionMod ?? null
+            ];
             $boton = "";
             return array_merge($socioObligacion->toArray(), [
+                'logs' => $logSocioObligacion,
                 'nombre_entidad' => $socioObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $socioObligacion->obligacion->obligacion ?? '',
                 'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Modificar</button>' .
@@ -125,22 +157,23 @@ class SocioObligacionController extends Controller
                 $data['fecha_presentacion'] = null;
             }
             $data['estado'] = 1;
-            Log::info($data);
             $socioObligacion = SocioObligacion::create($data);
             $archivoObligacionSocio = ArchivoObligacionSocio::create([
                 'id_socio' => $socioObligacion->id_socio,
                 'id_entidad' => $socioObligacion->id_entidad,
-                'id_obligacion' => $socioObligacion->id_obligacion, 
+                'id_obligacion' => $socioObligacion->id_obligacion,
                 'ruta_archivo' => '',
                 'validado' => 0,
-                'estado' => 1
+                'estado' => 1,
+                'subido_por' => auth()->user()->id
             ]);
             DB::commit();
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['message' => 'Error al guardar la obligación del socio',
-            'debug' => $th // Incluye el mensaje completo para depuración en ambiente de desarrollo
-        ], 500);
+            return response()->json([
+                'message' => 'Error al guardar la obligación del socio',
+                'debug' => $th // Incluye el mensaje completo para depuración en ambiente de desarrollo
+            ], 500);
         }
     }
 
@@ -192,9 +225,9 @@ class SocioObligacionController extends Controller
             $socioObligacion->save();
 
             $archivoObligacionSocio = ArchivoObligacionSocio::where('id_socio', $socioObligacion->id_socio)
-            ->where('id_entidad', $socioObligacion->id_entidad)
-            ->where('id_obligacion', $socioObligacion->id_obligacion)
-            ->first(); 
+                ->where('id_entidad', $socioObligacion->id_entidad)
+                ->where('id_obligacion', $socioObligacion->id_obligacion)
+                ->first();
             $archivoObligacionSocio->estado = 0;
             $archivoObligacionSocio->save();
 

@@ -315,8 +315,6 @@ class EntidadesController extends Controller
             'update' => $logEntidadMod ?? null
         ];
 
-        Log::info($logEntidad);
-
         // Convertir el modelo Camara a un array
         $entidadArray = array_merge($entidad->toArray(), $logEntidad);
 

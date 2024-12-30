@@ -130,11 +130,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Cámaras Registradas</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -171,9 +166,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalCamaraLabel"><b>Agregar una Nueva Cámara de Comercio</b></h5>
-                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                        </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -192,40 +184,30 @@
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Fecha de Ingreso
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Ingreso</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_ingreso" id="fecha_ingreso"
                                                             placeholder="Fecha de Ingreso">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        RUC
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>RUC</label>
                                                         <input type="text" class="form-control" name="ruc"
                                                             id="ruc" placeholder="RUC de la Cámara">
                                                         <div id="error-ruc" style="color: red; display: none;">El RUC debe
-                                                            tener 13 dígitos.</div>
+                                                            tener
+                                                            13 dígitos.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Razón Social
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Razón Social</label>
                                                         <input type="text" class="form-control" name="razon_social"
                                                             id="razon_social" placeholder="Razón Social">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Cédula Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cédula Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="cedula_representante_legal"
                                                             id="cedula_representante_legal"
@@ -234,46 +216,32 @@
                                                             Cédula debe tener 10 dígitos.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Nombres Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Nombres Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="nombres_representante_legal"
                                                             id="nombres_representante_legal"
                                                             placeholder="Nombres Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Apellidos Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Apellidos Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="apellidos_representante_legal"
                                                             id="apellidos_representante_legal"
                                                             placeholder="Apellidos Representante Legal">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Teléfono Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6">
+                                                        <label>Teléfono Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="telefono_representante_legal"
                                                             id="telefono_representante_legal"
                                                             placeholder="Teléfono Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Correo Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Correo Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="correo_representante_legal"
                                                             id="correo_representante_legal"
@@ -282,37 +250,25 @@
                                                             un correo electrónico válido.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Cargo Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cargo Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="cargo_representante_legal"
                                                             id="cargo_representante_legal"
                                                             placeholder="Cargo Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Dirección Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
+                                                        <label>Dirección Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="direccion_representante_legal"
                                                             id="direccion_representante_legal"
                                                             placeholder="Dirección Representante Legal">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Logo
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 flex flex-col gap-1">
+                                                        <label>Logo</label>
                                                         <input type="file" class="form-control-file" id="logoFile"
                                                             name="file">
                                                         <input type="hidden" name="tipoDoc" value="1">
@@ -320,37 +276,28 @@
                                                 </div>
                                             </div>
                                             <div id="datos_tributarios" class="tab-pane">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Tipo de Régimen
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Tipo de Régimen</label>
                                                         <select id="tipo_regimen" name="tipo_regimen"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($regimen as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Fecha de Registro
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Registro</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_registro" id="fecha_registro"
                                                             placeholder="Fecha de Registro">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Fecha de Constitución
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Constitución</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_constitucion" id="fecha_constitucion"
                                                             placeholder="Fecha de Constitución">
@@ -358,77 +305,68 @@
                                                             style="color: red; display: none;">La fecha de constitución
                                                             debe ser menor a la fecha de registro.</div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Años de Creación
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Años de Creación</label>
                                                         <input type="text" class="form-control" name="anios_creacion"
                                                             id="anios_creacion" placeholder="Años de Creación" disabled>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Agente de Retención
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Agente de Retención</label>
                                                         <select id="agente_retencion" name="agente_retencion"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=0>No</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Contributente Especial
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Contributente Especial</label>
                                                         <select id="contribuyente_especial" name="contribuyente_especial"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=0>No</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row my-2">
                                                     <div class="col-md-12">
                                                         <h2 class="card-title">Dirección Principal</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        País
+                                                    <div class="col-md-12">
+                                                        &nbsp;
                                                     </div>
-                                                    <div class="col-md-4">
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>País</label>
                                                         <select id="pais" name="pais"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($paises as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 57 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Provincia
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Provincia</label>
                                                         <select id="provincia" name="provincia"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($provincias as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
@@ -436,103 +374,84 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Cantón
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cantón</label>
                                                         <select id="canton" name="canton"
                                                             class="form-control populate">
-                                                            <option value="-1" selected>Seleccionar</option>
+                                                            <option value=-1 selected>Seleccionar</option>
                                                             @foreach ($cantones as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Parroquia
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Parroquia</label>
                                                         <select id="parroquia" name="parroquia"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($parroquias as $id => $nombre)
-                                                                <option value="{{ $id }}">
+                                                                <option value={{ $id }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Calle
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Calle</label>
                                                         <input type="text" class="form-control" name="calle"
                                                             id="calle" placeholder="Calle">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Manzana
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Manzana</label>
                                                         <input type="text" class="form-control" name="manzana"
                                                             id="manzana" placeholder="Manzana">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Número
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Número</label>
                                                         <input type="text" class="form-control" name="numero"
                                                             id="numero" placeholder="Número">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Intersección
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Intersección</label>
                                                         <input type="text" class="form-control" name="interseccion"
                                                             id="interseccion" placeholder="Intersección">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Referencia Ubicación
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <label>Referencia Ubicación</label>
                                                         <input type="text" class="form-control" name="referencia"
                                                             id="referencia" placeholder="Referencia Ubicación">
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-12">
-                                                        <h2 class="card-title">Actividades Economicas</h2>
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-12">
+                                                        <h2
+                                                            class="card-title
+                                                            ">
+                                                            Actividades Economicas</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
                                                         <select name="actividad_economica[]" id="actividad_economica"
                                                             multiple data-plugin-selectTwo>
                                                             @foreach ($actividadesEconomicas as $id => $descripcion)
@@ -545,25 +464,15 @@
                                                             name="actividad_economica_seleccionados">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="container-selected-items">
-                                                        <div id="selectedItemsContainer" class="selected-items">
-                                                            <strong>Seleccionados:</strong>
-                                                            <div id="selectedList"></div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <div class="container-selected-items">
+                                                            <div id="selectedItemsContainer" class="selected-items">
+                                                                <strong>Seleccionados:</strong>
+                                                                <div id="selectedList"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    &nbsp;
                                                 </div>
                                             </div>
                                         </div>
@@ -600,7 +509,8 @@
                                         <ul class="nav nav-tabs">
                                             <li class="nav-item active">
                                                 <a class="nav-link" data-bs-target="#datos_generales_mod"
-                                                    href="#datos_generales_mod" data-bs-toggle="tab">Datos Generales</a>
+                                                    href="#datos_generales_mod" data-bs-toggle="tab">Datos Generales
+                                                </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" data-bs-target="#datos_tributarios_mod"
@@ -610,42 +520,31 @@
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales_mod" class="tab-pane active">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Fecha de Ingreso
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Ingreso</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_ingreso_mod" id="fecha_ingreso_mod"
                                                             placeholder="Fecha de Ingreso">
                                                         <input type="hidden" id="camara_id" name="camara_id">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        RUC
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>RUC</label>
                                                         <input type="text" class="form-control" name="ruc_mod"
                                                             id="ruc_mod" placeholder="RUC de la Cámara">
                                                         <div id="error-ruc-mod" style="color: red; display: none;">El RUC
                                                             debe tener 13 dígitos.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Razón Social
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Razón Social</label>
                                                         <input type="text" class="form-control"
                                                             name="razon_social_mod" id="razon_social_mod"
                                                             placeholder="Razón Social">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Cédula Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cédula Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="cedula_representante_legal_mod"
                                                             id="cedula_representante_legal_mod"
@@ -654,46 +553,32 @@
                                                             Cédula debe tener 10 dígitos.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Nombres Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Nombres Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="nombres_representante_legal_mod"
                                                             id="nombres_representante_legal_mod"
                                                             placeholder="Nombres Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Apellidos Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Apellidos Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="apellidos_representante_legal_mod"
                                                             id="apellidos_representante_legal_mod"
                                                             placeholder="Apellidos Representante Legal">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Teléfono Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6">
+                                                        <label>Teléfono Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="telefono_representante_legal_mod"
                                                             id="telefono_representante_legal_mod"
                                                             placeholder="Teléfono Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Correo Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Correo Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="correo_representante_legal_mod"
                                                             id="correo_representante_legal_mod"
@@ -702,37 +587,25 @@
                                                             Ingrese un correo electrónico válido.</div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Cargo Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cargo Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="cargo_representante_legal_mod"
                                                             id="cargo_representante_legal_mod"
                                                             placeholder="Cargo Representante Legal">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Dirección Representante Legal
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
+                                                        <label>Dirección Representante Legal</label>
                                                         <input type="text" class="form-control"
                                                             name="direccion_representante_legal_mod"
                                                             id="direccion_representante_legal_mod"
                                                             placeholder="Dirección Representante Legal">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Logo
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 flex flex-col gap-1">
+                                                        <label>Logo</label>
                                                         <input type="file" class="form-control-file" id="logoFile_mod"
                                                             name="file_mod">
                                                         <input type="hidden" name="tipoDoc" value="1">
@@ -740,37 +613,28 @@
                                                 </div>
                                             </div>
                                             <div id="datos_tributarios_mod" class="tab-pane">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Tipo de Régimen
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Tipo de Régimen</label>
                                                         <select id="tipo_regimen_mod" name="tipo_regimen_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($regimen as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Fecha de Registro
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Registro</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_registro_mod" id="fecha_registro_mod"
                                                             placeholder="Fecha de Registro">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Fecha de Constitución
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Fecha de Constitución</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_constitucion_mod" id="fecha_constitucion_mod"
                                                             placeholder="Fecha de Constitución">
@@ -778,79 +642,70 @@
                                                             style="color: red; display: none;">La fecha de constitución
                                                             debe ser menor a la fecha de registro.</div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Años de Creación
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Años de Creación</label>
                                                         <input type="text" class="form-control"
                                                             name="anios_creacion_mod" id="anios_creacion_mod"
                                                             placeholder="Años de Creación" disabled>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Agente de Retención
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Agente de Retención</label>
                                                         <select id="agente_retencion_mod" name="agente_retencion_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=2>No</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Contributente Especial
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Contributente Especial</label>
                                                         <select id="contribuyente_especial_mod"
                                                             name="contribuyente_especial_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=2>No</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row my-2">
                                                     <div class="col-md-12">
                                                         <h2 class="card-title">Dirección Principal</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        País
+                                                    <div class="col-md-12">
+                                                        &nbsp;
                                                     </div>
-                                                    <div class="col-md-4">
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>País</label>
                                                         <select id="pais_mod" name="pais_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($paises as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 57 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Provincia
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Provincia</label>
                                                         <select id="provincia_mod" name="provincia_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($provincias as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
@@ -858,104 +713,82 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Cantón
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Cantón</label>
                                                         <select id="canton_mod" name="canton_mod"
                                                             class="form-control populate">
-                                                            <option value="-1" selected>Seleccionar</option>
+                                                            <option value=-1 selected>Seleccionar</option>
                                                             @foreach ($cantones as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Parroquia
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Parroquia</label>
                                                         <select id="parroquia_mod" name="parroquia_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($parroquias as $id => $nombre)
-                                                                <option value="{{ $id }}">
+                                                                <option value={{ $id }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Calle
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Calle</label>
                                                         <input type="text" class="form-control" name="calle_mod"
                                                             id="calle_mod" placeholder="Calle">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Manzana
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Manzana</label>
                                                         <input type="text" class="form-control" name="manzana_mod"
                                                             id="manzana_mod" placeholder="Manzana">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Número
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Número</label>
                                                         <input type="text" class="form-control" name="numero_mod"
                                                             id="numero_mod" placeholder="Número">
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        Intersección
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>Intersección</label>
                                                         <input type="text" class="form-control"
                                                             name="interseccion_mod" id="interseccion_mod"
                                                             placeholder="Intersección">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        Referencia Ubicación
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <label>Referencia Ubicación</label>
                                                         <input type="text" class="form-control" name="referencia_mod"
                                                             id="referencia_mod" placeholder="Referencia Ubicación">
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row my-2">
                                                     <div class="col-md-12">
                                                         <h2 class="card-title">Actividades Economicas</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="row">
                                                     <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
                                                         <select id="actividad_economica_mod"
                                                             name="actividad_economica_mod[]" multiple
                                                             data-plugin-selectTwo>
@@ -968,25 +801,15 @@
                                                             name="actividad_economica_seleccionados_mod">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        &nbsp;
-                                                    </div>
-                                                    <div class="container-selected-items">
-                                                        <div id="selectedItemsContainer_mod" class="selected-items">
-                                                            <strong>Seleccionados:</strong>
-                                                            <div id="selectedList_mod"></div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <div class="container-selected-items">
+                                                            <div id="selectedItemsContainer_mod" class="selected-items">
+                                                                <strong>Seleccionados:</strong>
+                                                                <div id="selectedList_mod"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    &nbsp;
                                                 </div>
                                             </div>
                                         </div>
@@ -2549,11 +2372,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -2575,11 +2398,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -2601,11 +2424,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -3199,23 +3022,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -3245,17 +3068,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -3265,9 +3088,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3292,13 +3115,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -3308,7 +3131,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3330,23 +3153,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -3376,17 +3199,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -3396,9 +3219,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3423,13 +3246,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -3439,7 +3262,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

@@ -149,11 +149,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Obligaciones Registradas de la Cámara</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -377,8 +372,8 @@
             let camaraObligacionSelected = null;
             let camaraObligaciones = [];
             var filteredObligaciones = [];
-            let obligacionCamaraLogInsert = null; 
-            let obligacionCamaraLogUpdate = null; 
+            let obligacionCamaraLogInsert = null;
+            let obligacionCamaraLogUpdate = null;
 
             $('#fecha_presentacion').datepicker('destroy').datepicker({
                 format: 'dd/mm/yyyy', // Define el formato de fecha

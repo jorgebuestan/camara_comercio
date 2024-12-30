@@ -295,7 +295,7 @@
                             <a href="{{ route('dashboard') }}"
                                 class="flex items-center gap-3 text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
                                 <i class="bx bx-home-alt"></i>
-                                <span>Inicio</span>
+                                <span class="block hover:text-white" style="font-family: Poppins;">Inicio</span>
                             </a>
                         </li>
 
@@ -320,13 +320,14 @@
                                                 class="block text-gray-300 hover:text-white">Establecimientos por
                                                 Cámara</a></li>
                                         <li><a href="{{ route('admin.socios_camara') }}"
-                                            class="block text-gray-300 hover:text-white">Socios por Cámara</a>
+                                                class="block text-gray-300 hover:text-white">Socios por Cámara</a>
                                         </li>
                                         <li><a href="{{ route('admin.obligaciones_camara') }}"
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Cámara</a>
                                         </li>
                                         <li><a href="{{ route('camara.archivos_obligaciones_camara') }}"
-                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por Cámara</a>
+                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por
+                                                Cámara</a>
                                         </li>
                                     </ul>
                                 </details>
@@ -355,7 +356,8 @@
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
                                         </li>
                                         <li><a href="{{ route('camara.archivos_obligaciones_socio') }}"
-                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por Socios</a>
+                                                class="block text-gray-300 hover:text-white">Archivos de Obligaciones por
+                                                Socios</a>
                                         </li>
                                     </ul>
                                 </details>
@@ -402,7 +404,7 @@
                         @endcan
 
                         @can('Camara')
-                            {{-- <li>
+                            <li>
                                 <details class="group">
                                     <summary
                                         class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
@@ -421,7 +423,7 @@
                                         </li>
                                     </ul>
                                 </details>
-                            </li> --}}
+                            </li>
                         @endcan
                     </ul>
                 </nav>
@@ -436,22 +438,26 @@
                     <h4 class="font-bold">@yield('pagename', 'Dashboard')</h4>
                 </header>
                 <main class="p-2 w-full !max-w-full">
-                    @yield('content')
-                    <div class="container mt-5">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3>Bienvenido al Dashboard</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <p>Esta es la página principal del sistema de la Cámara de Comercio. Utilice el
-                                            menú de la izquierda para navegar por las diferentes secciones.</p>
+                    @hasSection('content')
+                        @yield('content')
+                    @else
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3>Bienvenido al Dashboard</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Esta es la página principal del sistema de la Cámara de Comercio. Utilice
+                                                el
+                                                menú de la izquierda para navegar por las diferentes secciones.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </main>
                 @if (session('success'))
                     <div class="alert alert-success">

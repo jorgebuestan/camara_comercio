@@ -96,11 +96,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Obligaciones creadas</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -136,8 +131,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalObligacionLabel"><b>Agregar una nueva Obligación</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -160,22 +155,22 @@
                                 <div class="col-md-4">
                                     <select id="tiempo_presentacion" name="tiempo_presentacion"
                                         class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($tiempo_presentacion as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Presentación
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_presentacion" id="fecha_presentacion"
-                                        placeholder="Fecha de Presentación">
-                                </div> -->
+                                                    Fecha de Presentación
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                                        name="fecha_presentacion" id="fecha_presentacion"
+                                                        placeholder="Fecha de Presentación">
+                                                </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -187,21 +182,21 @@
                                 <div class="col-md-4">
                                     <select id="tipo_presentacion" name="tipo_presentacion" disabled
                                         class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($tipo_presentacion as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Inicio
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                                </div> -->
+                                                    Fecha de Inicio
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                                        name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
+                                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -223,8 +218,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Modificar Obligación</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button> -->
                         <button type="button" class="btn btn-warning" id="btn-more-info">
                             <i class="fas fa-info"></i>
                         </button>
@@ -251,22 +246,22 @@
                                 <div class="col-md-4">
                                     <select id="tiempo_presentacion_mod" name="tiempo_presentacion_mod"
                                         class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($tiempo_presentacion as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Presentación
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_presentacion_mod" id="fecha_presentacion_mod"
-                                        placeholder="Fecha de Presentación">
-                                </div> -->
+                                                    Fecha de Presentación
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                                        name="fecha_presentacion_mod" id="fecha_presentacion_mod"
+                                                        placeholder="Fecha de Presentación">
+                                                </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -278,21 +273,21 @@
                                 <div class="col-md-4">
                                     <select id="tipo_presentacion_mod" name="tipo_presentacion_mod" disabled
                                         class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($tipo_presentacion as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Inicio
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                                </div> --->
+                                                    Fecha de Inicio
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                                        name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
+                                                </div> --->
                             </div>
                         </div>
                     </div>
@@ -778,7 +773,7 @@
                     error: function() {
                         alert(
                             'Error al verificar registros similares. Intente nuevamente.'
-                            );
+                        );
                     }
                 });
             });
@@ -1027,11 +1022,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -1053,11 +1048,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -1079,11 +1074,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -1111,23 +1106,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -1157,17 +1152,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -1177,9 +1172,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1204,13 +1199,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -1220,7 +1215,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1242,23 +1237,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -1288,17 +1283,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -1308,9 +1303,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1335,13 +1330,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                                '<option value=-1>Seleccionar</option>'
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -1351,7 +1346,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

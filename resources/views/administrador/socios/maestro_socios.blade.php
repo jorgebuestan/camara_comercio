@@ -105,10 +105,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Socios Registrados</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -139,8 +135,10 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalSocioLabel"><b>Registro de Socios</b></h5>
-                        <button type="button" class="btn-close cerrar-modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="ModalSocioLabel"></h5>
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -323,8 +321,12 @@
                                                 <div class="row mb-2">
                                                     <div class="col-md-6 gap-1">
                                                         <label>Estado SRI</label>
-                                                        <input type="text" class="form-control" name="estado_sri"
-                                                            id="estado_sri" readonly />
+                                                        <select class="form-control populate" name="estado_sri"
+                                                            id="estado_sri">
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>ACTIVO</option>
+                                                            <option value=0>INACTIVO</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-6 gap-1">
                                                         <label>Tipo Régimen</label>
@@ -627,7 +629,11 @@
             $(document).on('click', '#btn_new_socio', function() {
                 limpiarFormulario();
                 $('#ModalSocio').find('#btn_register_socio').show();
+                $('#ModalSocioLabel').html('<b>Registro de Socio</b>');
+                $('#btn-more-info').hide();
                 $('#ModalSocio').find('#btn_update_socio').hide();
+                $('#estado_sri').val(1);
+                $('#estado_sri').prop('readonly', true);
                 $('#ModalSocio').modal('show');
             });
 
@@ -692,11 +698,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -718,11 +724,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -744,11 +750,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -842,9 +848,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -885,7 +891,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -1151,6 +1157,10 @@
                 let button = $(this);
                 socioSelected = button.data('id');
                 limpiarFormulario();
+                $('#ModalSocioLabel').html('<b>Actualizar Socio</b>');
+                $('#estado_sri').prop('readonly', false);
+                $('#btn-more-info').show();
+
 
                 $('.nav-tabs a[href="#datos_generales"]').tab('show');
 
@@ -1226,7 +1236,79 @@
                 $('#ModalSocio').find('#btn_update_socio').show();
                 $('#ModalSocio').modal('show');
             });
+            $('#btn-more-info').on('click', function() {
+                let socio = socios.find(socio => socio.id == socioSelected);
+                let socioLogInsert = socio.logs.insert ?? [];
+                let socioLogUpdate = socio.logs.update ?? [];
 
+                if (Array.isArray(socioLogInsert) && socioLogInsert.length > 0) {
+                    socioLogInsert = socioLogInsert[0];
+                } else {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'info',
+                        title: 'Información adicional',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'No hay información adicional para mostrar.',
+                    });
+                }
+                let lastItem = null;
+                if (Array.isArray(socioLogUpdate) && socioLogUpdate.length > 0) {
+                    lastItem = socioLogUpdate[socioLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(socioLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalSocio'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${socioLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            });
             /**
              * Functions
              */

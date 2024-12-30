@@ -122,8 +122,6 @@ class CamaraObligacionController extends Controller
                 'update' => $logCamaraObligacionMod ?? null
             ];
 
-            Log::info($logCamaraObligacion); 
-
             return array_merge($camaraObligacion->toArray(), [
                 'nombre_entidad' => $camaraObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '',
@@ -177,7 +175,6 @@ class CamaraObligacionController extends Controller
                 $data['fecha_presentacion'] = null;
             }
             $data['estado'] = 1;
-            Log::info($data);
             $camaraObligacion = CamaraObligacion::create($data);
             $archivoObligacionCamara = ArchivoObligacionCamara::create([
                 'id_camara' => $camaraObligacion->id_camara,
@@ -222,7 +219,6 @@ class CamaraObligacionController extends Controller
                 $data['fecha_presentacion'] =
                     Carbon::createFromFormat('d/m/Y', $data['fecha_presentacion'])->format('Y-m-d');
             }
-            Log::info($data);
             $camaraObligacion->update($data);
             DB::commit();
             return response()->json(['message' => 'Obligación actualizada correctamente'], 200);
