@@ -577,6 +577,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
+            $('a').on('click', function(e) {
+                e.preventDefault();
+                window.location.href = $(this).attr('href');
+            });
             // Constants for breakpoints and widths
             const MOBILE_BREAKPOINT = 768;
             const SIDEBAR_FULL_WIDTH = 'w-64';
