@@ -99,7 +99,16 @@ class SocioController extends Controller
             // Mapear los datos para la respuesta
             $data = $socios->map(function ($socio) {
                 $logSociosIns = LogActivity::with('user')->where('record_id', $socio->id)->where('table_name', 'socios')->where('action', 'insert')->get();
-                $logSociosMod = LogActivity::with('user')->where('record_id', $socio->id)->where('table_name', 'socios')->where('action', 'update')->get();
+                $logSociosMod = LogActivity::with('user')
+                    ->where(function ($query) use ($socio) {
+                        $query->where('record_id', $socio->id)
+                            ->where('table_name', 'socios')
+                            ->orWhere(function ($query) use ($socio) {
+                                $query->where('table_name', 'datos_tributarios_socio');
+                            });
+                    })
+                    ->where('action', 'update')
+                    ->get();
                 $logSociosIns = $logSociosIns->map(function ($log) {
                     return [
                         'created_at' => $log->created_at,
