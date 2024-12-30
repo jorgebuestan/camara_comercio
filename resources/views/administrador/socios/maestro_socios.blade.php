@@ -105,10 +105,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Socios Registrados</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">

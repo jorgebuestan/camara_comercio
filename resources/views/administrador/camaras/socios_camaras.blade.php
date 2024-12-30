@@ -110,11 +110,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Socios Registrados por Cámara</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -226,7 +221,8 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalModificarSocioLabel"><b>Modificar Socio del listado de la Cámara</b></h5>
+                    <h5 class="modal-title" id="ModalModificarSocioLabel"><b>Modificar Socio del listado de la Cámara</b>
+                    </h5>
                     <button type="button" class="btn btn-warning" id="btn-more-info">
                         <i class="fas fa-info"></i>
                     </button>

@@ -109,11 +109,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Obligaciones registradas por Entidad</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -191,13 +186,13 @@
                                 </select>
                             </div>
                             <!-- <div class="col-md-2">
-                                Fecha de Presentación
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" data-plugin-datepicker class="form-control" disabled 
-                                    name="fecha_presentacion" id="fecha_presentacion"
-                                    placeholder="Fecha de Presentación">
-                            </div> --> 
+                                    Fecha de Presentación
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_presentacion" id="fecha_presentacion"
+                                        placeholder="Fecha de Presentación">
+                                </div> -->
                         </div>
                         <div class="row">
                             &nbsp;
@@ -218,12 +213,12 @@
                                 </select>
                             </div>
                             <!-- <div class="col-md-2">
-                                Fecha de Inicio
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                            </div> -->
+                                    Fecha de Inicio
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
+                                </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -312,13 +307,13 @@
                                 </select>
                             </div>
                             <!-- <div class="col-md-2">
-                                Fecha de Presentación
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_presentacion_mod" id="fecha_presentacion_mod"
-                                    placeholder="Fecha de Presentación">
-                            </div> -->
+                                    Fecha de Presentación
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_presentacion_mod" id="fecha_presentacion_mod"
+                                        placeholder="Fecha de Presentación">
+                                </div> -->
                         </div>
                         <div class="row">
                             &nbsp;
@@ -339,12 +334,12 @@
                                 </select>
                             </div>
                             <!-- <div class="col-md-2">
-                                Fecha de Inicio
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                            </div> -->
+                                    Fecha de Inicio
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
+                                </div> -->
                         </div>
                     </div>
                 </div>
@@ -703,7 +698,7 @@
                         });
                         $('#tipo_presentacion').focus();
                         return;
-                    } 
+                    }
                 }
 
                 /* if ($('#tiempo_presentacion').val() == "1") {
@@ -805,7 +800,7 @@
 
                     console.log(res
                         .responseText
-                        ); // Muestra el error completo en la consola para depuración
+                    ); // Muestra el error completo en la consola para depuración
                 });
             });
 
@@ -834,7 +829,7 @@
                     method: 'GET',
                     success: function(response) {
                         console.log('Datos recibidos:', response);
-                        entidad_obligacion_selected = response; 
+                        entidad_obligacion_selected = response;
 
                         var obligacionId = $('#obligacion_id_mod');
                         var entidadId = $('#entidad_id_mod');

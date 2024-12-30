@@ -96,11 +96,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Obligaciones creadas</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -136,8 +131,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalObligacionLabel"><b>Agregar una nueva Obligación</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                        <span aria-hidden="true">&times;</span>
+                                    </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -169,13 +164,13 @@
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Presentación
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_presentacion" id="fecha_presentacion"
-                                        placeholder="Fecha de Presentación">
-                                </div> -->
+                                        Fecha de Presentación
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" data-plugin-datepicker class="form-control" disabled
+                                            name="fecha_presentacion" id="fecha_presentacion"
+                                            placeholder="Fecha de Presentación">
+                                    </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -196,12 +191,12 @@
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Inicio
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                                </div> -->
+                                        Fecha de Inicio
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" data-plugin-datepicker class="form-control" disabled
+                                            name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
+                                    </div> -->
                             </div>
                         </div>
                     </div>
@@ -223,8 +218,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarObligacionLabel"><b>Modificar Obligación</b></h5>
                         <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button> -->
+                                        <span aria-hidden="true">&times;</span>
+                                    </button> -->
                         <button type="button" class="btn btn-warning" id="btn-more-info">
                             <i class="fas fa-info"></i>
                         </button>
@@ -260,13 +255,13 @@
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Presentación
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_presentacion_mod" id="fecha_presentacion_mod"
-                                        placeholder="Fecha de Presentación">
-                                </div> -->
+                                        Fecha de Presentación
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" data-plugin-datepicker class="form-control" disabled
+                                            name="fecha_presentacion_mod" id="fecha_presentacion_mod"
+                                            placeholder="Fecha de Presentación">
+                                    </div> -->
                             </div>
                             <div class="row">
                                 &nbsp;
@@ -287,12 +282,12 @@
                                     </select>
                                 </div>
                                 <!-- <div class="col-md-2">
-                                    Fecha de Inicio
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control" disabled
-                                        name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                                </div> --->
+                                        Fecha de Inicio
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" data-plugin-datepicker class="form-control" disabled
+                                            name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
+                                    </div> --->
                             </div>
                         </div>
                     </div>
@@ -778,7 +773,7 @@
                     error: function() {
                         alert(
                             'Error al verificar registros similares. Intente nuevamente.'
-                            );
+                        );
                     }
                 });
             });
@@ -1112,17 +1107,17 @@
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
@@ -1162,7 +1157,7 @@
 
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
@@ -1205,7 +1200,7 @@
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
@@ -1243,17 +1238,17 @@
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
@@ -1293,7 +1288,7 @@
 
                             $cantonSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
@@ -1336,7 +1331,7 @@
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
                                 '<option value="-1">Seleccionar</option>'
-                                ); // Opción por defecto
+                            ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {

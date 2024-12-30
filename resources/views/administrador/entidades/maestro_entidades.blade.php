@@ -96,11 +96,6 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <div class="card-actions">
-                                            <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                                            <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                                        </div>
-
                                         <h2 class="card-title">Listado de Entidades creadas</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
@@ -138,8 +133,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEntidadLabel"><b>Agregar una nueva Entidad</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                                                        </button> -->
+                                                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                                            </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -1727,7 +1722,7 @@
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
-            
+
             $('#btn-more-info').on('click', function() {
                 let entidadLogInsert = entidad_selected.insert;
                 let entidadLogUpdate = entidad_selected.update;
