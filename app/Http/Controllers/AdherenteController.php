@@ -23,10 +23,10 @@ class AdherenteController extends Controller
 {
     public function adherentes_socio()
     {
-        $paises = Pais::pluck('nombre', 'id');
-        $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id');
-        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id');
-        $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id');
+        $paises = Pais::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+        $provincias = Provincia::where('id_pais', 57)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
+        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
+        $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
         $tipos_identificacion = TipoIdentificacion::pluck('descripcion', 'id');
 
         $sociosSelect = Socio::pluck('razon_social', 'id');

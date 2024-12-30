@@ -1229,9 +1229,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono_representante_legal').on('input', function() {
+            /*$('#telefono_representante_legal').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono_representante_legal').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
             $('#cargo_representante_legal').on('input', function() {

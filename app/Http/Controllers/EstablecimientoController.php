@@ -33,10 +33,10 @@ class EstablecimientoController extends Controller
             }
         }
         $regimen = TipoRegimen::pluck('nombre', 'id');
-        $paises = Pais::pluck('nombre', 'id');
-        $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
+        $paises = Pais::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+        $provincias = Provincia::where('id_pais', 57)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
+        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
+        $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
         $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
 
