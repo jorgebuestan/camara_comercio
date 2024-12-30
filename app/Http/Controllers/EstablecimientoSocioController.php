@@ -29,7 +29,6 @@ class EstablecimientoSocioController extends Controller
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
         $sociosSelect = Socio::pluck('razon_social', 'id');
         $socios = Camara::with('datos_tributarios')->where('estado', 1)->get();
-        Log::info($socios);
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {

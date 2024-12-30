@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use DateTime;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,38 +12,38 @@ use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
-use App\Models\Obligacion;  
-use App\Models\EntidadObligacion; 
+use App\Models\Obligacion;
+use App\Models\EntidadObligacion;
 use App\Models\LogActivity;
 
 class ObligacionesController extends Controller
 {
     //
     public function maestro_obligaciones()
-    {   
-        $tiempo_presentacion = TiempoPresentacion::pluck('descripcion', 'id');  
-        $tipo_presentacion = TipoPresentacion::pluck('descripcion', 'id');    
-        
-        return view('administrador.obligaciones.maestro_obligaciones', compact('tiempo_presentacion', 'tipo_presentacion') );
+    {
+        $tiempo_presentacion = TiempoPresentacion::pluck('descripcion', 'id');
+        $tipo_presentacion = TipoPresentacion::pluck('descripcion', 'id');
+
+        return view('administrador.obligaciones.maestro_obligaciones', compact('tiempo_presentacion', 'tipo_presentacion'));
     }
 
     public function obtener_listado_obligaciones(Request $request)
     {
         $columns = [
-            0 => 'obligaciones.id', 
-            1 => 'obligaciones.obligacion', 
-            2 => 'tiempo_presentacion.descripcion', 
-            3 => 'tipo_presentacion.descripcion' 
+            0 => 'obligaciones.id',
+            1 => 'obligaciones.obligacion',
+            2 => 'tiempo_presentacion.descripcion',
+            3 => 'tipo_presentacion.descripcion'
         ];
 
-        $query = DB::table('obligaciones')  
+        $query = DB::table('obligaciones')
             ->join('tiempo_presentacion', 'tiempo_presentacion.id', '=', 'obligaciones.id_tiempo_presentacion')
             ->leftJoin('tipo_presentacion', 'tipo_presentacion.id', '=', 'obligaciones.id_tipo_presentacion')
             ->select(
                 'obligaciones.id',
                 'obligaciones.obligacion',
                 'tiempo_presentacion.descripcion as tiempo_presentacion',
-                'tipo_presentacion.descripcion as tipo_presentacion' 
+                'tipo_presentacion.descripcion as tipo_presentacion'
             )
             ->where('obligaciones.estado', 1)
             ->orderBy('obligaciones.obligacion', 'asc');
@@ -52,10 +52,10 @@ class ObligacionesController extends Controller
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
-            $query->where(function($query) use ($search) {
-                $query->where('obligaciones.obligacion', 'LIKE', "%{$search}%")  
-                    ->orWhere('tiempo_presentacion.descripcion', 'LIKE', "%{$search}%") 
-                    ->orWhere('tipo_presentacion.descripcion', 'LIKE', "%{$search}%"); 
+            $query->where(function ($query) use ($search) {
+                $query->where('obligaciones.obligacion', 'LIKE', "%{$search}%")
+                    ->orWhere('tiempo_presentacion.descripcion', 'LIKE', "%{$search}%")
+                    ->orWhere('tipo_presentacion.descripcion', 'LIKE', "%{$search}%");
             });
         }
 
@@ -77,24 +77,24 @@ class ObligacionesController extends Controller
 
         $obligaciones = $query->get();
 
-        $data = $obligaciones->map(function ($obligacion) use ($request){
-            $boton = "";  
+        $data = $obligaciones->map(function ($obligacion) use ($request) {
+            $boton = "";
 
-            if( $request->input('tipo_boton')==1){
+            if ($request->input('tipo_boton') == 1) {
                 $boton = '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->id . '">Modificar</button>' .
-                '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar</button>'.
-                '&nbsp;&nbsp;&nbsp;';
+                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar</button>' .
+                    '&nbsp;&nbsp;&nbsp;';
             }
 
-            if( $request->input('tipo_boton')==2){
+            if ($request->input('tipo_boton') == 2) {
                 //$boton = '<button class="btn btn-primary mb-3 seleccionar-obligacion" data-id="' . $obligacion->id . '">Seleccionar</button>';
                 $boton = '<button type="button" class="btn btn-primary mb-3 seleccionar-obligacion" data-id="' . $obligacion->id . '">Seleccionar</button>';
             }
-             
+
             return [
-                'obligacion' => $obligacion->obligacion, 
-                'tiempo_presentacion' => $obligacion->tiempo_presentacion, 
-                'tipo_presentacion' => $obligacion->tipo_presentacion,  
+                'obligacion' => $obligacion->obligacion,
+                'tiempo_presentacion' => $obligacion->tiempo_presentacion,
+                'tipo_presentacion' => $obligacion->tipo_presentacion,
                 'btn' => $boton
             ];
         });
@@ -105,9 +105,9 @@ class ObligacionesController extends Controller
             "recordsFiltered" => $totalFiltered,
             "data" => $data
         ];
-        
+
         return response()->json($json_data);
-    } 
+    }
 
     public function checkObligacion(Request $request)
     {
@@ -135,37 +135,37 @@ class ObligacionesController extends Controller
         return response()->json([
             'similar' => $similares,
         ]);
-    } 
+    }
 
 
     public function registrar_obligacion(Request $request)
-    { 
+    {
 
         try {
-            
-            DB::beginTransaction();
-            $id_tipo_presentacion = 0; 
-            if($request->input('tiempo_presentacion')){
-                $id_tipo_presentacion = $request->input('tipo_presentacion');
-            } 
 
-            $fecha_inicio = $request->input('fecha_inicio'); 
+            DB::beginTransaction();
+            $id_tipo_presentacion = 0;
+            if ($request->input('tiempo_presentacion')) {
+                $id_tipo_presentacion = $request->input('tipo_presentacion');
+            }
+
+            $fecha_inicio = $request->input('fecha_inicio');
             if ($fecha_inicio) {
                 $fecha_inicio = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
             } else {
                 $fecha_inicio = null;
             }
 
-            $fecha_presentacion = $request->input('fecha_presentacion'); 
+            $fecha_presentacion = $request->input('fecha_presentacion');
             if ($fecha_presentacion) {
                 $fecha_presentacion = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_presentacion)->format('Y-m-d');
             } else {
                 $fecha_presentacion = null;
             }
-             
-             
+
+
             // Crear registro en la base de datos
-            $camara = Obligacion::create([ 
+            $camara = Obligacion::create([
                 'obligacion' => strtoupper($request->input('obligacion')),
                 'obligacion_busqueda' => strtoupper($request->input('obligacion')),
                 'id_tiempo_presentacion' => strtoupper($request->input('tiempo_presentacion')),
@@ -173,7 +173,7 @@ class ObligacionesController extends Controller
                 'fecha_inicio' => $fecha_inicio,
                 'fecha_presentacion' => $fecha_presentacion,
                 'estado' => 1
-            ]); 
+            ]);
 
             DB::commit();
 
@@ -193,10 +193,10 @@ class ObligacionesController extends Controller
             return response()->json(['error' => 'Error al registrar la cámara: ' . $e->getMessage()], 500);
         }
     }
- 
+
     public function eliminar_obligacion($id)
     {
-        try{
+        try {
 
             DB::beginTransaction();
             //$colaborador = Colaborador::find($id);
@@ -206,21 +206,19 @@ class ObligacionesController extends Controller
             if (!$obligacion) {
                 return response()->json(['error' => 'Obligacion no encontrada'], 404);
             }
-        
+
             // Cambiar el valor del campo 'activo' a 0
             $obligacion->estado = 0;
             $obligacion->save();
 
             DB::commit();
-        
-            return response()->json(['success' => 'Obligacion eliminada correctamente']);
 
-        }catch (\Exception $e) {
+            return response()->json(['success' => 'Obligacion eliminada correctamente']);
+        } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al eliminar la Obligacion: ' . $e->getMessage()], 500);
-        }  
-        
+        }
     }
 
     public function detalle_obligacion($id)
@@ -228,13 +226,13 @@ class ObligacionesController extends Controller
         // Buscar la cámara por ID
         $obligacion = Obligacion::find($id);
 
-        if($obligacion->fecha_inicio){
+        if ($obligacion->fecha_inicio) {
             $obligacion->fecha_inicio = Carbon::parse($obligacion->fecha_inicio)->format('d/m/Y');
         }
-        if($obligacion->fecha_presentacion){
+        if ($obligacion->fecha_presentacion) {
             $obligacion->fecha_presentacion = Carbon::parse($obligacion->fecha_presentacion)->format('d/m/Y');
         }
-    
+
         if (!$obligacion) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
@@ -271,50 +269,48 @@ class ObligacionesController extends Controller
             'update' => $logObligacionMod ?? null
         ];
 
-        Log::info($logObligacion);
-    
         // Convertir el modelo Obligacion a un array
         //$obligacionArray = $obligacion->toArray(); 
         $obligacionArray = array_merge($obligacion->toArray(), $logObligacion);
-    
+
         // Devolver la respuesta JSON
         return response()->json($obligacionArray);
     }
 
     public function modificar_obligacion(Request $request)
-    {  
+    {
         try {
 
             DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
-             
+
             // Buscar el registro existente por ID
             $obligacion = Obligacion::find($request->input('obligacion_id'));
-        
+
             if (!$obligacion) {
                 return response()->json(['error' => 'La Obligacion no existe.'], 404);
             }
 
-            $id_tipo_presentacion = 0; 
-            if($request->input('tiempo_presentacion_mod')){
+            $id_tipo_presentacion = 0;
+            if ($request->input('tiempo_presentacion_mod')) {
                 $id_tipo_presentacion = $request->input('tipo_presentacion_mod');
-            } 
+            }
 
-            $fecha_inicio = $request->input('fecha_inicio_mod'); 
+            $fecha_inicio = $request->input('fecha_inicio_mod');
             if ($fecha_inicio) {
                 $fecha_inicio = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
             } else {
                 $fecha_inicio = null;
             }
 
-            $fecha_presentacion = $request->input('fecha_presentacion_mod'); 
+            $fecha_presentacion = $request->input('fecha_presentacion_mod');
             if ($fecha_presentacion) {
                 $fecha_presentacion = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_presentacion)->format('Y-m-d');
             } else {
                 $fecha_presentacion = null;
             }
- 
-        
+
+
             // Actualizar los campos del registro existente
             $obligacion->update([
                 'obligacion' => strtoupper($request->input('obligacion_mod')),
@@ -324,9 +320,9 @@ class ObligacionesController extends Controller
                 'fecha_inicio' => $fecha_inicio,
                 'fecha_presentacion' => $fecha_presentacion,
                 'estado' => 1
-            ]); 
-        
-            
+            ]);
+
+
             //return response()->json(['success' => 'Cámara actualizada correctamente'], 200);
             /*return response()->json(['response' => [
                 'msg' => "Registro modificado",

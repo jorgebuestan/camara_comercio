@@ -350,7 +350,6 @@ class CamaraController extends Controller
             'update' => $logCamaraMod ?? null
         ];
 
-        Log::info($logCamara);
 
         // Convertir el modelo Camara a un array
         $camaraArray = array_merge($camaraArray, $logCamara);
