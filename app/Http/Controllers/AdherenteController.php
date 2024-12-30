@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\LogActivity;
 
 class AdherenteController extends Controller
 {
@@ -144,10 +145,41 @@ class AdherenteController extends Controller
             ]);
         }
         $response = $socioAdherentes->map(function ($socioAdherente) {
+            $logSociosAdherentesIns = LogActivity::with('user')->where('record_id', $socioAdherente->id)->where('table_name', 'socios_adherentes')->where('action', 'insert')->get();
+            $logSociosAdherentesMod = LogActivity::with('user')->where('record_id', $socioAdherente->id)->where('table_name', 'adherentes')->where('action', 'update')->get();
+            $logSociosAdherentesIns = $logSociosAdherentesIns->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logSociosAdherentesMod = $logSociosAdherentesMod->map(function ($log) {
+                return [
+                    'created_at' => $log->created_at,
+                    'user_id' => $log->user_id,
+                    'user' => [
+                        'name' => $log->user->name,
+                        'email' => $log->user->email,
+                        'username' => $log->user->username
+                    ]
+                ];
+            });
+
+            $logSociosAdherentes = [
+                'insert' => $logSociosAdherentesIns[0] ?? null,
+                'update' => $logSociosAdherentesMod ?? null
+            ];
             $btnModificar = '<button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Modificar</button>';
             $btnDesafiliar = '<button class="btn btn-danger mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Desafiliar</button>';
             $socioAdherente->adherente->fecha_ingreso = Carbon::createFromFormat('Y-m-d', $socioAdherente->adherente->fecha_ingreso)->format('d/m/Y');
             return array_merge($socioAdherente->toArray(), [
+                'logs' => $logSociosAdherentes,
                 'identificacion' => $socioAdherente->adherente->identificacion ?? '',
                 'nombres' => $socioAdherente->adherente->nombres ?? '',
                 'apellidos' => $socioAdherente->adherente->apellidos ?? '',
@@ -295,7 +327,7 @@ class AdherenteController extends Controller
                 $archivoFoto->storeAs("fotos_adherentes/" . $data['identificacion'], $nombreArchivo, 'public');
             }
 
-            $data['foto'] = $rutaFoto ?? $adherente->foto;
+            $data['foto'] = $rutaFoto == '' ? $adherente->foto : $rutaFoto;
             $adherente->update($data);
             DB::commit();
             return response()->json(['message' => 'Adherente actualizado correctamente'], 200);

@@ -184,9 +184,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalEstablecimientoLabel"><b>Agregar un nuevo Establecimiento</b></h5>
-                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                    </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -371,42 +368,42 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                        <div class="col-md-12">
-                                            <h2 class="card-title">Actividades Economicas</h2>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        &nbsp;
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <select name="actividad_economica[]" id="actividad_economica" multiple
-                                                data-plugin-selectTwo>
-                                            </select>
-                                            <input type="hidden" id="hiddenSelectedItems"
-                                                name="actividad_economica_seleccionados">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="col-md-4">
-                                            &nbsp;
-                                        </div>
-                                        <div class="col-md-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="container-selected-items">
-                                            <div id="selectedItemsContainer" class="selected-items">
-                                                <strong>Seleccionados:</strong>
-                                                <div id="selectedList"></div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            &nbsp;
-                                        </div>
-                                    </div> -->
+                                                                                <div class="col-md-12">
+                                                                                    <h2 class="card-title">Actividades Economicas</h2>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                &nbsp;
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <select name="actividad_economica[]" id="actividad_economica" multiple
+                                                                                        data-plugin-selectTwo>
+                                                                                    </select>
+                                                                                    <input type="hidden" id="hiddenSelectedItems"
+                                                                                        name="actividad_economica_seleccionados">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-2">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="col-md-4">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="container-selected-items">
+                                                                                    <div id="selectedItemsContainer" class="selected-items">
+                                                                                        <strong>Seleccionados:</strong>
+                                                                                        <div id="selectedList"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -427,9 +424,9 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalModificarEstablecimientoLabel"><b>Modificar Establecimiento</b>
                         </h5>
-                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                                    </button> -->
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -616,39 +613,39 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                        <div class="col-md-12">
-                                            <h2 class="card-title">Actividades Economicas</h2>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        &nbsp;
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
-                                                data-plugin-selectTwo>
-                                            </select>
-                                            <input type="hidden" id="hiddenSelectedItemsMod"
-                                                name="actividad_economica_seleccionados_mod">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="col-md-4">
-                                            &nbsp;
-                                        </div>
-                                        <div class="col-md-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="container-selected-items">
-                                            <div id="selectedItemsContainer_mod" class="selected-items">
-                                                <strong>Seleccionados:</strong>
-                                                <div id="selectedList_mod"></div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                                                                <div class="col-md-12">
+                                                                                    <h2 class="card-title">Actividades Economicas</h2>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                &nbsp;
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
+                                                                                        data-plugin-selectTwo>
+                                                                                    </select>
+                                                                                    <input type="hidden" id="hiddenSelectedItemsMod"
+                                                                                        name="actividad_economica_seleccionados_mod">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-2">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="col-md-4">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    &nbsp;
+                                                                                </div>
+                                                                                <div class="container-selected-items">
+                                                                                    <div id="selectedItemsContainer_mod" class="selected-items">
+                                                                                        <strong>Seleccionados:</strong>
+                                                                                        <div id="selectedList_mod"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -684,6 +681,7 @@
         $(document).ready(function() {
             var actividadesEconomicas = @json($actividadesEconomicas);
             var socios = @json($socios);
+            let establecimientoSocioSelected = null;
 
             Swal.fire({
                 title: 'Cargando',
@@ -1541,7 +1539,7 @@
                     url: '/administrador/establecimiento_socio/detalle/' + establecimientoId,
                     method: 'GET',
                     success: function(response) {
-
+                        establecimientoSocioSelected = response;
                         Swal.close();
                         console.log('Datos recibidos:', response);
 
@@ -2385,6 +2383,69 @@
                     $('#parroquia_mod').empty().append(
                         '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
                 }
+            });
+
+            $('#btn-more-info').on('click', function() {
+                let establecimientoSocioLogInsert = establecimientoSocioSelected.insert;
+                let establecimientoSocioLogUpdate = establecimientoSocioSelected.update;
+
+                // Manejo del caso cuando establecimientoSocioLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(establecimientoSocioLogUpdate) && establecimientoSocioLogUpdate.length >
+                    0) {
+                    lastItem = establecimientoSocioLogUpdate[establecimientoSocioLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(establecimientoSocioLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarEstablecimiento'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${establecimientoSocioLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
             });
 
         });

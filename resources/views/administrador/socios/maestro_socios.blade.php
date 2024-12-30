@@ -139,8 +139,10 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="ModalSocioLabel"><b>Registro de Socios</b></h5>
-                        <button type="button" class="btn-close cerrar-modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="ModalSocioLabel"></h5>
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -627,6 +629,8 @@
             $(document).on('click', '#btn_new_socio', function() {
                 limpiarFormulario();
                 $('#ModalSocio').find('#btn_register_socio').show();
+                $('#ModalSocioLabel').html('<b>Registro de Socio</b>');
+                $('#btn-more-info').hide();
                 $('#ModalSocio').find('#btn_update_socio').hide();
                 $('#ModalSocio').modal('show');
             });
@@ -1151,6 +1155,9 @@
                 let button = $(this);
                 socioSelected = button.data('id');
                 limpiarFormulario();
+                $('#ModalSocioLabel').html('<b>Actualizar Socio</b>');
+                $('#btn-more-info').show();
+
 
                 $('.nav-tabs a[href="#datos_generales"]').tab('show');
 
@@ -1226,7 +1233,79 @@
                 $('#ModalSocio').find('#btn_update_socio').show();
                 $('#ModalSocio').modal('show');
             });
+            $('#btn-more-info').on('click', function() {
+                let socio = socios.find(socio => socio.id == socioSelected);
+                let socioLogInsert = socio.logs.insert ?? [];
+                let socioLogUpdate = socio.logs.update ?? [];
 
+                if (Array.isArray(socioLogInsert) && socioLogInsert.length > 0) {
+                    socioLogInsert = socioLogInsert[0];
+                } else {
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'info',
+                        title: 'Información adicional',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'No hay información adicional para mostrar.',
+                    });
+                }
+                let lastItem = null;
+                if (Array.isArray(socioLogUpdate) && socioLogUpdate.length > 0) {
+                    lastItem = socioLogUpdate[socioLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(socioLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalSocio'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${socioLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            });
             /**
              * Functions
              */

@@ -266,6 +266,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalModificarObligacion"><b>Modificar Obligación</b></h5>
+                    <button type="button" class="btn btn-warning" id="btn-more-info">
+                        <i class="fas fa-info"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -1046,6 +1049,80 @@
                 }
                 return true;
             }
+            $('#btn-more-info').on('click', function() {
+                let socioObligacion = socioObligaciones.find(socioObligacion => socioObligacion.id ==
+                    socioObligacionSelected);
+                let socioObligacionLogInsert = socioObligacion.logs.insert ?? [];
+                let socioObligacionLogUpdate = socioObligacion.logs.update ?? [];
+
+                if (Array.isArray(socioObligacionLogInsert) && socioObligacionLogInsert.length > 0) {
+                    socioObligacionLogInsert = socioObligacionLogInsert[0];
+                } else {
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarObligacion'),
+                        icon: 'info',
+                        title: 'Información adicional',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'No hay información adicional para mostrar.',
+                    });
+                }
+                let lastItem = null;
+                if (Array.isArray(socioObligacionLogUpdate) && socioObligacionLogUpdate.length > 0) {
+                    lastItem = socioObligacionLogUpdate[socioObligacionLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(socioObligacionLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${socioObligacionLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            });
         });
     </script>
 @endsection

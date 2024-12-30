@@ -14,6 +14,7 @@ use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
 use App\Models\Socio;
 use App\Models\Camara;
+use App\Models\LogActivity;
 
 class EstablecimientoSocioController extends Controller
 {
@@ -52,7 +53,7 @@ class EstablecimientoSocioController extends Controller
     {
         $columns = [
             0 => 'establecimientos_socios.id',
-            1 => 'acciones' 
+            1 => 'acciones'
         ];
 
         $query = DB::table('establecimientos_socios')
@@ -104,7 +105,7 @@ class EstablecimientoSocioController extends Controller
         $establecimientos = $query->get();
 
         $data = $establecimientos->map(function ($establecimiento) {
-        $boton = "";  
+            $boton = "";
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
@@ -180,11 +181,11 @@ class EstablecimientoSocioController extends Controller
 
     public function eliminar_establecimiento_socio($id)
     {
-        try{
+        try {
 
             DB::beginTransaction();
             //$colaborador = Colaborador::find($id);
-            $establecimiento = EstablecimientoSocio::where('id', $id)->first(); 
+            $establecimiento = EstablecimientoSocio::where('id', $id)->first();
 
             if (!$establecimiento) {
                 return response()->json(['error' => 'Establecimiento no encontrado'], 404);
@@ -197,12 +198,11 @@ class EstablecimientoSocioController extends Controller
             DB::commit();
 
             return response()->json(['success' => 'Establecimiento eliminado correctamente']);
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return response()->json(['error' => 'Error al eliminar el Establecimiento por Socio: ' . $e->getMessage()], 500);
-        }  
+        }
     }
 
     public function detalle_establecimiento_socio($id)
@@ -214,10 +214,42 @@ class EstablecimientoSocioController extends Controller
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
 
-        // Convertir el modelo Establecimiento a un array
-        $establecimientoArray = $establecimiento->toArray(); 
+        $logEstablecimientoSocioIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'establecimientos_socios')->where('action', 'insert')->get();
+        $logEstablecimientoSocioMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'establecimientos_socios')->where('action', 'update')->get();
 
-        
+        $logEstablecimientoSocioIns = $logEstablecimientoSocioIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEstablecimientoSocioMod = $logEstablecimientoSocioMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logEstablecimientoSocio = [
+            'insert' => $logEstablecimientoSocioIns[0] ?? null,
+            'update' => $logEstablecimientoSocioMod ?? null
+        ];
+
+        // Convertir el modelo Establecimiento a un array
+        $establecimientoArray = array_merge($establecimiento->toArray(), $logEstablecimientoSocio);
+
+
         // Buscar el DatoTributario relacionado
         $socio = Socio::where('id', $establecimientoArray["id_socio"])->first();
 
@@ -232,7 +264,7 @@ class EstablecimientoSocioController extends Controller
 
     public function modificar_establecimiento_socio(Request $request)
     {
-        try { 
+        try {
 
             DB::beginTransaction();
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
@@ -268,7 +300,7 @@ class EstablecimientoSocioController extends Controller
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
 
-            ]); 
+            ]);
 
             DB::commit();
 
@@ -290,5 +322,4 @@ class EstablecimientoSocioController extends Controller
             return response()->json(['error' => 'Error al modificar el establecimiento: ' . $e->getMessage()], 500);
         }
     }
-
 }

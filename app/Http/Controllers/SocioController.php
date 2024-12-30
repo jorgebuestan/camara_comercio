@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use App\Models\LogActivity;
 
 class SocioController extends Controller
 {
@@ -65,7 +66,7 @@ class SocioController extends Controller
                 'datos_tributarios.provincia',
                 'datos_tributarios.pais',
                 'datos_tributarios.canton',
-                'datos_tributarios.parroquia'
+                'datos_tributarios.parroquia',
             ])->where('estado', 1);
             // Búsqueda
             if ($search = $request->input('search.value')) {
@@ -97,10 +98,43 @@ class SocioController extends Controller
             $socios = $query->get();
             // Mapear los datos para la respuesta
             $data = $socios->map(function ($socio) {
+                $logSociosIns = LogActivity::with('user')->where('record_id', $socio->id)->where('table_name', 'socios')->where('action', 'insert')->get();
+                $logSociosMod = LogActivity::with('user')->where('record_id', $socio->id)->where('table_name', 'socios')->where('action', 'update')->get();
+                $logSociosIns = $logSociosIns->map(function ($log) {
+                    return [
+                        'created_at' => $log->created_at,
+                        'user_id' => $log->user_id,
+                        'user' => [
+                            'name' => $log->user->name,
+                            'email' => $log->user->email,
+                            'username' => $log->user->username
+                        ]
+                    ];
+                });
+
+                $logSociosMod = $logSociosMod->map(function ($log) {
+                    return [
+                        'created_at' => $log->created_at,
+                        'user_id' => $log->user_id,
+                        'user' => [
+                            'name' => $log->user->name,
+                            'email' => $log->user->email,
+                            'username' => $log->user->username
+                        ]
+                    ];
+                });
+
+                $logSocios = [
+                    'insert' => $logSociosIns[0] ?? null,
+                    'update' => $logSociosMod ?? null
+                ];
+
+                // Convertir el modelo Camara a un array
                 $tipo_persona = $socio->tipo_persona->descripcion ?? '';
                 $tipo_personeria = $socio->tipo_personeria->descripcion ?? '';
                 $socio_arr = $socio->toArray();
                 return array_merge($socio_arr, [
+                    'logs' => $logSocios,
                     'fecha_ingreso' => Carbon::parse($socio->fecha_ingreso)->format('d/m/Y'),
                     'fecha_registro_mercantil' => Carbon::parse($socio->fecha_registro_mercantil)->format('d/m/Y'),
                     'fecha_vencimiento_nombramiento' => Carbon::parse($socio->fecha_vencimiento_nombramiento)->format('d/m/Y'),
@@ -394,8 +428,11 @@ class SocioController extends Controller
             }
             $data['foto'] = $rutaFoto ?? $socio->foto;
 
+            if (!isset($rutaFoto)) {
+                $rutaFoto = $socio->foto;
+            }
             $socio->update([
-                'logo' => $rutaFoto,
+                'logo' => $rutaFoto ?? 'no hay foto',
                 'fecha_ingreso' => $fecha_ingreso,
                 'id_tipo_persona' => 1,
                 'id_tipo_personeria' => $data['tipo_personeria'],

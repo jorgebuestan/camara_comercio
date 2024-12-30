@@ -194,6 +194,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalAdherenteLabel"></h5>
+                    <button type="button" class="btn btn-warning" id="btn-more-info">
+                        <i class="fas fa-info"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -387,7 +390,6 @@
             /** 
              * Default values and States
              */
-
             // Establecer el idioma de forma global para todos los datepickers
             $.datepicker.regional['es'] = {
                 closeText: 'Cerrar',
@@ -548,8 +550,9 @@
 
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
-                $('#ModalAdherenteLabel').html('<b>Agregar un nuevo Adherente</b>');
+                $('#ModalAdherenteLabel').html('<b>Registro de Adherente</b>');
                 $('#ModalAdherente').find('#agregar_adherente').show();
+                $('#btn-more-info').hide();
                 $('#ModalAdherente').find('#actualizar_adherente').hide();
                 // Verificar si se seleccionó una opción válida en el select
                 let socioSeleccionado = $('#socio').val();
@@ -1145,6 +1148,7 @@
                 let id = button.data('id');
                 limpiarFormulario();
                 $('#ModalAdherenteLabel').html('<b>Modificar Adherente</b>');
+                $('#btn-more-info').show();
                 let data = socioAdherentes.find(adherente => adherente.id == id);
 
                 let nombreSocioSeleccionado = $('#socio option:selected').text();
@@ -1279,6 +1283,80 @@
                                 error);
                         });
                     }
+                });
+            });
+            $('#btn-more-info').on('click', function() {
+                let socioAdherente = socioAdherentes.find(socioAdherente => socioAdherente.id ==
+                    socioAdherenteSelected);
+                let socioAdherenteLogInsert = socioAdherente.logs.insert ?? [];
+                let socioAdherenteLogUpdate = socioAdherente.logs.update ?? [];
+
+                if (Array.isArray(socioAdherenteLogInsert) && socioAdherenteLogInsert.length > 0) {
+                    socioAdherenteLogInsert = socioAdherenteLogInsert[0];
+                } else {
+                    Swal.fire({
+                        target: document.getElementById('ModalAdherente'),
+                        icon: 'info',
+                        title: 'Información adicional',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'No hay información adicional para mostrar.',
+                    });
+                }
+                let lastItem = null;
+                if (Array.isArray(socioAdherenteLogUpdate) && socioAdherenteLogUpdate.length > 0) {
+                    lastItem = socioAdherenteLogUpdate[socioAdherenteLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(socioAdherenteLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalAdherente'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${socioAdherenteLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
                 });
             });
             /** 
