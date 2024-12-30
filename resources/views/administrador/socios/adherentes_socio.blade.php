@@ -644,7 +644,7 @@
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -670,7 +670,7 @@
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -696,7 +696,7 @@
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },

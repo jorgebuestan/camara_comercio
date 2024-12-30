@@ -29,9 +29,9 @@
                                                             <label for="camara">Selecciona la Cámara:</label>
                                                             <select id="camara" name="camara"
                                                                 class="form-control populate">
-                                                                <option value="-1">Seleccionar</option>
+                                                                <option value=-1>Seleccionar</option>
                                                                 @foreach ($camaras as $id => $descripcion)
-                                                                    <option value="{{ $id }}">{{ $descripcion }}
+                                                                    <option value={{ $id }}>{{ $descripcion }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -50,9 +50,9 @@
                                                             value="{{ $id_camara }}">
                                                         <select id="obligacion" name="obligacion" data-plugin-selectTwo
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($obligaciones as $id => $nombre)
-                                                                <option value="{{ $id }}">{{ $nombre }}
+                                                                <option value={{ $id }}>{{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -192,14 +192,14 @@
 
                             $obligacionSelect.empty(); // Limpiamos el select de provincias
                             $obligacionSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
 
                             // Agregamos las provincias al select
                             obligaciones.forEach(function(obligacion) {
                                 $obligacionSelect.append(
-                                    `<option value="${obligacion.id}">${obligacion.nombre}</option>`
+                                    `<option value=${obligacion.id}>${obligacion.nombre}</option>`
                                 );
                             });
                         },
@@ -211,7 +211,7 @@
                     let $obligacionSelect = $('#obligacion');
                     $obligacionSelect.empty(); // Limpiamos el select de provincias
                     $obligacionSelect.append(
-                        '<option value="-1">Seleccionar</option>'
+                        '<option value=-1>Seleccionar</option>'
                     ); // Opción por defecto
                 }
                 table.ajax.reload();

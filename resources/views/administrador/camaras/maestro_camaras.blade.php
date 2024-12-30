@@ -620,7 +620,7 @@
                                                             class="form-control populate">
                                                             <option value=-1>Seleccionar</option>
                                                             @foreach ($regimen as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -733,7 +733,7 @@
                                                             class="form-control populate">
                                                             <option value=-1>Seleccionar</option>
                                                             @foreach ($parroquias as $id => $nombre)
-                                                                <option value="{{ $id }}">
+                                                                <option value={{ $id }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
@@ -2375,7 +2375,7 @@
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -2401,7 +2401,7 @@
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -2427,7 +2427,7 @@
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -3037,7 +3037,7 @@
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -3077,7 +3077,7 @@
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -3120,7 +3120,7 @@
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -3168,7 +3168,7 @@
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -3208,7 +3208,7 @@
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -3251,7 +3251,7 @@
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },

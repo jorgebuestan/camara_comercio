@@ -2,22 +2,22 @@
 
 @section('pagename')
     Archivos de Obligaciones por Socios
-@endsection 
- 
-@section('content') 
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <section class="card" id="w3">
-                <header class="card-header">
-                    <h2 class="card-title">Archivos de Obligaciones por Socios</h2>
-                </header>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <form  method="POST"  id="ModalArchivoObligacion" enctype="multipart/form-data">
-                                @csrf  
+@endsection
+
+@section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <section class="card" id="w3">
+                    <header class="card-header">
+                        <h2 class="card-title">Archivos de Obligaciones por Socios</h2>
+                    </header>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <form method="POST" id="ModalArchivoObligacion" enctype="multipart/form-data">
+                                    @csrf
 
                                     <div class="form-group">
 
@@ -29,9 +29,9 @@
                                                             <label for="camara">Selecciona la Cámara:</label>
                                                             <select id="camara" name="camara"
                                                                 class="form-control populate">
-                                                                <option value="-1">Seleccionar</option>
+                                                                <option value=-1>Seleccionar</option>
                                                                 @foreach ($camaras as $id => $descripcion)
-                                                                    <option value="{{ $id }}">{{ $descripcion }}
+                                                                    <option value={{ $id }}>{{ $descripcion }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -47,9 +47,9 @@
                                                     <div class="col-12">
                                                         <label for="socio">Selecciona el Socio:</label>
                                                         <select id="socio" name="socio" class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($socios as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -68,9 +68,9 @@
                                                         <input type="hidden" id="socio_id" name="socio_id" value="">
                                                         <select id="obligacion" name="obligacion" data-plugin-selectTwo
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($obligaciones as $id => $nombre)
-                                                                <option value="{{ $id }}">{{ $nombre }}
+                                                                <option value={{ $id }}>{{ $nombre }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -213,14 +213,14 @@
 
                             $sociosSelect.empty(); // Limpiamos el select de provincias
                             $sociosSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
 
                             // Agregamos los socios al Select
                             socios.forEach(function(socio) {
                                 $sociosSelect.append(
-                                    `<option value="${socio.id}">${socio.nombre}</option>`
+                                    `<option value=${socio.id}>${socio.nombre}</option>`
                                 );
                             });
                         },
@@ -242,12 +242,12 @@
 
                     socioSelect.empty(); // Limpiamos el select de provincias
                     socioSelect.append(
-                        '<option value="-1">Seleccionar</option>'
+                        '<option value=-1>Seleccionar</option>'
                     ); // Opción por defecto
 
                     obligacionSelect.empty(); // Limpiamos el select de provincias
                     obligacionSelect.append(
-                        '<option value="-1">Seleccionar</option>'
+                        '<option value=-1>Seleccionar</option>'
                     ); // Opción por defecto
                 }
                 //Swal.close();
@@ -282,14 +282,14 @@
 
                             $obligacionSelect.empty(); // Limpiamos el select de provincias
                             $obligacionSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
 
                             // Agregamos las provincias al select
                             obligaciones.forEach(function(obligacion) {
                                 $obligacionSelect.append(
-                                    `<option value="${obligacion.id}">${obligacion.nombre}</option>`
+                                    `<option value=${obligacion.id}>${obligacion.nombre}</option>`
                                 );
                             });
                         },
@@ -309,7 +309,7 @@
                     let $obligacionSelect = $('#obligacion');
                     $obligacionSelect.empty(); // Limpiamos el select de provincias
                     $obligacionSelect.append(
-                        '<option value="-1">Seleccionar</option>'
+                        '<option value=-1>Seleccionar</option>'
                     ); // Opción por defecto
                 }
                 table.ajax.reload();

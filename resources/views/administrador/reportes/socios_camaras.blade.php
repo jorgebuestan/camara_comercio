@@ -86,9 +86,9 @@
                                 <div class="row">
                                     <div class="col-md-9"> <select id="camara" name="camara" data-plugin-selectTwo
                                             class="form-control populate">
-                                            <option value="-1">Seleccionar Cámara</option>
+                                            <option value=-1>Seleccionar Cámara</option>
                                             @foreach ($camaras as $id => $descripcion)
-                                                <option value="{{ $id }}">{{ $descripcion }}</option>
+                                                <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
                                     </div>

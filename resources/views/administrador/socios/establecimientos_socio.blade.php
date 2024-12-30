@@ -131,7 +131,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <select id="socio" name="socio" class="form-control populate">
-                                            <option value="-1">Seleccionar</option>
+                                            <option value=-1>Seleccionar</option>
                                             @foreach ($sociosSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
@@ -196,9 +196,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="pais" name="pais" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($paises as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 57 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -209,9 +209,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="provincia" name="provincia" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($provincias as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -227,9 +227,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="canton" name="canton" class="form-control populate">
-                                        <option value="-1" selected>Seleccionar</option>
+                                        <option value=-1 selected>Seleccionar</option>
                                         @foreach ($cantones as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -240,9 +240,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="parroquia" name="parroquia" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($parroquias as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -257,8 +257,8 @@
                                     Nombre Comercial
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" name="nombre_comercial"
-                                        id="nombre_comercial" placeholder="Calle">
+                                    <input type="text" class="form-control" name="nombre_comercial" id="nombre_comercial"
+                                        placeholder="Calle">
                                 </div>
                                 <div class="col-md-2">
                                     Fecha de inicio de actividades
@@ -363,42 +363,42 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                                                                    <div class="col-md-12">
-                                                                                        <h2 class="card-title">Actividades Economicas</h2>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    &nbsp;
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12">
-                                                                                        <select name="actividad_economica[]" id="actividad_economica" multiple
-                                                                                            data-plugin-selectTwo>
-                                                                                        </select>
-                                                                                        <input type="hidden" id="hiddenSelectedItems"
-                                                                                            name="actividad_economica_seleccionados">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-2">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="col-md-4">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="container-selected-items">
-                                                                                        <div id="selectedItemsContainer" class="selected-items">
-                                                                                            <strong>Seleccionados:</strong>
-                                                                                            <div id="selectedList"></div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                </div> -->
+                                                                                                <div class="col-md-12">
+                                                                                                    <h2 class="card-title">Actividades Economicas</h2>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                &nbsp;
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-12">
+                                                                                                    <select name="actividad_economica[]" id="actividad_economica" multiple
+                                                                                                        data-plugin-selectTwo>
+                                                                                                    </select>
+                                                                                                    <input type="hidden" id="hiddenSelectedItems"
+                                                                                                        name="actividad_economica_seleccionados">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-2">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="col-md-4">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="col-md-2">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="container-selected-items">
+                                                                                                    <div id="selectedItemsContainer" class="selected-items">
+                                                                                                        <strong>Seleccionados:</strong>
+                                                                                                        <div id="selectedList"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="row">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -441,9 +441,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="pais_mod" name="pais_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($paises as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 57 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 57 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -454,9 +454,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="provincia_mod" name="provincia_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($provincias as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -472,9 +472,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="canton_mod" name="canton_mod" class="form-control populate">
-                                        <option value="-1" selected>Seleccionar</option>
+                                        <option value=-1 selected>Seleccionar</option>
                                         @foreach ($cantones as $id => $nombre)
-                                            <option value="{{ $id }}" {{ $id == 2 ? 'selected' : '' }}>
+                                            <option value={{ $id }} {{ $id == 2 ? 'selected' : '' }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -485,9 +485,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <select id="parroquia_mod" name="parroquia_mod" class="form-control populate">
-                                        <option value="-1">Seleccionar</option>
+                                        <option value=-1>Seleccionar</option>
                                         @foreach ($parroquias as $id => $nombre)
-                                            <option value="{{ $id }}">
+                                            <option value={{ $id }}>
                                                 {{ $nombre }}
                                             </option>
                                         @endforeach
@@ -608,39 +608,39 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                                                                    <div class="col-md-12">
-                                                                                        <h2 class="card-title">Actividades Economicas</h2>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    &nbsp;
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-12">
-                                                                                        <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
-                                                                                            data-plugin-selectTwo>
-                                                                                        </select>
-                                                                                        <input type="hidden" id="hiddenSelectedItemsMod"
-                                                                                            name="actividad_economica_seleccionados_mod">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-md-2">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="col-md-4">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        &nbsp;
-                                                                                    </div>
-                                                                                    <div class="container-selected-items">
-                                                                                        <div id="selectedItemsContainer_mod" class="selected-items">
-                                                                                            <strong>Seleccionados:</strong>
-                                                                                            <div id="selectedList_mod"></div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div> -->
+                                                                                                <div class="col-md-12">
+                                                                                                    <h2 class="card-title">Actividades Economicas</h2>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                &nbsp;
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-12">
+                                                                                                    <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
+                                                                                                        data-plugin-selectTwo>
+                                                                                                    </select>
+                                                                                                    <input type="hidden" id="hiddenSelectedItemsMod"
+                                                                                                        name="actividad_economica_seleccionados_mod">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-2">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="col-md-4">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="col-md-2">
+                                                                                                    &nbsp;
+                                                                                                </div>
+                                                                                                <div class="container-selected-items">
+                                                                                                    <div id="selectedItemsContainer_mod" class="selected-items">
+                                                                                                        <strong>Seleccionados:</strong>
+                                                                                                        <div id="selectedList_mod"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1709,11 +1709,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -1735,11 +1735,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -1761,11 +1761,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -2122,23 +2122,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -2148,11 +2148,11 @@
                     });
                 } else {
                     $('#provincia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2175,17 +2175,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -2195,9 +2195,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2222,13 +2222,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -2238,7 +2238,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2260,23 +2260,23 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
                             provincias.forEach(function(provincia) {
                                 $provinciaSelect.append(
-                                    `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                    `<option value=${provincia.id}>${provincia.nombre}</option>`
                                 );
                             });
                         },
@@ -2286,11 +2286,11 @@
                     });
                 } else {
                     $('#provincia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2313,17 +2313,17 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
                             cantones.forEach(function(canton) {
                                 $cantonSelect.append(
-                                    `<option value="${canton.id}">${canton.nombre}</option>`
+                                    `<option value=${canton.id}>${canton.nombre}</option>`
                                 );
                             });
                         },
@@ -2333,9 +2333,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -2360,13 +2360,13 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
                             parroquias.forEach(function(parroquia) {
                                 $parroquiaSelect.append(
-                                    `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                    `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                                 );
                             });
                         },
@@ -2376,7 +2376,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

@@ -698,11 +698,11 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
-                                `<option value="${provincia.id}">${provincia.nombre}</option>`
+                                `<option value=${provincia.id}>${provincia.nombre}</option>`
                             );
                         });
                     },
@@ -724,11 +724,11 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
-                                `<option value="${canton.id}">${canton.nombre}</option>`);
+                                `<option value=${canton.id}>${canton.nombre}</option>`);
                         });
                     },
                     error: function() {
@@ -750,11 +750,11 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
-                                `<option value="${parroquia.id}">${parroquia.nombre}</option>`
+                                `<option value=${parroquia.id}>${parroquia.nombre}</option>`
                             );
                         });
                     },
@@ -848,9 +848,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -891,7 +891,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
