@@ -15,6 +15,7 @@ use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
 use App\Models\Camara;
+use App\Models\DatoTributario;
 use App\Models\LogActivity;
 
 class EstablecimientoController extends Controller
@@ -173,24 +174,21 @@ class EstablecimientoController extends Controller
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
             if (empty($actividadesEconomicasSeleccionadasArray)) {
+                Log::error('Debe seleccionar al menos una actividad económica');
                 return response()->json(['error' => 'Debe seleccionar al menos una actividad económica'], 422);
             }
-
-            if (count($actividadesEconomicasSeleccionadasArray) > 6) {
-                return response()->json(['error' => 'No puede seleccionar más de 6 actividades económicas'], 422);
+            $camara = Camara::find($request->input('camaraHidden'));
+            if (!$camara) {
+                Log::error('Cámara no encontrada');
+                return response()->json(['error' => 'Cámara no encontrada'], 404);
             }
+            $datoTributario = DatoTributario::where('id_camara', $request->input('camaraHidden'))->first();
+            $actividadesEconomicasCamara = $datoTributario->actividades_economicas ? json_decode($datoTributario->actividades_economicas, true) : [];
 
-            if ($request->input('camaraHidden') !== null) {
-                $camara = Camara::find($request->input('camaraHidden'));
-                if (!$camara) {
-                    return response()->json(['error' => 'Cámara no encontrada'], 404);
-                }
-                $actividadesEconomicasCamara = $camara->actividades_economicas ? json_decode($camara->actividades_economicas, true) : [];
-
-                foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
-                    if (!in_array($actividadId, $actividadesEconomicasCamara)) {
-                        return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
-                    }
+            foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
+                if (!in_array($actividadId, $actividadesEconomicasCamara)) {
+                    Log::error('El establecimiento tiene una actividad económica que no existe en la cámara');
+                    return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
                 }
             }
 
@@ -361,23 +359,21 @@ class EstablecimientoController extends Controller
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
             if (empty($actividadesEconomicasSeleccionadasArray)) {
+                Log::error('Debe seleccionar al menos una actividad económica');
                 return response()->json(['error' => 'Debe seleccionar al menos una actividad económica'], 422);
             }
 
-            if (count($actividadesEconomicasSeleccionadasArray) > 6) {
-                return response()->json(['error' => 'No puede seleccionar más de 6 actividades económicas'], 422);
+            if (!$camara) {
+                Log::error('Cámara no encontrada');
+                return response()->json(['error' => 'Cámara no encontrada'], 404);
             }
+            $datoTributario = DatoTributario::where('id_camara', $request->input('camaraHiddenMod'))->first();
+            $actividadesEconomicasCamara = $datoTributario->actividades_economicas ? json_decode($datoTributario->actividades_economicas, true) : [];
 
-            if ($request->input('camaraHiddenMod') != null) {
-                $camara = Camara::find($request->input('camaraHiddenMod'));
-                if (!$camara) {
-                    return response()->json(['error' => 'Cámara no encontrada'], 404);
-                }
-                $actividadesEconomicasCamara = $camara->actividades_economicas ? json_decode($camara->actividades_economicas, true) : [];
-                foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
-                    if (!in_array($actividadId, $actividadesEconomicasCamara)) {
-                        return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
-                    }
+            foreach ($actividadesEconomicasSeleccionadasArray as $actividadId) {
+                if (!in_array($actividadId, $actividadesEconomicasCamara)) {
+                    Log::error('El establecimiento tiene una actividad económica que no existe en la cámara');
+                    return response()->json(['error' => 'El establecimiento tiene una actividad económica que no existe en la cámara'], 422);
                 }
             }
 
