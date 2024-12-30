@@ -1565,7 +1565,7 @@
 
             // Validar campo Correo
             $("#correo_representante_legal").on("input", function() {
-                $(this).val($(this).val().toUpperCase());
+                $(this).val($(this).val().toLowerCase());
                 var correo = $(this).val();
                 var regexCorreo =
                     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
@@ -2326,7 +2326,8 @@
                         Nombres.val(response.nombres_representante_legal);
                         Apellidos.val(response.apellidos_representante_legal);
                         Telefono.val(response.telefono_representante_legal);
-                        Correo.val(response.correo_representante_legal);
+                        //Correo.val(response.correo_representante_legal);
+                        Correo.val(response.correo_representante_legal.toLowerCase());
                         Cargo.val(response.cargo_representante_legal);
                         Direccion.val(response.direccion_representante_legal);
 
