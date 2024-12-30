@@ -295,7 +295,7 @@
                             <a href="{{ route('dashboard') }}"
                                 class="flex items-center gap-3 text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
                                 <i class="bx bx-home-alt"></i>
-                                <span>Inicio</span>
+                                <span class="block hover:text-white" style="font-family: Poppins;">Inicio</span>
                             </a>
                         </li>
 
@@ -577,10 +577,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            $('a').on('click', function(e) {
-                e.preventDefault();
-                window.location.href = $(this).attr('href');
-            });
             // Constants for breakpoints and widths
             const MOBILE_BREAKPOINT = 768;
             const SIDEBAR_FULL_WIDTH = 'w-64';
