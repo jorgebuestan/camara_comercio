@@ -172,8 +172,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalCamaraLabel"><b>Agregar una Nueva Cámara de Comercio</b></h5>
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                                                                                                                                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                                                                                                                                                                                                                        </button> -->
+                                                                                                                                                                                                                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                                                                                                                                                                                                            </button> -->
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -327,9 +327,9 @@
                                                     <div class="col-md-4">
                                                         <select id="tipo_regimen" name="tipo_regimen"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($regimen as $id => $descripcion)
-                                                                <option value="{{ $id }}">{{ $descripcion }}
+                                                                <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -376,9 +376,9 @@
                                                     <div class="col-md-4">
                                                         <select id="agente_retencion" name="agente_retencion"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=0>No</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
@@ -387,9 +387,9 @@
                                                     <div class="col-md-4">
                                                         <select id="contribuyente_especial" name="contribuyente_especial"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=0>No</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -411,9 +411,9 @@
                                                     <div class="col-md-4">
                                                         <select id="pais" name="pais"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($paises as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 57 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
@@ -426,9 +426,9 @@
                                                     <div class="col-md-4">
                                                         <select id="provincia" name="provincia"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($provincias as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
@@ -446,9 +446,9 @@
                                                     <div class="col-md-4">
                                                         <select id="canton" name="canton"
                                                             class="form-control populate">
-                                                            <option value="-1" selected>Seleccionar</option>
+                                                            <option value=-1 selected>Seleccionar</option>
                                                             @foreach ($cantones as $id => $nombre)
-                                                                <option value="{{ $id }}"
+                                                                <option value={{ $id }}
                                                                     {{ $id == 2 ? 'selected' : '' }}>
                                                                     {{ $nombre }}
                                                                 </option>
@@ -461,9 +461,9 @@
                                                     <div class="col-md-4">
                                                         <select id="parroquia" name="parroquia"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($parroquias as $id => $nombre)
-                                                                <option value="{{ $id }}">
+                                                                <option value={{ $id }}>
                                                                     {{ $nombre }}
                                                                 </option>
                                                             @endforeach
@@ -747,7 +747,7 @@
                                                     <div class="col-md-4">
                                                         <select id="tipo_regimen_mod" name="tipo_regimen_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($regimen as $id => $descripcion)
                                                                 <option value="{{ $id }}">{{ $descripcion }}
                                                                 </option>
@@ -797,9 +797,9 @@
                                                     <div class="col-md-4">
                                                         <select id="agente_retencion_mod" name="agente_retencion_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=2>No</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
@@ -809,9 +809,9 @@
                                                         <select id="contribuyente_especial_mod"
                                                             name="contribuyente_especial_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
+                                                            <option value=-1>Seleccionar</option>
+                                                            <option value=1>Si</option>
+                                                            <option value=2>No</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -833,7 +833,7 @@
                                                     <div class="col-md-4">
                                                         <select id="pais_mod" name="pais_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($paises as $id => $nombre)
                                                                 <option value="{{ $id }}"
                                                                     {{ $id == 57 ? 'selected' : '' }}>
@@ -848,7 +848,7 @@
                                                     <div class="col-md-4">
                                                         <select id="provincia_mod" name="provincia_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($provincias as $id => $nombre)
                                                                 <option value="{{ $id }}"
                                                                     {{ $id == 2 ? 'selected' : '' }}>
@@ -868,7 +868,7 @@
                                                     <div class="col-md-4">
                                                         <select id="canton_mod" name="canton_mod"
                                                             class="form-control populate">
-                                                            <option value="-1" selected>Seleccionar</option>
+                                                            <option value=-1 selected>Seleccionar</option>
                                                             @foreach ($cantones as $id => $nombre)
                                                                 <option value="{{ $id }}"
                                                                     {{ $id == 2 ? 'selected' : '' }}>
@@ -883,7 +883,7 @@
                                                     <div class="col-md-4">
                                                         <select id="parroquia_mod" name="parroquia_mod"
                                                             class="form-control populate">
-                                                            <option value="-1">Seleccionar</option>
+                                                            <option value=-1>Seleccionar</option>
                                                             @foreach ($parroquias as $id => $nombre)
                                                                 <option value="{{ $id }}">
                                                                     {{ $nombre }}
@@ -2548,7 +2548,7 @@
                     success: function(response) {
                         let provincias = response.provincias;
                         let $provinciaSelect = $('#provincia_mod');
-                        $provinciaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $provinciaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         provincias.forEach(function(provincia) {
                             $provinciaSelect.append(
@@ -2574,7 +2574,7 @@
                     success: function(response) {
                         let cantones = response.cantones;
                         let $cantonSelect = $('#canton_mod');
-                        $cantonSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $cantonSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         cantones.forEach(function(canton) {
                             $cantonSelect.append(
@@ -2600,7 +2600,7 @@
                     success: function(response) {
                         let parroquias = response.parroquias;
                         let $parroquiaSelect = $('#parroquia_mod');
-                        $parroquiaSelect.empty().append('<option value="-1">Seleccionar</option>');
+                        $parroquiaSelect.empty().append('<option value=-1>Seleccionar</option>');
 
                         parroquias.forEach(function(parroquia) {
                             $parroquiaSelect.append(
@@ -3198,17 +3198,17 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
@@ -3244,11 +3244,11 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
@@ -3264,9 +3264,9 @@
                     });
                 } else {
                     $('#canton').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3291,7 +3291,7 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
@@ -3307,7 +3307,7 @@
                     });
                 } else {
                     $('#parroquia').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3329,17 +3329,17 @@
 
                             $provinciaSelect.empty(); // Limpiamos el select de provincias
                             $provinciaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $cantonSelect.empty(); // Limpiamos el select de provincias
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             $parroquiaSelect.empty(); // Limpiamos el select de provincias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las provincias al select
@@ -3375,11 +3375,11 @@
 
                             $cantonSelect.empty(); // Limpiamos el select de cantones
                             $parroquiaSelect.empty().append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Limpiamos parroquias
 
                             $cantonSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos los cantones al select
@@ -3395,9 +3395,9 @@
                     });
                 } else {
                     $('#canton_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de cantones
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de cantones
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 
@@ -3422,7 +3422,7 @@
 
                             $parroquiaSelect.empty(); // Limpiamos el select de parroquias
                             $parroquiaSelect.append(
-                                '<option value="-1">Seleccionar</option>'
+                                '<option value=-1>Seleccionar</option>'
                             ); // Opción por defecto
 
                             // Agregamos las parroquias al select
@@ -3438,7 +3438,7 @@
                     });
                 } else {
                     $('#parroquia_mod').empty().append(
-                        '<option value="-1">Seleccionar</option>'); // Limpiar select de parroquias
+                        '<option value=-1>Seleccionar</option>'); // Limpiar select de parroquias
                 }
             });
 

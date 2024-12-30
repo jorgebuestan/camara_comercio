@@ -11,6 +11,7 @@ use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
+use App\Models\Establecimiento;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -189,8 +190,7 @@ class CamaraController extends Controller
             //$actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', []);
             $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados', '');
             // Convertir la cadena en un array (si no está vacío)
-            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
-
+            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? array_map('intval', explode(',', $actividadesEconomicasSeleccionadas)) : [];
 
             DatoTributario::create([
                 'id_camara' => $camara->id,
@@ -416,7 +416,7 @@ class CamaraController extends Controller
             }
 
             $actividadesEconomicasSeleccionadas = $request->input('actividad_economica_seleccionados_mod', '');
-            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
+            $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? array_map('intval', explode(',', $actividadesEconomicasSeleccionadas)) : [];
 
             // Actualizar DatoTributario
             $datoTributario->update([
@@ -436,6 +436,15 @@ class CamaraController extends Controller
                 'referencia' => strtoupper($request->input('referencia_mod')),
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
             ]);
+
+            $establecimientos = Establecimiento::where('id_camara', $camara->id)->get();
+            if ($establecimientos) {
+                foreach ($establecimientos as $establecimiento) {
+                    $establecimiento->update([
+                        'actividades_economicas' => json_encode($actividadesEconomicasSeleccionadasArray)
+                    ]);
+                }
+            }
 
             $usuario = User::where('username', $camara->ruc)->first();
             $usuario->name = strtoupper($request->input('razon_social_mod'));
