@@ -676,7 +676,7 @@
         $(document).ready(function() {
             let establecimiento_camara_selected = null;
             let actividadesEconomicas = @json($actividadesEconomicas);
-            var camaras = @json($camaras);
+            let camaras = @json($camaras);
             let actividadesDisponibles = null;
             if (!@json($isAdmin)) {
                 let selectedCamera = $('#camara').val();
@@ -684,22 +684,24 @@
                     return camara.id == selectedCamera;
                 });
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
-
-                let actividades = Object.keys(actividadesEconomicas).map(function(key) {
-                    return {
-                        id: key,
-                        descripcion: actividadesEconomicas[key]
-                    };
-                });
-                let filteredActivities = actividades.filter(function(actividad) {
-                    return filteredActividades.includes(actividad.id);
-                });
-
-                actividadesDisponibles = filteredActivities;
+                filteredActividades = JSON.parse(filteredActividades);
+                let actividades = Object.keys(actividadesEconomicas)
+                    .filter(function(key) {
+                        return filteredActividades.some(function(activity) {
+                            return activity == parseInt(key);
+                        });
+                    })
+                    .map(function(key) {
+                        return {
+                            id: key,
+                            descripcion: actividadesEconomicas[key]
+                        };
+                    });
+                actividadesDisponibles = actividades;
 
                 $('#actividad_economica').empty();
                 $('#actividad_economica_mod').empty();
-                filteredActivities.forEach(function(actividad) {
+                actividadesDisponibles.forEach(function(actividad) {
                     $('#actividad_economica').append(
                         `<option value=${actividad.id}>${actividad.descripcion}</option>`
                     );
@@ -772,36 +774,6 @@
                 }
             });
 
-            // Escuchar el evento change del select de cámaras
-            /*$('#camara').change(function() {
-                let selectedCamera = $(this).val();
-                let filtered = camaras.find(function(camara) {
-                    return camara.id == selectedCamera;
-                });
-                let filteredActividades = filtered.datos_tributarios.actividades_economicas;
-
-                let actividades = Object.keys(actividadesEconomicas).map(function(key) {
-                    return {
-                        id: key,
-                        descripcion: actividadesEconomicas[key]
-                    };
-                });
-                let filteredActivities = actividades.filter(function(actividad) {
-                    return filteredActividades.includes(actividad.id);
-                });
-
-                $('#actividad_economica').empty();
-                $('#actividad_economica_mod').empty();
-                filteredActivities.forEach(function(actividad) {
-                    $('#actividad_economica').append(
-                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
-                    );
-                    $('#actividad_economica_mod').append(
-                        `<option value=${actividad.id}>${actividad.descripcion}</option>`
-                    );
-                });
-            });*/
-
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
 
@@ -825,7 +797,6 @@
                     // Cargar el valor de la cámara en el campo oculto
                     $('#camaraHidden').val(camaraSeleccionada);
 
-                    // Abrir el modal
                     $('#ModalEstablecimiento').modal('show');
                 }
             });
@@ -865,10 +836,12 @@
                     return camara.id == selectedCamera;
                 });
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
-
+                filteredActividades = JSON.parse(filteredActividades);
                 let actividades = Object.keys(actividadesEconomicas)
                     .filter(function(key) {
-                        return filteredActividades.includes(parseInt(key));
+                        return filteredActividades.some(function(activity) {
+                            return activity == parseInt(key);
+                        });
                     })
                     .map(function(key) {
                         return {
@@ -1045,7 +1018,6 @@
                 // Limpiar completamente el select, establecer en blanco
                 $('#actividad_economica').val([]).trigger('change'); // Para select2 u otros plugins
                 $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
-                console.log('Modal abierto, campos limpios');
             });
 
             $('#ModalEstablecimiento').on('hidden.bs.modal', function() {
@@ -1058,7 +1030,6 @@
                 // Limpiar completamente el select, establecer en blanco
                 $('#actividad_economica').val([]).trigger('change'); // Para select2 u otros plugins
                 $('#actividad_economica option:selected').prop('selected', false); // Fuerza la deselección
-                console.log('Modal abierto, campos limpios');
             });
 
 
@@ -1565,7 +1536,6 @@
                 var establecimientoId = button.data('id');
                 let establecimiento_camara_selected = $('#camaraHiddenMod').val();
 
-                console.log('Cargo ID:', establecimientoId);
 
                 //$('#carga').show();
                 Swal.fire({
@@ -1590,7 +1560,6 @@
                     url: '/administrador/establecimiento/detalle/' + establecimientoId,
                     method: 'GET',
                     success: function(response) {
-                        console.log('Datos recibidos:', response);
                         establecimiento_camara_selected = response;
 
                         var establecimientoId = $('#establecimiento_id');
@@ -1666,7 +1635,6 @@
                         selectedItemsMod = [];
                         $('#selectedList_mod').empty();
 
-                        console.log(response.actividades_economicas);
 
                         // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
                         if (response.actividades_economicas) {
@@ -1690,6 +1658,7 @@
                             if (Array.isArray(actividadesEstablecimiento) &&
                                 actividadesEstablecimiento
                                 .length > 0) {
+
                                 actividadesEstablecimiento = actividadesEstablecimiento
                                     .filter(id => actividadesDisponibles.some(actividad =>
                                         parseInt(actividad.id) === parseInt(id)));
