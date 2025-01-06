@@ -2431,7 +2431,11 @@
                     const options = {
                         year: 'numeric',
                         month: 'long',
-                        day: 'numeric'
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false, // Para formato 24 horas
                     };
                     return new Date(dateString).toLocaleDateString('es-ES', options);
                 };
