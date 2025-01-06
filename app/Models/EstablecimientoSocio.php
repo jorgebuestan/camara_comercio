@@ -11,6 +11,7 @@ class EstablecimientoSocio extends Model
     use HasFactory, LogsActivity;
     protected $table = 'establecimientos_socios'; 
     protected $fillable = [
+        'secuencial',
         'nombre_comercial',
         'id_socio',
         'id_pais',

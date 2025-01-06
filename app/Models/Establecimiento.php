@@ -11,6 +11,7 @@ class Establecimiento extends Model
     use HasFactory, LogsActivity;
     protected $table = 'establecimientos'; 
     protected $fillable = [
+        'secuencial',
         'nombre_comercial',
         'id_camara',
         'id_pais',

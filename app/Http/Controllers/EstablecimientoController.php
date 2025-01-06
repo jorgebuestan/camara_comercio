@@ -192,8 +192,25 @@ class EstablecimientoController extends Controller
                 }
             }
 
+            // Obtener el último secuencial para la cámara
+                $ultimoSecuencial = Establecimiento::where('id_camara', $request->input('camaraHidden'))
+                ->orderBy('secuencial', 'desc')
+                ->value('secuencial');
+
+            // Calcular el nuevo secuencial
+            $nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
+
+            if ($nuevoSecuencial > 999) {
+                Log::error('No se puede asignar un nuevo secuencial, se alcanzó el límite de 999');
+                return response()->json(['error' => 'No se puede asignar un nuevo secuencial, se alcanzó el límite de 999'], 422);
+            }
+
+            // Formatear el secuencial a tres dígitos
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
+
             // Crear registro en la base de datos
             $establecimiento = Establecimiento::create([
+                'secuencial' => $secuencialFormateado, 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_camara' => strtoupper($request->input('camaraHidden')),
                 'id_pais' => $request->input('pais'),
