@@ -15,7 +15,12 @@ class TipoPersoneriaSeeder extends Seeder
     {
         //
         DB::table('tipo_personeria')->insert([ 
-            'descripcion' => 'NATURAL' 
+            'descripcion' => 'NATURAL SIN RUC' 
+        ]); 
+
+        
+        DB::table('tipo_personeria')->insert([ 
+            'descripcion' => 'NATURAL CON RUC' 
         ]); 
 
         DB::table('tipo_personeria')->insert([ 
