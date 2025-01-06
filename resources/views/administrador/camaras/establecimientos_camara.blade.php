@@ -151,6 +151,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Fecha de Inicio de Actividades</th>
+                                                    <th>Secuencial</th>
                                                     <th>Nombre Comercial</th>
                                                     <th>Dirección</th>
                                                     <th>Correo</th>
@@ -435,6 +436,24 @@
                                     <input type="hidden" id="establecimiento_id" name="establecimiento_id"
                                         value="">
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Secuencial
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="secuencial_mod"
+                                    id="secuencial_mod" placeholder="Secuencial" disabled>
+                                </div>
+                                <div class="col-md-2">
+                                    &nbsp;
+                                </div>
+                                <div class="col-md-4">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
@@ -746,12 +765,16 @@
                         width: '15%'
                     },
                     {
+                        data: 'secuencial',
+                        width: '10%'
+                    },
+                    {
                         data: 'nombre_comercial',
                         width: '20%'
                     },
                     {
                         data: 'direccion',
-                        width: '30%'
+                        width: '20%'
                     },
                     {
                         data: 'correo',
@@ -1636,6 +1659,7 @@
                         var camaraId = $('#camaraHiddenMod');
                         var FechaInicioACtividades = $('#fecha_inicio_actividades_mod');
 
+                        var Secuencial = $('#secuencial_mod');
                         var Pais = $('#pais_mod');
                         var Provincia = $('#provincia_mod');
                         var Canton = $('#canton_mod');
@@ -1654,9 +1678,9 @@
                         var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
                         establecimientoId.val(response.id);
+                        Secuencial.val(response.secuencial);
                         camaraId.val(response.id_camara);
-                        FechaInicioACtividades.val(convertirFecha(response
-                            .fecha_inicio_actividades));
+                        FechaInicioACtividades.val(convertirFecha(response.fecha_inicio_actividades));
                         Pais.val(response.id_pais);
                         Provincia.val(response.id_provincia);
                         Canton.val(response.id_canton);

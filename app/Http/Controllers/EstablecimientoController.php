@@ -70,6 +70,7 @@ class EstablecimientoController extends Controller
             ->select(
                 'establecimientos.id',
                 'establecimientos.fecha_inicio_actividades',
+                'establecimientos.secuencial',
                 'establecimientos.nombre_comercial',
                 DB::raw('CONCAT(establecimientos.calle, " ", establecimientos.manzana, " ", establecimientos.numero, " ", establecimientos.interseccion) AS direccion'),
                 'establecimientos.correo'
@@ -118,6 +119,7 @@ class EstablecimientoController extends Controller
             $boton = "";
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
+                'secuencial' => $establecimiento->secuencial,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
                 'direccion' => $establecimiento->direccion,
                 'correo' => $establecimiento->correo,

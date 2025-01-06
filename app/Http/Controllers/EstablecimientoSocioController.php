@@ -59,6 +59,7 @@ class EstablecimientoSocioController extends Controller
             ->select(
                 'establecimientos_socios.id',
                 'establecimientos_socios.fecha_inicio_actividades',
+                'establecimientos_socios.secuencial',
                 'establecimientos_socios.nombre_comercial',
                 DB::raw('CONCAT(establecimientos_socios.calle, " ", establecimientos_socios.manzana, " ", establecimientos_socios.numero, " ", establecimientos_socios.interseccion) AS direccion'),
                 'establecimientos_socios.correo'
@@ -107,6 +108,7 @@ class EstablecimientoSocioController extends Controller
             $boton = "";
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
+                'secuencial' => $establecimiento->secuencial,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
                 'direccion' => $establecimiento->direccion,
                 'correo' => $establecimiento->correo,
@@ -140,8 +142,25 @@ class EstablecimientoSocioController extends Controller
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
+            // Obtener el último secuencial para la cámara
+            $ultimoSecuencial = EstablecimientoSocio::where('id_socio', $request->input('socioHidden'))
+                ->orderBy('secuencial', 'desc')
+                ->value('secuencial');
+
+            // Calcular el nuevo secuencial
+            $nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
+
+            if ($nuevoSecuencial > 999) {
+                Log::error('No se puede asignar un nuevo secuencial, se alcanzó el límite de 999');
+                return response()->json(['error' => 'No se puede asignar un nuevo secuencial, se alcanzó el límite de 999'], 422);
+            }
+
+            // Formatear el secuencial a tres dígitos
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
+
             // Crear registro en la base de datos
             $establecimiento = EstablecimientoSocio::create([
+                'secuencial' => $secuencialFormateado, 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_socio' => strtoupper($request->input('socioHidden')),
                 'id_pais' => $request->input('pais'),
