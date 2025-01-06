@@ -30,10 +30,10 @@ class ObligacionesController extends Controller
     public function obtener_listado_obligaciones(Request $request)
     {
         $columns = [
-            0 => 'obligaciones.id',
-            1 => 'obligaciones.obligacion',
-            2 => 'tiempo_presentacion.descripcion',
-            3 => 'tipo_presentacion.descripcion'
+            0 => 'obligaciones.obligacion',
+            1 => 'tiempo_presentacion.descripcion',
+            2 => 'tipo_presentacion.descripcion',
+            3 => 'obligaciones.id'
         ];
 
         $query = DB::table('obligaciones')
@@ -45,10 +45,7 @@ class ObligacionesController extends Controller
                 'tiempo_presentacion.descripcion as tiempo_presentacion',
                 'tipo_presentacion.descripcion as tipo_presentacion'
             )
-            ->where('obligaciones.estado', 1)
-            ->orderBy('obligaciones.obligacion', 'asc');
-
-        // Filtro de localidad 
+            ->where('obligaciones.estado', 1);
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
@@ -68,17 +65,18 @@ class ObligacionesController extends Controller
         if (isset($columns[$orderColumnIndex])) {
             $orderColumn = $columns[$orderColumnIndex];
             $query->orderBy($orderColumn, $orderDir);
+        } else {
+            $query->orderBy('obligaciones.obligacion', 'asc');
         }
 
         // Paginación
-        $start = $request->input('start') ?? 0;
-        $length = $request->input('length') ?? 10;
-        $query->skip($start)->take($length);
-
-        $obligaciones = $query->get();
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $obligaciones = $query->skip($start)->take($length)->get();
 
         $data = $obligaciones->map(function ($obligacion) use ($request) {
             $boton = "";
+            $checkbox = false;
 
             if ($request->input('tipo_boton') == 1) {
                 $boton = '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->id . '">Modificar</button>' .
@@ -87,16 +85,27 @@ class ObligacionesController extends Controller
             }
 
             if ($request->input('tipo_boton') == 2) {
-                //$boton = '<button class="btn btn-primary mb-3 seleccionar-obligacion" data-id="' . $obligacion->id . '">Seleccionar</button>';
-                $boton = '<button type="button" class="btn btn-primary mb-3 seleccionar-obligacion" data-id="' . $obligacion->id . '">Seleccionar</button>';
+                $obligacionExiste = EntidadObligacion::where('id_obligacion', $obligacion->id)->where('estado', 1)->exists();
+                $checkbox = false;
+                if ($obligacionExiste) {
+                    $checkbox = true;
+                }
+                $boton = '<div class="flex justify-center w-full items-center"><input type="checkbox" style="width:1rem;height:1rem;" class="form-check-input seleccionar-obligacion" data-id="' . $obligacion->id . '" value="' . ($checkbox ? 'true' : 'false') . '"' . ($checkbox ? ' checked' : '') . '></div>';
+                return array_merge((array) $obligacion, [
+                    'obligacion' => $obligacion->obligacion,
+                    'tiempo_presentacion' => $obligacion->tiempo_presentacion,
+                    'tipo_presentacion' => $obligacion->tipo_presentacion ?? 'N/A',
+                    'btn' => $boton,
+                    'selected' => $checkbox
+                ]);
             }
-
-            return [
+            $obligacionArr = (array) $obligacion;
+            return array_merge($obligacionArr, [
                 'obligacion' => $obligacion->obligacion,
                 'tiempo_presentacion' => $obligacion->tiempo_presentacion,
-                'tipo_presentacion' => $obligacion->tipo_presentacion,
-                'btn' => $boton
-            ];
+                'tipo_presentacion' => $obligacion->tipo_presentacion ?? 'N/A',
+                'btn' => $boton,
+            ]);
         });
 
         $json_data = [
