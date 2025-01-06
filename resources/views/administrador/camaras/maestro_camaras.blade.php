@@ -1296,9 +1296,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono_representante_legal_mod').on('input', function() {
+            /*$('#telefono_representante_legal_mod').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono_representante_legal_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
             $('#cargo_representante_legal_mod').on('input', function() {
@@ -1412,7 +1424,7 @@
             });
 
             $("#correo_representante_legal_mod").on("input", function() {
-                $(this).val($(this).val().toUpperCase());
+                $(this).val($(this).val().toLowerCase());
                 var correo = $(this).val();
                 var regexCorreo =
                     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido

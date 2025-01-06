@@ -567,9 +567,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono').on('input', function() {
+            /*$('#telefono').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
             $('#representante').on('input', function() {
@@ -577,9 +589,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono_representante').on('input', function() {
+            /*$('#telefono_representante').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono_representante').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
             $('#entidad_mod').on('input', function() {
@@ -592,9 +616,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono_mod').on('input', function() {
+            /*$('#telefono_mod').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
             $('#representante_mod').on('input', function() {
@@ -602,9 +638,21 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono_representante_mod').on('input', function() {
+            /*$('#telefono_representante_mod').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono_representante_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
 
