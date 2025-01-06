@@ -368,7 +368,7 @@
                                         class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
                                         <span class="flex items-center gap-3">
                                             <i class="bx bxs-user-account"></i>
-                                            <span>Entidades</span>
+                                            <span>Obligaciones Legales</span>
                                         </span>
                                         <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
                                     </summary>

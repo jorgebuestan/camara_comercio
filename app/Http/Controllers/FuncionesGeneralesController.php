@@ -19,7 +19,7 @@ class FuncionesGeneralesController extends Controller
     public function get_provincias(Request $request)
     {  
         $id_pais = request('id_pais');
-        $provincias = Provincia::where('id_pais', $id_pais)->pluck('nombre', 'id');
+        $provincias = Provincia::where('id_pais', $id_pais)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
 
         // Si no hay provincias para el país, o siempre se quiere incluir la provincia con ID = 1
         if (!$provincias->has(1)) {
@@ -41,7 +41,7 @@ class FuncionesGeneralesController extends Controller
     {  
         $id_pais = request('id_pais');
         $id_provincia = request('id_provincia');
-        $cantones = Canton::where('id_pais', $id_pais)->where('id_provincia', $id_provincia)->pluck('nombre', 'id');
+        $cantones = Canton::where('id_pais', $id_pais)->where('id_provincia', $id_provincia)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
 
         // Si no hay provincias para el país, o siempre se quiere incluir la provincia con ID = 1
         if (!$cantones->has(1)) {
@@ -66,7 +66,7 @@ class FuncionesGeneralesController extends Controller
         $id_canton = request('id_canton');
         $parroquias = Parroquia::where('id_pais', $id_pais)
         ->where('id_provincia', $id_provincia)
-        ->where('id_canton', $id_canton)->pluck('nombre', 'id');
+        ->where('id_canton', $id_canton)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
 
         // Si no hay provincias para el país, o siempre se quiere incluir la provincia con ID = 1
         if (!$parroquias->has(1)) {

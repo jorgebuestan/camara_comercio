@@ -20,9 +20,9 @@ class EntidadesController extends Controller
     //
     public function maestro_entidades()
     {
-        $paises = Pais::pluck('nombre', 'id');
-        $provincias = Provincia::where('id_pais', 57)->pluck('nombre', 'id'); // Provincias de Ecuador
-        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->pluck('nombre', 'id'); // Provincias de Ecuador
+        $paises = Pais::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+        $provincias = Provincia::where('id_pais', 57)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
+        $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $tipo_entidad = TipoEntidad::pluck('descripcion', 'id');
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
