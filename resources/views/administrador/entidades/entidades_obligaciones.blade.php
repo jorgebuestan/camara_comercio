@@ -452,7 +452,7 @@
                             }
                         ],
                         order: [
-                            [0, "asc"]
+                            [3, "desc"]
                         ],
                         createdRow: function(row, data, dataIndex) {
                             let td = $(row).find(".truncate");
@@ -460,7 +460,19 @@
 
                             let td2 = $(row).find(".truncate2");
                             td2.attr("title", td2.text());
-                        }
+                        },
+                        columnDefs: [
+                            {
+                                targets: 3,
+                                orderable: true,
+                                render: function(data, type, row) {
+                                    if (type == 'display') {
+                                        return data; 
+                                    }
+                                    return row.selected ? 1 : 0;
+                                }
+                            }
+                        ]
                     });
 
                     $('#ModalObligacion').modal('show');

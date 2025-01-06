@@ -121,7 +121,8 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/obligaciones_socio/index', [SocioObligacionController::class, 'index'])->middleware('auth')->name('admin.obtener_listado_obligaciones_socio');
     Route::post('/administrador/obligacion_socio/registrar_obligacion_socio', [SocioObligacionController::class, 'store'])->middleware('auth')->name('admin.registrar_obligacion_socio');
     Route::post('/administrador/obligacion_socio/modificar', [SocioObligacionController::class, 'update'])->middleware('auth')->name('admin.modificar_obligacion_socio');
-    Route::post('/administrador/obligacion_socio/eliminar/{id}', [SocioObligacionController::class, 'eliminarObligacionSocio'])->middleware('auth')->name('admin.eliminar_obligacion_socio');;
+    Route::post('/administrador/obligacion_socio/eliminar/{id}', [SocioObligacionController::class, 'eliminarObligacionSocio'])->middleware('auth')->name('admin.eliminar_obligacion_socio');
+    Route::get('/administrador/obligaciones_socio/entidades', [SocioObligacionController::class, 'getEntidadesObligaciones'])->middleware('auth')->name('admin.obtener_entidades');
 
     //Maestro de Adherentes de Socios
     Route::get('/administrador/adherentes_socio', [AdherenteController::class, 'adherentes_socio'])->middleware('auth')->name('admin.adherentes_socio');
