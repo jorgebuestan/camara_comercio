@@ -11,6 +11,7 @@ use App\Models\Entidad;
 use Carbon\Carbon;
 use App\Models\ArchivoObligacionSocio;
 use App\Models\LogActivity;
+use App\Models\Obligacion;
 
 class SocioObligacionController extends Controller
 {
@@ -111,6 +112,8 @@ class SocioObligacionController extends Controller
                 'logs' => $logSocioObligacion,
                 'nombre_entidad' => $socioObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $socioObligacion->obligacion->obligacion ?? '',
+                'fecha_inicio' => $socioObligacion->fecha_inicio ? Carbon::parse($socioObligacion->fecha_inicio)->format('d/m/Y') : 'N/A',
+                'fecha_presentacion' => $socioObligacion->fecha_presentacion ? Carbon::parse($socioObligacion->fecha_presentacion)->format('d/m/Y') : 'N/A',
                 'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Modificar</button>' .
                     '<button class="btn btn-warning mb-1 delete-socio-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Eliminar</button></div>'
             ]);
@@ -130,52 +133,88 @@ class SocioObligacionController extends Controller
             $data = $request->validate([
                 'id_socio' => 'required|integer',
                 'id_entidad' => 'required|integer',
-                'id_obligacion' => 'required|integer',
-                'fecha_inicio' => 'sometimes|nullable|date_format:d/m/Y',
-                'fecha_presentacion' => 'sometimes|nullable|date_format:d/m/Y',
+                'obligaciones' => 'required|array|min:1',
+                'obligaciones.*.id_obligacion' => 'required|integer',
+                'obligaciones.*.fecha' => 'required|date_format:d/m/Y',
             ]);
             DB::beginTransaction();
-            $existeObligacion = SocioObligacion::where('id_socio', $data['id_socio'])
+            $existeObligaciones = SocioObligacion::where('id_socio', $data['id_socio'])
                 ->where('id_entidad', $data['id_entidad'])
-                ->where('id_obligacion', $data['id_obligacion'])
-                ->first();
-
-            if ($existeObligacion) {
-                return response()->json(['message' => 'La obligación ya existe para la cámara'], 400);
+                ->whereIn('id_obligacion', array_column($data['obligaciones'], 'id_obligacion'))
+                ->get();
+            $existeObligaciones->each(function ($obligacion) {
+                $obligacion->update(['estado' => 1]);
+                $archivoObligacionSocio = ArchivoObligacionSocio::where('id_socio', $obligacion->id_socio)
+                    ->where('id_entidad', $obligacion->id_entidad)
+                    ->where('id_obligacion', $obligacion->id_obligacion)
+                    ->first();
+                if ($archivoObligacionSocio) {
+                    $archivoObligacionSocio->estado = 1;
+                    $archivoObligacionSocio->subido_por = auth()->id();
+                    $archivoObligacionSocio->save();
+                } else {
+                    ArchivoObligacionSocio::create([
+                        'id_socio' => $obligacion->id_socio,
+                        'id_entidad' => $obligacion->id_entidad,
+                        'id_obligacion' => $obligacion->id_obligacion,
+                        'ruta_archivo' => '',
+                        'validado' => 0,
+                        'estado' => 1,
+                        'subido_por' => auth()->id(),
+                    ]);
+                }
+            });
+            $idsExistentes = $existeObligaciones->pluck('id_obligacion')->toArray();
+            $nuevasObligaciones = collect($data['obligaciones'])->filter(fn($ob) => !in_array($ob['id_obligacion'], $idsExistentes));
+            $nuevasObligaciones->each(function ($obligacion) {
+                if (empty($obligacion['fecha'])) {
+                    return response()->json(['message' => 'La fecha no puede estar vacía'], 400);
+                }
+            });
+            foreach ($nuevasObligaciones as $obligacion) {
+                $obligacionData = Obligacion::with('tiempo_presentacion')->find($obligacion['id_obligacion']);
+                $tiempoPresentacion = $obligacionData->tiempo_presentacion->id;
+                $fecha = Carbon::createFromFormat('d/m/Y', $obligacion['fecha'])->format('Y-m-d');
+                $socioObligacion = SocioObligacion::create([
+                    'id_socio' => $data['id_socio'],
+                    'id_entidad' => $data['id_entidad'],
+                    'id_obligacion' => $obligacion['id_obligacion'],
+                    'fecha_inicio' => $tiempoPresentacion == 2 ? $fecha : null,
+                    'fecha_presentacion' => $tiempoPresentacion == 1 ? $fecha : null,
+                    'estado' => 1,
+                ]);
+                $archivoExiste = ArchivoObligacionSocio::where('id_socio', $socioObligacion->id_socio)
+                    ->where('id_entidad', $socioObligacion->id_entidad)
+                    ->where('id_obligacion', $socioObligacion->id_obligacion)
+                    ->first();
+                if (!$archivoExiste) {
+                    ArchivoObligacionSocio::create([
+                        'id_socio' => $socioObligacion->id_socio,
+                        'id_entidad' => $socioObligacion->id_entidad,
+                        'id_obligacion' => $socioObligacion->id_obligacion,
+                        'ruta_archivo' => '',
+                        'validado' => 0,
+                        'estado' => 1,
+                        'subido_por' => auth()->id(),
+                    ]);
+                } else {
+                    $archivoExiste->estado = 1;
+                    $archivoExiste->subido_por = auth()->id();
+                    $archivoExiste->save();
+                }
             }
-
-            if (isset($data['fecha_inicio'])) {
-                $data['fecha_inicio'] =
-                    Carbon::createFromFormat('d/m/Y', $data['fecha_inicio'])->format('Y-m-d');
-            } else {
-                $data['fecha_inicio'] = null;
-            }
-            if (isset($data['fecha_presentacion'])) {
-                $data['fecha_presentacion'] =
-                    Carbon::createFromFormat('d/m/Y', $data['fecha_presentacion'])->format('Y-m-d');
-            } else {
-                $data['fecha_presentacion'] = null;
-            }
-            $data['estado'] = 1;
-            $socioObligacion = SocioObligacion::create($data);
-            $archivoObligacionSocio = ArchivoObligacionSocio::create([
-                'id_socio' => $socioObligacion->id_socio,
-                'id_entidad' => $socioObligacion->id_entidad,
-                'id_obligacion' => $socioObligacion->id_obligacion,
-                'ruta_archivo' => '',
-                'validado' => 0,
-                'estado' => 1,
-                'subido_por' => auth()->user()->id
-            ]);
             DB::commit();
+            return response()->json(['message' => 'Obligaciones guardadas correctamente'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
+            DB::rollBack();
             return response()->json([
                 'message' => 'Error al guardar la obligación del socio',
-                'debug' => $th // Incluye el mensaje completo para depuración en ambiente de desarrollo
+                'error' => $th->getMessage()
             ], 500);
         }
     }
+
 
     public function update(Request $request)
     {
@@ -237,6 +276,23 @@ class SocioObligacionController extends Controller
             Log::error($th);
             DB::rollBack();
             return response()->json(['message' => 'Error al eliminar la obligación'], 500);
+        }
+    }
+
+    public function getEntidadesObligaciones(Request $request) {
+        try{
+            $data = $request->validate([
+                'id_entidad' => 'required|integer',
+            ]);
+
+            $entidad = Entidad::with('obligaciones.obligacion.tiempo_presentacion', 'obligaciones.obligacion.tipo_presentacion')->where('id', $data['id_entidad'])->where('estado', 1)->get();
+            if (!$entidad) {
+                return response()->json(['message' => 'La entidad no existe'], 400);
+            }
+            return response()->json(['entidades' => $entidad]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['message' => 'Error al obtener las obligaciones de la entidad'], 500);
         }
     }
 }

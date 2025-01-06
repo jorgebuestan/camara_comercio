@@ -97,7 +97,6 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <!-- <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstablecimiento">Agregar Nuevo Registro</button> -->
                                         <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nueva
                                             Obligación</button>
                                     </div>
@@ -149,80 +148,9 @@
                                 <input type="hidden" id="entidad_id" name="entidad_id" value="">
                                 <input type="hidden" id="obligacion_id" name="obligacion_id" value="">
                             </div>
-                            <div class="col-lg-3">
-                                &nbsp;
-                            </div>
-                            <div class="col-lg-3 text-end">
-                                <button type="button" id="agregarObligacion" class="btn btn-primary mb-3">Agregar
-                                    Obligación</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                Nombre
-                            </div>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" name="obligacion" disabled id="obligacion"
-                                    placeholder="Obligación">
-                            </div>
                         </div>
                         <div class="row">
                             &nbsp;
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                Tiempo de Presentación
-                            </div>
-                            <div class="col-md-4">
-                                <select id="tiempo_presentacion" name="tiempo_presentacion" disabled
-                                    class="form-control populate">
-                                    <option value=-1>Seleccionar</option>
-                                    @foreach ($tiempo_presentacion as $id => $nombre)
-                                        <option value={{ $id }}>
-                                            {{ $nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!-- <div class="col-md-2">
-                                                Fecha de Presentación
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                                    name="fecha_presentacion" id="fecha_presentacion"
-                                                    placeholder="Fecha de Presentación">
-                                            </div> -->
-                        </div>
-                        <div class="row">
-                            &nbsp;
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                Tipo de Presentación
-                            </div>
-                            <div class="col-md-4">
-                                <select id="tipo_presentacion" name="tipo_presentacion" disabled
-                                    class="form-control populate">
-                                    <option value=-1>Seleccionar</option>
-                                    @foreach ($tipo_presentacion as $id => $nombre)
-                                        <option value={{ $id }}>
-                                            {{ $nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!-- <div class="col-md-2">
-                                                Fecha de Inicio
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                                    name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio">
-                                            </div> -->
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                &nbsp;
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -241,9 +169,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
+                    <button type="button" id="agregarObligacion" class="btn btn-primary">Agregar
+                        Obligaciones</button>
                     <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
-                    <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
                 </div>
             </div>
         </div>
@@ -305,14 +233,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <!-- <div class="col-md-2">
-                                                Fecha de Presentación
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                                    name="fecha_presentacion_mod" id="fecha_presentacion_mod"
-                                                    placeholder="Fecha de Presentación">
-                                            </div> -->
                         </div>
                         <div class="row">
                             &nbsp;
@@ -332,20 +252,11 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <!-- <div class="col-md-2">
-                                                Fecha de Inicio
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                                    name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio">
-                                            </div> -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
                     <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>
-                    <!--<button type="button" class="btn btn-primary" id="btn-register-obligacion">Guardar</button>-->
                 </div>
             </div>
         </div>
@@ -359,10 +270,10 @@
 
     <script>
         $(document).ready(function() {
-
+            let obligacionesSeleccionadas = [];
             let entidad_obligacion_selected = null;
-            //alert($('#camara').val());
-            let establecimientos = [];
+            let obligaciones = [];
+            let obligacionesEntidad = [];
             Swal.fire({
                 title: 'Cargando',
                 text: 'Por favor espere',
@@ -373,7 +284,7 @@
                 }
             });
 
-            var table = $('#dataTable').DataTable({
+            let table = $('#dataTable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
@@ -389,7 +300,7 @@
                         console.error("Error al cargar los datos: ", error);
                     },
                     complete: function(response) {
-                        establecimientos = response.responseJSON.data;
+                        obligacionesEntidad = response.responseJSON.data;
                         Swal.close();
                     },
                 },
@@ -415,17 +326,17 @@
                     [0, "asc"]
                 ],
                 createdRow: function(row, data, dataIndex) {
-                    var td = $(row).find(".truncate");
+                    let td = $(row).find(".truncate");
                     td.attr("title", td.text());
 
-                    var td2 = $(row).find(".truncate2");
+                    let td2 = $(row).find(".truncate2");
                     td2.attr("title", td2.text());
                 }
             });
 
             // Escuchar el evento change del select de cámaras
             $('#entidad').change(function() {
-                var selectedEntidad = $(this).val();
+                let selectedEntidad = $(this).val();
 
                 if (selectedEntidad === '-1') {
                     //alert('Por favor selecciona una cámara válida.');
@@ -443,21 +354,21 @@
                         text: 'Por favor espere',
                         icon: 'info',
                         allowOutsideClick: false,
+                        showConfirmButton: false,
                         didOpen: () => {
                             Swal.showLoading()
                         }
                     });
-                    table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
+                    table.ajax.reload();
                 }
             });
-
 
             $('#abrirModal').click(function(e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
 
                 // Verificar si se seleccionó una opción válida en el select
-                var entidadSeleccionada = $('#entidad').val();
-                var nombreEntidadSeleccionada = $('#entidad option:selected').text();
+                let entidadSeleccionada = $('#entidad').val();
+                let nombreEntidadSeleccionada = $('#entidad option:selected').text();
 
                 if (entidadSeleccionada === '-1') {
                     //alert('Por favor, selecciona una Entidad para poder registrar una Obligación');
@@ -482,11 +393,12 @@
                         text: 'Por favor espere',
                         icon: 'info',
                         allowOutsideClick: false,
+                        showConfirmButton: false,
                         didOpen: () => {
                             Swal.showLoading()
                         }
                     });
-                    var table = $('#dataTableObligaciones').DataTable({
+                    let tableObligaciones = $('#dataTableObligaciones').DataTable({
                         destroy: true,
                         processing: true,
                         serverSide: true,
@@ -499,10 +411,25 @@
                                 d.tipo_boton = 2; // Enviar el valor de localidad seleccionada
                             },
                             error: function(error) {
+                                Swal.close();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Ocurrió un error al cargar las obligaciones.',
+                                    confirmButtonText: 'Aceptar',
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $('#ModalObligacion').modal('hide');
+                                    }
+                                });
                                 console.error("Error al cargar los datos: ", error);
                             },
                             complete: function(response) {
-                                establecimientos = response.responseJSON.data;
+                                obligaciones = response.responseJSON.data;
+                                obligacionesSeleccionadas = obligaciones.filter(obligacion =>
+                                    obligacion.selected === true).map(obligacion =>
+                                    obligacion.id);
                                 Swal.close();
                             },
                         },
@@ -513,27 +440,39 @@
                             },
                             {
                                 data: 'tiempo_presentacion',
-                                width: '15%'
+                                width: '20%'
                             },
                             {
                                 data: 'tipo_presentacion',
-                                width: '15%'
+                                width: '20%'
                             },
                             {
                                 data: 'btn',
-                                width: '20%'
+                                width: '10%'
                             }
                         ],
                         order: [
-                            [0, "asc"]
+                            [3, "desc"]
                         ],
                         createdRow: function(row, data, dataIndex) {
-                            var td = $(row).find(".truncate");
+                            let td = $(row).find(".truncate");
                             td.attr("title", td.text());
 
-                            var td2 = $(row).find(".truncate2");
+                            let td2 = $(row).find(".truncate2");
                             td2.attr("title", td2.text());
-                        }
+                        },
+                        columnDefs: [
+                            {
+                                targets: 3,
+                                orderable: true,
+                                render: function(data, type, row) {
+                                    if (type == 'display') {
+                                        return data; 
+                                    }
+                                    return row.selected ? 1 : 0;
+                                }
+                            }
+                        ]
                     });
 
                     $('#ModalObligacion').modal('show');
@@ -545,17 +484,11 @@
                 $('#ModalObligacion').modal('hide'); // Cerrar el modal
             });
 
-            $('.cerrar-modal-mod').click(function() {
+            /* $('.cerrar-modal-mod').click(function() {
                 $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal
-            });
+            }); */
 
-            //Manejo de Uppercase
-            $('#nombre_comercial').on('input', function() {
-                // Convierte el valor del campo a mayúsculas
-                $(this).val($(this).val().toUpperCase());
-            });
-
-            // Establecer el idioma de forma global para todos los datepickers
+            /* // Establecer el idioma de forma global para todos los datepickers
             $.datepicker.regional['es'] = {
                 closeText: 'Cerrar',
                 prevText: '<Ant',
@@ -577,9 +510,9 @@
                 showMonthAfterYear: false,
                 yearSuffix: ''
             };
-            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $.datepicker.setDefaults($.datepicker.regional['es']); */
 
-            $('#fecha_presentacion').datepicker('destroy').datepicker({
+            /* $('#fecha_presentacion').datepicker('destroy').datepicker({
                 format: 'dd/mm/yyyy', // Define el formato de fecha
                 autoclose: true, // Cierra automáticamente al seleccionar
                 todayHighlight: true, // Resalta la fecha actual
@@ -605,239 +538,174 @@
                 autoclose: true, // Cierra automáticamente al seleccionar
                 todayHighlight: true, // Resalta la fecha actual
                 language: 'es' // Asegúrate de establecer el idioma correcto
-            });
-
+            }); */
             $(document).on('click', '.seleccionar-obligacion', function() {
-                var button = $(this);
-                var obligacionId = button.data('id');
-
-                Swal.fire({
-                    target: document.getElementById('ModalObligacion'),
-                    title: 'Cargando',
-                    text: 'Por favor espere',
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading()
+                let button = $(this);
+                let obligacionId = button.data('id');
+                let isChecked = button.is(':checked');
+                if (isChecked) {
+                    if (!obligacionesSeleccionadas.includes(obligacionId)) {
+                        obligacionesSeleccionadas.push(obligacionId);
                     }
-                });
-
-                $.ajax({
-                    url: '/administrador/obligacion/detalle/' + obligacionId,
-                    method: 'GET',
-                    success: function(response) {
-                        console.log('Datos recibidos:', response);
-
-                        var obligacionId = $('#obligacion_id');
-                        var Obligacion = $('#obligacion');
-                        var tiempoPresentacion = $('#tiempo_presentacion');
-                        var fechaPresentacion = $('#fecha_presentacion');
-                        var tipoPresentacion = $('#tipo_presentacion');
-                        var fechaInicio = $('#fecha_inicio');
-
-                        obligacionId.val(response.id);
-                        Obligacion.val(response.obligacion);
-                        tiempoPresentacion.val(response.id_tiempo_presentacion);
-                        //fechaPresentacion.val(response.fecha_presentacion); 
-                        tipoPresentacion.val(response.id_tipo_presentacion);
-                        //fechaInicio.val(response.fecha_inicio);   
-
-                        // Deshabilitar o habilitar los selects según el valor
-                        //alert(response.id_tiempo_presentacion);
-                        if (response.id_tiempo_presentacion === 1) { // General
-
-                            $('#fecha_presentacion').prop('disabled', false);
-                            $('#fecha_inicio').prop('disabled', true);
-
-                        } else if (response.id_tiempo_presentacion === 2) { // Local
-
-                            $('#fecha_presentacion').prop('disabled', true);
-                            $('#fecha_inicio').prop('disabled', false);
-
-                        }
-
-                        //$('#carga').hide();
-                        //$('#ModalModificarObligacion').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    },
-                    complete: function(response) {
-                        establecimientos = response.responseJSON.data;
-                        Swal.close();
-                    },
-                });
+                } else {
+                    obligacionesSeleccionadas = obligacionesSeleccionadas.filter(id => id !== obligacionId);
+                }
             });
 
             $("#agregarObligacion").click(async function() {
+                if (!validarRegistro()) {
+                    return;
+                }
+                let formData = new FormData();
+                formData.append('entidad_id', $('#entidad_id').val());
+                obligacionesSeleccionadas.forEach(function(obligacion) {
+                    formData.append('obligaciones[]', obligacion);
+                });
+                const registro = await Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    title: 'Agregar Obligaciones',
+                    text: "¿Está seguro de que desea agregar las obligaciones seleccionadas a la entidad?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                    showConfirmButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.registrar_obligacion_entidad') }}",
+                            type: "POST",
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                        }).done(function(res) {
+                            Swal.fire({
+                                target: document.getElementById('ModalObligacion'),
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: res.success,
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false,
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#ModalObligacion').modal('hide');
+                                    table.ajax.reload(null, false);
+                                }
+                            });
+                        }).fail(function(res) {
+                            if (res.status === 422) {
+                                let errors = res.responseJSON;
+                                if (errors.error) {
+                                    Swal.fire({
+                                        target: document.getElementById('ModalObligacion'),
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: errors.error,
+                                        confirmButtonText: 'Aceptar',
+                                        allowOutsideClick: false
+                                    });
+                                }
+                            } else {
+                                Swal.fire({
+                                    target: document.getElementById('ModalObligacion'),
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Ocurrió un error al registrar la Obligación.',
+                                    confirmButtonText: 'Aceptar',
+                                    allowOutsideClick: false
+                                });
+                            }
+                            console.log(res.responseText);
+                        });
+                    } else {
+                        console.log('Eliminación cancelada por el usuario.');
+                    }
+                });
+            });
 
-                if ($('#obligacion_id').val() == "") {
-                    //alert('Debe debe seleccionar una Obligación'); 
+            function validarRegistro() {
+                const entidad = $('#entidad').val();
+                if (entidad === '-1') {
                     Swal.fire({
                         target: document.getElementById('ModalObligacion'),
                         icon: 'error',
                         title: 'Error',
-                        text: 'Debe debe seleccionar una Obligación',
+                        text: 'Por favor, selecciona una Entidad para poder registrar una Obligación',
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
-                    return;
+                    return false;
                 }
-
-                if ($('#tiempo_presentacion').val() == "2") {
-                    if ($('#tipo_presentacion').val() == "-1") {
-                        //alert('Debe seleccionar el Tipo de Presentación');
-                        Swal.fire({
-                            target: document.getElementById('ModalObligacion'),
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Debe seleccionar el Tipo de Presentación',
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
-                        });
-                        $('#tipo_presentacion').focus();
-                        return;
-                    }
-                }
-
-                /* if ($('#tiempo_presentacion').val() == "1") {
-                    if ($('#fecha_presentacion').val() == "") {
-                        //alert('Debe ingresar la Fecha de Presentación'); 
-                        await Swal.fire({
-                            target: document.getElementById('ModalObligacion'),
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Debe ingresar la Fecha de Presentación',
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
-                        });
-                        $('#fecha_presentacion').focus();
-                        return;
-                    }
-                } */
-
-                /* if ($('#tiempo_presentacion').val() == "2") {
-                    if ($('#fecha_inicio').val() == "") {
-                        //alert('Debe ingresar la Fecha de Inicio'); 
-                        await Swal.fire({
-                            target: document.getElementById('ModalObligacion'),
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Debe ingresar la Fecha de Inicio',
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
-                        });
-                        $('#fecha_inicio').focus();
-                        return;
-                    }
-                } */
-
-
-                var formData = new FormData(document.getElementById("ModalObligacion"));
-                Swal.fire({
-                    target: document.getElementById('ModalObligacion'),
-                    title: 'Enviando información',
-                    text: 'Por favor espere',
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    }
-                });
-
-                $.ajax({
-                    url: "{{ route('admin.registrar_obligacion_entidad') }}",
-                    type: "POST",
-                    data: formData,
-                    dataType: "json",
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                }).done(function(res) {
-                    $('#carga').hide();
-                    Swal.close();
-                    //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                if (obligacionesSeleccionadas.length === 0) {
                     Swal.fire({
                         target: document.getElementById('ModalObligacion'),
-                        icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
-                        title: 'Éxito',
-                        text: res.success,
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor, selecciona al menos una obligación para agregar a la entidad',
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
-                    location.reload(); // Recargar la página
-                }).fail(function(res) {
-                    $('#carga').hide();
+                    return false;
+                }
 
-                    if (res.status === 422) {
-                        // Mostrar mensaje de error de validación
-                        let errors = res.responseJSON;
-                        if (errors.error) {
-                            //alert(errors.error);
-                            Swal.fire({
-                                target: document.getElementById('ModalObligacion'),
-                                icon: 'error',
-                                title: 'Error',
-                                text: errors.error,
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
-                        }
-                    } else {
-                        // Mostrar mensaje genérico si no se recibió un error específico
-                        //alert("Ocurrió un error al registrar la Obligación.");
-                        Swal.fire({
-                            target: document.getElementById('ModalObligacion'),
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Ocurrió un error al registrar la Obligación.',
-                            confirmButtonText: 'Aceptar',
-                            allowOutsideClick: false
-                        });
-
-                    }
-
-                    console.log(res
-                        .responseText
-                    ); // Muestra el error completo en la consola para depuración
-                });
-            });
+                let nuevasObligaciones = obligacionesSeleccionadas.filter(
+                    id => !obligacionesEntidad.some(entidad => entidad.id === id)
+                );
+                if (nuevasObligaciones.length === 0) {
+                    Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'info',
+                        title: 'Error',
+                        text: 'Todas las obligaciones seleccionadas ya están registradas para esta entidad.',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    /* if (obligaciones.length === obligacionesSeleccionadas.length) {
+                        $('#ModalObligacion').modal('hide');
+                    } */
+                    return false;
+                }
+                return true;
+            }
 
             // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
-            $(document).on('click', '.open-modal', function() {
+            /* $(document).on('click', '.open-modal', function() {
                 console.log('Botón clicado...');
-                var button = $(this);
-                var obligacionId = button.data('id');
+                let button = $(this);
+                let obligacionId = button.data('id');
 
                 console.log('Cargo ID:', obligacionId);
-
-                //$('#carga').show();
                 Swal.fire({
                     title: 'Cargando datos de la Obligación',
                     text: 'Por favor espere',
                     icon: 'info',
                     allowOutsideClick: false,
+                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading()
                     }
                 });
-
-
                 $.ajax({
                     url: '/administrador/entidad_obligacion/detalle/' + obligacionId,
                     method: 'GET',
                     success: function(response) {
-                        console.log('Datos recibidos:', response);
                         entidad_obligacion_selected = response;
 
-                        var obligacionId = $('#obligacion_id_mod');
-                        var entidadId = $('#entidad_id_mod');
-                        var entidadobligacionId = $('#entidad_obligacion_id_mod');
-                        var Obligacion = $('#obligacion_mod');
-                        var tiempoPresentacion = $('#tiempo_presentacion_mod');
-                        var fechaPresentacion = $('#fecha_presentacion_mod');
-                        var tipoPresentacion = $('#tipo_presentacion_mod');
-                        var fechaInicio = $('#fecha_inicio_mod');
+                        let obligacionId = $('#obligacion_id_mod');
+                        let entidadId = $('#entidad_id_mod');
+                        let entidadobligacionId = $('#entidad_obligacion_id_mod');
+                        let Obligacion = $('#obligacion_mod');
+                        let tiempoPresentacion = $('#tiempo_presentacion_mod');
+                        let fechaPresentacion = $('#fecha_presentacion_mod');
+                        let tipoPresentacion = $('#tipo_presentacion_mod');
+                        let fechaInicio = $('#fecha_inicio_mod');
 
 
                         entidadobligacionId.val(response.id);
@@ -871,11 +739,11 @@
                         console.error(xhr.responseText);
                     }
                 });
-            });
+            }); */
 
             $(document).on('click', '.delete-obligacion', async function() {
-                var button = $(this);
-                var obligacionId = button.data('id');
+                let button = $(this);
+                let obligacionId = button.data('id');
 
                 const result = await Swal.fire({
                     title: '¿Está seguro de que desea eliminar este registro?',
@@ -907,26 +775,32 @@
                         },
                         success: function(response) {
                             Swal.close();
-                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
                             Swal.fire({
-                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                                icon: 'success',
                                 title: 'Éxito',
                                 text: 'Registro eliminado correctamente.',
                                 confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    table.ajax.reload(null, false);
+                                }
                             });
-                            location
-                                .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            //alert('Hubo un problema al eliminar el Registro.');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'Hubo un problema al eliminar el Registro.',
                                 confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    table.ajax.reload(null, false);
+                                }
                             });
                         }
                     });
@@ -978,13 +852,14 @@
                     text: 'Por favor espere',
                     icon: 'info',
                     allowOutsideClick: false,
+                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading()
                     }
                 });
 
                 // Aquí puedes añadir la lógica para enviar el formulario modificado
-                var formData = new FormData(document.getElementById("ModalModificarObligacion"));
+                let formData = new FormData(document.getElementById("ModalModificarObligacion"));
                 $.ajax({
                     url: "{{ route('admin.modificar_entidad_obligacion') }}",
                     type: "post",

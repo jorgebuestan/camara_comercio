@@ -195,39 +195,6 @@
                         <div class="row">
                             &nbsp;
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="obligacion">Obligación</label>
-                                <input type="text" class="form-control" id="obligacion" name="obligacion" readonly />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="tiempo_presentacion">Tiempo de Presentación</label>
-                                <input type="text" class="form-control" id="tiempo_presentacion"
-                                    name="tiempo_presentacion" readonly />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="fecha_presentacion">Fecha de Presentación</label>
-                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_presentacion" id="fecha_presentacion" placeholder="Fecha de Presentación" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="tipo_presentacion">Tipo de Presentación</label>
-                                <input type="text" class="form-control" id="tipo_presentacion" name="tipo_presentacion"
-                                    readonly />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="fecha_inicio">Fecha de Inicio</label>
-                                <input type="text" data-plugin-datepicker class="form-control" disabled
-                                    name="fecha_inicio" id="fecha_inicio" placeholder="Fecha de Inicio" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            &nbsp;
-                        </div>
                         <div class="row mb-4">
                             <div class="col-md-12 overflow-x-auto">
                                 <table class="table table-bordered mb-0" id="dataTableObligaciones">
@@ -236,6 +203,8 @@
                                             <th>Obligación</th>
                                             <th>Tiempo de Presentación</th>
                                             <th>Tipo de Presentación</th>
+                                            <th id="labelFecha">Fecha</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -362,22 +331,16 @@
             };
             $.datepicker.setDefaults($.datepicker.regional['es']);
 
-            var entidades = @json($entidades);
-            var socioSelected = null;
+            let entidades = [];
+            let socioSelected = null;
             let obligacionSelected = null;
             let entidadSelected = null;
             let socioObligacionSelected = null;
             let socioObligaciones = [];
-            var filteredObligaciones = [];
+            let filteredObligaciones = [];
+            let selectedAddObligaciones = [];
 
-            $('#fecha_presentacion').datepicker('destroy').datepicker({
-                format: 'dd/mm/yyyy', // Define el formato de fecha
-                autoclose: true, // Cierra automáticamente al seleccionar
-                todayHighlight: true, // Resalta la fecha actual
-                language: 'es' // Asegúrate de establecer el idioma correcto
-            });
-
-            $('#fecha_inicio').datepicker('destroy').datepicker({
+            $('.fecha').datepicker('destroy').datepicker({
                 format: 'dd/mm/yyyy', // Define el formato de fecha
                 autoclose: true, // Cierra automáticamente al seleccionar
                 todayHighlight: true, // Resalta la fecha actual
@@ -410,7 +373,7 @@
                     Swal.showLoading()
                 }
             });
-            var table = $('#dataTable').DataTable({
+            let table = $('#dataTable').DataTable({
                 destroy: true,
                 processing: false,
                 serverSide: true,
@@ -424,6 +387,7 @@
                         d.with_entidad = 1;
                         d.with_socio = 1;
                         d.with_obligacion = 1;
+                        d.estado = 1;
                     },
                     error: function(error) {
                         Swal.fire({
@@ -466,20 +430,20 @@
                     [0, "asc"]
                 ],
                 createdRow: function(row, data, dataIndex) {
-                    var td = $(row).find(".truncate");
+                    let td = $(row).find(".truncate");
                     td.attr("title", td.text());
 
-                    var td2 = $(row).find(".truncate2");
+                    let td2 = $(row).find(".truncate2");
                     td2.attr("title", td2.text());
                 }
             });
 
-            var tableObligaciones = $('#dataTableObligaciones').DataTable({
+            let tableObligaciones = $('#dataTableObligaciones').DataTable({
                 data: filteredObligaciones,
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'obligacion',
-                        width: '60%'
+                        width: '20%'
                     },
                     {
                         data: 'tiempo_presentacion',
@@ -488,10 +452,18 @@
                     {
                         data: 'tipo_presentacion',
                         width: '20%'
+                    },
+                    {
+                        data: 'fecha',
+                        width: '20%'
+                    },
+                    {
+                        data: 'btn',
+                        width: '20%'
                     }
                 ],
                 order: [
-                    [0, "asc"]
+                    [4, "desc"]
                 ],
                 createdRow: function(row, data, dataIndex) {
                     let td = $(row).find(".truncate");
@@ -504,41 +476,24 @@
                     $(row).attr('data-obligacion', data.obligacion);
                     $(row).attr('data-tiempo', data.tiempo_presentacion);
                     $(row).attr('data-tipo', data.tipo_presentacion);
-                }
+                },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        orderable: true,
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                return data;
+                            }
+                            return row.selected ? 1 : 0;
+                        }
+                    }
+                ]
             });
 
             /**
              * Event Listeners
              */
-
-            $(document).on('click', '.selectable-row', function() {
-                if ($(this).hasClass('selected')) {
-                    limpiarObligacion();
-                    $(this).removeClass('selected');
-                    $('#fecha_presentacion').prop('disabled', true);
-                    $('#fecha_inicio').prop('disabled', true);
-                } else {
-                    $('#dataTableObligaciones tr').removeClass('selected');
-                    limpiarObligacion();
-                    $(this).addClass('selected');
-                    obligacionSelected = $(this).data('id-obligacion');
-                    let obligacion = $(this).data('obligacion');
-                    let tiempo = $(this).data('tiempo');
-                    let tipo = $(this).data('tipo');
-
-                    $('#obligacion').val(obligacion);
-                    $('#tiempo_presentacion').val(tiempo);
-                    $('#tipo_presentacion').val(tipo);
-
-                    if (tiempo == 'CONSECUTIVA') {
-                        $('#fecha_presentacion').prop('disabled', true);
-                        $('#fecha_inicio').prop('disabled', false);
-                    } else if (tiempo == 'ÚNICA VEZ') {
-                        $('#fecha_presentacion').prop('disabled', false);
-                        $('#fecha_inicio').prop('disabled', true);
-                    }
-                }
-            });
 
             // Escuchar el evento change del select de socios
             $('#socio').change(function() {
@@ -568,9 +523,8 @@
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
 
                 // Verificar si se seleccionó una opción válida en el select
-                var socioSeleccionado = $('#socio').val();
-                console.log(socioSeleccionado);
-                var nombreSocioSeleccionado = $('#socio option:selected').text();
+                let socioSeleccionado = $('#socio').val();
+                let nombreSocioSeleccionado = $('#socio option:selected').text();
 
                 if (socioSeleccionado == -1) {
                     Swal.fire({
@@ -587,11 +541,9 @@
                     });
                     return;
                 } else {
-
                     $('#nombreSocioSeleccionado').text(nombreSocioSeleccionado);
                     limpiarFormulario();
                     tableObligaciones.clear().draw();
-                    // Abrir el modal
                     $('#ModalObligacion').modal('show');
                 }
             });
@@ -609,6 +561,7 @@
             $('#entidad').on('change', function() {
                 let selected = $(this).val();
                 limpiarObligacion();
+                selectedAddObligaciones = [];
                 if (selected == -1) {
                     filteredObligaciones = [];
                     tableObligaciones.clear().rows.add(filteredObligaciones).draw();
@@ -627,44 +580,138 @@
                     });
                     return;
                 }
-                filteredObligaciones = entidades.find(entidad => entidad.id == selected)
-                    .obligaciones;
-                filteredObligaciones = filteredObligaciones.map(obligacion => {
-                    return {
-                        id_obligacion: obligacion.obligacion.id,
-                        obligacion: obligacion.obligacion.obligacion,
-                        tiempo_presentacion: obligacion.obligacion.tiempo_presentacion
-                            ?.descripcion == undefined ? 'N/A' : obligacion.obligacion
-                            .tiempo_presentacion
-                            ?.descripcion,
-                        tipo_presentacion: obligacion.obligacion.tipo_presentacion?.descripcion ==
-                            undefined ?
-                            'N/A' : obligacion.obligacion.tipo_presentacion.descripcion
+                Swal.fire({
+                    target: document.getElementById('ModalObligacion'),
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading()
                     }
                 });
-                tableObligaciones.clear().rows.add(filteredObligaciones).draw();
+                $.ajax({
+                    url: "{{ route('admin.obtener_entidades') }}",
+                    type: 'GET',
+                    data: {
+                        id_entidad: selected
+                    },
+                    error: function(error) {
+                        Swal.close();
+                        Swal.fire({
+                            target: document.getElementById('ModalObligacion'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.message ||
+                                "Error al cargar las obligaciones de la entidad.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error(
+                                    "Error al cargar las obligaciones de la entidad: ",
+                                    error);
+                                $('#ModalObligacion').modal('hide');
+                            }
+                        });
+                        return;
+                    },
+                    complete: function(response) {
+                        Swal.close();
+                        entidades = response.responseJSON.entidades;
+                        filteredObligaciones = entidades.find(entidad => entidad.id == selected).obligaciones;
+                        filteredObligaciones = filteredObligaciones.map(obligacion => {
+                            let checkbox = socioObligaciones.some(socioObligacion => socioObligacion.id_obligacion === obligacion.obligacion.id);
+                            let data = [];
+                            let fecha = '';
+                            if (checkbox) {
+                                data = socioObligaciones.find(socioObligacion => socioObligacion.id_obligacion === obligacion.obligacion.id);
+                                console.log(data);
+                                fecha = data.obligacion?.tiempo_presentacion?.descripcion == 'CONSECUTIVA' ? data?.fecha_inicio : data.fecha_presentacion;
+                                console.log(fecha);
+                            } else {
+                                fecha = `<input type="text" data-plugin-datepicker class="form-control fecha" name="fecha" id="fecha_${obligacion.obligacion.id}" placeholder="Fecha">`;
+                            }
+                            return {
+                                id_obligacion: obligacion.obligacion.id,
+                                obligacion: obligacion.obligacion.obligacion,
+                                tiempo_presentacion: obligacion.obligacion.tiempo_presentacion
+                                    ?.descripcion == undefined ? 'N/A' : obligacion.obligacion
+                                    .tiempo_presentacion
+                                    ?.descripcion,
+                                tipo_presentacion: obligacion.obligacion.tipo_presentacion?.descripcion ==
+                                    undefined ?
+                                    'N/A' : obligacion.obligacion.tipo_presentacion.descripcion,
+                                fecha,
+                                btn: `<div class="flex justify-center w-full items-center"><input type="checkbox" style="width:1rem;height:1rem;" class="form-check-input seleccionar-obligacion" data-id="${obligacion.obligacion.id}" value="${checkbox ? 'true' : 'false'}"${checkbox ? ' checked' : ''} ${checkbox ? ' disabled' : ''}></div>`,
+                                selected: checkbox
+                            }
+                        });
+                        tableObligaciones.clear().rows.add(filteredObligaciones).draw();
+                        let debounceTimeout;
+                        clearTimeout(debounceTimeout);
+                        debounceTimeout = setTimeout(() => {
+                            $('.fecha').each(function() {
+                                $(this).datepicker({
+                                    format: 'dd/mm/yyyy',
+                                    autoclose: true,
+                                    todayHighlight: true,
+                                    language: 'es'
+                                });
+                            });
+                        }, 300);
+                    }
+                });
+            });
+
+            $(document).on('click', '.seleccionar-obligacion', function() {
+                let checkbox = $(this);
+                let id = checkbox.data('id');
+                let isChecked = checkbox.is(':checked');
+                let fecha = $(`#fecha_${id}`).val();
+                if ((fecha == '' || !esFechaValida(fecha)) && isChecked) {
+                    Swal.fire({
+                        target: document.getElementById('ModalObligacion'),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona una fecha para la obligación.',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Por favor, selecciona una fecha para la obligación.");
+                        }
+                    });
+                    checkbox.prop('checked', false);
+                    return;
+                }
+                let obligacion = filteredObligaciones.find(obligacion => obligacion.id_obligacion == id);
+                if (isChecked) {
+                    if (!selectedAddObligaciones.some(obligacion => obligacion.id_obligacion == id)){
+                        selectedAddObligaciones.push({
+                            id_obligacion: obligacion.id_obligacion,
+                            fecha: $(`#fecha_${obligacion.id_obligacion}`).val(),
+                        })
+                    }
+                } else {
+                    selectedAddObligaciones = selectedAddObligaciones.filter(obligacion => obligacion.id_obligacion != id);
+                }
             });
 
             $('#agregar_obligacion').click(function() {
-                if (!validarRegistro('ModalObligacion', 0)) return false;
-
-                let obligacion = $('#obligacion').val();
-                let tiempo_presentacion = $('#tiempo_presentacion').val();
-                let tipo_presentacion = $('#tipo_presentacion').val();
-                let fecha_presentacion = $('#fecha_presentacion').val();
-                let fecha_inicio = $('#fecha_inicio').val();
+                if (!validarRegistro('ModalObligacion')) return false;
                 let entidad = $('#entidad').val();
-
-                let data = {
-                    id_obligacion: obligacionSelected,
-                    id_entidad: entidad,
-                    id_socio: $('#socio').val(),
-                    tiempo_presentacion: tiempo_presentacion,
-                    tipo_presentacion: tipo_presentacion,
-                    fecha_presentacion: fecha_presentacion,
-                    fecha_inicio: fecha_inicio,
-                };
-
+                let socio = $('#socio').val();
+                let formData = new FormData();
+                formData.append('id_socio', socio);
+                formData.append('id_entidad', entidad);
+                selectedAddObligaciones.forEach((obligacion, index) => {
+                    formData.append(`obligaciones[${index}][id_obligacion]`, obligacion.id_obligacion);
+                    formData.append(`obligaciones[${index}][fecha]`, obligacion.fecha);
+                });
                 Swal.fire({
                     target: document.getElementById('ModalObligacion'),
                     title: '¿Estás seguro?',
@@ -680,7 +727,9 @@
                         $.ajax({
                             url: "{{ route('admin.registrar_obligacion_socio') }}",
                             type: 'POST',
-                            data: data,
+                            data: formData,
+                            processData: false,
+                            contentType: false,
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
                                     'content')
@@ -792,17 +841,6 @@
                 let fecha_presentacion = data.fecha_presentacion ?? 'N/A';
                 let fecha_inicio = data.fecha_inicio ?? 'N/A';
 
-                function convertirFecha(fecha) {
-                    if (fecha == 'N/A') {
-                        return fecha;
-                    }
-                    let fechaArray = fecha.split('-');
-                    return `${fechaArray[2]}/${fechaArray[1]}/${fechaArray[0]}`;
-                }
-
-                fecha_inicio = convertirFecha(fecha_inicio);
-                fecha_presentacion = convertirFecha(fecha_presentacion);
-
                 $('#ModalModificarObligacion').find('#entidad_mod').val(data.nombre_entidad);
                 $('#ModalModificarObligacion').find('#obligacion_mod').val(data.nombre_obligacion);
                 $('#ModalModificarObligacion').find('#tiempo_presentacion_mod').val(tiempo_presentacion);
@@ -824,7 +862,7 @@
                 $('#ModalModificarObligacion').modal('show');
             });
             $('#modificar_obligacion').click(function() {
-                if (!validarRegistro('ModalModificarObligacion', 1)) return;
+                if (!validarRegistroMod('ModalModificarObligacion')) return;
                 let fecha_inicio = $('#ModalModificarObligacion').find('#fecha_inicio_mod').val();
                 let fecha_presentacion = $('#ModalModificarObligacion').find('#fecha_presentacion_mod')
                     .val();
@@ -899,7 +937,6 @@
             function limpiarFormulario() {
                 filteredObligaciones = [];
                 $('#entidad').val(-1);
-                $('#dataTableObligaciones tr').removeClass('selected');
                 limpiarObligacion();
             }
 
@@ -914,15 +951,15 @@
             //Manejo de Fechas
             // Función para validar el formato dd/mm/yyyy
             function esFechaValida(fecha) {
-                var regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+                let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
                 if (!regex.test(fecha)) {
                     return false;
                 }
-                var partes = fecha.split('/');
-                var dia = parseInt(partes[0], 10);
-                var mes = parseInt(partes[1], 10) - 1;
-                var anio = parseInt(partes[2], 10);
-                var fechaObj = new Date(anio, mes, dia);
+                let partes = fecha.split('/');
+                let dia = parseInt(partes[0], 10);
+                let mes = parseInt(partes[1], 10) - 1;
+                let anio = parseInt(partes[2], 10);
+                let fechaObj = new Date(anio, mes, dia);
                 return (
                     fechaObj.getDate() == dia &&
                     fechaObj.getMonth() == mes &&
@@ -930,15 +967,84 @@
                 );
             }
 
-            function validarRegistro(idModal, isMod) {
-                let mod = "";
-                if (isMod) mod = "_mod";
-                let obligacion = $('#obligacion' + mod).val();
-                let tiempo_presentacion = $('#tiempo_presentacion' + mod).val();
-                let tipo_presentacion = $('#tipo_presentacion' + mod).val();
-                let fecha_presentacion = $('#fecha_presentacion' + mod).val();
-                let fecha_inicio = $('#fecha_inicio' + mod).val();
-                let entidad = $('#entidad' + mod).val();
+            function validarRegistro(idModal) {
+                let entidad = $('#entidad').val();
+                let socio = $('#socio').val();
+                if (entidad == -1) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona una entidad.',
+                    });
+                    return false;
+                }
+                if (socio == -1) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona un socio.',
+                    });
+                    return false;
+                }
+                if (selectedAddObligaciones.length == 0) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona al menos una obligación.',
+                    });
+                    return false;
+                }
+                let nuevasObligaciones = selectedAddObligaciones.filter(
+                    id => !filteredObligaciones.some(obligacion => obligacion.id === id)
+                );
+                if (nuevasObligaciones.length == 0) {
+                    Swal.fire({
+                        target: document.getElementById(idModal),
+                        icon: 'error',
+                        title: 'Error',
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Aceptar',
+                        text: 'Por favor, selecciona al menos una obligación nueva.',
+                    });
+                    return false;
+                }
+                nuevasObligaciones.forEach(obligacion => {
+                    if (!obligacion.fecha || obligacion.fecha.trim() === '') {
+                        Swal.fire({
+                            target: document.getElementById(idModal),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, selecciona una fecha para todas las obligaciones seleccionadas.',
+                        });
+                        return false;
+                    }
+                });
+                return true;
+            }
+
+            function validarRegistroMod(idModal) {
+                let obligacion = $('#obligacion_mod').val();
+                let tiempo_presentacion = $('#tiempo_presentacion_mod').val();
+                let tipo_presentacion = $('#tipo_presentacion_mod').val();
+                let fecha_presentacion = $('#fecha_presentacion_mod').val();
+                let fecha_inicio = $('#fecha_inicio_mod').val();
+                let entidad = $('#entidad_mod').val();
 
                 if (entidad == -1) {
                     Swal.fire({

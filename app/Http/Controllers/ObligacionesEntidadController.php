@@ -13,6 +13,7 @@ use App\Models\TiempoPresentacion;
 use App\Models\TipoPresentacion;
 use App\Models\Obligacion;
 use App\Models\LogActivity;
+use Illuminate\Support\Facades\Validator;
 
 class ObligacionesEntidadController extends Controller
 {
@@ -29,10 +30,10 @@ class ObligacionesEntidadController extends Controller
     public function obtener_listado_obligaciones_por_entidad(Request $request)
     {
         $columns = [
-            0 => 'obligaciones.id',
-            1 => 'obligaciones.obligacion',
-            2 => 'tiempo_presentacion.descripcion',
-            3 => 'tipo_presentacion.descripcion'
+            0 => 'obligaciones.obligacion',
+            1 => 'tiempo_presentacion.descripcion',
+            2 => 'tipo_presentacion.descripcion',
+            3 => 'entidades_obligaciones.id'
         ];
 
         $query = DB::table('obligaciones')
@@ -46,10 +47,12 @@ class ObligacionesEntidadController extends Controller
                 'tipo_presentacion.descripcion as tipo_presentacion',
                 'entidades_obligaciones.id as register'
             )
-            ->where('entidades_obligaciones.estado', 1)
-            ->orderBy('obligaciones.obligacion', 'asc');
-
-        // Filtro de localidad 
+            ->where('entidades_obligaciones.estado', 1);
+        
+        // **Filtrar por id_camara si está presente en el request**
+        if ($idEntidad = $request->input('id_entidad')) {
+            $query->where('entidades_obligaciones.id_entidad', $idEntidad);
+        }
 
         // Búsqueda
         if ($search = $request->input('search.value')) {
@@ -60,11 +63,6 @@ class ObligacionesEntidadController extends Controller
             });
         }
 
-        // **Filtrar por id_camara si está presente en el request**
-        if ($idEntidad = $request->input('id_entidad')) {
-            $query->where('entidades_obligaciones.id_entidad', $idEntidad);
-        }
-
         $totalFiltered = $query->count();
 
         // Orden
@@ -72,27 +70,26 @@ class ObligacionesEntidadController extends Controller
         $orderDir = $request->input('order.0.dir', 'asc'); // Por defecto, orden ascendente
 
         if (isset($columns[$orderColumnIndex])) {
-            $orderColumn = $columns[$orderColumnIndex];
-            $query->orderBy($orderColumn, $orderDir);
+            $query->orderBy($columns[$orderColumnIndex], $orderDir);
+        } else {
+            $query->orderBy('obligaciones.obligacion', 'asc');
         }
 
         // Paginación
-        $start = $request->input('start') ?? 0;
-        $length = $request->input('length') ?? 10;
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
         $query->skip($start)->take($length);
 
         $obligaciones = $query->get();
 
         $data = $obligaciones->map(function ($obligacion) {
-            $boton = "";
-
             return [
+                'id' => $obligacion->id,
                 'obligacion' => $obligacion->obligacion,
                 'tiempo_presentacion' => $obligacion->tiempo_presentacion,
-                'tipo_presentacion' => $obligacion->tipo_presentacion,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->register . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'tipo_presentacion' => $obligacion->tipo_presentacion ?? 'N/A',
+                'btn' => '<div class="flex items-center justify-center w-full"><button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar</button>' .
+                    '<div/>'
             ];
         });
 
@@ -110,59 +107,47 @@ class ObligacionesEntidadController extends Controller
     {
 
         try {
-
-            DB::beginTransaction();
-            $id_tipo_presentacion = 0;
-            if ($request->input('tiempo_presentacion')) {
-                $id_tipo_presentacion = $request->input('tipo_presentacion');
-            }
-
-            $fecha_inicio = $request->input('fecha_inicio');
-            if ($fecha_inicio) {
-                $fecha_inicio = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_inicio)->format('Y-m-d');
-            } else {
-                $fecha_inicio = null;
-            }
-
-            $fecha_presentacion = $request->input('fecha_presentacion');
-            if ($fecha_presentacion) {
-                $fecha_presentacion = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha_presentacion)->format('Y-m-d');
-            } else {
-                $fecha_presentacion = null;
-            }
-
-
-            // Crear registro en la base de datos
-            $obligacion = EntidadObligacion::create([
-                'id_obligacion' => strtoupper($request->input('obligacion_id')),
-                'id_entidad' => strtoupper($request->input('entidad_id')),
-                'fecha_inicio' => $fecha_inicio,
-                'fecha_presentacion' => $fecha_presentacion,
-                'estado' => 1
+            $validator = Validator::make($request->all(), [
+                'obligaciones' => 'required|array|min:1',
+                'obligaciones.*' => 'required|integer|exists:obligaciones,id',
+                'entidad_id' => 'required|integer|exists:entidades,id',
             ]);
-
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
+            DB::beginTransaction();
+            $obligacionesRepetidas = array_diff_assoc($data['obligaciones'], array_unique($data['obligaciones']));
+            if (!empty($obligacionesRepetidas)) {
+                return response()->json(['error' => 'Existen IDs de obligaciones repetidos en la solicitud'], 422);
+            }
+            $obligacionesExisten = EntidadObligacion::where('id_entidad', $data['entidad_id'])->whereIn('id_obligacion', $data['obligaciones'])->get();
+            if ($obligacionesExisten->count() > 0) {
+                $obligacionesExisten->each(function ($obligacion) {
+                    $obligacion->estado = 1;
+                    $obligacion->save();
+                });
+            }
+            $nuevasObligaciones = array_diff($data['obligaciones'], $obligacionesExisten->pluck('id_obligacion')->toArray());
+            foreach ($nuevasObligaciones as $obligacionId) {
+                EntidadObligacion::create([
+                    'id_obligacion' => $obligacionId,
+                    'id_entidad' => $data['entidad_id'],
+                    'estado' => 1
+                ]);
+            }
             DB::commit();
             return response()->json(['success' => 'Obligación registrada correctamente'], 200);
-        } catch (\Illuminate\Database\QueryException $e) {
-
-            Log::error($e);
+        } catch (\Throwable $th) {
+            Log::error($th);
             DB::rollBack();
-            if ($e->getCode() == 23000) { // Código SQL para violación de restricción única
-                return response()->json(['error' => 'La Obligación ya existe en el grupo de obligaciones por Entidad, no se puede registrar la misma dos veces.'], 422);
-            }
-            return response()->json(['error' => 'Error al registrar la Obligación: ' . $e->getMessage()], 500);
-        } catch (\Exception $e) {
-
-            Log::error($e);
-            DB::rollBack();
-            return response()->json(['error' => 'Error al registrar la Obligación: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Error al registrar la Obligación: ' . $th->getMessage()], 500);
         }
     }
 
     public function eliminar_entidad_obligacion($id)
     {
         try {
-
             DB::beginTransaction();
             //$colaborador = Colaborador::find($id);
             $entidad = EntidadObligacion::where('id', $id)->first();
