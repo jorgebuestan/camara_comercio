@@ -640,6 +640,8 @@
             $('#con_razon_social').hide();
             $('#id_con_ruc').hide();
             $('#id_sin_ruc').hide();
+            $('#datos_tributarios').hide();  
+            $('a[href="#datos_tributarios"]').hide();
 
 
             /**
@@ -666,7 +668,7 @@
             function toggleJuridico(active) {
                 if (active) {
                     // Ocultar el contenido del tab
-                    $('#datos_tributarios').show(); 
+                    //$('#datos_tributarios').show(); 
                     // Ocultar el botón o enlace que activa el tab
                     $('a[href="#datos_tributarios"]').show();
 
@@ -685,7 +687,7 @@
             function toggleNaturalConRuc(active) {
                 if (active) {
                     // Ocultar el contenido del tab
-                    $('#datos_tributarios').show(); 
+                    //$('#datos_tributarios').show(); 
                     // Ocultar el botón o enlace que activa el tab
                     $('a[href="#datos_tributarios"]').show();
 
@@ -704,7 +706,7 @@
             function toggleNaturalSinRuc(active) {
                 if (active) {  
                     // Ocultar el contenido del tab
-                    $('#datos_tributarios').hide(); 
+                    //$('#datos_tributarios').hide(); 
                     // Ocultar el botón o enlace que activa el tab
                     $('a[href="#datos_tributarios"]').hide();
 
@@ -722,6 +724,7 @@
 
             // Event listener for onChange of select tipo_personeria
             $('#tipo_personeria').change(function() {
+                $('a[href="#datos_tributarios"]').hide();
                 var tipoPersoneria = $(this).val();
                 if (tipoPersoneria == 1) {
                     toggleNaturalSinRuc(true);
@@ -729,11 +732,13 @@
                     toggleNaturalConRuc(false);
                     $('#identificacion').focus();
                 }else if (tipoPersoneria == 2) {
+                    $('a[href="#datos_tributarios"]').hide();
                     toggleNaturalSinRuc(false);
                     toggleJuridico(false);
                     toggleNaturalConRuc(true);
                     $('#identificacion').focus();
                 }else if (tipoPersoneria == 3) {
+                    $('a[href="#datos_tributarios"]').hide();
                     toggleNaturalSinRuc(false);
                     toggleJuridico(true);
                     toggleNaturalConRuc(false);
@@ -744,30 +749,33 @@
                     toggleNaturalSinRuc(false);
                     $('#sin_razon_social').hide();
                     $('#con_razon_social').hide();
-                }
-                /*if (tipoPersoneria == 1) {
-                    toggleNaturalSinRuc(true);
-                    toggleJuridico(false);
-                    toggleNaturalConRuc(false);
-                    $('#identificacion').focus();
-                } else if (tipoPersoneria == 2) {
-                    toggleNaturalConRuc(false);
-                    toggleJuridico(false);
-                    toggleNaturalConRuc(true);
-                    $('#identificacion').focus();
-                } else if (tipoPersoneria == 3) {
-                    toggleNaturalConRuc(false);
-                    toggleJuridico(true);
-                    toggleNaturalConRuc(false);
-                    $('#identificacion').focus();
-                } else {
-                    toggleJuridico(false);
-                    toggleNaturalConRuc(false);
-                    toggleNaturalSinRuc(false);
-                    $('#sin_razon_social').hide();
-                    $('#con_razon_social').hide();
-                }*/
+                    $('a[href="#datos_tributarios"]').hide();
+                } 
             });
+            /* $('#tipo_personeria').change(function() {
+                var tipoPersoneria = $(this).val();
+                if (tipoPersoneria == 1) {
+                     
+                }else if (tipoPersoneria == 2) {
+
+                    
+
+                    $('#sin_razon_social').hide();
+                    $('#id_con_ruc').show();
+                    $('#id_sin_ruc').hide();
+                    $('#con_razon_social').show();
+                    $('#juridico').hide();
+                    $('#natural').show();
+                    $('#tributario_natural').show();
+ 
+                    $('a[href="#datos_tributarios"]').show();
+                     
+                }else if (tipoPersoneria == 3) {
+                     
+                }else{
+                     
+                } 
+            }); */
 
             // Event listener for onInput of input identificacion
             $('#identificacion').on('input', function() {
