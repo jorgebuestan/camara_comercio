@@ -193,13 +193,22 @@
                                                             @endForEach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-6 gap-1">
+                                                    <div id="id_con_ruc" class="col-md-6 gap-1">
                                                         <label>
                                                             Identificación
                                                         </label>
                                                         <input type="text" class="form-control" name="identificacion"
                                                             id="identificacion" placeholder="Identificación" />
                                                         <div id="error_identificacion" style="color: red; display: none;">
+                                                        </div>
+                                                    </div>
+                                                    <div id="id_sin_ruc" class="col-md-6 gap-1">
+                                                        <label>
+                                                            Identificación
+                                                        </label>
+                                                        <input type="text" class="form-control" name="identificacion_sin_ruc"
+                                                            id="identificacion_sin_ruc" placeholder="Identificación sin Ruc" />
+                                                        <div id="error_identificacion_sin_ruc" style="color: red; display: none;">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -210,7 +219,17 @@
                                                     </div>
                                                 </div>
                                                 <div id="datos_personales">
-                                                    <div class="row mb-2">
+                                                    <div id="sin_razon_social" class="row mb-2">
+                                                        <div class="col-md-12 gap-1">
+                                                            <label>
+                                                                Nombre
+                                                            </label>
+                                                            <input type="text" class="form-control"
+                                                                name="razon_social_nombre" id="razon_social_nombre"
+                                                                placeholder="Razón Social" />
+                                                        </div>
+                                                    </div>
+                                                    <div id="con_razon_social" class="row mb-2">
                                                         <div class="col-md-12 gap-1">
                                                             <label>
                                                                 Razón Social
@@ -534,6 +553,7 @@
             $.datepicker.setDefaults($.datepicker.regional['es']);
 
             $('#identificacion').attr('maxlength', 13);
+            $('#identificacion_sin_ruc').attr('maxlength', 10);
 
             var socioSelected = null;
             let socios = [];
@@ -616,6 +636,11 @@
                 }
             });
 
+            $('#sin_razon_social').hide();
+            $('#con_razon_social').hide();
+            $('#id_con_ruc').hide();
+            $('#id_sin_ruc').hide();
+
 
             /**
              * Event listeners
@@ -640,19 +665,56 @@
             // Functions for Form Selects and Elements
             function toggleJuridico(active) {
                 if (active) {
+                    // Ocultar el contenido del tab
+                    $('#datos_tributarios').show(); 
+                    // Ocultar el botón o enlace que activa el tab
+                    $('a[href="#datos_tributarios"]').show();
+
+                    $('#sin_razon_social').hide();
+                    $('#id_con_ruc').show();
+                    $('#id_sin_ruc').hide();
+                    $('#con_razon_social').show();
                     $('#juridico').show();
-                    $('#tributario_natural').hide()
+                    $('#tributario_natural').hide();
                     $('#natural').hide();
                 } else {
                     $('#juridico').hide();
                 }
             }
 
-            function toggleNatural(active) {
+            function toggleNaturalConRuc(active) {
                 if (active) {
+                    // Ocultar el contenido del tab
+                    $('#datos_tributarios').show(); 
+                    // Ocultar el botón o enlace que activa el tab
+                    $('a[href="#datos_tributarios"]').show();
+
+                    $('#sin_razon_social').hide();
+                    $('#id_con_ruc').show();
+                    $('#id_sin_ruc').hide();
+                    $('#con_razon_social').show();
                     $('#juridico').hide();
                     $('#natural').show();
                     $('#tributario_natural').show();
+                } else {
+                    $('#natural').hide();
+                }
+            }
+
+            function toggleNaturalSinRuc(active) {
+                if (active) {  
+                    // Ocultar el contenido del tab
+                    $('#datos_tributarios').hide(); 
+                    // Ocultar el botón o enlace que activa el tab
+                    $('a[href="#datos_tributarios"]').hide();
+
+                    $('#sin_razon_social').show();
+                    $('#id_con_ruc').hide();
+                    $('#id_sin_ruc').show();
+                    $('#con_razon_social').hide();
+                    $('#juridico').hide();
+                    $('#natural').hide();
+                    $('#tributario_natural').hide();
                 } else {
                     $('#natural').hide();
                 }
@@ -662,17 +724,49 @@
             $('#tipo_personeria').change(function() {
                 var tipoPersoneria = $(this).val();
                 if (tipoPersoneria == 1) {
+                    toggleNaturalSinRuc(true);
                     toggleJuridico(false);
-                    toggleNatural(true);
+                    toggleNaturalConRuc(false);
+                    $('#identificacion').focus();
+                }else if (tipoPersoneria == 2) {
+                    toggleNaturalSinRuc(false);
+                    toggleJuridico(false);
+                    toggleNaturalConRuc(true);
+                    $('#identificacion').focus();
+                }else if (tipoPersoneria == 3) {
+                    toggleNaturalSinRuc(false);
+                    toggleJuridico(true);
+                    toggleNaturalConRuc(false);
+                    $('#identificacion').focus();
+                }else{
+                    toggleJuridico(false);
+                    toggleNaturalConRuc(false);
+                    toggleNaturalSinRuc(false);
+                    $('#sin_razon_social').hide();
+                    $('#con_razon_social').hide();
+                }
+                /*if (tipoPersoneria == 1) {
+                    toggleNaturalSinRuc(true);
+                    toggleJuridico(false);
+                    toggleNaturalConRuc(false);
                     $('#identificacion').focus();
                 } else if (tipoPersoneria == 2) {
+                    toggleNaturalConRuc(false);
+                    toggleJuridico(false);
+                    toggleNaturalConRuc(true);
+                    $('#identificacion').focus();
+                } else if (tipoPersoneria == 3) {
+                    toggleNaturalConRuc(false);
                     toggleJuridico(true);
-                    toggleNatural(false);
+                    toggleNaturalConRuc(false);
                     $('#identificacion').focus();
                 } else {
                     toggleJuridico(false);
-                    toggleNatural(false);
-                }
+                    toggleNaturalConRuc(false);
+                    toggleNaturalSinRuc(false);
+                    $('#sin_razon_social').hide();
+                    $('#con_razon_social').hide();
+                }*/
             });
 
             // Event listener for onInput of input identificacion
@@ -684,6 +778,17 @@
                     $('#error_identificacion').show();
                 } else {
                     $('#error_identificacion').hide();
+                }
+            });
+
+            $('#identificacion_sin_ruc').on('input', function() {
+                var identificacion = $(this).val();
+                var validRuc = /^\d{10}$/.test(identificacion);
+                if (!validRuc) {
+                    $('#error_identificacion_sin_ruc').text('La identificación debe tener 10 dígitos.');
+                    $('#error_identificacion_sin_ruc').show();
+                } else {
+                    $('#error_identificacion_sin_ruc').hide();
                 }
             });
 
@@ -904,8 +1009,8 @@
                 const data = {};
 
                 const commonFields = [
-                    'fecha_ingreso', 'tipo_personeria', 'identificacion',
-                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fecha_ingreso', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
+                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen', 'razon_social_nombre', 
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
@@ -923,7 +1028,7 @@
                     'correo', 'telefono', , 'fecha_nacimiento'
                 ]);
 
-                let requiredFields = $('#tipo_personeria').val() == 2 ? requiredFieldsJuridico :
+                let requiredFields = $('#tipo_personeria').val() == 3 ? requiredFieldsJuridico :
                     requiredFieldsNaturalRuc;
 
 
@@ -993,8 +1098,8 @@
                 const data = {};
 
                 const commonFields = [
-                    'fecha_ingreso', 'tipo_personeria', 'identificacion',
-                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen',
+                    'fecha_ingreso', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
+                    'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen', 'razon_social_nombre', 
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial',
@@ -1013,7 +1118,7 @@
                     'correo', 'telefono', , 'fecha_nacimiento'
                 ]);
 
-                let requiredFields = $('#tipo_personeria').val() == 2 ? requiredFieldsJuridico :
+                let requiredFields = $('#tipo_personeria').val() == 3 ? requiredFieldsJuridico :
                     requiredFieldsNaturalRuc;
 
 
@@ -1174,13 +1279,15 @@
                 $('#ModalSocio').find('#tipo_personeria').val(data.id_tipo_personeria).trigger(
                     'change');
                 $('#ModalSocio').find('#identificacion').val(data.identificacion);
+                $('#ModalSocio').find('#identificacion_sin_ruc').val(data.identificacion);
                 $('#ModalSocio').find('#razon_social').val(data.razon_social);
-                if (data.id_tipo_personeria == 1) {
+                $('#ModalSocio').find('#razon_social_nombre').val(data.razon_social);
+                if (data.id_tipo_personeria == 2) {
                     $('#ModalSocio').find('#telefono').val(data.telefono);
                     $('#ModalSocio').find('#correo').val(data.correo);
                     $('#ModalSocio').find('#fecha_nacimiento').val(data.fecha_nacimiento).trigger(
                         'change');
-                } else if (data.id_tipo_personeria == 2) {
+                } else if (data.id_tipo_personeria == 3) {
                     $('#ModalSocio').find('#cedula_representante').val(data
                         .cedula_representante_legal);
                     $('#ModalSocio').find('#nombre_representante').val(data
@@ -1196,6 +1303,8 @@
                     $('#ModalSocio').find('#vencimiento_nombramiento').val(data
                         .fecha_vencimiento_nombramiento).trigger('change');
                 }
+                //alert('mod');
+                //alert(data.fecha_registro_sri);
                 $('#ModalSocio').find('#estado_sri').val(data.estado_sri);
                 $('#ModalSocio').find('#fecha_registro_sri').val(data.fecha_registro_sri).trigger(
                     'change');
@@ -1324,7 +1433,7 @@
                     .val(-1);
             }
 
-            function validarRegistro() {
+            function validarRegistro() {  //jbuestan  Para validacion de Registro
                 if ($('#fecha_ingreso').val() == "") {
                     Swal.fire({
                         target: document.getElementById('ModalSocio'),
@@ -1352,49 +1461,107 @@
                     $('#tipo_personeria').focus();
                     return false;
                 }
-                if ($('#identificacion').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la identificación.',
-                    });
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#identificacion').focus();
-                    return false;
+
+                if ($('#tipo_personeria').val() == 1) {
+                    if ($('#identificacion_sin_ruc').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la identificación.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#identificacion_sin_ruc').focus();
+                        return false;
+                    }
+
+                    if ($('#razon_social_nombre').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese el nombre del Socio.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#razon_social').focus();
+                        return false;
+                    }
+
+                    if (!/^\d{10}$/.test($('#identificacion_sin_ruc').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'La Identificación debe tener 10 dígitos.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#identificacion_sin_ruc').focus();
+                        return false;
+                    }
                 }
-                if ($('#razon_social').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la razón social.',
-                    });
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#razon_social').focus();
-                    return false;
+
+                if ($('#tipo_personeria').val() == 2 || $('#tipo_personeria').val() == 3){
+
+                    if ($('#identificacion').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la identificación.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#identificacion').focus();
+                        return false;
+                    } 
+
+                    if ($('#razon_social').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la razón social.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#razon_social').focus();
+                        return false;
+                    }
+
+                    if (!/^\d{13}$/.test($('#identificacion').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'El RUC debe tener 13 dígitos.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#identificacion').focus();
+                        return false;
+                    }
+
                 }
-                if (!/^\d{13}$/.test($('#identificacion').val())) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'El RUC debe tener 13 dígitos.',
-                    });
-                    $('.nav-tabs a[href="#datos_generales"]').tab('show');
-                    $('#identificacion').focus();
-                    return false;
-                }
-                if ($('#tipo_personeria').val() == 2) {
+                
+                
+                
+                
+                if ($('#tipo_personeria').val() == 3) {
                     if ($('#nombre_representante').val() == "") {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1520,7 +1687,7 @@
                         $('#vencimiento_nombramiento').focus();
                         return false;
                     }
-                } else if ($('#tipo_personeria').val() == 1) {
+                } else if ($('#tipo_personeria').val() == 2) {
                     if (!/^\+?\d{1,14}$/.test($('#telefono').val())) {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -1578,258 +1745,264 @@
                         return false;
                     }
                 }
-                if ($('#estado_sri').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el estado del SRI.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#estado_sri').focus();
-                    return false;
+
+                if ($('#tipo_personeria').val() == 2 || $('#tipo_personeria').val() == 3){
+
+                    if ($('#estado_sri').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione el estado del SRI.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#estado_sri').focus();
+                        return false;
+                    }
+                    if ($('#tipo_regimen').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione el tipo de régimen.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#tipo_regimen').focus();
+                        return false;
+                    }
+                    if ($('#fecha_registro_sri').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la fecha de registro en el SRI.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_registro_sri').focus();
+                        return false;
+                    }
+                    if (!esFechaValida($('#fecha_registro_sri').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_registro_sri').focus();
+                        return false;
+                    }
+                    if ($('#fecha_actualizacion_ruc').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la fecha de actualización del RUC.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_actualizacion_ruc').focus();
+                        return false;
+                    }
+                    if (!esFechaValida($('#fecha_actualizacion_ruc').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_actualizacion_ruc').focus();
+                        return false;
+                    }
+                    if ($('#fecha_constitucion').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la fecha de constitución.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_constitucion').focus();
+                        return false;
+                    }
+                    if (!esFechaValida($('#fecha_constitucion').val())) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#fecha_constitucion').focus();
+                        return false;
+                    }
+                    if ($('#agente_retencion').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione si es agente de retención.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#agente_retencion').focus();
+                        return false;
+                    }
+                    if ($('#contribuyente_especial').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione si es contribuyente especial.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#contribuyente_especial').focus();
+                        return false;
+                    }
+                    if ($('#pais').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione el país.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#pais').focus();
+                        return false;
+                    }
+                    if ($('#provincia').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione la provincia.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#provincia').focus();
+                        return false;
+                    }
+                    if ($('#canton').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione el cantón.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#canton').focus();
+                        return false;
+                    }
+                    if ($('#parroquia').val() == -1) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, seleccione la parroquia.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#parroquia').focus();
+                        return false;
+                    }
+                    if ($('#calle').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la calle.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#calle').focus();
+                        return false;
+                    }
+                    if ($('#numero').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese el número.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#numero').focus();
+                        return false;
+                    }
+                    if ($('#interseccion').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la intersección.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#interseccion').focus();
+                        return false;
+                    }
+                    if ($('#referencia').val() == "") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese la referencia.',
+                        });
+                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                        $('#referencia').focus();
+                        return false;
+                    }
+
                 }
-                if ($('#tipo_regimen').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el tipo de régimen.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#tipo_regimen').focus();
-                    return false;
-                }
-                if ($('#fecha_registro_sri').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la fecha de registro en el SRI.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_registro_sri').focus();
-                    return false;
-                }
-                if (!esFechaValida($('#fecha_registro_sri').val())) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_registro_sri').focus();
-                    return false;
-                }
-                if ($('#fecha_actualizacion_ruc').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la fecha de actualización del RUC.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_actualizacion_ruc').focus();
-                    return false;
-                }
-                if (!esFechaValida($('#fecha_actualizacion_ruc').val())) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_actualizacion_ruc').focus();
-                    return false;
-                }
-                if ($('#fecha_constitucion').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la fecha de constitución.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_constitucion').focus();
-                    return false;
-                }
-                if (!esFechaValida($('#fecha_constitucion').val())) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#fecha_constitucion').focus();
-                    return false;
-                }
-                if ($('#agente_retencion').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione si es agente de retención.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#agente_retencion').focus();
-                    return false;
-                }
-                if ($('#contribuyente_especial').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione si es contribuyente especial.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#contribuyente_especial').focus();
-                    return false;
-                }
-                if ($('#pais').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el país.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#pais').focus();
-                    return false;
-                }
-                if ($('#provincia').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione la provincia.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#provincia').focus();
-                    return false;
-                }
-                if ($('#canton').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione el cantón.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#canton').focus();
-                    return false;
-                }
-                if ($('#parroquia').val() == -1) {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, seleccione la parroquia.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#parroquia').focus();
-                    return false;
-                }
-                if ($('#calle').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la calle.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#calle').focus();
-                    return false;
-                }
-                if ($('#numero').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese el número.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#numero').focus();
-                    return false;
-                }
-                if ($('#interseccion').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la intersección.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#interseccion').focus();
-                    return false;
-                }
-                if ($('#referencia').val() == "") {
-                    Swal.fire({
-                        target: document.getElementById('ModalSocio'),
-                        icon: 'error',
-                        title: 'Error',
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Aceptar',
-                        text: 'Por favor, ingrese la referencia.',
-                    });
-                    $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                    $('#referencia').focus();
-                    return false;
-                }
+                
                 return true;
             }
 
@@ -2094,6 +2267,7 @@
             validarFechaOnBlur('fecha_nacimiento');
 
             onInputUppercase('razon_social');
+            onInputUppercase('razon_social_nombre');
             onInputUppercase('identificacion');
             onInputUppercase('correo');
             onInputUppercase('correo');
@@ -2125,9 +2299,9 @@
             aniosVencimiento('fecha_ingreso', 'vencimiento_nombramiento',
                 'anios_nombramiento');
 
-            calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
+            /*calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
                 'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
-            );
+            );*/
         });
     </script>
 @endsection

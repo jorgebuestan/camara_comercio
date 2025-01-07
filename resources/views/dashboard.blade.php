@@ -404,7 +404,7 @@
                         @endcan
 
                         @can('Camara')
-                            <li>
+                            <!-- <li>
                                 <details class="group">
                                     <summary
                                         class="flex items-center justify-between text-white hover:bg-gray-700 p-2 rounded-md cursor-pointer">
@@ -423,7 +423,7 @@
                                         </li>
                                     </ul>
                                 </details>
-                            </li>
+                            </li> -->
                         @endcan
                     </ul>
                 </nav>
