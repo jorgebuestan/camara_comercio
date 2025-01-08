@@ -250,12 +250,19 @@
                                 href="{{ route('profile.edit') }}">Perfil</a>
                         </li>
                         <li>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <!-- <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
                                     :href="route('logout')"
                                     onclick="event.preventDefault();
                                                             this.closest('form').submit();">
+                                    {{ __('Cerrar sesión') }}
+                                </a>
+                            </form> -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
                                     {{ __('Cerrar sesión') }}
                                 </a>
                             </form>
