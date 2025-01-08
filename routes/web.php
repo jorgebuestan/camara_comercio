@@ -47,9 +47,9 @@ Route::group(['middleware' => ['auth', 'verified', 'password.change']], function
 });
 */
 
-Route::middleware(['log:requests'])->group(function () {
+/*Route::middleware(['log:requests'])->group(function () {
     Route::post('password/change', [PasswordController::class, 'update'])->name('password.update2');
-});
+});*/
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
