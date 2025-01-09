@@ -153,11 +153,7 @@
                                             <li id="tab_item_tributario" class="nav-item">
                                                 <a class="nav-link" data-bs-target="#datos_tributarios"
                                                     href="#datos_tributarios" data-bs-toggle="tab">Datos Tributarios</a>
-                                            </li>
-                                            {{-- <li id="tab_item_establecimiento" class="nav-item">
-                                                <a class="nav-link" data-bs-target="#establecimientos"
-                                                    href="#establecimientos" data-bs-toggle="tab">Establecimientos</a>
-                                            </li> --}}
+                                            </li> 
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
@@ -640,8 +636,10 @@
             $('#con_razon_social').hide();
             $('#id_con_ruc').hide();
             $('#id_sin_ruc').hide();
-            $('#datos_tributarios').hide();  
-            $('a[href="#datos_tributarios"]').hide();
+            //$('#datos_tributarios').hide();  
+            //$('a[href="#datos_tributarios"]').hide();
+            $('#tab_item_tributario').hide();
+            $('#datos_tributarios').removeClass('show active');
 
 
             /**
@@ -664,44 +662,45 @@
                 $('#ModalSocio').modal('show');
             });
 
-            // Functions for Form Selects and Elements
             function toggleJuridico(active) {
-                if (active) {
-                    // Ocultar el contenido del tab
-                    //$('#datos_tributarios').show(); 
-                    // Ocultar el botón o enlace que activa el tab
-                    $('a[href="#datos_tributarios"]').show();
+    if (active) {
+        // Mostrar solo los elementos relacionados con "jurídico"
+        $('a[href="#datos_tributarios"]').show();
+        //$('#datos_tributarios').show();
 
-                    $('#sin_razon_social').hide();
-                    $('#id_con_ruc').show();
-                    $('#id_sin_ruc').hide();
-                    $('#con_razon_social').show();
-                    $('#juridico').show();
-                    $('#tributario_natural').hide();
-                    $('#natural').hide();
-                } else {
-                    $('#juridico').hide();
-                }
-            }
+        $('#sin_razon_social').hide();
+        $('#id_con_ruc').show();
+        $('#id_sin_ruc').hide();
+        $('#con_razon_social').show();
+        $('#juridico').show();
 
-            function toggleNaturalConRuc(active) {
-                if (active) {
-                    // Ocultar el contenido del tab
-                    //$('#datos_tributarios').show(); 
-                    // Ocultar el botón o enlace que activa el tab
-                    $('a[href="#datos_tributarios"]').show();
+        // Ocultar los elementos relacionados con "natural"
+        $('#natural').hide();
+        $('#tributario_natural').hide();
+    } else {
+        $('#juridico').hide();
+    }
+}
 
-                    $('#sin_razon_social').hide();
-                    $('#id_con_ruc').show();
-                    $('#id_sin_ruc').hide();
-                    $('#con_razon_social').show();
-                    $('#juridico').hide();
-                    $('#natural').show();
-                    $('#tributario_natural').show();
-                } else {
-                    $('#natural').hide();
-                }
-            }
+function toggleNaturalConRuc(active) {
+    if (active) {
+        // Mostrar solo los elementos relacionados con "natural con RUC"
+        $('a[href="#datos_tributarios"]').show();
+        //$('#datos_tributarios').show();
+
+        $('#sin_razon_social').hide();
+        $('#id_con_ruc').show();
+        $('#id_sin_ruc').hide();
+        $('#con_razon_social').show();
+        $('#natural').show();
+        $('#tributario_natural').show();
+
+        // Ocultar los elementos relacionados con "jurídico"
+        $('#juridico').hide();
+    } else {
+        $('#natural').hide();
+    }
+}
 
             function toggleNaturalSinRuc(active) {
                 if (active) {  
@@ -709,6 +708,7 @@
                     //$('#datos_tributarios').hide(); 
                     // Ocultar el botón o enlace que activa el tab
                     $('a[href="#datos_tributarios"]').hide();
+                    $('#datos_tributarios').hide();  
 
                     $('#sin_razon_social').show();
                     $('#id_con_ruc').hide();
@@ -723,8 +723,9 @@
             }
 
             // Event listener for onChange of select tipo_personeria
-            $('#tipo_personeria').change(function() {
+            /*$('#tipo_personeria').change(function() {
                 $('a[href="#datos_tributarios"]').hide();
+                $('#datos_tributarios').hide();  
                 var tipoPersoneria = $(this).val();
                 if (tipoPersoneria == 1) {
                     toggleNaturalSinRuc(true);
@@ -733,12 +734,14 @@
                     $('#identificacion').focus();
                 }else if (tipoPersoneria == 2) {
                     $('a[href="#datos_tributarios"]').hide();
+                    $('#datos_tributarios').hide();  
                     toggleNaturalSinRuc(false);
                     toggleJuridico(false);
                     toggleNaturalConRuc(true);
                     $('#identificacion').focus();
                 }else if (tipoPersoneria == 3) {
                     $('a[href="#datos_tributarios"]').hide();
+                    $('#datos_tributarios').hide();  
                     toggleNaturalSinRuc(false);
                     toggleJuridico(true);
                     toggleNaturalConRuc(false);
@@ -750,32 +753,104 @@
                     $('#sin_razon_social').hide();
                     $('#con_razon_social').hide();
                     $('a[href="#datos_tributarios"]').hide();
+                    $('#datos_tributarios').hide();  
                 } 
-            });
-            /* $('#tipo_personeria').change(function() {
-                var tipoPersoneria = $(this).val();
-                if (tipoPersoneria == 1) {
-                     
-                }else if (tipoPersoneria == 2) {
+            });*/
 
-                    
+            $('#tipo_personeria333').change(function () {
+                var tipoPersoneria = $(this).val();
+
+                // Ocultar siempre los tabs y resets generales
+                $('a[href="#datos_tributarios"], #datos_tributarios, #sin_razon_social, #con_razon_social').hide();
+
+                // Manejando cada tipo de personería
+                switch (tipoPersoneria) {
+                    case "1": // Natural sin RUC
+                        toggleNaturalSinRuc(true);
+                        toggleJuridico(false);
+                        toggleNaturalConRuc(false);
+                        break;
+                    case "2": // Natural con RUC
+                        toggleNaturalSinRuc(false);
+                        toggleJuridico(false);
+                        toggleNaturalConRuc(true);
+                        break;
+                    case "3": // Jurídico
+                        toggleNaturalSinRuc(false);
+                        toggleNaturalConRuc(false);
+                        toggleJuridico(true);
+                        break;
+                    default:
+                        toggleJuridico(false);
+                        toggleNaturalConRuc(false);
+                        toggleNaturalSinRuc(false);
+                        break;
+                }
+
+                // Siempre enfocar en identificación
+                $('#identificacion').focus();
+            });
+
+            $('#tipo_personeria').on('change', function () {
+                const value = $(this).val(); 
+
+                if( value === '1' ){
+
+                    $('#sin_razon_social').show();
+                    $('#id_con_ruc').hide();
+                    $('#id_sin_ruc').show();
+                    $('#con_razon_social').hide();
+                    $('#juridico').hide();
+                    $('#natural').hide();
+                    $('#tributario_natural').hide();
+
+                    // Ocultar el botón del tab y el contenido si está activo
+                    $('#tab_item_tributario').hide();
+                    $('#datos_tributarios').removeClass('show active');
+
+                    // Volver a activar el tab "Datos Generales" si estaba en "Datos Tributarios"
+                    if ($('.nav-link[href="#datos_tributarios"]').hasClass('active')) {
+                        $('.nav-link[href="#datos_generales"]').addClass('active');
+                        $('#datos_generales').addClass('show active');
+                    }
+
+                }else if(value === '2'){
 
                     $('#sin_razon_social').hide();
                     $('#id_con_ruc').show();
                     $('#id_sin_ruc').hide();
                     $('#con_razon_social').show();
-                    $('#juridico').hide();
                     $('#natural').show();
                     $('#tributario_natural').show();
- 
-                    $('a[href="#datos_tributarios"]').show();
-                     
-                }else if (tipoPersoneria == 3) {
-                     
+
+                    $('#tab_item_tributario').show();
+
+                }else if(value === '3'){
+
+                    $('#sin_razon_social').hide();
+                    $('#id_con_ruc').show();
+                    $('#id_sin_ruc').hide();
+                    $('#con_razon_social').show();
+                    $('#juridico').show();
+
+                    // Ocultar los elementos relacionados con "natural"
+                    $('#natural').hide();
+                    $('#tributario_natural').hide();
+
+                    $('#tab_item_tributario').show();
+
                 }else{
-                     
-                } 
-            }); */
+                    // Ocultar el botón del tab y el contenido si está activo
+                    $('#tab_item_tributario').hide();
+                    $('#datos_tributarios').removeClass('show active');
+
+                    // Volver a activar el tab "Datos Generales" si estaba en "Datos Tributarios"
+                    if ($('.nav-link[href="#datos_tributarios"]').hasClass('active')) {
+                        $('.nav-link[href="#datos_generales"]').addClass('active');
+                        $('#datos_generales').addClass('show active');
+                    }
+                }
+            }); 
 
             // Event listener for onInput of input identificacion
             $('#identificacion').on('input', function() {

@@ -899,4 +899,16 @@ class SocioController extends Controller
             );
         }
     }
+
+    public function get_socios()
+    {
+        // Obtiene todos los socios
+        $socios = Socio::all();
+
+        // Retorna los socios como JSON
+        return response()->json([
+            'success' => true,
+            'data' => $socios
+        ], 200);
+    }
 }
