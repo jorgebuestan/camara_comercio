@@ -351,7 +351,7 @@
                                     </summary>
                                     <ul class="ml-4 mt-2 space-y-2">
                                         <li><a href="{{ route('admin.maestro_socios') }}"
-                                                class="block text-gray-300 hover:text-white">Mantenimiento de Socios..</a>
+                                                class="block text-gray-300 hover:text-white">Mantenimiento de Socios</a>
                                         </li>
                                         <li><a href="{{ route('admin.establecimientos_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Establecimientos por
