@@ -22,4 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  
 //Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-socios', [SocioController::class, 'get_socios']);
+    
 //});
+
+Route::middleware('api')->group(function () {
+    Route::post('/formulario-solicitud-ingreso', [SocioController::class, 'formulario_ingreso']);
+});

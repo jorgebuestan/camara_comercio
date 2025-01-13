@@ -17,9 +17,16 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\LogActivity;
+ 
+use Illuminate\Support\Str; 
 
 class SocioController extends Controller
 {
+    public function __construct()
+    {
+        // Elimina o ajusta cualquier middleware aquí si es necesario
+        $this->middleware('auth')->except(['formulario_ingreso']);
+    }
     //
     public function maestro_socios()
     {
@@ -910,5 +917,50 @@ class SocioController extends Controller
             'success' => true,
             'data' => $socios
         ], 200);
+    }
+
+    public function formulario_ingreso(Request $request)
+    {
+        //return response()->json(['status' => 'success', 'message' => 'Endpoint alcanzado correctamente']);
+        // Validar los datos entrantes
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'files' => 'required|array|min:4|max:4',
+            'files.*' => 'required|string', // Asegurarse de que sean strings en Base64
+        ]);
+
+        $filePaths = [];
+
+        foreach ($validatedData['files'] as $index => $file) {
+            // Decodificar el archivo Base64
+            $fileData = base64_decode($file);
+            
+            // Validar el tipo de archivo
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_buffer($finfo, $fileData);
+            finfo_close($finfo);
+
+            if (!in_array($mimeType, ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])) {
+                return response()->json([
+                    'error' => "El archivo {$index} no es un PDF o DOCX válido."
+                ], 400);
+            }
+
+            // Crear un nombre único para el archivo
+            $extension = $mimeType === 'application/pdf' ? 'pdf' : 'docx';
+            $fileName = Str::uuid() . ".$extension";
+
+            // Guardar el archivo
+            $filePath = "uploads/files/$fileName";
+            Storage::disk('local')->put($filePath, $fileData);
+            $filePaths[] = $filePath;
+        }
+
+        // Responder con éxito
+        return response()->json([
+            'message' => 'Formulario enviado correctamente',
+            'files' => $filePaths,
+        ]);
     }
 }
