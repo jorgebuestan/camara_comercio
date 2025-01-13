@@ -921,32 +921,64 @@ class SocioController extends Controller
 
     public function formulario_ingreso(Request $request)
     {
-        //return response()->json(['status' => 'success', 'message' => 'Endpoint alcanzado correctamente']);
         $request->validate([
-            'file' => 'required|string', // Base64 del archivo
-            'name' => 'required|string', // Nombre del archivo
-            'type' => 'required|in:pdf,docx', // Tipo del archivo
+            'file1' => 'required|string', // Base64 del primer archivo
+            'file2' => 'required|string', // Base64 del segundo archivo
+            'name1' => 'required|string', // Nombre del primer archivo
+            'name2' => 'required|string', // Nombre del segundo archivo
+            'type1' => 'required|in:pdf,docx', // Tipo del primer archivo
+            'type2' => 'required|in:pdf,docx', // Tipo del segundo archivo
+            'cedula_ruc' => [
+                'required',
+                'regex:/^\d{10}|\d{13}$/', // Cédula (10 dígitos) o RUC (13 dígitos)
+            ],
+            'campo2' => 'required|string', // Otro campo adicional
+            'campo3' => 'required|string', // Otro campo adicional
+            'campo4' => 'required|string', // Otro campo adicional
+            'campo5' => 'required|string', // Otro campo adicional
         ]);
-
+    
         $data = $request->all();
-
-        // Decodificar base64 y guardar archivo
-        $fileContent = base64_decode($data['file']);
-        $fileName = $data['name'] . '.' . $data['type'];
-        $filePath = 'uploads/' . $fileName;
-
-        Storage::put($filePath, $fileContent);
-
-        // Guardar en la base de datos
-        /*$file = File::create([
-            'name' => $data['name'],
-            'type' => $data['type'],
-            'path' => $filePath,
-        ]);*/
-
+    
+        // Crear la carpeta con el nombre de la cédula o RUC
+        $folder = $data['cedula_ruc'];
+        $folderPath = 'uploads/' . $folder;
+    
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+    
+        // Procesar el primer archivo
+        $fileContent1 = base64_decode($data['file1']);
+        $fileName1 = $data['name1'] . '.' . $data['type1'];
+        $filePath1 = $folderPath . '/' . $fileName1;
+    
+        Storage::put($filePath1, $fileContent1);
+    
+        // Procesar el segundo archivo
+        $fileContent2 = base64_decode($data['file2']);
+        $fileName2 = $data['name2'] . '.' . $data['type2'];
+        $filePath2 = $folderPath . '/' . $fileName2;
+    
+        Storage::put($filePath2, $fileContent2);
+    
+        // Guardar en la base de datos (opcional, descomentarlo si se requiere)
+        /*
+        $record = Record::create([
+            'cedula_ruc' => $data['cedula_ruc'],
+            'campo2' => $data['campo2'],
+            'campo3' => $data['campo3'],
+            'campo4' => $data['campo4'],
+            'campo5' => $data['campo5'],
+            'file1_path' => $filePath1,
+            'file2_path' => $filePath2,
+        ]);
+        */
+    
         return response()->json([
-            'message' => 'Archivo subido exitosamente',
-            'file' => 'archivo',
+            'message' => 'Archivos subidos exitosamente',
+            'file1_path' => $filePath1,
+            'file2_path' => $filePath2,
         ], 201);
     }
 }
