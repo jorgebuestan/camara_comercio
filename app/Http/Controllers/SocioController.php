@@ -922,45 +922,31 @@ class SocioController extends Controller
     public function formulario_ingreso(Request $request)
     {
         //return response()->json(['status' => 'success', 'message' => 'Endpoint alcanzado correctamente']);
-        // Validar los datos entrantes
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'files' => 'required|array|min:4|max:4',
-            'files.*' => 'required|string', // Asegurarse de que sean strings en Base64
+        $request->validate([
+            'file' => 'required|string', // Base64 del archivo
+            'name' => 'required|string', // Nombre del archivo
+            'type' => 'required|in:pdf,docx', // Tipo del archivo
         ]);
 
-        $filePaths = [];
+        $data = $request->all();
 
-        foreach ($validatedData['files'] as $index => $file) {
-            // Decodificar el archivo Base64
-            $fileData = base64_decode($file);
-            
-            // Validar el tipo de archivo
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_buffer($finfo, $fileData);
-            finfo_close($finfo);
+        // Decodificar base64 y guardar archivo
+        $fileContent = base64_decode($data['file']);
+        $fileName = $data['name'] . '.' . $data['type'];
+        $filePath = 'uploads/' . $fileName;
 
-            if (!in_array($mimeType, ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])) {
-                return response()->json([
-                    'error' => "El archivo {$index} no es un PDF o DOCX válido."
-                ], 400);
-            }
+        Storage::put($filePath, $fileContent);
 
-            // Crear un nombre único para el archivo
-            $extension = $mimeType === 'application/pdf' ? 'pdf' : 'docx';
-            $fileName = Str::uuid() . ".$extension";
+        // Guardar en la base de datos
+        /*$file = File::create([
+            'name' => $data['name'],
+            'type' => $data['type'],
+            'path' => $filePath,
+        ]);*/
 
-            // Guardar el archivo
-            $filePath = "uploads/files/$fileName";
-            Storage::disk('local')->put($filePath, $fileData);
-            $filePaths[] = $filePath;
-        }
-
-        // Responder con éxito
         return response()->json([
-            'message' => 'Formulario enviado correctamente',
-            'files' => $filePaths,
-        ]);
+            'message' => 'Archivo subido exitosamente',
+            'file' => 'archivo',
+        ], 201);
     }
 }
