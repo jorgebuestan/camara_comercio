@@ -193,6 +193,30 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
+                                    Secuencial
+                                </div>
+                                <div class="col-md-4">
+                                    <select id="num_establecimiento" name="num_establecimiento" class="form-control populate">
+                                        <option value=-1>Seleccionar</option>
+                                        @foreach ($num_establecimiento as $id => $nombre)
+                                            <option value={{ $id }}>
+                                                {{ $nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    &nbsp;
+                                </div>
+                                <div class="col-md-4">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
                                     País
                                 </div>
                                 <div class="col-md-4">
@@ -1537,11 +1561,28 @@
                     });
                     location.reload(); // Recargar la página
                 }).fail(function(res) {
-                    if (res.status === 422) {
-                        // Mostrar mensaje de error de validación
+                    if (res.status === 400) { // Manejo del error 400 (clave duplicada)
                         let errors = res.responseJSON;
                         if (errors.error) {
-                            //alert(errors.error);
+                            Swal.fire({
+                                target: document.getElementById('ModalEstablecimiento'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: errors.error, // Mostrar el mensaje enviado desde el servidor
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false,
+                                showConfirmButton: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.error('Error:', errors.error);
+                                }
+                            });
+                            return;
+                        }
+                    } else if (res.status === 422) {
+                        // Manejar errores de validación (si existen)
+                        let errors = res.responseJSON;
+                        if (errors.error) {
                             Swal.fire({
                                 target: document.getElementById('ModalEstablecimiento'),
                                 icon: 'error',
@@ -1559,7 +1600,6 @@
                         }
                     } else {
                         // Mostrar mensaje genérico si no se recibió un error específico
-                        //alert("Ocurrió un error al registrar el establecimiento.");
                         Swal.fire({
                             target: document.getElementById('ModalEstablecimiento'),
                             icon: 'error',
@@ -1572,8 +1612,7 @@
                             if (result.isConfirmed) {
                                 console.error('Error:', res.responseText);
                             }
-                        });
-                        return;
+                        }); 
                     }
                 });
             });

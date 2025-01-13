@@ -928,53 +928,70 @@ class SocioController extends Controller
             'name2' => 'required|string', // Nombre del segundo archivo
             'type1' => 'required|in:pdf,docx', // Tipo del primer archivo
             'type2' => 'required|in:pdf,docx', // Tipo del segundo archivo
+            'tipo_personeria' => 'required|in:1,2,3', // Debe ser 1, 2 o 3
+            'tipo_identificacion' => 'required|in:1,2', // Debe ser 1 o 2
             'cedula_ruc' => [
                 'required',
-                'regex:/^\d{10}|\d{13}$/', // Cédula (10 dígitos) o RUC (13 dígitos)
+                'regex:/^\d{10}|\d{13}$/', // Solo acepta 10 o 13 dígitos
             ],
-            'campo2' => 'required|string', // Otro campo adicional
-            'campo3' => 'required|string', // Otro campo adicional
-            'campo4' => 'required|string', // Otro campo adicional
-            'campo5' => 'required|string', // Otro campo adicional sincronizacdop
+            'razon_social' => 'required|string',
+            'correo' => 'nullable|email', // Campo no obligatorio, puede ser null o un correo válido
+            'telefono' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/', // Campo no obligatorio, puede ser null o un número válido
         ]);
     
         $data = $request->all();
     
+        // Validar longitud de cédula o RUC y tipo de identificación según tipo de personería
+        if (
+            // Validar para tipo_personeria 1
+            ($data['tipo_personeria'] == '1' && 
+                (!in_array($data['tipo_identificacion'], ['2', '3', '4']) || strlen($data['cedula_ruc']) != 10)) ||
+            
+            // Validar para tipo_personeria 2 o 3
+            (in_array($data['tipo_personeria'], ['2', '3']) && 
+                ($data['tipo_identificacion'] != '1' || strlen($data['cedula_ruc']) != 13))
+        ) {
+            return response()->json([
+                'message' => 'Error: El tipo de identificación o la longitud de la cédula o RUC no corresponde con el tipo de personería.',
+            ], 400);
+        }
+     
         // Crear la carpeta con el nombre de la cédula o RUC
         $folder = $data['cedula_ruc'];
         $folderPath = 'uploads/' . $folder;
-    
+
         if (!Storage::exists($folderPath)) {
             Storage::makeDirectory($folderPath);
         }
-    
+
         // Procesar el primer archivo
         $fileContent1 = base64_decode($data['file1']);
         $fileName1 = $data['name1'] . '.' . $data['type1'];
         $filePath1 = $folderPath . '/' . $fileName1;
-    
+
         Storage::put($filePath1, $fileContent1);
-    
+
         // Procesar el segundo archivo
         $fileContent2 = base64_decode($data['file2']);
         $fileName2 = $data['name2'] . '.' . $data['type2'];
         $filePath2 = $folderPath . '/' . $fileName2;
-    
+
         Storage::put($filePath2, $fileContent2);
-    
-        // Guardar en la base de datos (opcional, descomentarlo si se requiere)
+
+        // Guardar en la base de datos (opcional, descomentar si se requiere)
         /*
         $record = Record::create([
             'cedula_ruc' => $data['cedula_ruc'],
-            'campo2' => $data['campo2'],
-            'campo3' => $data['campo3'],
-            'campo4' => $data['campo4'],
-            'campo5' => $data['campo5'],
+            'tipo_personeria' => $data['tipo_personeria'],
+            'tipo_identificacion' => $data['tipo_identificacion'],
+            'razon_social' => $data['razon_social'],
+            'correo' => $data['correo'],
+            'telefono' => $data['telefono'],
             'file1_path' => $filePath1,
             'file2_path' => $filePath2,
         ]);
         */
-    
+
         return response()->json([
             'message' => 'Archivos subidos exitosamente',
             'file1_path' => $filePath1,

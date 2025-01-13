@@ -50,7 +50,14 @@ class EstablecimientoSocioController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
 
-        return view('administrador.socios.establecimientos_socio', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'sociosSelect', 'socios'));
+        $num_establecimiento = collect(range(1, 99))
+        ->mapWithKeys(function ($num) {
+            $key = str_pad($num, 2, '0', STR_PAD_LEFT); // Asegurar que sea de dos dígitos
+            return [$key => $key];
+        });
+
+
+        return view('administrador.socios.establecimientos_socio', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'sociosSelect', 'socios', 'num_establecimiento'));
     }
 
     public function obtener_listado_establecimientos_socio(Request $request)
@@ -153,7 +160,7 @@ class EstablecimientoSocioController extends Controller
                 ->value('secuencial');
 
             // Calcular el nuevo secuencial
-            $nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
+            /*$nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
 
             if ($nuevoSecuencial > 999) {
                 Log::error('No se puede asignar un nuevo secuencial, se alcanzó el límite de 999');
@@ -161,11 +168,11 @@ class EstablecimientoSocioController extends Controller
             }
 
             // Formatear el secuencial a tres dígitos
-            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);*/
 
             // Crear registro en la base de datos
             $establecimiento = EstablecimientoSocio::create([
-                'secuencial' => $secuencialFormateado, 
+                'secuencial' => $request->input('num_establecimiento'), 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_socio' => strtoupper($request->input('socioHidden')),
                 'id_pais' => $request->input('pais'),
@@ -193,6 +200,12 @@ class EstablecimientoSocioController extends Controller
 
             Log::error($e);
             DB::rollBack();
+
+             // Verificar si el error es por la clave única
+             if ($e->errorInfo[1] == 1062) { // Código de error SQL para clave duplicada
+                return response()->json(['error' => 'El secuencial ya está registrado para esta cámara.'], 400);
+            }
+            
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
 

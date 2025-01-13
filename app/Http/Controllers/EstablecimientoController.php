@@ -56,7 +56,13 @@ class EstablecimientoController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }
 
-        return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras', 'isAdmin'));
+        $num_establecimiento = collect(range(1, 99))
+        ->mapWithKeys(function ($num) {
+            $key = str_pad($num, 2, '0', STR_PAD_LEFT); // Asegurar que sea de dos dígitos
+            return [$key => $key];
+        });
+
+        return view('administrador.camaras.establecimientos_camara', compact('regimen', 'paises', 'provincias', 'cantones', 'parroquias', 'actividadesEconomicas', 'camarasSelect', 'camaras', 'isAdmin', 'num_establecimiento'));
     }
 
     public function obtener_listado_establecimientos_camara(Request $request)
@@ -194,7 +200,7 @@ class EstablecimientoController extends Controller
                 }
             }
 
-            // Obtener el último secuencial para la cámara
+            /*// Obtener el último secuencial para la cámara
                 $ultimoSecuencial = Establecimiento::where('id_camara', $request->input('camaraHidden'))
                 ->orderBy('secuencial', 'desc')
                 ->value('secuencial');
@@ -208,11 +214,11 @@ class EstablecimientoController extends Controller
             }
 
             // Formatear el secuencial a tres dígitos
-            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);*/
 
             // Crear registro en la base de datos
             $establecimiento = Establecimiento::create([
-                'secuencial' => $secuencialFormateado, 
+                'secuencial' => $request->input('num_establecimiento'), 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_camara' => strtoupper($request->input('camaraHidden')),
                 'id_pais' => $request->input('pais'),
@@ -240,6 +246,12 @@ class EstablecimientoController extends Controller
 
             Log::error($e);
             DB::rollBack();
+
+            // Verificar si el error es por la clave única
+            if ($e->errorInfo[1] == 1062) { // Código de error SQL para clave duplicada
+                return response()->json(['error' => 'El secuencial ya está registrado para esta cámara.'], 400);
+            }
+
             return response()->json(['error' => 'Error al registrar el establecimiento: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
 
