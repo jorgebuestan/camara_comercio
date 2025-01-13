@@ -27,7 +27,7 @@
         <!-- Email Address -->
         <div>
             <!-- Etiqueta del campo -->
-            <label for="login">Email o Usuario..</label>
+            <label for="login">Email o Usuario</label>
             
             <!-- Campo de entrada -->
             <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
