@@ -935,7 +935,7 @@ class SocioController extends Controller
             'campo2' => 'required|string', // Otro campo adicional
             'campo3' => 'required|string', // Otro campo adicional
             'campo4' => 'required|string', // Otro campo adicional
-            'campo5' => 'required|string', // Otro campo adicional
+            'campo5' => 'required|string', // Otro campo adicional sincronizacdop
         ]);
     
         $data = $request->all();
