@@ -26,5 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //});
 
 Route::middleware('api')->group(function () {
-    Route::post('/formulario-solicitud-ingreso', [SocioController::class, 'formulario_ingreso']);
+    Route::post('/formulario-solicitud-ingreso', [SocioController::class, 'formulario_ingreso']);  
+    Route::post('/estado-solicitud', [SocioController::class, 'estado_solicitud']);  
 });

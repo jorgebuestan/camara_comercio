@@ -10,6 +10,7 @@ use App\Models\DatoTributarioSocio;
 use App\Models\Parroquia;
 use App\Models\Socio;
 use App\Models\TipoPersoneria;
+use App\Models\SolicitudSocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -24,8 +25,8 @@ class SocioController extends Controller
 {
     public function __construct()
     {
-        // Elimina o ajusta cualquier middleware aquí si es necesario
-        $this->middleware('auth')->except(['formulario_ingreso']);
+        // Elimina o ajusta cualquier middleware aquí si es necesario 
+        $this->middleware('auth')->except(['get_socios', 'formulario_ingreso', 'estado_solicitud']); 
     }
     //
     public function maestro_socios()
@@ -921,13 +922,14 @@ class SocioController extends Controller
 
     public function formulario_ingreso(Request $request)
     {
+        // Validar los campos
         $request->validate([
             'file1' => 'required|string', // Base64 del primer archivo
-            'file2' => 'required|string', // Base64 del segundo archivo
+            'file2' => 'nullable|string', // Base64 del segundo archivo (opcional)
             'name1' => 'required|string', // Nombre del primer archivo
-            'name2' => 'required|string', // Nombre del segundo archivo
+            'name2' => 'nullable|string', // Nombre del segundo archivo (opcional)
             'type1' => 'required|in:pdf,docx', // Tipo del primer archivo
-            'type2' => 'required|in:pdf,docx', // Tipo del segundo archivo
+            'type2' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
             'tipo_personeria' => 'required|in:1,2,3', // Debe ser 1, 2 o 3
             'tipo_identificacion' => 'required|in:1,2', // Debe ser 1 o 2
             'cedula_ruc' => [
@@ -937,16 +939,28 @@ class SocioController extends Controller
             'razon_social' => 'required|string',
             'correo' => 'nullable|email', // Campo no obligatorio, puede ser null o un correo válido
             'telefono' => 'nullable|string|regex:/^\+?[0-9]{7,15}$/', // Campo no obligatorio, puede ser null o un número válido
+            'direccion' => 'nullable|string',
         ]);
-    
+
         $data = $request->all();
-    
+
+        // Verificar si ya existe un registro con la misma cédula o RUC
+        $existingSocio = SolicitudSocio::where('cedula_ruc', $data['cedula_ruc'])->first();
+
+        if ($existingSocio) {
+            return response()->json([
+                'codigo' => '400',
+                'message' => 'Ya existe una Solicitud con la misma Cédula o RUC.',
+            ], 400);
+        }
+
+
         // Validar longitud de cédula o RUC y tipo de identificación según tipo de personería
         if (
             // Validar para tipo_personeria 1
             ($data['tipo_personeria'] == '1' && 
                 (!in_array($data['tipo_identificacion'], ['2', '3', '4']) || strlen($data['cedula_ruc']) != 10)) ||
-            
+
             // Validar para tipo_personeria 2 o 3
             (in_array($data['tipo_personeria'], ['2', '3']) && 
                 ($data['tipo_identificacion'] != '1' || strlen($data['cedula_ruc']) != 13))
@@ -955,47 +969,87 @@ class SocioController extends Controller
                 'message' => 'Error: El tipo de identificación o la longitud de la cédula o RUC no corresponde con el tipo de personería.',
             ], 400);
         }
-     
+
         // Crear la carpeta con el nombre de la cédula o RUC
         $folder = $data['cedula_ruc'];
-        $folderPath = 'uploads/' . $folder;
+        $folderPath = 'solicitudes/' . $folder;
 
-        if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath);
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
         }
+
+
+        //$route_file = 'documentos/' . $cedula . '/' . date('Ymdhmi') . '.' . $extension; 
+        // Guardar el archivo en el disco público
+        //Storage::disk('public')->put($route_file, \File::get($file));
+
 
         // Procesar el primer archivo
         $fileContent1 = base64_decode($data['file1']);
         $fileName1 = $data['name1'] . '.' . $data['type1'];
         $filePath1 = $folderPath . '/' . $fileName1;
+        Storage::disk('public')->put($filePath1, $fileContent1);
 
-        Storage::put($filePath1, $fileContent1);
+        // Si el tipo de personería no es 1, procesamos el segundo archivo
+        $filePath2 = null;
+        if ($data['tipo_personeria'] != '1') {
+            $fileContent2 = base64_decode($data['file2']);
+            $fileName2 = $data['name2'] . '.' . $data['type2'];
+            $filePath2 = $folderPath . '/' . $fileName2;
+            Storage::disk('public')->put($filePath2, $fileContent2);
+        }
 
-        // Procesar el segundo archivo
-        $fileContent2 = base64_decode($data['file2']);
-        $fileName2 = $data['name2'] . '.' . $data['type2'];
-        $filePath2 = $folderPath . '/' . $fileName2;
-
-        Storage::put($filePath2, $fileContent2);
-
-        // Guardar en la base de datos (opcional, descomentar si se requiere)
-        /*
-        $record = Record::create([
-            'cedula_ruc' => $data['cedula_ruc'],
-            'tipo_personeria' => $data['tipo_personeria'],
-            'tipo_identificacion' => $data['tipo_identificacion'],
+        // Guardar en la base de datos la Solicitud para nuevo Socio
+        $socio = SolicitudSocio::create([
+            'id_tipo_personeria' => $data['tipo_personeria'],
+            'id_tipo_identificacion' => $data['tipo_identificacion'],
+            'cedula_ruc' => $data['cedula_ruc'], 
             'razon_social' => $data['razon_social'],
             'correo' => $data['correo'],
             'telefono' => $data['telefono'],
-            'file1_path' => $filePath1,
-            'file2_path' => $filePath2,
+            'direccion' => $data['direccion'],
+            'id_estado_formulario' => 1, 
+            'ruta_archivo1' => $filePath1, // Ruta del primer archivo
+            'ruta_archivo2' => $filePath2, // Ruta del segundo archivo (puede ser null si tipo_personeria es 1)
         ]);
-        */
 
-        return response()->json([
+        /*return response()->json([
             'message' => 'Archivos subidos exitosamente',
             'file1_path' => $filePath1,
             'file2_path' => $filePath2,
+        ], 201);*/
+        return response()->json([
+            'codigo' => '200', 
+            'message' => 'Archivos subidos exitosamente' 
         ], 201);
+    }
+
+    public function estado_solicitud(Request $request)
+    {
+        /*$request->validate([
+            'cedula_ruc' => 'required|string',  
+        ]);*/
+        $data = $request->all(); 
+
+        // Buscar la solicitud y unir con la tabla 'estados_formulario_socio' para obtener la descripción
+        $socio = DB::table('solicitudes_socios')
+            ->join('estados_formulario_socio', 'solicitudes_socios.id_estado_formulario', '=', 'estados_formulario_socio.id')
+            ->where('cedula_ruc', $data['cedula_ruc'])
+            ->select('solicitudes_socios.*', 'estados_formulario_socio.descripcion as estado_descripcion')
+            ->first(); // Usamos first() para obtener un solo registro
+
+        if (!$socio) {
+            return response()->json([
+                'codigo' => '400',
+                'message' => 'No existe una Solicitud con la información ingresada.',
+            ], 400);
+        }
+
+        // Si se encuentra la solicitud, retornar los datos con la descripción del estado
+        return response()->json([
+            'codigo' => '200',
+            'message' => 'Solicitud encontrada.',
+            'estado' => $socio->estado_descripcion, // Aquí usamos la descripción del estado 
+        ], 200);
     }
 }
