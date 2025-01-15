@@ -353,6 +353,11 @@
                                         <li><a href="{{ route('admin.maestro_socios') }}"
                                                 class="block text-gray-300 hover:text-white">Mantenimiento de Socios</a>
                                         </li>
+                                        @can('Admin')
+                                            <li><a href="{{ route('admin.maestro_solicitudes') }}"
+                                                    class="block text-gray-300 hover:text-white">Ver Solicitudes</a>
+                                            </li>
+                                        @endcan
                                         <li><a href="{{ route('admin.establecimientos_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Establecimientos por
                                                 Socios</a></li>

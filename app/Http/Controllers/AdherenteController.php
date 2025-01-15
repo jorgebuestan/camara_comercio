@@ -29,7 +29,10 @@ class AdherenteController extends Controller
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
         $tipos_identificacion = TipoIdentificacion::pluck('descripcion', 'id');
 
-        $sociosSelect = Socio::pluck('razon_social', 'id');
+        //$sociosSelect = Socio::pluck('razon_social', 'id');
+        $sociosSelect = Socio::whereIn('id_tipo_personeria', [2, 3])
+        ->where('estado', 1)
+        ->pluck('razon_social', 'id');
 
         return view('administrador.socios.adherentes_socio', compact('paises', 'provincias', 'cantones', 'parroquias', 'tipos_identificacion', 'sociosSelect'));
     }

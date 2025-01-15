@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ArchivoObligacionCamaraController;
 use App\Http\Controllers\ArchivoObligacionSocioController; 
 use App\Http\Controllers\PasswordController; 
+use App\Http\Controllers\SolicitudController;
 
 
 
@@ -187,6 +188,10 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/camara/archivos/archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'index'])->middleware('auth')->name('camara.archivos_obligaciones_socio');
     Route::get('/administrador/obtener_listado_archivos_obligaciones_socio', [ArchivoObligacionSocioController::class, 'obtener_listado_archivos_obligaciones_socio'])->middleware('auth')->name('admin.obtener_listado_archivos_obligaciones_socio');
     Route::post('/camara/archivos/guardar_archivo_socio', [ArchivoObligacionSocioController::class, 'guardar_archivo_socio'])->name('socio.guardar_archivo_socio');
+    
+    //Manejo de Solicitudes de Nuevos Socios
+    Route::get('/administrador/maestro_solicitudes', [SolicitudController::class, 'index'])->middleware('auth')->name('admin.maestro_solicitudes');
+    Route::get('/administrador/obtener_listado_solicitudes', [SolicitudController::class, 'obtener_listado_solicitudes'])->middleware('auth')->name('admin.obtener_listado_solicitudes');
     
 });
 

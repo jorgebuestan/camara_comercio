@@ -668,17 +668,7 @@ class SocioController extends Controller
             }else{
                 $identi = $data['identificacion_sin_ruc'];
                 $razon_social = $data['razon_social_nombre'];
-            }
-    
-
-            /*$socioExiste = Socio::where(function ($query) use ($data, $socioId) {
-                $query->where('identificacion', $data['identificacion'])
-                    ->orWhere('razon_social', $data['razon_social']);
-            })->where('id', '!=', $socioId)->count();
-            if ($socioExiste > 0) {
-                return response()->json(['message' => 'Existe un socio con estos datos en el sistema.'], 422);
-            }*/
-            //return ("Identi: ". $identi);
+            } 
 
             $socioExiste = Socio::where(function ($query) use ($data, $socioId, $identi, $razon_social) {
                 $query->where('identificacion', $identi)
@@ -690,19 +680,7 @@ class SocioController extends Controller
             $fecha_ingreso = Carbon::createFromFormat('d/m/Y', $data['fecha_ingreso'])->format('Y-m-d');
             $rutaFoto = null;
             $contents = Storage::disk('public')->get($socio->logo);
-  
-            //return ("Identi: ". $identi);
-            /* 
-            if ($request->hasFile('foto')) {
-                $archivoFoto = $request->file('foto');
-                $nombreArchivo = $identi . '.' . $archivoFoto->getClientOriginalExtension();
-
-                $storedFilePath = "fotos_socios/" . $identi . "/" . $nombreArchivo;
-
-                $rutaFoto = $storedFilePath;
-                $archivoFoto->storeAs("fotos_socios/" . $identi, $nombreArchivo, 'public');
-            }
-            */
+   
 
             if ($request->hasFile('foto')) {
                 $archivoFoto = $request->file('foto');
@@ -786,36 +764,38 @@ class SocioController extends Controller
                     'estado' => 1,
                 ]);
 
-                // Actualización de los datos tributarios
-                $datosTributarios = DatoTributarioSocio::where('id_socio', $socioId)->first();
-                $datosTributarios->update([
-                    'id_socio' => $socio->id,
-                    'estado_sri' => 1,
-                    'id_tipo_regimen' => $data['tipo_regimen'],
-                    'fecha_registro_sri' => validarFecha($data['fecha_registro_sri']) 
-                        ? Carbon::createFromFormat('d/m/Y', $data['fecha_registro_sri'])->format('Y-m-d') 
-                        : null,
-                    'fecha_actualizacion_ruc' => validarFecha($data['fecha_actualizacion_ruc']) 
-                        ? Carbon::createFromFormat('d/m/Y', $data['fecha_actualizacion_ruc'])->format('Y-m-d') 
-                        : null,
-                    'fecha_constitucion' => validarFecha($data['fecha_constitucion']) 
-                        ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
-                        : null,
-                    'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
-                        ? Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d') 
-                        : null,
-                    'agente_retencion' => $data['agente_retencion'],
-                    'contribuyente_especial' => $data['contribuyente_especial'],
-                    'id_pais' => $data['pais'] ?? null,
-                    'id_provincia' => $data['provincia'] ?? null,
-                    'id_canton' => $data['canton'] ?? null,
-                    'id_parroquia' => $data['parroquia'] ?? null,
-                    'calle' => $data['calle'],
-                    'manzana' => $data['manzana'],
-                    'numero' => $data['numero'],
-                    'interseccion' => $data['interseccion'] ?? null,
-                    'referencia' => $data['referencia'] ?? null,
-                ]);
+                // Actualización o creación de los datos tributarios
+                $datosTributarios = DatoTributarioSocio::updateOrCreate(
+                    ['id_socio' => $socioId], // Condición de búsqueda (en este caso, el id_socio)
+                    [
+                        'id_socio' => $socio->id,
+                        'estado_sri' => 1,
+                        'id_tipo_regimen' => $data['tipo_regimen'],
+                        'fecha_registro_sri' => validarFecha($data['fecha_registro_sri']) 
+                            ? Carbon::createFromFormat('d/m/Y', $data['fecha_registro_sri'])->format('Y-m-d') 
+                            : null,
+                        'fecha_actualizacion_ruc' => validarFecha($data['fecha_actualizacion_ruc']) 
+                            ? Carbon::createFromFormat('d/m/Y', $data['fecha_actualizacion_ruc'])->format('Y-m-d') 
+                            : null,
+                        'fecha_constitucion' => validarFecha($data['fecha_constitucion']) 
+                            ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
+                            : null,
+                        'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
+                            ? Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d') 
+                            : null,
+                        'agente_retencion' => $data['agente_retencion'],
+                        'contribuyente_especial' => $data['contribuyente_especial'],
+                        'id_pais' => $data['pais'] ?? null,
+                        'id_provincia' => $data['provincia'] ?? null,
+                        'id_canton' => $data['canton'] ?? null,
+                        'id_parroquia' => $data['parroquia'] ?? null,
+                        'calle' => $data['calle'],
+                        'manzana' => $data['manzana'],
+                        'numero' => $data['numero'],
+                        'interseccion' => $data['interseccion'] ?? null,
+                        'referencia' => $data['referencia'] ?? null,
+                    ]
+                );
 
             }else{
 

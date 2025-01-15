@@ -289,10 +289,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6 gap-1">
-                                                        <label>Fecha de Registro</label>
+                                                        <label>Fecha de Registro Sri</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_registro" id="fecha_registro"
-                                                            placeholder="Fecha de Registro">
+                                                            placeholder="Fecha de Registro Sri">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -626,10 +626,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6 gap-1">
-                                                        <label>Fecha de Registro</label>
+                                                        <label>Fecha de Registro Sri</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_registro_mod" id="fecha_registro_mod"
-                                                            placeholder="Fecha de Registro">
+                                                            placeholder="Fecha de Registro Sri">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -1702,7 +1702,7 @@
                         target: document.getElementById('ModalCamara'),
                         icon: 'error',
                         title: 'Error',
-                        text: 'Debe ingresar la Fecha de Registro de la Cámaran',
+                        text: 'Debe ingresar la Fecha de Registro de la Cámara',
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
