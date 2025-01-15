@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('pagename')
-    Maestro de Socios
+    Solicitudes de Socios por Página Web
 @endsection
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -85,7 +85,7 @@
             <div class="col-lg-12">
                 <section id="w3">
                     <header class="card-header">
-                        <h2 class="card-title">Gestión de Socios</h2>
+                        <h2 class="card-title">Gestión de Solicitudes</h2>
                     </header>
                     <div class="card-body">
                         <div class="row">
@@ -93,7 +93,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button id="btn_new_socio" class="btn btn-primary mb-3">Agregar Nuevo
-                                            Registro</button>
+                                            Socio</button>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <h2 class="card-title">Listado de Socios Registrados</h2>
+                                        <h2 class="card-title">Listado de Solicitudes pendientes</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
                                         <table class="table table-bordered table-striped mb-0" id="dataTable">
@@ -114,10 +114,8 @@
                                                     <th>Fecha de Solicitud</th>
                                                     <th>Tipo Personería</th>
                                                     <th>Identificación</th>
-                                                    <th>Razón Social</th>
-                                                    <th>Correo</th>
-                                                    <th>Teléfono</th>
-                                                    <th>Dirección</th>
+                                                    <th>Cedula/Ruc</th>
+                                                    <th>Razón Social</th> 
                                                     <th>Archivo 1</th>
                                                     <th>Archivo 2</th>
                                                 </tr>
@@ -574,7 +572,7 @@
                 processing: false,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.obtener_listado_socios') }}",
+                    url: "{{ route('admin.obtener_listado_solicitudes') }}",
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
@@ -603,24 +601,33 @@
                 },
                 pageLength: 10,
                 columns: [{
-                        data: 'fecha_ingreso',
-                        width: '20%'
-                    },
-                    {
-                        data: 'identificacion',
-                        width: '20%'
-                    },
-                    {
-                        data: 'razon_social',
-                        width: '20%'
+                        data: 'fecha_solicitud',
+                        width: '15%'
                     },
                     {
                         data: 'tipo_personeria',
-                        width: '20%'
+                        width: '10%'
                     },
                     {
-                        data: 'btn',
-                        width: '20%',
+                        data: 'tipo_identificacion',
+                        width: '5%'
+                    },
+                    {
+                        data: 'cedula_ruc',
+                        width: '10%'
+                    },
+                    {
+                        data: 'razon_social',
+                        width: '40%'
+                    },
+                    {
+                        data: 'ruta_archivo1',
+                        width: '10%',
+                        sortable: false,
+                    },
+                    {
+                        data: 'ruta_archivo2',
+                        width: '10%',
                         sortable: false,
                     }
                 ],
