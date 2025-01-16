@@ -367,7 +367,17 @@ class CamaraController extends Controller
             // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
             $fechaIngreso = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_ingreso_mod'))->format('Y-m-d');
 
-            $rutaLogo = 'default/default_logo.png'; // Ruta por defecto al logo
+            
+
+            
+
+            // Buscar el registro existente por ID
+            $camara = Camara::find($request->input('camara_id'));
+
+            if (!$camara) {
+                return response()->json(['error' => 'La cámara no existe.'], 404);
+            }
+            $rutaLogo = $camara->logo; // Ruta por defecto al logo
 
             // Manejo del archivo de logo si existe
             if ($request->hasFile('file_mod')) {
@@ -378,13 +388,6 @@ class CamaraController extends Controller
                 // Crear carpeta con el nombre del RUC y guardar el archivo
                 $rutaLogo = "logos/{$ruc}/{$nombreArchivo}";
                 $archivoLogo->storeAs("logos/{$ruc}", $nombreArchivo, 'public');
-            }
-
-            // Buscar el registro existente por ID
-            $camara = Camara::find($request->input('camara_id'));
-
-            if (!$camara) {
-                return response()->json(['error' => 'La cámara no existe.'], 404);
             }
 
             // Actualizar los campos del registro existente

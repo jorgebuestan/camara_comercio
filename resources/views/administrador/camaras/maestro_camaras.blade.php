@@ -149,6 +149,16 @@
                                 </section>
                             </div>
                         </div>
+                        <!-- <div class="row">
+                            <div class="col"> 
+                                <div id="image-container">
+                                    <a href="{{ asset('storage/logos/0922489968001/0922489968001.png') }}" data-lightbox="example" target="_blank">
+                                        <img src="{{ asset('storage/logos/0922489968001/0922489968001.png') }}" alt="Imagen reducida" style="max-width: 100%; height: auto;">
+                                         
+                                    </a>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
             </div>
             </section>
@@ -604,11 +614,25 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
-                                                    <div class="col-md-12 flex flex-col gap-1">
+                                                    <div class="col-md-6">
                                                         <label>Logo</label>
-                                                        <input type="file" class="form-control-file" id="logoFile_mod"
+                                                        <input type="file" class="form-control-file" id="file_mod"
                                                             name="file_mod">
                                                         <input type="hidden" name="tipoDoc" value="1">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <!-- <div id="image-container">
+                                                            <a href="{{ asset('storage/logos/0922489968001/0922489968001.png') }}" data-lightbox="example" target="_blank">
+                                                                <img src="{{ asset('storage/logos/0922489968001/0922489968001.png') }}" alt="Imagen reducida" style="max-width: 100%; height: auto;">
+                                                                
+                                                            </a>
+                                                        </div> -->
+
+                                                        <div id="image-container">
+                                                            <a id="image-link" href="#" data-lightbox="example" target="_blank">
+                                                                <img id="image-preview" src="#" alt="Imagen reducida" style="max-width: 200px; height: auto;">
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1989,7 +2013,8 @@
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
-                    location.reload(); // Recargar la página
+                    //location.reload(); // Recargar la página
+                    window.location.href = window.location.href.split('?')[0] + '?noCache=' + new Date().getTime();
                 }).fail(function(res) {
                     $('#carga').hide();
 
@@ -2198,6 +2223,11 @@
                         } else {
                             console.error("Fecha no válida:", fechaConvertida);
                         }
+
+                        var logoFullPath = "{{ asset('storage') }}/" + response.logo;
+
+                        $('#image-link').attr('href', logoFullPath); // Cambia el href del enlace
+                        $('#image-preview').attr('src', logoFullPath); // Cambia el src de la imagen
 
                         // Manejo de la fecha de constitución
                         const fechaISO2 = response.dato_tributario
@@ -2929,7 +2959,8 @@
                         allowOutsideClick: false
                     });
                     //alert(msg);
-                    location.reload();
+                    //location.reload();
+                    window.location.href = window.location.href.split('?')[0] + '?noCache=' + new Date().getTime();
                     $('#carga').hide();
                 }).fail(function(res) {
                     let errorMessage = 'Ocurrió un error inesperado.';
