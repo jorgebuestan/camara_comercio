@@ -207,6 +207,18 @@
                             </div>
                         </div>
                         <div class="row mb-2">
+                            <div class="col-md-6">  
+                                <div id="image-container">
+                                    <a id="image-link" href="#" data-lightbox="example" target="_blank" style="display: none;">
+                                        <img id="image-preview" src="#" alt="Imagen reducida" style="max-width: 200px; height: auto; display: none;">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                    &nbsp;
+                            </div>
+                        </div>
+                        <div class="row mb-2">
                             <div class="col-md-6 gap-1 flex flex-col">
                                 <label>
                                     Adjuntar Foto
@@ -1166,6 +1178,25 @@
                 $('#ModalAdherente').find('#correo').val(data.adherente.correo ?? '');
                 $('#ModalAdherente').find('#telefono').val(data.adherente.telefono ?? '');
                 $('#ModalAdherente').find('#pais').val(data.adherente.id_pais ?? -1).trigger('change');
+
+                // Construye la ruta completa
+                //alert(data.adherente.foto);
+                if (data.adherente.foto) {
+                    var logoFullPath = "{{ asset('storage') }}/" + data.adherente.foto;
+
+                    // Actualiza el enlace y la imagen
+                    $('#image-link').attr('href', logoFullPath).show(); // Muestra el enlace
+                    $('#image-preview').attr('src', logoFullPath).show(); // Muestra la imagen
+
+                    const imageElement = document.getElementById('image-preview'); // Cambia al ID correcto de tu imagen
+                    const currentSrc = imageElement.src;
+                    imageElement.src = currentSrc.split('?')[0] + '?noCache=' + new Date().getTime();
+
+                } else {
+                    // Si no hay logo, asegúrate de ocultar la imagen y el enlace
+                    $('#image-link').hide();
+                    $('#image-preview').hide();
+                }
 
                 // Cargar provincias y asignar provincia
                 cargarProvincias(data.adherente.id_pais).then(() => {
