@@ -17,7 +17,14 @@ class SocioObligacionController extends Controller
 {
     public function obligaciones_socio(Request $request)
     {
-        $sociosSelect = Socio::pluck('razon_social', 'id');
+        //$sociosSelect = Socio::pluck('razon_social', 'id');
+        $sociosSelect = Socio::where('estado', 1)
+        ->whereIn('id_tipo_personeria', [2, 3])
+        ->whereIn('id', function ($query) {
+            $query->select('id_socio')
+                ->from('datos_tributarios_socio'); // Nombre de la tabla correspondiente
+        })
+        ->pluck('razon_social', 'id');
         $entidades = Entidad::with('obligaciones.obligacion.tiempo_presentacion', 'obligaciones.obligacion.tipo_presentacion')->where('estado', 1)->get();
         $entidadesSelect = $entidades->pluck('entidad', 'id');
 

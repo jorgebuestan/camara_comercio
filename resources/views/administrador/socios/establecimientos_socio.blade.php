@@ -120,7 +120,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12"> 
                                         <!-- <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstablecimiento">Agregar Nuevo Registro</button> -->
                                         <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Registro</button>
 
@@ -130,7 +130,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="socio" name="socio" class="form-control populate">
+                                        <select id="socio" name="socio" data-plugin-selectTwo class="form-control populate">
                                             <option value=-1>Seleccionar</option>
                                             @foreach ($sociosSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>

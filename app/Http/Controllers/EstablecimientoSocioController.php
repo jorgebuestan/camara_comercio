@@ -28,6 +28,7 @@ class EstablecimientoSocioController extends Controller
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
         $sociosSelect = Socio::where('estado', 1)
+        ->whereIn('id_tipo_personeria', [2, 3])
         ->whereIn('id', function ($query) {
             $query->select('id_socio')
                 ->from('datos_tributarios_socio'); // Nombre de la tabla correspondiente

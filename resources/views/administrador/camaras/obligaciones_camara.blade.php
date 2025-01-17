@@ -132,7 +132,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" class="form-control populate"
+                                        <select id="camara" name="camara" data-plugin-selectTwo class="form-control populate"
                                             @if (!$isAdmin) disabled @endif>
                                             @if ($isAdmin)
                                                 <option value=-1>Seleccionar Cámara</option>

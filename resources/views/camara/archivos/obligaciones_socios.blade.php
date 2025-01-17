@@ -28,7 +28,7 @@
                                                         <div class="col-12">
                                                             <label for="camara">Selecciona la Cámara:</label>
                                                             <select id="camara" name="camara"
-                                                                class="form-control populate">
+                                                            data-plugin-selectTwo class="form-control populate">
                                                                 <option value=-1>Seleccionar</option>
                                                                 @foreach ($camaras as $id => $descripcion)
                                                                     <option value={{ $id }}>{{ $descripcion }}
@@ -46,7 +46,7 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <label for="socio">Selecciona el Socio:</label>
-                                                        <select id="socio" name="socio" class="form-control populate">
+                                                        <select id="socio" name="socio" data-plugin-selectTwo class="form-control populate">
                                                             <option value=-1>Seleccionar</option>
                                                             @foreach ($socios as $id => $descripcion)
                                                                 <option value={{ $id }}>{{ $descripcion }}

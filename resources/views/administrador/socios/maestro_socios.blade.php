@@ -158,6 +158,18 @@
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
                                                 <div class="row mb-2">
+                                                    <div class="col-md-6">  
+                                                        <div id="image-container">
+                                                            <a id="image-link" href="#" data-lightbox="example" target="_blank" style="display: none;">
+                                                                <img id="image-preview" src="#" alt="Imagen reducida" style="max-width: 200px; height: auto; display: none;">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                         &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
                                                     <div class="col-md-6 gap-1 flex flex-col">
                                                         <label>
                                                             Adjuntar Foto
@@ -1250,6 +1262,20 @@ function toggleNaturalConRuc(active) {
                     });
                     $('#ModalSocio').modal('hide');
                     table.ajax.reload(null, false);
+                    console.log("Antes de redirigir");
+
+    // Forzar la recarga de la imagen
+    const imageElement = document.getElementById('image-preview'); // Cambia al ID correcto de tu imagen
+    const currentSrc = imageElement.src;
+    imageElement.src = currentSrc.split('?')[0] + '?noCache=' + new Date().getTime();
+
+    // Si necesitas recargar la página completa también
+    setTimeout(function() {
+        location.reload(true); // Si sigue siendo necesario
+    }, 100);
+    
+    console.log("Después de redirigir");
+
                 }).fail(function(error) {
                     Swal.fire({
                         target: document.getElementById('ModalSocio'),
@@ -1398,6 +1424,25 @@ function toggleNaturalConRuc(active) {
                 $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
                 $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
                 $('#ModalSocio').find('#pais').val(data.id_pais ?? -1).trigger('change');
+
+                
+                // Construye la ruta completa
+                if (data.logo) {
+                    var logoFullPath = "{{ asset('storage') }}/" + data.logo;
+
+                    // Actualiza el enlace y la imagen
+                    $('#image-link').attr('href', logoFullPath).show(); // Muestra el enlace
+                    $('#image-preview').attr('src', logoFullPath).show(); // Muestra la imagen
+
+                    const imageElement = document.getElementById('image-preview'); // Cambia al ID correcto de tu imagen
+                    const currentSrc = imageElement.src;
+                    imageElement.src = currentSrc.split('?')[0] + '?noCache=' + new Date().getTime();
+
+                } else {
+                    // Si no hay logo, asegúrate de ocultar la imagen y el enlace
+                    $('#image-link').hide();
+                    $('#image-preview').hide();
+                }
 
                 // Cargar provincias y asignar provincia
                 cargarProvincias(data.id_pais ?? -1).then(() => {
