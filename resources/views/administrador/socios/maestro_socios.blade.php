@@ -381,18 +381,20 @@
                                                             placeholder="Fecha Actualización RUC">
                                                     </div>
                                                 </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>Fecha de Constitución</label>
-                                                        <input type="text" data-plugin-datepicker class="form-control"
-                                                            name="fecha_constitucion" id="fecha_constitucion"
-                                                            placeholder="Fecha de Constitución">
-                                                    </div>
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>Años de Creación</label>
-                                                        <input type="text" class="form-control" name="anios_creacion"
-                                                            id="anios_creacion" readonly />
-                                                    </div>
+                                                <div id="fechaconstitucion" style="display: none">
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Fecha de Constitución</label>
+                                                            <input type="text" data-plugin-datepicker class="form-control"
+                                                                name="fecha_constitucion" id="fecha_constitucion"
+                                                                placeholder="Fecha de Constitución">
+                                                        </div>
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Años de Creación</label>
+                                                            <input type="text" class="form-control" name="anios_creacion"
+                                                                id="anios_creacion" readonly />
+                                                        </div>
+                                                    </div> 
                                                 </div>
                                                 <div id="tributario_natural" style="display:none">
                                                     <div class="row mb-2">
@@ -813,7 +815,8 @@ function toggleNaturalConRuc(active) {
                     $('#id_sin_ruc').show();
                     $('#con_razon_social').hide();
                     $('#juridico').hide();
-                    $('#natural').hide();
+                    $('#natural').hide(); 
+                    $('#fechaconstitucion').hide();
                     $('#tributario_natural').hide();
 
                     // Ocultar el botón del tab y el contenido si está activo
@@ -834,6 +837,8 @@ function toggleNaturalConRuc(active) {
                     $('#con_razon_social').show();
                     $('#natural').show();
                     $('#tributario_natural').show();
+                    $('#fechaconstitucion').hide();
+                    $('#juridico').hide();
 
                     $('#tab_item_tributario').show();
 
@@ -844,6 +849,7 @@ function toggleNaturalConRuc(active) {
                     $('#id_sin_ruc').hide();
                     $('#con_razon_social').show();
                     $('#juridico').show();
+                    $('#fechaconstitucion').show();
 
                     // Ocultar los elementos relacionados con "natural"
                     $('#natural').hide();
@@ -1960,34 +1966,37 @@ function toggleNaturalConRuc(active) {
                         $('#fecha_actualizacion_ruc').focus();
                         return false;
                     }
-                    if ($('#fecha_constitucion').val() == "") {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese la fecha de constitución.',
-                        });
-                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                        $('#fecha_constitucion').focus();
-                        return false;
-                    }
-                    if (!esFechaValida($('#fecha_constitucion').val())) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                        });
-                        $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
-                        $('#fecha_constitucion').focus();
-                        return false;
-                    }
+                    if($('#tipo_personeria').val() == 3){
+                        if ($('#fecha_constitucion').val() == "") {
+                            Swal.fire({
+                                target: document.getElementById('ModalSocio'),
+                                icon: 'error',
+                                title: 'Error',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                                text: 'Por favor, ingrese la fecha de constitución.',
+                            });
+                            $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                            $('#fecha_constitucion').focus();
+                            return false;
+                        }
+                        if (!esFechaValida($('#fecha_constitucion').val())) {
+                            Swal.fire({
+                                target: document.getElementById('ModalSocio'),
+                                icon: 'error',
+                                title: 'Error',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                                text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                            });
+                            $('.nav-tabs a[href="#datos_tributarios"]').tab('show');
+                            $('#fecha_constitucion').focus();
+                            return false;
+                        }
+                    } 
+                    
                     if ($('#agente_retencion').val() == -1) {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
@@ -2427,9 +2436,9 @@ function toggleNaturalConRuc(active) {
             aniosVencimiento('fecha_ingreso', 'vencimiento_nombramiento',
                 'anios_nombramiento');
 
-            /*calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
+            calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
                 'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
-            );*/
+            );
         });
     </script>
 @endsection

@@ -358,39 +358,72 @@ class SocioController extends Controller
             //return($request->input('tipo_personeria'));
             if($request->input('tipo_personeria') != 1){ 
 
-                $validator = Validator::make($request->all(), [
-                    'fecha_ingreso' => 'required|date_format:d/m/Y',
-                    'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                    'tipo_personeria' => 'required|integer',
-                    'identificacion' => 'required|string',
-                    'razon_social' => 'required|string|max:255',
-                    'cedula_representante' => 'required_if:tipo_personeria,3|nullable|string|max:13',
-                    'nombre_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
-                    'apellido_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
-                    'telefono_representante' => 'required_if:tipo_personeria,3|nullable|string|max:15',
-                    'correo_representante' => 'required_if:tipo_personeria,3|nullable|email|max:255',
-                    'fecha_registro_mercantil' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
-                    'vencimiento_nombramiento' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
-                    'correo' => 'required_if:tipo_personeria,2|nullable|email|max:255',
-                    'telefono' => 'required_if:tipo_personeria,2|nullable|string|max:15',
-                    'tipo_regimen' => 'required|integer',
-                    'fecha_registro_sri' => 'required|date_format:d/m/Y',
-                    'fecha_actualizacion_ruc' => 'required|date_format:d/m/Y',
-                    'fecha_constitucion' => 'required|date_format:d/m/Y',
-                    'agente_retencion' => 'required|integer',
-                    'contribuyente_especial' => 'required|integer',
-                    'fecha_nacimiento' => 'required_if:tipo_personeria,2|nullable|date_format:d/m/Y',
-                    'pais' => 'required|integer',
-                    'provincia' => 'required|integer',
-                    'canton' => 'required|integer',
-                    'parroquia' => 'required|integer',
-                    'calle' => 'required|string|max:255',
-                    'manzana' => 'required|string|max:255',
-                    'numero' => 'required|string|max:255',
-                    'interseccion' => 'required|string|max:255',
-                    'referencia' => 'required|string|max:255',
-                ]);
-
+                if($request->input('tipo_personeria') == 2){
+                    $validator = Validator::make($request->all(), [
+                        'fecha_ingreso' => 'required|date_format:d/m/Y',
+                        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                        'tipo_personeria' => 'required|integer',
+                        'identificacion' => 'required|string',
+                        'razon_social' => 'required|string|max:255',
+                        'cedula_representante' => 'required_if:tipo_personeria,3|nullable|string|max:13',
+                        'nombre_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
+                        'apellido_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
+                        'telefono_representante' => 'required_if:tipo_personeria,3|nullable|string|max:15',
+                        'correo_representante' => 'required_if:tipo_personeria,3|nullable|email|max:255',
+                        'fecha_registro_mercantil' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
+                        'vencimiento_nombramiento' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
+                        'correo' => 'required_if:tipo_personeria,2|nullable|email|max:255',
+                        'telefono' => 'required_if:tipo_personeria,2|nullable|string|max:15',
+                        'tipo_regimen' => 'required|integer',
+                        'fecha_registro_sri' => 'required|date_format:d/m/Y',
+                        'fecha_actualizacion_ruc' => 'required|date_format:d/m/Y', 
+                        'agente_retencion' => 'required|integer',
+                        'contribuyente_especial' => 'required|integer',
+                        'fecha_nacimiento' => 'required_if:tipo_personeria,2|nullable|date_format:d/m/Y',
+                        'pais' => 'required|integer',
+                        'provincia' => 'required|integer',
+                        'canton' => 'required|integer',
+                        'parroquia' => 'required|integer',
+                        'calle' => 'required|string|max:255',
+                        'manzana' => 'required|string|max:255',
+                        'numero' => 'required|string|max:255',
+                        'interseccion' => 'required|string|max:255',
+                        'referencia' => 'required|string|max:255',
+                    ]);
+                }else{
+                    $validator = Validator::make($request->all(), [
+                        'fecha_ingreso' => 'required|date_format:d/m/Y',
+                        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                        'tipo_personeria' => 'required|integer',
+                        'identificacion' => 'required|string',
+                        'razon_social' => 'required|string|max:255',
+                        'cedula_representante' => 'required_if:tipo_personeria,3|nullable|string|max:13',
+                        'nombre_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
+                        'apellido_representante' => 'required_if:tipo_personeria,3|nullable|string|max:255',
+                        'telefono_representante' => 'required_if:tipo_personeria,3|nullable|string|max:15',
+                        'correo_representante' => 'required_if:tipo_personeria,3|nullable|email|max:255',
+                        'fecha_registro_mercantil' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
+                        'vencimiento_nombramiento' => 'required_if:tipo_personeria,3|nullable|date_format:d/m/Y',
+                        'correo' => 'required_if:tipo_personeria,2|nullable|email|max:255',
+                        'telefono' => 'required_if:tipo_personeria,2|nullable|string|max:15',
+                        'tipo_regimen' => 'required|integer',
+                        'fecha_registro_sri' => 'required|date_format:d/m/Y',
+                        'fecha_actualizacion_ruc' => 'required|date_format:d/m/Y',
+                        'fecha_constitucion' => 'required|date_format:d/m/Y',
+                        'agente_retencion' => 'required|integer',
+                        'contribuyente_especial' => 'required|integer',
+                        'fecha_nacimiento' => 'required_if:tipo_personeria,2|nullable|date_format:d/m/Y',
+                        'pais' => 'required|integer',
+                        'provincia' => 'required|integer',
+                        'canton' => 'required|integer',
+                        'parroquia' => 'required|integer',
+                        'calle' => 'required|string|max:255',
+                        'manzana' => 'required|string|max:255',
+                        'numero' => 'required|string|max:255',
+                        'interseccion' => 'required|string|max:255',
+                        'referencia' => 'required|string|max:255',
+                    ]);
+                }  
             }else{
 
                 $validator = Validator::make($request->all(), [
@@ -528,7 +561,10 @@ class SocioController extends Controller
                     'fecha_actualizacion_ruc' => validarFecha($data['fecha_actualizacion_ruc']) 
                         ? Carbon::createFromFormat('d/m/Y', $data['fecha_actualizacion_ruc'])->format('Y-m-d') 
                         : null,
-                    'fecha_constitucion' => validarFecha($data['fecha_constitucion']) 
+                    /*'fecha_constitucion' => validarFecha($data['fecha_constitucion']) 
+                        ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
+                        : null,*/
+                    'fecha_constitucion' => array_key_exists('fecha_constitucion', $data) && validarFecha($data['fecha_constitucion']) 
                         ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
                         : null,
                     'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
@@ -739,7 +775,7 @@ class SocioController extends Controller
 
                 // Actualización del socio
                 $socio->update([
-                    'logo' => $rutaFoto ?? 'no hay foto',
+                    'logo' => $rutaFoto ?? '',
                     'fecha_ingreso' => $fecha_ingreso,
                     'id_tipo_persona' => 1,
                     'id_tipo_personeria' => $data['tipo_personeria'],
@@ -800,7 +836,7 @@ class SocioController extends Controller
             }else{
 
                 $socio->update([
-                    'logo' => $rutaFoto ?? 'no hay foto',
+                    'logo' => $rutaFoto ?? '',
                     'fecha_ingreso' => $fecha_ingreso,
                     'id_tipo_persona' => 1,
                     'id_tipo_personeria' => $data['tipo_personeria'],
