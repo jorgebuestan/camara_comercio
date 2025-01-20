@@ -95,9 +95,12 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 text-end">
+            <div class="col-lg-11 text-end">
+                &nbsp;
+            </div>
+            <div class="col-lg-1">
                 <a href="{{ route('dashboard') }}" id="videoLink">
-                    <button type="button" class="mb-1 mt-1 btn btn-primary">Regresar</button>
+                    <button type="button" class="mb-1 mt-1 me-1 btn btn-primary">Regresar</button>
                 </a>
             </div>
         </div>
@@ -492,7 +495,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-camara">Guardar</button>
                     </div>
                 </div>
@@ -844,7 +847,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
-                            data-dismiss="modal">Cerrar</button>
+                            data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-modificar-camara">Guardar Cambios</button>
                     </div>
                 </div>
@@ -862,7 +865,7 @@
         </div>
     </div>
 
-
+  
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -886,69 +889,50 @@
             });
 
             var table = $('#dataTable').DataTable({
-                destroy: true,
-                processing: false,
-                serverSide: true,
-                ajax: {
-                    url: "{{ route('admin.obtener_listado_camaras') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.start = d.start || 0;
-                        d.length = d.length || 10;
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: error.responseJSON?.error || "Error al cargar los datos.",
-                        });
-                        console.error("Error al cargar los datos: ", error);
-                    },
-                    complete: function(response) {
-                        camaras = response.responseJSON.data;
-                        Swal.close();
-                    },
-                },
-                pageLength: 10, // Establece el número de registros por página
-                columns: [{
-                        data: 'fecha_ingreso',
-                        width: '15%'
-                    },
-                    {
-                        data: 'ruc',
-                        width: '15%'
-                    },
-                    {
-                        data: 'razon_social',
-                        width: '20%'
-                    },
-                    {
-                        data: 'representante_legal',
-                        width: '20%'
-                    },
-                    {
-                        data: 'cedula_representante_legal',
-                        width: '15%'
-                    },
-                    {
-                        data: 'btn',
-                        width: '15%'
-                    }
-                ],
-                order: [
-                    [0, "asc"]
-                ],
-                createdRow: function(row, data, dataIndex) {
-                    var td = $(row).find(".truncate");
-                    td.attr("title", td.text());
+    destroy: true,
+    processing: false,
+    serverSide: true,
+    ajax: {
+      url: "{{ route('admin.obtener_listado_camaras') }}",
+      type: "GET",
+      data: function(d) {
+        d.start = d.start || 0;
+        d.length = d.length || 10;
+      },
+      error: function(error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          showConfirmButton: true,
+          allowOutsideClick: false,
+          confirmButtonText: 'Aceptar',
+          text: error.responseJSON?.error || "Error al cargar los datos.",
+        });
+        console.error("Error al cargar los datos: ", error);
+      },
+      complete: function(response) {
+        camaras = response.responseJSON.data;
+        Swal.close();
+      },
+    },
+    pageLength: 10,
+    columns: [
+      { data: 'fecha_ingreso', width: '15%' },
+      { data: 'ruc', width: '10%' },
+      { data: 'razon_social', width: '20%' },
+      { data: 'representante_legal', width: '20%' },
+      { data: 'cedula_representante_legal', width: '15%' },
+      { data: 'btn', width: '20%' }
+    ],
+    order: [[0, "asc"]],
+    createdRow: function(row, data, dataIndex) {
+      var td = $(row).find(".truncate");
+      td.attr("title", td.text());
 
-                    var td2 = $(row).find(".truncate2");
-                    td2.attr("title", td2.text());
-                }
-            });
+      var td2 = $(row).find(".truncate2");
+      td2.attr("title", td2.text());
+    }
+  });
             // Inicializar Select2 con búsqueda habilitada
             // Inicializar Select2
             // Inicializar Select2

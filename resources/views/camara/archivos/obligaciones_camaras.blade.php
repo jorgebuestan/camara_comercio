@@ -148,15 +148,15 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'entidad',
-                        width: '45%'
+                        width: '40%'
                     },
                     {
                         data: 'obligacion',
-                        width: '45%'
+                        width: '40%'
                     },
                     {
                         data: 'archivo',
-                        width: '10%'
+                        width: '20%'
                     }
                 ],
                 order: [

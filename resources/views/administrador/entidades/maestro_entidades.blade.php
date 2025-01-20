@@ -286,7 +286,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <!-- <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button> -->
                         <button type="button" class="btn btn-primary" id="btn-register-entidad">Guardar</button>
                     </div>
@@ -458,7 +458,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
-                            data-dismiss="modal">Cerrar</button>
+                            data-dismiss="modal">Cerrar</button>&nbsp;
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
                         <button type="button" class="btn btn-primary" id="btn-modificar-entidad">Guardar
                             Cambios</button>
@@ -521,11 +521,11 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '20%'
+                        width: '15%'
                     },
                     {
                         data: 'entidad',
-                        width: '20%'
+                        width: '15%'
                     },
                     {
                         data: 'tipo_entidad',
@@ -541,7 +541,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '10%'
+                        width: '20%'
                     }
                 ],
                 order: [

@@ -519,8 +519,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" id="btn_register_socio">Guardar</button>
+                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
+                            <button type="button" class="btn btn-primary" id="btn_register_socio">Guardar</button>&nbsp;
                             <button type="button" class="btn btn-primary" style="display: none;"
                                 id="btn_update_socio">Actualizar</button>
                         </div>

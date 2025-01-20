@@ -178,8 +178,8 @@ class AdherenteController extends Controller
                 'insert' => $logSociosAdherentesIns[0] ?? null,
                 'update' => $logSociosAdherentesMod ?? null
             ];
-            $btnModificar = '<button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Modificar</button>';
-            $btnDesafiliar = '<button class="btn btn-danger mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Desafiliar</button>';
+            $btnModificar = '<button class="btn btn-outline-warning btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>';
+            $btnDesafiliar = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
             $socioAdherente->adherente->fecha_ingreso = Carbon::createFromFormat('Y-m-d', $socioAdherente->adherente->fecha_ingreso)->format('d/m/Y');
             return array_merge($socioAdherente->toArray(), [
                 'logs' => $logSociosAdherentes,

@@ -121,8 +121,8 @@ class SocioObligacionController extends Controller
                 'nombre_obligacion' => $socioObligacion->obligacion->obligacion ?? '',
                 'fecha_inicio' => $socioObligacion->fecha_inicio ? Carbon::parse($socioObligacion->fecha_inicio)->format('d/m/Y') : 'N/A',
                 'fecha_presentacion' => $socioObligacion->fecha_presentacion ? Carbon::parse($socioObligacion->fecha_presentacion)->format('d/m/Y') : 'N/A',
-                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Modificar</button>' .
-                    '<button class="btn btn-warning mb-1 delete-socio-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Eliminar</button></div>'
+                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-1 btn-sm rounded-pill edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                    '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioObligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></button></div>'
             ]);
         });
 

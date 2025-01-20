@@ -79,9 +79,14 @@ class ObligacionesController extends Controller
             $checkbox = false;
 
             if ($request->input('tipo_boton') == 1) {
-                $boton = '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->id . '">Modificar</button>' .
+                /*$boton = '<button class="btn btn-primary mb-3 open-modal" data-id="' . $obligacion->id . '">Modificar</button>' .
                     '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;';
+                    '&nbsp;&nbsp;&nbsp;';*/
+
+                $boton = '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                        '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $obligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                        '</div>';
             }
 
             if ($request->input('tipo_boton') == 2) {

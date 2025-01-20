@@ -93,10 +93,11 @@ class CamaraSocioController extends Controller
                 'fecha_afiliacion' => $socio->fecha_afiliacion,
                 'identificacion' => $socio->identificacion,
                 'razon_social' => $socio->razon_social,
-                'tipo_personeria' => $socio->tipo_personeria,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $socio->id . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-socio" data-id="' . $socio->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'tipo_personeria' => $socio->tipo_personeria, 
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-socio" data-id="' . $socio->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                         '</div>'
             ];
         });
 

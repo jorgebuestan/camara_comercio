@@ -214,7 +214,7 @@
                             &nbsp;
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
                             <button type="button" class="btn btn-primary" id="agregar_obligacion">Agregar
                                 Obligación</button>
                         </div>
@@ -287,7 +287,7 @@
                             &nbsp;
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>
+                            <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>&nbsp;
                             <button type="button" class="btn btn-primary" id="modificar_obligacion">Modificar
                                 Obligación</button>
                         </div>

@@ -128,10 +128,11 @@ class EstablecimientoController extends Controller
                 'secuencial' => $establecimiento->secuencial,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
                 'direccion' => $establecimiento->direccion,
-                'correo' => $establecimiento->correo,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $establecimiento->id . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'correo' => $establecimiento->correo, 
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                        '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $establecimiento->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                        '</div>'
             ];
         });
 
@@ -150,7 +151,7 @@ class EstablecimientoController extends Controller
 
         try {
             $validator = Validator::make($request->all(), [
-                'nombre_comercial' => 'required|string',
+                'nombre_comercial' => 'required|string', 
                 'camaraHidden' => 'required|integer',
                 'pais' => 'required|string',
                 'provincia' => 'required|string',
@@ -200,10 +201,10 @@ class EstablecimientoController extends Controller
                 }
             }
 
-            /*// Obtener el último secuencial para la cámara
-                $ultimoSecuencial = Establecimiento::where('id_camara', $request->input('camaraHidden'))
-                ->orderBy('secuencial', 'desc')
-                ->value('secuencial');
+            // Obtener el último secuencial para la cámara
+            $ultimoSecuencial = Establecimiento::where('id_camara', $request->input('camaraHidden'))
+            ->orderBy('secuencial', 'desc')
+            ->value('secuencial');
 
             // Calcular el nuevo secuencial
             $nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
@@ -214,11 +215,11 @@ class EstablecimientoController extends Controller
             }
 
             // Formatear el secuencial a tres dígitos
-            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);*/
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
 
             // Crear registro en la base de datos
             $establecimiento = Establecimiento::create([
-                'secuencial' => $request->input('num_establecimiento'), 
+                'secuencial' => $secuencialFormateado, 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_camara' => strtoupper($request->input('camaraHidden')),
                 'id_pais' => $request->input('pais'),

@@ -99,10 +99,11 @@ class EntidadesController extends Controller
                 'entidad' => $entidad->entidad,
                 'tipo_entidad' => $entidad->tipo_entidad,
                 'direccion' => $entidad->direccion,
-                'representante' => $entidad->representante,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $entidad->id . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'representante' => $entidad->representante, 
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $entidad->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                          '</div>'
             ];
         });
 

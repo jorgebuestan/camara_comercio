@@ -339,7 +339,7 @@
                     },
                     {
                         data: 'razon_social',
-                        width: '40%'
+                        width: '35%'
                     },
                     {
                         data: 'tipo_personeria',
@@ -347,7 +347,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '15%'
+                        width: '20%'
                     }
                 ],
                 order: [

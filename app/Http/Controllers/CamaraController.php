@@ -114,9 +114,10 @@ class CamaraController extends Controller
                 'razon_social' => $camara->razon_social,
                 'cedula_representante_legal' => $camara->cedula_representante_legal,
                 'representante_legal' => $representante_legal,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $camara->id . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                         '</div>'
             ];
         });
 
@@ -132,7 +133,7 @@ class CamaraController extends Controller
 
 
     // Validación de datos
-    /*$validated = $request->validate([
+    /*$validated = $request->validate([ 
             'fecha_ingreso' => 'required|string', // Validar como string inicialmente
             'ruc' => 'required|string|unique:camaras,ruc|max:20',
             'razon_social' => 'required|string|max:255',

@@ -375,7 +375,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
                             <button type="button" class="btn btn-primary" id="agregar_adherente">Agregar
                                 Adherente</button>
                             <button type="button" class="btn btn-primary" style="display: none;"

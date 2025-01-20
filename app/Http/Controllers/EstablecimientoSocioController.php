@@ -124,10 +124,11 @@ class EstablecimientoSocioController extends Controller
                 'secuencial' => $establecimiento->secuencial,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
                 'direccion' => $establecimiento->direccion,
-                'correo' => $establecimiento->correo,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $establecimiento->id . '">Modificar</button>' .
-                    '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar</button>' .
-                    '&nbsp;&nbsp;&nbsp;'
+                'correo' => $establecimiento->correo, 
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                        '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $establecimiento->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                        '</div>'
             ];
         });
 
@@ -161,7 +162,7 @@ class EstablecimientoSocioController extends Controller
                 ->value('secuencial');
 
             // Calcular el nuevo secuencial
-            /*$nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
+            $nuevoSecuencial = $ultimoSecuencial ? intval($ultimoSecuencial) + 1 : 1;
 
             if ($nuevoSecuencial > 999) {
                 Log::error('No se puede asignar un nuevo secuencial, se alcanzó el límite de 999');
@@ -169,11 +170,11 @@ class EstablecimientoSocioController extends Controller
             }
 
             // Formatear el secuencial a tres dígitos
-            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);*/
+            $secuencialFormateado = str_pad($nuevoSecuencial, 3, '0', STR_PAD_LEFT);
 
             // Crear registro en la base de datos
             $establecimiento = EstablecimientoSocio::create([
-                'secuencial' => $request->input('num_establecimiento'), 
+                'secuencial' => $secuencialFormateado, 
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial')),
                 'id_socio' => strtoupper($request->input('socioHidden')),
                 'id_pais' => $request->input('pais'),

@@ -191,7 +191,7 @@
                                     <input type="hidden" id="socioHidden" name="socioHidden" value="">
                                 </div>
                             </div>
-                            <div class="row">
+                            <!--<div class="row">
                                 <div class="col-md-2">
                                     Secuencial
                                 </div>
@@ -211,7 +211,7 @@
                                 <div class="col-md-4">
                                     &nbsp;
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="row">
                                 &nbsp;
                             </div>
@@ -388,47 +388,47 @@
                                 &nbsp;
                             </div>
                             <!-- <div class="row">
-                                                                                                <div class="col-md-12">
-                                                                                                    <h2 class="card-title">Actividades Economicas</h2>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                &nbsp;
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-12">
-                                                                                                    <select name="actividad_economica[]" id="actividad_economica" multiple
-                                                                                                        data-plugin-selectTwo>
-                                                                                                    </select>
-                                                                                                    <input type="hidden" id="hiddenSelectedItems"
-                                                                                                        name="actividad_economica_seleccionados">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-2">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="col-md-4">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="col-md-2">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="container-selected-items">
-                                                                                                    <div id="selectedItemsContainer" class="selected-items">
-                                                                                                        <strong>Seleccionados:</strong>
-                                                                                                        <div id="selectedList"></div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="row">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                            </div> -->
+                                    <div class="col-md-12">
+                                        <h2 class="card-title">Actividades Economicas</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select name="actividad_economica[]" id="actividad_economica" multiple
+                                            data-plugin-selectTwo>
+                                        </select>
+                                        <input type="hidden" id="hiddenSelectedItems"
+                                            name="actividad_economica_seleccionados">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-4">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="container-selected-items">
+                                        <div id="selectedItemsContainer" class="selected-items">
+                                            <strong>Seleccionados:</strong>
+                                            <div id="selectedList"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
-                        <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-establecimiento">Guardar</button>
                     </div>
                 </div>
@@ -688,7 +688,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
-                            data-dismiss="modal">Cerrar</button>
+                            data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-modificar-establecimiento">Guardar
                             Cambios</button>
                     </div>

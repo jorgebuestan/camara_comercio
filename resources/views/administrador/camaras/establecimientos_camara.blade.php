@@ -191,7 +191,7 @@
                                     <input type="hidden" id="camaraHidden" name="camaraHidden" value="">
                                 </div>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-2">
                                     Secuencial
                                 </div>
@@ -211,7 +211,7 @@
                                 <div class="col-md-4">
                                     &nbsp;
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="row">
                                 &nbsp;
                             </div>
@@ -348,7 +348,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="correo" id="correo"
-                                        placeholder="Correo Representante Legal">
+                                        placeholder="Correo">
                                     <div id="error-correo" style="color: red; display: none;">Ingrese un correo
                                         electrónico válido.</div>
                                 </div>
@@ -381,6 +381,52 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="telefono3" id="telefono3"
+                                        placeholder="Teléfono">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>Información de Contacto</b>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Nombres
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name=" nombres_contacto" id="nombres_contacto"
+                                        placeholder="Teléfono">
+                                </div>
+                                <div class="col-md-2">
+                                    Apellidos
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="apellidos_contacto" id="apellidos_contacto"
+                                        placeholder="Teléfono">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Teléfono
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto"
+                                        placeholder="Teléfono">
+                                </div>
+                                <div class="col-md-2">
+                                    Email
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="email_contacto" id="email_contacto"
                                         placeholder="Teléfono">
                                 </div>
                             </div>
@@ -428,7 +474,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> -->
-                        <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-establecimiento">Guardar</button>
                     </div>
                 </div>
@@ -612,7 +658,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="correo_mod" id="correo_mod"
-                                        placeholder="Correo Representante Legal">
+                                        placeholder="Correo">
                                     <div id="error-correo-mod" style="color: red; display: none;">Ingrese un correo
                                         electrónico válido.</div>
                                 </div>
@@ -689,7 +735,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btn-close"
-                            data-dismiss="modal">Cerrar</button>
+                            data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-modificar-camara">Guardar Cambios</button>
                     </div>
                 </div>

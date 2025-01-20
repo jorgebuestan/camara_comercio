@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/bootstrap/css/bootstrap.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/animate/animate.compat.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/font-awesome/css/all.min.css') }}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/boxicons/css/boxicons.min.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/magnific-popup/magnific-popup.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('porto/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css') }}" />
@@ -88,6 +89,45 @@
             box-shadow: 1px 3px 0 1px #CCCCCC;
         }
     </style>
+
+<style>
+  #dataTable tbody tr {
+    height: 30px !important;  /* Establece una altura fija más pequeña */
+  }
+
+  #dataTable tbody td {
+    padding: 5px 8px; /* Ajusta el relleno */
+    font-size: 12px; /* Tamaño de la letra */
+    vertical-align: middle; /* Centra el contenido verticalmente */
+    line-height: 1.2; /* Altura de línea controlada */
+  }
+
+  #dataTable thead th {
+    padding: 5px 8px; /* Ajusta el relleno de los encabezados */
+    font-size: 10px; /* Tamaño de la letra */
+    vertical-align: middle; /* Centra verticalmente el texto */
+    line-height: 1.2; /* Altura de línea controlada */
+  }
+</style>
+
+<style>
+  .d-flex {
+    align-items: center !important; /* Asegura que los elementos estén centrados verticalmente */
+  }
+
+  .btn {
+    margin: 0 !important; /* Remueve márgenes que puedan causar desplazamientos */
+    line-height: 1 !important; /* Ajusta la altura de línea */
+    display: flex; /* Asegura que el contenido del botón esté centrado */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-sm {
+    height: auto !important; /* Asegura que no haya alturas fijas que desalineen */
+    padding: 5px 10px !important; /* Aplica un relleno uniforme */
+  }
+</style>
 
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ URL::asset('porto/css/theme.css') }}" />

@@ -124,9 +124,9 @@ class CamaraObligacionController extends Controller
 
             return array_merge($camaraObligacion->toArray(), [
                 'nombre_entidad' => $camaraObligacion->entidad->entidad ?? '',
-                'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '',
-                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-primary mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Modificar</button>' .
-                    '<button class="btn btn-warning mb-1 delete-camara-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Eliminar</button></div>'
+                'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '', 
+                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                    '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-camara-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button></div>'
             ], $logCamaraObligacion);
         });
 

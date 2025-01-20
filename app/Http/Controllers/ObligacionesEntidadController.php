@@ -88,7 +88,7 @@ class ObligacionesEntidadController extends Controller
                 'obligacion' => $obligacion->obligacion,
                 'tiempo_presentacion' => $obligacion->tiempo_presentacion,
                 'tipo_presentacion' => $obligacion->tipo_presentacion ?? 'N/A',
-                'btn' => '<div class="flex items-center justify-center w-full"><button class="btn btn-warning mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar</button>' .
+                'btn' => '<div class="flex items-center justify-center w-full"><button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></button>' .
                     '<div/>'
             ];
         });
