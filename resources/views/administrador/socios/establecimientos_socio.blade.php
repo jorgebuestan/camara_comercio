@@ -387,6 +387,54 @@
                             <div class="row">
                                 &nbsp;
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>Información de Contacto</b>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Nombres
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="nombres_contacto" id="nombres_contacto"
+                                        placeholder="nombres del Conctacto">
+                                </div>
+                                <div class="col-md-2">
+                                    Apellidos
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="apellidos_contacto" id="apellidos_contacto"
+                                        placeholder="Apellidos del Contacto">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Teléfono
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="telefono_contacto" id="telefono_contacto"
+                                        placeholder="Teléfono del Contacto">
+                                </div>
+                                <div class="col-md-2">
+                                    Email
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="email_contacto" id="email_contacto"
+                                        placeholder="Email del Contacto">
+                                    <div id="error-correo-contacto" style="color: red; display: none;">Ingrese un correo
+                                    electrónico válido.</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
                             <!-- <div class="row">
                                     <div class="col-md-12">
                                         <h2 class="card-title">Actividades Economicas</h2>
@@ -650,40 +698,88 @@
                             <div class="row">
                                 &nbsp;
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>Información de Contacto</b>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Nombres
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="nombres_contacto_mod" id="nombres_contacto_mod"
+                                        placeholder="Nombres del Contacto">
+                                </div>
+                                <div class="col-md-2">
+                                    Apellidos
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="apellidos_contacto_mod" id="apellidos_contacto_mod"
+                                        placeholder="Apellidos del Contacto">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Teléfono
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="telefono_contacto_mod" id="telefono_contacto_mod"
+                                        placeholder="Teléfono del Contacto">
+                                </div>
+                                <div class="col-md-2">
+                                    Email
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="email_contacto_mod" id="email_contacto_mod"
+                                        placeholder="Email del Contacto">
+                                    <div id="error-correo-contacto-mod" style="color: red; display: none;">Ingrese un correo
+                                    electrónico válido.</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
                             <!-- <div class="row">
-                                                                                                <div class="col-md-12">
-                                                                                                    <h2 class="card-title">Actividades Economicas</h2>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                &nbsp;
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-12">
-                                                                                                    <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
-                                                                                                        data-plugin-selectTwo>
-                                                                                                    </select>
-                                                                                                    <input type="hidden" id="hiddenSelectedItemsMod"
-                                                                                                        name="actividad_economica_seleccionados_mod">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-2">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="col-md-4">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="col-md-2">
-                                                                                                    &nbsp;
-                                                                                                </div>
-                                                                                                <div class="container-selected-items">
-                                                                                                    <div id="selectedItemsContainer_mod" class="selected-items">
-                                                                                                        <strong>Seleccionados:</strong>
-                                                                                                        <div id="selectedList_mod"></div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div> -->
+                                <div class="col-md-12">
+                                    <h2 class="card-title">Actividades Economicas</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select name="actividad_economica_mod" id="actividad_economica_mod" multiple
+                                        data-plugin-selectTwo>
+                                    </select>
+                                    <input type="hidden" id="hiddenSelectedItemsMod"
+                                        name="actividad_economica_seleccionados_mod">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    &nbsp;
+                                </div>
+                                <div class="col-md-4">
+                                    &nbsp;
+                                </div>
+                                <div class="col-md-2">
+                                    &nbsp;
+                                </div>
+                                <div class="container-selected-items">
+                                    <div id="selectedItemsContainer_mod" class="selected-items">
+                                        <strong>Seleccionados:</strong>
+                                        <div id="selectedList_mod"></div>
+                                    </div>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1116,6 +1212,18 @@
                 }
             });
 
+            $("#email_contacto").on("input", function() {
+                $(this).val($(this).val().toLowerCase());
+                var correo = $(this).val();
+                var regexCorreo =
+                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
+                if (regexCorreo.test(correo)) { // Si es un correo válido
+                    $("#error-correo-contacto").hide(); // Ocultar error
+                } else {
+                    $("#error-correo-contacto").show(); // Mostrar error
+                }
+            });
+
             // Evento para validar la fecha al salir del campo
             $('#fecha_inicio_actividades_mod').on('blur', function() {
                 var fecha = $(this).val();
@@ -1174,17 +1282,75 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono1').on('input', function() {
+            /*$('#telefono1').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono1').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
+
+            /*$('#telefono2').on('input', function() {
+                // Convierte el valor del campo a mayúsculas
+                $(this).val($(this).val().toUpperCase());
+            });*/
 
             $('#telefono2').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
+            });
+
+            /*$('#telefono3').on('input', function() {
+                // Convierte el valor del campo a mayúsculas
+                $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono3').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
+            });
+
+            $('#telefono_contacto').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
+            });
+
+            $('#nombres_contacto').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono3').on('input', function() {
+            $('#apellidos_contacto').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
             });
@@ -1220,19 +1386,89 @@
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#telefono1_mod').on('input', function() {
+            $('#nombres_contacto_mod').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
             });
+
+            $('#apellidos_contacto_mod').on('input', function() {
+                // Convierte el valor del campo a mayúsculas
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            $("#email_contacto_mod").on("input", function() {
+                $(this).val($(this).val().toLowerCase());
+                var correo = $(this).val();
+                var regexCorreo =
+                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regex para correo válido
+                if (regexCorreo.test(correo)) { // Si es un correo válido
+                    $("#error-correo-contacto-mod").hide(); // Ocultar error
+                } else {
+                    $("#error-correo-contacto-mod").show(); // Mostrar error
+                }
+            });
+
+            /*$('#telefono1_mod').on('input', function() {
+                // Convierte el valor del campo a mayúsculas
+                $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono1_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
+            });
+
+            /*$('#telefono2_mod').on('input', function() {
+                // Convierte el valor del campo a mayúsculas
+                $(this).val($(this).val().toUpperCase());
+            });*/
 
             $('#telefono2_mod').on('input', function() {
-                // Convierte el valor del campo a mayúsculas
-                $(this).val($(this).val().toUpperCase());
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
-            $('#telefono3_mod').on('input', function() {
+            /*$('#telefono3_mod').on('input', function() {
                 // Convierte el valor del campo a mayúsculas
                 $(this).val($(this).val().toUpperCase());
+            });*/
+
+            $('#telefono3_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
+            }); 
+
+            $('#telefono_contacto_mod').on('input', function() {
+                let value = $(this).val();
+                // Eliminar todos los caracteres no numéricos excepto el guion
+                value = value.replace(/[^0-9]/g, '');
+                
+                // Limitar el campo a un máximo de 11 caracteres (10 dígitos + 1 guion)
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                $(this).val(value);
             });
 
 
@@ -1441,6 +1677,63 @@
                     return;
                 }*/
 
+                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#email_contacto').val())) {
+                    /*$("#error-correo").show();
+                    isValid = false;*/
+                    $("#error-correo-contacto").show();
+                    //alert('Debe registrar un correo con formato válido');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#correo').focus();
+                    return;
+                }
+
+                if ($('#nombres_contacto').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Nombres del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#nombres_contacto').focus();
+                    return;
+                }
+
+                if ($('#apellidos_contacto').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Apellidos del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#referencia').focus();
+                    return;
+                }
+
+                if ($('#telefono_contacto').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Teléfono del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#referencia').focus();
+                    return;
+                }
+                
+
                 var formData = new FormData(document.getElementById("ModalEstablecimiento"));
                 Swal.fire({
                     target: document.getElementById('ModalEstablecimiento'),
@@ -1625,6 +1918,10 @@
                         var Telefono1 = $('#telefono1_mod');
                         var Telefono2 = $('#telefono2_mod');
                         var Telefono3 = $('#telefono3_mod');
+                        var NombresContacto = $('#nombres_contacto_mod');
+                        var ApellidosContacto = $('#apellidos_contacto_mod');
+                        var TelefonoContacto = $('#telefono_contacto_mod');
+                        var EmailContacto = $('#email_contacto_mod');
                         var ActividadEconomica = $('#actividad_economica_mod');
                         var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
@@ -1674,10 +1971,15 @@
                         Numero.val(response.numero);
                         Interseccion.val(response.interseccion);
                         Referencia.val(response.referencia);
-                        Correo.val(response.correo);
+                        //Correo.val(response.correo);
+                        Correo.val((response.correo ?? "").toLowerCase());
                         Telefono1.val(response.telefono1);
                         Telefono2.val(response.telefono2);
                         Telefono3.val(response.telefono3);
+                        NombresContacto.val(response.nombres_contacto);
+                        ApellidosContacto.val(response.apellidos_contacto);
+                        TelefonoContacto.val(response.telefono_contacto); 
+                        EmailContacto.val((response.email_contacto ?? "").toLowerCase());
 
                         // Limpia la lista visual y el array
                         selectedItemsMod = [];
@@ -2049,6 +2351,62 @@
                     });
                     return;
                 }*/
+
+                if ($('#nombres_contacto_mod').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Nombres del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#referencia').focus();
+                    return;
+                }
+
+                if ($('#apellidos_contacto_mod').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar los Apellidos del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#referencia').focus();
+                    return;
+                }
+
+                if ($('#telefono_contacto_mod').val() == "") { 
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe ingresar el Teléfono del Contacto',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#referencia').focus();
+                    return;
+                }
+
+                if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test($('#email_contacto_mod').val())) {
+                    /*$("#error-correo").show();
+                    isValid = false;*/
+                    $("#error-correo-contacto-mod").show();
+                    //alert('Debe registrar un correo con formato válido');
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe registrar un correo con formato válido',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#correo_mod').focus();
+                    return;
+                }
 
                 //$('#carga').show();
                 Swal.fire({

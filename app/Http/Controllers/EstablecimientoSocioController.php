@@ -190,6 +190,10 @@ class EstablecimientoSocioController extends Controller
                 'telefono1' => strtoupper($request->input('telefono1')),
                 'telefono2' => strtoupper($request->input('telefono2')),
                 'telefono3' => strtoupper($request->input('telefono3')),
+                'nombres_contacto' => strtoupper($request->input('nombres_contacto')),
+                'apellidos_contacto' => strtoupper($request->input('apellidos_contacto')),
+                'telefono_contacto' => strtoupper($request->input('telefono_contacto')),
+                'email_contacto' => strtoupper($request->input('email_contacto')),
                 'fecha_inicio_actividades' => $fecha_inicio_actividades, // Usar fecha convertida
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray),
                 'estado' => 1
@@ -335,6 +339,10 @@ class EstablecimientoSocioController extends Controller
                 'telefono1' => strtoupper($request->input('telefono1_mod')),
                 'telefono2' => strtoupper($request->input('telefono2_mod')),
                 'telefono3' => strtoupper($request->input('telefono3_mod')),
+                'nombres_contacto' => strtoupper($request->input('nombres_contacto_mod')),
+                'apellidos_contacto' => strtoupper($request->input('apellidos_contacto_mod')),
+                'telefono_contacto' => strtoupper($request->input('telefono_contacto_mod')),
+                'email_contacto' => strtoupper($request->input('email_contacto_mod')),
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
 

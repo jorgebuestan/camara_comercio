@@ -31,6 +31,10 @@ class Establecimiento extends Model
         'fecha_reinicio_actividades',
         'fecha_cese_actividades',
         'actividades_economicas',
+        'nombres_contacto',
+        'apellidos_contacto',
+        'telefono_contacto',
+        'email_contacto',
         'estado'
     ]; 
 }
