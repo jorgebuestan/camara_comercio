@@ -247,6 +247,11 @@ class EstablecimientoController extends Controller
                 'estado' => 1
             ]);
 
+            $camara = Camara::find($request->input('camaraHidden'));
+            $camara->update([
+                'estado' => 1 
+            ]);
+
             DB::commit();
 
             return response()->json(['success' => 'Establecimiento registrado correctamente'], 200);

@@ -67,9 +67,10 @@ class CamaraController extends Controller
                 'camaras.razon_social',
                 'camaras.cedula_representante_legal',
                 'camaras.nombres_representante_legal',
-                'camaras.apellidos_representante_legal'
-            )
-            ->where('camaras.estado', 1)
+                'camaras.apellidos_representante_legal',
+                'camaras.estado'
+            ) 
+            ->whereIn('camaras.estado', [1, 2])
             ->orderBy('camaras.razon_social', 'asc');
 
         // Filtro de localidad 
@@ -107,6 +108,14 @@ class CamaraController extends Controller
             $boton = "";
 
             $representante_legal = $camara->nombres_representante_legal . " " . $camara->apellidos_representante_legal;
+   
+            $estado = "";
+            if($camara->estado ==1){
+                $estado = '<span class="badge bg-success text-light">ACTIVO</span>';
+            }
+            if($camara->estado ==2){
+                $estado = '<span class="badge bg-danger text-light">INACTIVO</span>';
+            }
 
             return [
                 'fecha_ingreso' => $camara->fecha_ingreso,
@@ -114,6 +123,7 @@ class CamaraController extends Controller
                 'razon_social' => $camara->razon_social,
                 'cedula_representante_legal' => $camara->cedula_representante_legal,
                 'representante_legal' => $representante_legal,
+                'estado' => $estado,
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
                             '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                             '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
@@ -181,7 +191,7 @@ class CamaraController extends Controller
                 'correo_representante_legal' => strtoupper($request->input('correo_representante_legal')),
                 'cargo_representante_legal' => strtoupper($request->input('cargo_representante_legal')),
                 'direccion_representante_legal' => strtoupper($request->input('direccion_representante_legal')),
-                'estado' => 1
+                'estado' => 2
             ]);
 
             $fechaRegistro = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_registro'))->format('Y-m-d');

@@ -122,6 +122,8 @@
                                     <div class="col-md-12">
                                         <button class="btn btn-primary mb-3" data-toggle="modal"
                                             data-target="#ModalCamara">Agregar Nuevo Registro</button>
+                                            <!--<span class="badge bg-success text-light">ACTIVO</span>
+                                            <span class="badge bg-danger text-light">INACTIVO</span>-->
                                     </div>
                                 </div>
                             </div>
@@ -144,6 +146,7 @@
                                                     <th>Razón Social</th>
                                                     <th>Representante Legal</th>
                                                     <th>Cédula Rep. Legal</th>
+                                                    <th>Estado</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -922,7 +925,8 @@
       { data: 'razon_social', width: '20%' },
       { data: 'representante_legal', width: '20%' },
       { data: 'cedula_representante_legal', width: '15%' },
-      { data: 'btn', width: '20%' }
+      { data: 'estado', width: '5%' },
+      { data: 'btn', width: '15%' }
     ],
     order: [[0, "asc"]],
     createdRow: function(row, data, dataIndex) {
