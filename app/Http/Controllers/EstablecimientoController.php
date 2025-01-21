@@ -78,10 +78,11 @@ class EstablecimientoController extends Controller
                 'establecimientos.fecha_inicio_actividades',
                 'establecimientos.secuencial',
                 'establecimientos.nombre_comercial',
+                'establecimientos.estado',
                 DB::raw('CONCAT(establecimientos.calle, " ", establecimientos.manzana, " ", establecimientos.numero, " ", establecimientos.interseccion) AS direccion'),
                 'establecimientos.correo'
-            )
-            ->where('establecimientos.estado', 1)
+            ) 
+            ->whereIn('establecimientos.estado', [1, 2])
             ->orderBy('establecimientos.nombre_comercial', 'asc');
 
         // Filtro de localidad 
@@ -123,12 +124,22 @@ class EstablecimientoController extends Controller
 
         $data = $establecimientos->map(function ($establecimiento) {
             $boton = "";
+
+            $estado = "";
+            if($establecimiento->estado ==1){
+                $estado = '<span class="badge bg-success text-light">ABIERTO</span>';
+            }
+            if($establecimiento->estado ==2){
+                $estado = '<span class="badge bg-danger text-light">CERRADO</span>';
+            }
+
             return [
                 'fecha_inicio_actividades' => $establecimiento->fecha_inicio_actividades,
                 'secuencial' => $establecimiento->secuencial,
                 'nombre_comercial' => $establecimiento->nombre_comercial,
                 'direccion' => $establecimiento->direccion,
                 'correo' => $establecimiento->correo, 
+                'estado' => $estado, 
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
                         '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $establecimiento->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                         '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-establecimiento" data-id="' . $establecimiento->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
@@ -442,8 +453,8 @@ class EstablecimientoController extends Controller
                 'telefono_contacto' => strtoupper($request->input('telefono_contacto_mod')),
                 'email_contacto' => strtoupper($request->input('email_contacto_mod')),
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
-                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
-
+                'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray), 
+                'estado' => $request->input('estado_mod') 
             ]);
 
             DB::commit();

@@ -365,6 +365,21 @@ class CamaraController extends Controller
         // Convertir el modelo Camara a un array
         $camaraArray = array_merge($camaraArray, $logCamara);
 
+
+        // Contar los registros en Establecimiento relacionados con esta cámara
+        $totalEstablecimientos = Establecimiento::where('id_camara', $id)->count();
+
+        // Contar los registros de estado igual a 1 y estado igual a 2
+        $estado1 = Establecimiento::where('id_camara', $id)->where('estado', 1)->count();
+        $estado2 = Establecimiento::where('id_camara', $id)->where('estado', 2)->count();
+
+        // Agregar la información de los establecimientos al array de respuesta
+        $camaraArray['establecimientos'] = [
+            'total' => $totalEstablecimientos,
+            'estado_1' => $estado1,
+            'estado_2' => $estado2
+        ];
+
         // Devolver la respuesta JSON
         return response()->json($camaraArray);
     }

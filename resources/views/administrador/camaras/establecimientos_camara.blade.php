@@ -155,6 +155,7 @@
                                                     <th>Nombre Comercial</th>
                                                     <th>Dirección</th>
                                                     <th>Correo</th>
+                                                    <th>Estado</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -518,10 +519,14 @@
                                     id="secuencial_mod" placeholder="Secuencial" disabled>
                                 </div>
                                 <div class="col-md-2">
-                                    &nbsp;
+                                    Estado
                                 </div>
                                 <div class="col-md-4">
-                                    &nbsp;
+                                    <select id="estado_mod" name="estado_mod" class="form-control populate">
+                                        <option value=-1>SELECCIONAR</option> 
+                                        <option value=1>ABIERTO</option> 
+                                        <option value=2>CERRADO</option> 
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -901,8 +906,12 @@
                         width: '15%'
                     },
                     {
+                        data: 'estado',
+                        width: '5%'
+                    },
+                    {
                         data: 'btn',
-                        width: '20%'
+                        width: '15%'
                     }
                 ],
                 order: [
@@ -1939,6 +1948,7 @@
                         var TelefonoContacto = $('#telefono_contacto_mod');
                         var EmailContacto = $('#email_contacto_mod');
                         var ActividadEconomica = $('#actividad_economica_mod');
+                        var Estado = $('#estado_mod');
                         var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
                         establecimientoId.val(response.id);
@@ -1949,6 +1959,7 @@
                         Provincia.val(response.id_provincia);
                         Canton.val(response.id_canton);
                         Parroquia.val(response.id_parroquia);
+                        Estado.val(response.estado);
 
                         $('#nombreCamaraSeleccionadaMod').text(response.camara.razon_social);
 
@@ -2167,6 +2178,19 @@
 
                 //alert($('#hiddenSelectedItemsMod').val());
                 //return;
+                if ($('#estado_mod').val() == "-1") {
+                    //alert('Debe seleccionar el Cantón');
+                    await Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar el Estado del Establecimiento',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('#estado_mod').focus();
+                    return;
+                }
 
                 if ($('#nombre_comercial_mod').val() == "") {
                     //alert('Debe ingresar el Nombre Comercial'); 

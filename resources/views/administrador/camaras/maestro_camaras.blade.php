@@ -458,7 +458,7 @@
                                                         <h2
                                                             class="card-title
                                                             ">
-                                                            Actividades Economicas</h2>
+                                                            Actividades Económicas</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -809,7 +809,31 @@
                                                 </div>
                                                 <div class="row my-2">
                                                     <div class="col-md-12">
-                                                        <h2 class="card-title">Actividades Economicas</h2>
+                                                        <h2 class="card-title">Establecimientos</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-1">
+                                                        <b>Abiertos:</b>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <span id="abiertos-count">0</span>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <b>Cerrados:</b>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <span id="cerrados-count">0</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-12">
+                                                        <h2 class="card-title">Actividades Económicas</h2>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -2192,6 +2216,9 @@
                         Direccion.val(response.direccion_representante_legal);
 
                         TipoRegimen.val(response.dato_tributario.tipo_regimen);
+
+                        $('#abiertos-count').text(response.establecimientos?.estado_1 || 0);
+                        $('#cerrados-count').text(response.establecimientos?.estado_2 || 0);
                         //FechaRegistro.val(response.dato_tributario.fecha_registro_sri); 
                         //FechaRegistro.val(convertirFecha(response.dato_tributario.fecha_registro_sri));
 
