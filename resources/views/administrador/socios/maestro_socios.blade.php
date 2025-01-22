@@ -115,6 +115,7 @@
                                                     <th>Identificación</th>
                                                     <th>Razón Social</th>
                                                     <th>Tipo de Personería</th>
+                                                    <th>Estado</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -614,19 +615,23 @@
                 pageLength: 10,
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '20%'
+                        width: '10%'
                     },
                     {
                         data: 'identificacion',
-                        width: '20%'
+                        width: '10%'
                     },
                     {
                         data: 'razon_social',
-                        width: '20%'
+                        width: '35%'
                     },
                     {
                         data: 'tipo_personeria',
-                        width: '20%'
+                        width: '15%'
+                    },
+                    {
+                        data: 'estado',
+                        width: '5%'
                     },
                     {
                         data: 'btn',
@@ -1424,12 +1429,16 @@ function toggleNaturalConRuc(active) {
                 $('#ModalSocio').find('#fecha_registro_sri').val(data.fecha_registro_sri).trigger(
                     'change');
                 $('#ModalSocio').find('#fecha_actualizacion_ruc').val(data.fecha_actualizacion_ruc);
-                $('#ModalSocio').find('#fecha_constitucion').val(data.fecha_constitucion).trigger(
-                    'change');
+                
                 $('#ModalSocio').find('#tipo_regimen').val(data.tipo_regimen);
                 $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
                 $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
                 $('#ModalSocio').find('#pais').val(data.id_pais ?? -1).trigger('change');
+                
+                if(data.id_tipo_personeria == 3){
+                    $('#ModalSocio').find('#fecha_constitucion').val(data.fecha_constitucion).trigger(
+                        'change');
+                }
 
                 
                 // Construye la ruta completa

@@ -75,7 +75,7 @@ class SocioController extends Controller
                 'datos_tributarios.pais',
                 'datos_tributarios.canton',
                 'datos_tributarios.parroquia',
-            ])->where('estado', 1);
+            ])->whereIn('estado', [1, 2]);
             // Búsqueda
             if ($search = $request->input('search.value')) {
                 $query->where(function ($q) use ($search) {
@@ -146,9 +146,25 @@ class SocioController extends Controller
                     'update' => $logSociosMod ?? null
                 ];
 
-                // Convertir el modelo Camara a un array
                 $tipo_persona = $socio->tipo_persona->descripcion ?? '';
                 $tipo_personeria = $socio->tipo_personeria->descripcion ?? '';
+
+                $estado = "";
+
+                if($tipo_personeria!="NATURAL SIN RUC"){
+                    if($socio->estado ==1){
+                        $estado = '<span class="badge bg-success text-light">ACTIVO</span>';
+                    }
+                    if($socio->estado ==2){
+                        $estado = '<span class="badge bg-danger text-light">INACTIVO</span>';
+                    }
+                }else{
+                    $estado = "No aplica";
+                }
+                
+
+                // Convertir el modelo Camara a un array
+                
                 $socio_arr = $socio->toArray();
                 return array_merge($socio_arr, [
                     'logs' => $logSocios,
@@ -175,6 +191,7 @@ class SocioController extends Controller
                     'tipo_personeria' => $tipo_personeria,
                     'identificacion' => $socio->identificacion,
                     'estado_sri' => $socio->datos_tributarios->estado_sri ?? '',
+                    'estado' => $estado,
                     'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                         '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button></div>'
                 ]);
@@ -543,7 +560,7 @@ class SocioController extends Controller
                         : null,
                     'fecha_desafiliacion' => null,
                     'motivo_desafiliacion' => null,
-                    'estado' => 1,
+                    'estado' => 2,
                 ]);
 
                 if (!$socio) {
