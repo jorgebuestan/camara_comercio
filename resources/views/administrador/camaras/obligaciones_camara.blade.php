@@ -155,6 +155,7 @@
                                         <table class="table table-bordered table-striped mb-0 " id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>Establecimiento</th>
                                                     <th>Entidad</th>
                                                     <th>Obligacion</th>
                                                     <th>Acciones</th>
@@ -451,15 +452,21 @@
                     }
                 },
                 pageLength: 10, // Establece el número de registros por página
-                columns: [{
+                columns: [
+                    {
+                        data: 'establecimiento',
+                        title: 'Establecimiento',
+                        width: '30%'
+                    },
+                    {
                         data: 'nombre_entidad',
                         title: 'Entidad',
-                        width: '40%'
+                        width: '30%'
                     },
                     {
                         data: 'nombre_obligacion',
                         title: 'Obligación',
-                        width: '40%'
+                        width: '30%'
                     },
                     {
                         data: 'btn',

@@ -170,7 +170,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="agregarObligacion" class="btn btn-primary">Agregar
-                        Obligaciones</button>
+                        Obligaciones</button>&nbsp;
                     <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>
                 </div>
             </div>
@@ -295,6 +295,7 @@
                         d.start = d.start || 0;
                         d.length = d.length || 10;
                         d.id_entidad = $('#entidad').val(); // Enviar el valor de localidad seleccionada
+                        d.modulo  = 1;
                     },
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
@@ -409,6 +410,7 @@
                                 d.start = d.start || 0;
                                 d.length = d.length || 10;
                                 d.tipo_boton = 2; // Enviar el valor de localidad seleccionada
+                                d.id_entidad = entidadSeleccionada;
                             },
                             error: function(error) {
                                 Swal.close();

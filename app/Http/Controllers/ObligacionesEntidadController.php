@@ -52,6 +52,8 @@ class ObligacionesEntidadController extends Controller
         // **Filtrar por id_camara si está presente en el request**
         if ($idEntidad = $request->input('id_entidad')) {
             $query->where('entidades_obligaciones.id_entidad', $idEntidad);
+        }else{
+            $query->where('entidades_obligaciones.id_entidad', -1);
         }
 
         // Búsqueda
@@ -82,14 +84,31 @@ class ObligacionesEntidadController extends Controller
 
         $obligaciones = $query->get();
 
-        $data = $obligaciones->map(function ($obligacion) {
+         // Obtener el valor del módulo del request
+        $modulo = $request->input('modulo', 1); // Por defecto, módulo 1
+
+        //$data = $obligaciones->map(function ($obligacion) {
+        $data = $obligaciones->map(function ($obligacion) use ($modulo) { 
+
+            $btn = '';
+
+            // Botón dependiendo del valor de módulo
+            if ($modulo == 1) {
+                $btn = '<div class="flex items-center justify-center w-full">
+                            <button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->register . '">
+                                Eliminar&nbsp;<i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>';
+            } elseif ($modulo == 2) {
+                $btn = '<button type="button" class="btn btn-primary mb-3 seleccionar-obligacion" data-id="' . $obligacion->id . '">Seleccionar</button>';
+            }
+            
             return [
                 'id' => $obligacion->id,
                 'obligacion' => $obligacion->obligacion,
                 'tiempo_presentacion' => $obligacion->tiempo_presentacion,
                 'tipo_presentacion' => $obligacion->tipo_presentacion ?? 'N/A',
-                'btn' => '<div class="flex items-center justify-center w-full"><button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->register . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></button>' .
-                    '<div/>'
+                'btn' => $btn 
             ];
         });
 

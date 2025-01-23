@@ -373,6 +373,9 @@
                                         <li><a href="{{ route('admin.obligaciones_camara') }}"
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Cámara</a>
                                         </li>
+                                        <li><a href="{{ route('admin.obligaciones_establecimientos') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Cámara(2)</a>
+                                        </li>
                                         <li><a href="{{ route('camara.archivos_obligaciones_camara') }}"
                                                 class="block text-gray-300 hover:text-white">Archivos de Obligaciones por
                                                 Cámara</a>

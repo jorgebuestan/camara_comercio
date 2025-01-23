@@ -12,6 +12,8 @@ use App\Models\Socio;
 use App\Models\SocioObligacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\Establecimiento;
+use App\Models\Entidad;
 
 class FuncionesGeneralesController extends Controller
 {
@@ -145,4 +147,63 @@ class FuncionesGeneralesController extends Controller
             })->values(),
         ]);
     }
+
+    public function get_establecimientos_camara(Request $request)
+    {  
+        $id_camara = request('id_camara'); 
+
+        $establecimientos = Establecimiento::where('id_camara', $id_camara)
+        ->orderBy('secuencial', 'asc')
+        ->selectRaw("CONCAT(secuencial, ' - ', nombre_comercial) as nombre, id")
+        ->pluck('nombre', 'id');
+ 
+    
+        // Formato de respuesta esperado
+        return response()->json([
+            'establecimientos' => $establecimientos->map(function ($nombre, $id) {
+                return ['id' => $id, 'nombre' => $nombre];
+            })->values(),
+        ]);
+    }
+
+    public function get_entidades_establecimientos(Request $request)
+    {  
+        $id_establecimiento = request('id_establecimiento');
+
+        // Obtener el establecimiento específico
+        $establecimiento = Establecimiento::findOrFail($id_establecimiento);
+
+        // Obtener las entidades en función del valor de secuencial
+        $entidades = Entidad::when($establecimiento->secuencial === '001', function ($query) use ($establecimiento) {
+                // Si secuencial es '001', incluir:
+                // 1. Entidades con alcance = 1
+                // 2. Entidades con alcance = 2 que coincidan en id_pais, id_provincia, id_canton
+                $query->where(function ($q) use ($establecimiento) {
+                    $q->where('alcance', 1)
+                    ->orWhere(function ($q2) use ($establecimiento) {
+                        $q2->where('alcance', 2)
+                            ->where('id_pais', $establecimiento->id_pais)
+                            ->where('id_provincia', $establecimiento->id_provincia)
+                            ->where('id_canton', $establecimiento->id_canton);
+                    });
+                });
+            })
+            ->when($establecimiento->secuencial !== '001', function ($query) use ($establecimiento) {
+                // Si secuencial no es '001', incluir solo entidades con alcance = 2 que coincidan
+                $query->where('alcance', 2)
+                    ->where('id_pais', $establecimiento->id_pais)
+                    ->where('id_provincia', $establecimiento->id_provincia)
+                    ->where('id_canton', $establecimiento->id_canton);
+            })
+            ->orderBy('entidad', 'asc') // Ordenar alfabéticamente por el nombre de la entidad
+            ->pluck('entidad', 'id'); // Seleccionar los campos id y entidad
+
+        // Formato de respuesta esperado
+        return response()->json([
+            'entidades' => $entidades->map(function ($entidad, $id) {
+                return ['id' => $id, 'nombre' => $entidad];
+            })->values(),
+        ]);
+    }
+    
 }

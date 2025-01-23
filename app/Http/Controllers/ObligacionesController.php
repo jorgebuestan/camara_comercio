@@ -90,7 +90,7 @@ class ObligacionesController extends Controller
             }
 
             if ($request->input('tipo_boton') == 2) {
-                $obligacionExiste = EntidadObligacion::where('id_obligacion', $obligacion->id)->where('estado', 1)->exists();
+                $obligacionExiste = EntidadObligacion::where('id_obligacion', $obligacion->id)->where('id_entidad', $request->input('id_entidad'))->where('estado', 1)->exists();
                 $checkbox = false;
                 if ($obligacionExiste) {
                     $checkbox = true;

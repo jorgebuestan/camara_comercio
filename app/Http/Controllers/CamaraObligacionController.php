@@ -43,6 +43,7 @@ class CamaraObligacionController extends Controller
         $data = $request->validate([
             'id_entidad' => 'sometimes|integer|nullable',
             'id_camara' => 'sometimes|integer|nullable',
+            'id_establecimiento' => 'sometimes|integer|nullable',
             'id_obligacion' => 'sometimes|integer|nullable',
             'fecha_inicio' => 'sometimes|date|nullable',
             'fecha_presentacion' => 'sometimes|date|nullable',
@@ -55,6 +56,7 @@ class CamaraObligacionController extends Controller
         ]);
         $camaraObligaciones = CamaraObligacion::when(isset($request['camaras_obligaciones.id_entidad']), fn($q) => $q->where('id_entidad', $request['id_entidad']))
             ->when(isset($request['id_camara']), fn($q) => $q->where('camaras_obligaciones.id_camara', $request['id_camara']))
+            ->when(isset($request['id_establecimiento']), fn($q) => $q->where('camaras_obligaciones.id_establecimiento', $request['id_establecimiento']))
             ->when(isset($request['id_obligacion']), fn($q) => $q->where('camaras_obligaciones.id_obligacion', $request['id_obligacion']))
             ->when(isset($request['fecha_inicio']), fn($q) => $q->where('camaras_obligaciones.fecha_inicio', $request['fecha_inicio']))
             ->when(isset($request['fecha_presentacion']), fn($q) => $q->where('camaras_obligaciones.fecha_presentacion', $request['fecha_presentacion']))
@@ -70,10 +72,12 @@ class CamaraObligacionController extends Controller
                 $orderColumnIndex = $request['order'][0]['column'];
                 $orderDir = $request['order'][0]['dir'];
                 $q->leftJoin('entidades', 'camaras_obligaciones.id_entidad', '=', 'entidades.id')
+                    ->leftJoin('establecimientos', 'establecimientos.id', '=', 'camaras_obligaciones.id_establecimiento')
                     ->leftJoin('obligaciones', 'camaras_obligaciones.id_obligacion', '=', 'obligaciones.id');
                 $q->select([
                     'camaras_obligaciones.*',
                     'entidades.entidad as entidad_nombre',
+                    'establecimientos.id as establecimiento',
                     'obligaciones.obligacion as obligacion_nombre',
                 ]);
                 $q->orderBy($columns[$orderColumnIndex], $orderDir);
@@ -123,6 +127,7 @@ class CamaraObligacionController extends Controller
             ];
 
             return array_merge($camaraObligacion->toArray(), [
+                'establecimiento' => $camaraObligacion->establecimientos->secuencial ?? '',
                 'nombre_entidad' => $camaraObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '', 
                 'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
@@ -143,6 +148,7 @@ class CamaraObligacionController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'id_camara' => 'required|integer',
+                'id_establecimiento' => 'required|integer',
                 'id_entidad' => 'required|integer',
                 'id_obligacion' => 'required|integer',
                 'fecha_inicio' => 'sometimes|nullable|date_format:d/m/Y',
@@ -154,12 +160,13 @@ class CamaraObligacionController extends Controller
             $data = $validator->validated();
             DB::beginTransaction();
             $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
+                ->where('id_establecimiento', $data['id_establecimiento'])
                 ->where('id_entidad', $data['id_entidad'])
                 ->where('id_obligacion', $data['id_obligacion'])
                 ->first();
 
             if ($existeObligacion) {
-                return response()->json(['message' => 'La obligación ya existe para la cámara'], 400);
+                return response()->json(['message' => 'La obligación ya existe para el Establkecimiento'], 400);
             }
 
             if (isset($data['fecha_inicio'])) {

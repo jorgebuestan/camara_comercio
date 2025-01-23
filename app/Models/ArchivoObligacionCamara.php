@@ -13,6 +13,7 @@ class ArchivoObligacionCamara extends Model
     protected $fillable = [
         'id_camara',
         'id_entidad',
+        'id_establecimiento',
         'id_obligacion',
         'ruta_archivo',
         'validado',
