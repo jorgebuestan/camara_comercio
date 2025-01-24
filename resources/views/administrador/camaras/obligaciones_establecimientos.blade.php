@@ -271,6 +271,86 @@
                 </div>
             </div>
         </form>
+        <form enctype="multipart/form-data" class="modal fade" id="ModalModificarObligacion" tabindex="-1"
+            aria-labelledby="ModalModificarObligacion" aria-hidden="true">
+            @csrf
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalModificarObligacion"><b>Modificar Obligación</b></h5>
+                        <button type="button" class="btn btn-warning" id="btn-more-info">
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p><strong>Cámara:</strong> <span id="camaraModSeleccionada"></span></p>
+                                    <input type="hidden" id="id_establecimiento_obligacion" name="id_establecimiento_obligacion" value="">
+                                </div>
+                                <div class="col-lg-2">
+                                    <p><strong>Establecimiento:</strong></p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <p><span id="establecimientoMod"></span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="entidad_mod">Entidad</label>
+                                    <input type="text" class="form-control" id="entidad_mod" name="entidad_mod"
+                                        readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="obligacion_mod">Obligación</label>
+                                    <input type="text" class="form-control" id="obligacion_mod" name="obligacion_mod"
+                                        readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="tiempo_presentacion_mod">Tiempo de Presentación</label>
+                                    <input type="text" class="form-control" id="tiempo_presentacion_mod"
+                                        name="tiempo_presentacion_mod" readonly />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="fecha_presentacion_mod">Fecha de Presentación</label>
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_presentacion_mod" id="fecha_presentacion_mod"
+                                        placeholder="Fecha de Presentación" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="tipo_presentacion_mod">Tipo de Presentación</label>
+                                    <input type="text" class="form-control" id="tipo_presentacion_mod"
+                                        name="tipo_presentacion_mod" readonly />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="fecha_inicio_mod">Fecha de Inicio</label>
+                                    <input type="text" data-plugin-datepicker class="form-control" disabled
+                                        name="fecha_inicio_mod" id="fecha_inicio_mod" placeholder="Fecha de Inicio" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary cerrar-modal-mod">Cerrar</button>&nbsp;
+                                <button type="button" class="btn btn-primary" id="modificar_obligacion">Modificar
+                                    Obligación</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
     </div> 
     <div id="carga"
@@ -334,6 +414,18 @@
                 format: 'dd/mm/yyyy', // Define el formato de fecha
                 autoclose: true, // Cierra automáticamente al seleccionar
             });
+
+            $('#fecha_presentacion_mod').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+            });
+
+
+            $('#fecha_inicio_mod').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+            });
+
 
 
             Swal.fire({
@@ -558,6 +650,11 @@
             $('.cerrar-modal').click(function() {
                 limpiarFormulario();
                 $('#ModalObligacion').modal('hide'); // Cerrar el modal
+            });
+
+            $('.cerrar-modal-mod').click(function() {
+                limpiarFormulario();
+                $('#ModalModificarObligacion').modal('hide'); // Cerrar el modal
             });
 
             $('#entidad').change(function() {
@@ -917,6 +1014,238 @@
                                 }
                             });
                             return;
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '.edit-modal', function() {
+
+
+                console.log('Botón clicado...');
+                var button = $(this);
+                var Id = button.data('id');
+
+                console.log('Cargo ID:', Id);
+
+                //alert(Id);
+
+                //$('#carga').show();
+                Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    title: 'Cargando información de Cámara',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+
+                // Función para convertir fecha en formato dd/mm/yyyy a objeto Date
+                // Función para convertir fecha en formato dd/mm/yyyy o yyyy-mm-dd a objeto Date
+                function convertirFecha(fecha) {
+                    let partes;
+
+                    // Detectar el formato según el separador
+                    if (fecha.includes('/')) {
+                        // Formato dd/mm/yyyy
+                        partes = fecha.split('/');
+                        return new Date(partes[2], partes[1] - 1, partes[0]); // Mes base 0
+                    } else if (fecha.includes('-')) {
+                        // Formato yyyy-mm-dd
+                        partes = fecha.split('-');
+                        return new Date(partes[0], partes[1] - 1, partes[2]); // Mes base 0
+                    }
+
+                    // Si no coincide con ninguno, devolver null o lanzar un error
+                    console.error("Formato de fecha desconocido:", fecha);
+                    return null;
+                }
+
+                $.ajax({
+                    url: '/administrador/obligacion_establecimiento/detalle/' + Id,
+                    method: 'GET',
+                    success: function(response) {
+                        camara_selected = response;
+                        console.log('Datos recibidos:', response);
+ 
+                        var IdEstablecimientoObligacion = $('#id_establecimiento_obligacion'); 
+                        var Camara = $('#camaraModSeleccionada ');
+                        var Establecimeinto = $('#establecimientoMod');
+                        var Entidad = $('#entidad_mod');
+                        var Obligacion = $('#obligacion_mod');
+                        var TiempoPresentacion = $('#tiempo_presentacion_mod');
+                        var FechaPresentacion = $('#fecha_presentacion_mod');
+                        var TipoPresentacion = $('#tipo_presentacion_mod');
+                        var FechaInicio = $('#fecha_inicio_mod');  
+
+                        Camara.text(null);  
+                        Establecimeinto.text(null); 
+                        Entidad.val(null); 
+                        Obligacion.val(null); 
+                        TiempoPresentacion.val(null); 
+                        FechaPresentacion.val(null); 
+                        TipoPresentacion.val(null); 
+                        FechaInicio.val(null);  
+                        //alert(response.id);
+
+                        IdEstablecimientoObligacion.val(response.id);  
+                        Camara.text(response.camara.razon_social);  
+                        Establecimeinto.text(response.establecimientos.secuencial); 
+                        Entidad.val(response.entidad.entidad); 
+                        Obligacion.val(response.obligacion.obligacion); 
+
+
+                        /*TiempoPresentacion.val(response.obligacion.id_tiempo_presentacion); 
+                        FechaPresentacion.val(response.fecha_presentacion); 
+                        TipoPresentacion.val(response.obligacion.id_tipo_presentacacion); 
+                        FechaInicio.val(response.fecha_inicio);   // var fechaConstitucionDate = convertirFecha(fechaConstitucion);
+                        */
+                       // Validaciones y asignaciones
+                        if (response.obligacion.id_tiempo_presentacion !== undefined) {
+                            // Asignar el texto correspondiente al valor de id_tiempo_presentacion
+                            const tiempoPresentacion = response.obligacion.id_tiempo_presentacion === 1 ? "Único" : "Consecutivo";
+                            TiempoPresentacion.val(tiempoPresentacion);
+
+                            // Habilitar el campo correspondiente
+                            if (response.obligacion.id_tiempo_presentacion === 1) {
+                                FechaPresentacion.prop("disabled", false);
+                                FechaInicio.prop("disabled", true);
+                            } else if (response.obligacion.id_tiempo_presentacion === 2) {
+                                FechaPresentacion.prop("disabled", true);
+                                FechaInicio.prop("disabled", false);
+                            }
+                        }
+
+                        //alert(response.obligacion.id_tipo_presentacion);
+                        if (response.obligacion.id_tipo_presentacion !== undefined) {
+                            // Asignar el texto correspondiente al valor de id_tipo_presentacacion
+                            const tiposPresentacion = {
+                                1: "Mensual",
+                                2: "Bimensual",
+                                3: "Trimestral",
+                                4: "Semestral",
+                                5: "Anual"
+                            };
+                            const tipoPresentacion = tiposPresentacion[response.obligacion.id_tipo_presentacion] || "N/A";
+                            TipoPresentacion.val(tipoPresentacion);
+                        }
+
+                       // alert (response.fecha_presentacion);
+                        // Validar y asignar FechaPresentacion
+                        if (response.fecha_presentacion) {
+                            // Si el campo no es null ni vacío, convertir la fecha y asignarla
+                            if (response.fecha_presentacion !== null && response.fecha_presentacion.trim() !== "") {
+                                const fechaConvertida = convertirFecha(response.fecha_presentacion);
+                                FechaPresentacion.val(fechaConvertida.toLocaleDateString());
+                            } else {
+                                // Si es null o vacío, dejar el campo vacío
+                                FechaPresentacion.val("");
+                            }
+                        }
+
+                        // Validar y asignar FechaInicio
+                        if (response.fecha_inicio) {
+                            // Si el campo no es null ni vacío, convertir la fecha y asignarla
+                            if (response.fecha_inicio !== null && response.fecha_inicio.trim() !== "") {
+                                const fechaConvertida = convertirFecha(response.fecha_inicio);
+                                FechaInicio.val(fechaConvertida.toLocaleDateString());
+                            } else {
+                                // Si es null o vacío, dejar el campo vacío
+                                FechaInicio.val("");
+                            }
+                        }
+                        //alert(response.camara.razon_social);
+
+                        Swal.close();
+                        $('#ModalModificarCamara').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al momento de Cargar el Establecimiento',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
+                    }
+                }); 
+
+                $('#ModalModificarObligacion').modal('show');
+            });
+            $('#modificar_obligacion').click(function() {
+                 
+                // Usando el contenedor como referencia
+                let $modal = $('#ModalModificarObligacion'); // Modal contenedor
+
+                let id = $modal.find('#id_establecimiento_obligacion').val(); 
+                let fecha_inicio = $modal.find('#fecha_inicio_mod').val();
+                let fecha_presentacion = $modal.find('#fecha_presentacion_mod').val();
+                //alert($('#id_establecimiento_obligacion').val());
+                //alert(id);
+                let data = {
+                    id: id,  
+                    fecha_presentacion: fecha_presentacion == 'N/A' ? null : fecha_presentacion,
+                    fecha_inicio: fecha_inicio == 'N/A' ? null : fecha_inicio,
+                };
+                Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    title: '¿Estás seguro?',
+                    text: '¿Deseas modificar esta obligación de la cámara seleccionada?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.modificar_obligacion_establecimiento') }}",
+                            type: 'POST',
+                            data: data,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                        }).done(function(response) {
+                            Swal.fire({
+                                target: document.getElementById(
+                                    'ModalModificarObligacion'),
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: 'Obligación modificada correctamente.',
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#ModalModificarObligacion').modal('hide');
+                                    table.ajax.reload(null, false);
+                                }
+                            });
+                        }).fail(function (error) {
+                            let errorMessage = 'Error al modificar la obligación.';
+                            if (error.responseJSON?.errors) {
+                                // Construir un mensaje de error detallado
+                                errorMessage = Object.entries(error.responseJSON.errors)
+                                    .map(([key, messages]) => `${messages.join(' ')}`)
+                                    .join('\n');
+                            }
+
+                            Swal.fire({
+                                target: document.getElementById('ModalModificarObligacion'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: errorMessage,
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'Aceptar',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.error("Error al modificar la obligación: ", error);
+                                }
+                            });
                         });
                     }
                 });

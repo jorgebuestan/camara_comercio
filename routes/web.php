@@ -202,7 +202,9 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/obtener_listado_obligaciones_establecimientos', [EstablecimientoCamaraObligacionController::class, 'obtener_listado_obligaciones_establecimientos'])->middleware('auth')->name('admin.obtener_listado_obligaciones_establecimientos');
     Route::post('/administrador/obligacion_camara/registrar_obligacion_establecimiento', [EstablecimientoCamaraObligacionController::class, 'registrar_obligacion_establecimiento'])->middleware('auth')->name('admin.registrar_obligacion_establecimiento');
     Route::post('/administrador/obligacion_establecimiento/eliminar/{id}', [EstablecimientoCamaraObligacionController::class, 'eliminarObligacionEstablecimiento'])->middleware('auth')->name('admin.eliminar_obligacion_establecimiento');
- 
+    Route::get('/administrador/obligacion_establecimiento/detalle/{id}', [EstablecimientoCamaraObligacionController::class, 'detalle_obligacion_establecimiento'])->middleware('auth')->name('admin.detalle_obligacion_establecimiento');
+    Route::post('/administrador/obligacion_camara/modificar_obligacion_establecimiento', [EstablecimientoCamaraObligacionController::class, 'modificar_obligacion_establecimiento'])->middleware('auth')->name('admin.modificar_obligacion_establecimiento');
+    
 });
 
 require __DIR__ . '/auth.php';

@@ -105,7 +105,7 @@ class EstablecimientoCamaraObligacionController extends Controller
                 'entidad' => $obligacion->entidad,
                 'obligacion' => $obligacion->obligacion, 
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
-                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $obligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill edit-modal" data-id="' . $obligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                             '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
                          '</div>'
             ];
@@ -217,6 +217,109 @@ class EstablecimientoCamaraObligacionController extends Controller
             Log::error($th);
             DB::rollBack();
             return response()->json(['message' => 'Error al eliminar la obligación'], 500);
+        }
+    }
+
+    public function detalle_obligacion_establecimiento($id)
+    {
+        // Buscar la cámara por ID
+        $camara = CamaraObligacion::find($id);
+        $camara = CamaraObligacion::with(['camara', 'entidad', 'obligacion', 'establecimientos'])->find($id);
+
+        if (!$camara) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+
+        // Convertir el modelo Camara a un array
+        $camaraArray = $camara->toArray();
+
+        
+
+        $logCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'insert')->get();
+        $logCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'update')->get();
+
+        $logCamaraIns = $logCamaraIns->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamaraMod = $logCamaraMod->map(function ($log) {
+            return [
+                'created_at' => $log->created_at,
+                'user_id' => $log->user_id,
+                'user' => [
+                    'name' => $log->user->name,
+                    'email' => $log->user->email,
+                    'username' => $log->user->username
+                ]
+            ];
+        });
+
+        $logCamara = [
+            'insert' => $logCamaraIns[0] ?? null,
+            'update' => $logCamaraMod ?? null
+        ]; 
+
+        // Combinar todo en el array de respuesta
+        $camaraArray = array_merge($camaraArray, $logCamara);
+   
+        // Devolver la respuesta JSON
+        return response()->json($camaraArray);
+    }
+
+    public function modificar_obligacion_establecimiento(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer', 
+                'fecha_inicio' => 'sometimes|nullable|date_format:d/m/Y',
+                'fecha_presentacion' => 'sometimes|nullable|date_format:d/m/Y',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Datos incorrectos',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+            $data = $validator->validated();
+            DB::beginTransaction();
+            $camaraObligacion = CamaraObligacion::find($data['id']);
+            if (!$camaraObligacion) {
+                return response()->json(['message' => 'La obligación no existe'], 400);
+            }
+            if (isset($data['fecha_inicio'])) {
+                $data['fecha_inicio'] =
+                    Carbon::createFromFormat('d/m/Y', $data['fecha_inicio'])->format('Y-m-d');
+            }
+            if (isset($data['fecha_presentacion'])) {
+                $data['fecha_presentacion'] =
+                    Carbon::createFromFormat('d/m/Y', $data['fecha_presentacion'])->format('Y-m-d');
+            }
+            $camaraObligacion->update($data);
+            DB::commit();
+            return response()->json(['message' => 'Obligación actualizada correctamente'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th); // Registra el error para depuración
+        
+            DB::rollBack(); // Revierte cualquier cambio en caso de error
+        
+            // Proveer detalles adicionales solo en entornos de desarrollo
+            $debugInfo = config('app.debug') ? [
+                'error_detail' => $th->getMessage(),
+                'error_line' => $th->getLine(),
+                'error_file' => $th->getFile(),
+            ] : [];
+        
+            return response()->json(array_merge([
+                'message' => 'Error al actualizar la obligación'
+            ], $debugInfo), 500);
         }
     }
 }
