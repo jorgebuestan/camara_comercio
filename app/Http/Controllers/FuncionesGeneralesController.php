@@ -92,8 +92,9 @@ class FuncionesGeneralesController extends Controller
         // Obtener las obligaciones con el concat deseado
         $obligaciones = CamaraObligacion::select(
                             'camaras_obligaciones.id',
-                            DB::raw("CONCAT(entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
+                            DB::raw("CONCAT(establecimientos.secuencial, ' - ', entidades.entidad, ' - ', obligaciones.obligacion) AS nombre")
                         )
+                        ->join('establecimientos', 'establecimientos.id', '=', 'camaras_obligaciones.id_establecimiento')
                         ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
                         ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
                         ->where('camaras_obligaciones.id_camara', $id_camara)

@@ -105,10 +105,12 @@ class ArchivoObligacionCamaraController extends Controller
         ];
 
         $query = DB::table('archivos_obligaciones_camaras')
+            ->join('establecimientos', 'establecimientos.id', '=', 'archivos_obligaciones_camaras.id_establecimiento') 
             ->join('entidades', 'entidades.id', '=', 'archivos_obligaciones_camaras.id_entidad') 
             ->join('obligaciones', 'obligaciones.id', '=', 'archivos_obligaciones_camaras.id_obligacion') 
             ->select(
                 'archivos_obligaciones_camaras.id',
+                'establecimientos.secuencial',
                 'entidades.entidad',
                 'obligaciones.obligacion',
                 'archivos_obligaciones_camaras.validado',
@@ -122,6 +124,7 @@ class ArchivoObligacionCamaraController extends Controller
         if ($search = $request->input('search.value')) {
             $query->where(function ($query) use ($search) {
                 $query->where('archivos_obligaciones_camaras.id', 'LIKE', "%{$search}%")
+                    ->orWhere('establecimientos.secuencial', 'LIKE', "%{$search}%")
                     ->orWhere('archivos_obligaciones_camaras.id_entidad', 'LIKE', "%{$search}%")
                     ->orWhere('archivos_obligaciones_camaras.id_obligacion', 'LIKE', "%{$search}%")
                     ->orWhere('archivos_obligaciones_camaras.validado', 'LIKE', "%{$search}%");
@@ -169,6 +172,7 @@ class ArchivoObligacionCamaraController extends Controller
             }
         
             return [
+                'secuencial' => $archivo->secuencial,
                 'entidad' => $archivo->entidad,
                 'obligacion' => $archivo->obligacion,
                 'archivo' => $boton
