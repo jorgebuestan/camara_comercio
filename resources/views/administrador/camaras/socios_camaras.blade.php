@@ -116,11 +116,14 @@
                                         <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Fecha Afiliación</th>
-                                                    <th>Identificación</th>
-                                                    <th>Razón Social</th>
-                                                    <th>Tipo de Personería</th>
-                                                    <th>Acciones</th>
+                                                    <th>CONSECUTIVO</th>
+                                                    <th>FECHA AFILIACIÓN</th>
+                                                    <th>IDENTIFICACIÓN</th>
+                                                    <th>RAZÓN SOCIAL</th>
+                                                    <th>TIPO DE PERSONERÍA</th>
+                                                    <th>FECHA DESAFILIACIÓN</th>
+                                                    <th>MOTIVO DESAFILIACIÓN</th>
+                                                    <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -195,10 +198,11 @@
                                 <table class="table table-bordered table-striped mb-0" id="dataTableSocios">
                                     <thead>
                                         <tr>
-                                            <th>Identificación</th>
-                                            <th>Razón Social</th>
-                                            <th>Tipo de Personería</th>
-                                            <th>Acciones</th>
+                                            <th>CONSECUTIVO</th>
+                                            <th>IDENTIFICACIÓN</th>
+                                            <th>RAZÓN SOCIAL</th>
+                                            <th>TIPO DE PERSONERÍA</th>
+                                            <th>ACCIONES</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -330,20 +334,31 @@
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
+                        data: 'consecutivo',
+                        width: '5%'
+                    },{
                         data: 'fecha_afiliacion',
-                        width: '15%'
+                        width: '10%'
                     },
                     {
                         data: 'identificacion',
-                        width: '15%'
+                        width: '10%'
                     },
                     {
                         data: 'razon_social',
-                        width: '35%'
+                        width: '30%'
                     },
                     {
                         data: 'tipo_personeria',
                         width: '15%'
+                    },
+                    {
+                        data: 'fecha_desafiliacion',
+                        width: '10%'
+                    },
+                    {
+                        data: 'motivo_desafiliacion',
+                        width: '10%'
                     },
                     {
                         data: 'btn',
@@ -447,12 +462,15 @@
                         },
                         pageLength: 10, // Establece el número de registros por página
                         columns: [{
+                                data: 'consecutivo',
+                                width: '5%'
+                            },{
                                 data: 'identificacion',
                                 width: '15%'
                             },
                             {
                                 data: 'razon_social',
-                                width: '50%'
+                                width: '45%'
                             },
                             {
                                 data: 'tipo_personeria',
@@ -765,9 +783,85 @@
                 var button = $(this);
                 var socioId = button.data('id');
 
-                const result = await Swal.fire({
-                    title: '¿Está seguro de que desea eliminar este registro?',
-                    text: "Esta acción no se puede deshacer.",
+                const {
+                    value: motivo
+                } = await Swal.fire({
+                    title: '¿Está seguro de desafiliar al Socio?',
+                    text: "Indiquenos el motivo de la desafiliación",
+                    input: 'textarea',
+                    inputAttributes: {
+                        maxlength: "140",
+                        inputAutoTrim: true,
+                        inputAutoFocus: true,
+                        style: 'text-transform: uppercase;',
+                    },
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
+
+                if (motivo) {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('admin.eliminar_socio_camara') }}",
+                        type: "POST",
+                        data: {
+                            socio_id: socioId,
+                            motivo: motivo.toUpperCase(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                    }).done(async function(response) {
+                        Swal.close();
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: response.message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                        });
+                        table.ajax.reload(null, false);
+                    }).fail(function(error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.message ||
+                                "Error al eliminar el socio.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
+                        });
+                        return;
+                    });
+                } else {
+                    // El usuario canceló la eliminación
+                    console.log('Eliminación cancelada por el usuario.');
+                }
+            });
+
+            $(document).on('click', '.reafiliar-socio', async function() {
+                var button = $(this);
+                var socioId = button.data('id');
+
+                var result = await Swal.fire({
+                    title: '¿Está seguro de reafiliar al Socio?', 
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -788,35 +882,39 @@
                         }
                     });
                     $.ajax({
-                        url: '/administrador/socio_camara/eliminar/' + socioId,
-                        method: 'POST',
+                        url: "{{ route('admin.reafiliar_socio_camara') }}",
+                        type: "POST",
                         data: {
-                            _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                            socio_id: socioId, 
+                            _token: '{{ csrf_token() }}'
                         },
-                        success: function(response) {
-                            Swal.close();
-                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
-                            Swal.fire({
-                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
-                                title: 'Éxito',
-                                text: 'Registro eliminado correctamente.',
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
-                            location
-                                .reload(); // O cualquier otra lógica para actualizar la interfaz
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            //alert('Hubo un problema al eliminar el Registro.');
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Hubo un problema al eliminar el Registro.',
-                                confirmButtonText: 'Aceptar',
-                                allowOutsideClick: false
-                            });
-                        }
+                    }).done(async function(response) {
+                        Swal.close();
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: response.message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                        });
+                        table.ajax.reload(null, false);
+                    }).fail(function(error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.message ||
+                                "Error al eliminar el socio.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
+                        });
+                        return;
                     });
                 } else {
                     // El usuario canceló la eliminación

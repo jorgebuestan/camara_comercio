@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\LogActivity;
+use Illuminate\Support\Facades\Validator; 
 
 class CamaraSocioController extends Controller
 {
@@ -45,12 +46,15 @@ class CamaraSocioController extends Controller
             ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria')
             ->select(
                 'camaras_socios.id',
-                DB::raw("DATE_FORMAT(camaras_socios.fecha_afiliacion, '%d/%m/%Y') as fecha_afiliacion"),
+                DB::raw("DATE_FORMAT(camaras_socios.fecha_afiliacion, '%d/%m/%Y') as fecha_afiliacion"), 
+                'socios.numero_consecutivo',
                 'socios.identificacion',
                 'socios.razon_social',
-                'tipo_personeria.descripcion as tipo_personeria'
-            )
-            ->where('camaras_socios.estado', 1)
+                'tipo_personeria.descripcion as tipo_personeria',
+                'camaras_socios.estado',
+                DB::raw("DATE_FORMAT(camaras_socios.fecha_desafiliacion, '%d/%m/%Y') as fecha_desafiliacion"),
+                'camaras_socios.motivo_desafiliacion'
+            ) 
             ->orderBy('socios.razon_social', 'asc');
 
         // Filtro de localidad 
@@ -88,15 +92,28 @@ class CamaraSocioController extends Controller
 
         $data = $socios->map(function ($socio) {
             $boton = "";
+            $fecha_desafiliacion = "";
+            $motivo_desafiliacion = "";
+
+            if($socio->estado == 1){
+                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-socio" data-id="' . $socio->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
+            }else{
+                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-socio" data-id="' . $socio->id . '">&nbsp;&nbsp;&nbsp;Afiliar&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-plus"></i></button>';
+                $fecha_desafiliacion = $socio->fecha_desafiliacion;
+                $motivo_desafiliacion = $socio->motivo_desafiliacion;
+            } 
 
             return [
+                'consecutivo' => $socio->numero_consecutivo,
                 'fecha_afiliacion' => $socio->fecha_afiliacion,
                 'identificacion' => $socio->identificacion,
                 'razon_social' => $socio->razon_social,
                 'tipo_personeria' => $socio->tipo_personeria, 
+                'fecha_desafiliacion' => $fecha_desafiliacion, 
+                'motivo_desafiliacion' => $motivo_desafiliacion, 
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
                             '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
-                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-socio" data-id="' . $socio->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                            $boton .
                          '</div>'
             ];
         });
@@ -123,6 +140,7 @@ class CamaraSocioController extends Controller
             ->join('tipo_personeria', 'tipo_personeria.id', '=', 'socios.id_tipo_personeria')
             ->select(
                 'socios.id',
+                'socios.numero_consecutivo',
                 'socios.identificacion',
                 'socios.razon_social',
                 'tipo_personeria.descripcion as tipo_personeria'
@@ -162,6 +180,7 @@ class CamaraSocioController extends Controller
             $boton = "";
 
             return [
+                'consecutivo' => $socio->numero_consecutivo,
                 'identificacion' => $socio->identificacion,
                 'razon_social' => $socio->razon_social,
                 'tipo_personeria' => $socio->tipo_personeria,
@@ -278,14 +297,24 @@ class CamaraSocioController extends Controller
         }
     }
 
-    public function eliminar_socio_camara($id)
+    public function eliminar_socio_camara(Request $request)
     {
         try {
 
+            $validator = Validator::make($request->all(), [
+                'socio_id' => 'required|integer',
+                'motivo' => 'required|string|max:255',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
             DB::beginTransaction();
 
             //$colaborador = Colaborador::find($id);
-            $camara_socio = CamaraSocio::where('id', $id)->first();
+            $socioId = $data['socio_id'];
+            $motivo = $data['motivo'];
+            $camara_socio = CamaraSocio::where('id', $socioId)->first();
 
             if (!$camara_socio) {
                 return response()->json(['error' => 'Socio no encontrado'], 404);
@@ -293,15 +322,68 @@ class CamaraSocioController extends Controller
 
             // Cambiar el valor del campo 'activo' a 0
             $camara_socio->estado = 0;
+            $camara_socio->fecha_desafiliacion = Carbon::now();
+            $camara_socio->motivo_desafiliacion = $motivo;
             $camara_socio->save();
 
             DB::commit();
 
-            return response()->json(['success' => 'Socio por Cámara eliminado correctamente']);
+            //return response()->json(['success' => 'Socio por Cámara desafiliado correctamente']);
+            return response()->json(['message' => 'Socio por Cámara desafiliado correctamente'], 200);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
-            return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+            //return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+            return response()->json(
+                [
+                    'error' => $e->getMessage(),
+                    'message' => 'Error al desafiliar al Socio',
+                ],
+                500
+            );
+        }
+    }
+
+    public function reafiliar_socio_camara(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'socio_id' => 'required|integer', 
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
+            DB::beginTransaction();
+
+            //$colaborador = Colaborador::find($id);
+            $socioId = $data['socio_id']; 
+            $camara_socio = CamaraSocio::where('id', $socioId)->first();
+
+            if (!$camara_socio) {
+                return response()->json(['error' => 'Socio no encontrado'], 404);
+            }
+
+            // Cambiar el valor del campo 'activo' a 0
+            $camara_socio->estado = 1; 
+            $camara_socio->save();
+
+            DB::commit();
+
+            //return response()->json(['success' => 'Socio por Cámara desafiliado correctamente']);
+            return response()->json(['message' => 'Socio reafiliado correctamente a la Cámara'], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            //return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+            return response()->json(
+                [
+                    'error' => $e->getMessage(),
+                    'message' => 'Error al reafiliar al Socio',
+                ],
+                500
+            );
         }
     }
 

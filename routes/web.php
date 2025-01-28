@@ -174,9 +174,10 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/socio/detalle/{id}', [CamaraSocioController::class, 'detalle_socio'])->middleware('auth')->name('admin.detalle_socio');
     Route::get('/administrador/socio_camara/detalle/{id}', [CamaraSocioController::class, 'detalle_socio_camara'])->middleware('auth')->name('admin.detalle_socio_camara');
     Route::post('/administrador/registrar_socio_camara', [CamaraSocioController::class, 'registrar_socio_camara'])->middleware('auth')->name('admin.registrar_socio_camara');
-    Route::post('/administrador/socio_camara/eliminar/{id}', [CamaraSocioController::class, 'eliminar_socio_camara'])->middleware('auth')->name('admin.eliminar_socio_camara');;
+    Route::post('/administrador/socio_camara/eliminar_socio_camara', [CamaraSocioController::class, 'eliminar_socio_camara'])->middleware('auth')->name('admin.eliminar_socio_camara');;
     Route::post('/administrador/socio_camara/modificar_socio_camara', [CamaraSocioController::class, 'modificar_socio_camara'])->middleware('auth')->name('admin.modificar_socio_camara');
-
+    Route::post('/administrador/socio_camara/reafiliar_socio_camara', [CamaraSocioController::class, 'reafiliar_socio_camara'])->middleware('auth')->name('admin.reafiliar_socio_camara');;
+    
     //Reportes
     Route::get('/administrador/reportes/reporte_socios_camara', [ReportesController::class, 'reporte_socios_camara'])->middleware('auth')->name('admin.reporte_socios_camara');
     Route::get('/administrador/obtener_listado_socios_camaras', [ReportesController::class, 'obtener_listado_socios_camaras'])->middleware('auth')->name('admin.obtener_listado_socios_camaras');

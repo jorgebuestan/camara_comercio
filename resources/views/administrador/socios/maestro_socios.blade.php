@@ -111,12 +111,13 @@
                                         <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Fecha de Ingreso</th>
-                                                    <th>Identificación</th>
-                                                    <th>Razón Social</th>
-                                                    <th>Tipo de Personería</th>
-                                                    <th>Estado</th>
-                                                    <th>Acciones</th>
+                                                    <th>FECHA DE INGRESO</th>
+                                                    <th>CONSECUTIVO</th>
+                                                    <th>IDEMNTIFICACIÓN</th>
+                                                    <th>RAZÓN SOCIAL</th>
+                                                    <th>TIPO DE PERSONERÍA</th>
+                                                    <th>ESTADO</th>
+                                                    <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -618,20 +619,24 @@
                         width: '10%'
                     },
                     {
+                        data: 'consecutivo',
+                        width: '3%'
+                    },
+                    {
                         data: 'identificacion',
                         width: '10%'
                     },
                     {
                         data: 'razon_social',
-                        width: '35%'
+                        width: '25%'
                     },
                     {
                         data: 'tipo_personeria',
-                        width: '15%'
+                        width: '12%'
                     },
                     {
                         data: 'estado',
-                        width: '5%'
+                        width: '3%'
                     },
                     {
                         data: 'btn',

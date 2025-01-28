@@ -169,6 +169,7 @@ class SocioController extends Controller
                 return array_merge($socio_arr, [
                     'logs' => $logSocios,
                     'fecha_ingreso' => Carbon::parse($socio->fecha_ingreso)->format('d/m/Y'),
+                    'consecutivo' => $socio->numero_consecutivo,
                     'fecha_registro_mercantil' => Carbon::parse($socio->fecha_registro_mercantil)->format('d/m/Y'),
                     'fecha_vencimiento_nombramiento' => Carbon::parse($socio->fecha_vencimiento_nombramiento)->format('d/m/Y'),
                     'tipo_regimen' => $socio->datos_tributarios->tipo_regimen->id ?? '',
