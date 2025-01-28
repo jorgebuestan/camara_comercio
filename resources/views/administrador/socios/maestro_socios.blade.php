@@ -222,6 +222,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="row mb-2" id="div_tipo_identificacion">
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>
+                                                            Tipo de Identificación
+                                                        </label>
+                                                        <select id="tipo_identificacion" name="tipo_identificacion"
+                                                            class="form-control populate">
+                                                            <option value="-1" selected>Seleccionar</option>
+                                                            @foreach ($tipo_identificacion as $id => $descripcion)
+                                                                <option value={{ $id }}>{{ $descripcion }}
+                                                                </option>
+                                                            @endForEach
+                                                        </select>
+                                                    </div>
+                                                </div> 
                                                 <div class="row mb-2">
                                                     <div class="col-md-12">
                                                         <h4>Datos Personales</h4>
@@ -565,7 +580,7 @@
             $.datepicker.setDefaults($.datepicker.regional['es']);
 
             $('#identificacion').attr('maxlength', 13);
-            $('#identificacion_sin_ruc').attr('maxlength', 10);
+            $('#identificacion_sin_ruc').attr('maxlength', 15);
 
             var socioSelected = null;
             let socios = [];
@@ -660,6 +675,7 @@
             $('#con_razon_social').hide();
             $('#id_con_ruc').hide();
             $('#id_sin_ruc').hide();
+            $('#div_tipo_identificacion').hide();
             //$('#datos_tributarios').hide();  
             //$('a[href="#datos_tributarios"]').hide();
             $('#tab_item_tributario').hide();
@@ -828,6 +844,8 @@ function toggleNaturalConRuc(active) {
                     $('#natural').hide(); 
                     $('#fechaconstitucion').hide();
                     $('#tributario_natural').hide();
+                    $('#div_tipo_identificacion').show();
+                    $('#tipo_identificacion').val('-1');  
 
                     // Ocultar el botón del tab y el contenido si está activo
                     $('#tab_item_tributario').hide();
@@ -849,6 +867,7 @@ function toggleNaturalConRuc(active) {
                     $('#tributario_natural').show();
                     $('#fechaconstitucion').hide();
                     $('#juridico').hide();
+                    $('#div_tipo_identificacion').hide();
 
                     $('#tab_item_tributario').show();
 
@@ -860,6 +879,7 @@ function toggleNaturalConRuc(active) {
                     $('#con_razon_social').show();
                     $('#juridico').show();
                     $('#fechaconstitucion').show();
+                    $('#div_tipo_identificacion').hide();
 
                     // Ocultar los elementos relacionados con "natural"
                     $('#natural').hide();
@@ -892,7 +912,7 @@ function toggleNaturalConRuc(active) {
                 }
             });
 
-            $('#identificacion_sin_ruc').on('input', function() {
+            /*$('#identificacion_sin_ruc').on('input', function() {
                 var identificacion = $(this).val();
                 var validRuc = /^\d{10}$/.test(identificacion);
                 if (!validRuc) {
@@ -901,7 +921,7 @@ function toggleNaturalConRuc(active) {
                 } else {
                     $('#error_identificacion_sin_ruc').hide();
                 }
-            });
+            });*/
 
             // Función para cargar provincias
             function cargarProvincias(paisId) {
@@ -1120,7 +1140,7 @@ function toggleNaturalConRuc(active) {
                 const data = {};
 
                 const commonFields = [
-                    'fecha_ingreso', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
+                    'fecha_ingreso', 'tipo_identificacion', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
                     'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen', 'razon_social_nombre', 
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
@@ -1209,7 +1229,7 @@ function toggleNaturalConRuc(active) {
                 const data = {};
 
                 const commonFields = [
-                    'fecha_ingreso', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
+                    'fecha_ingreso', 'tipo_identificacion', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
                     'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen', 'razon_social_nombre', 
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
@@ -1405,6 +1425,7 @@ function toggleNaturalConRuc(active) {
                     'change');
                 $('#ModalSocio').find('#identificacion').val(data.identificacion);
                 $('#ModalSocio').find('#identificacion_sin_ruc').val(data.identificacion);
+                $('#ModalSocio').find('#tipo_identificacion').val(data.id_tipo_identificacion);
                 $('#ModalSocio').find('#razon_social').val(data.razon_social);
                 $('#ModalSocio').find('#razon_social_nombre').val(data.razon_social);
                 if (data.id_tipo_personeria == 2) {
@@ -1639,9 +1660,28 @@ function toggleNaturalConRuc(active) {
                         $('.nav-tabs a[href="#datos_generales"]').tab('show');
                         $('#razon_social').focus();
                         return false;
+                    } 
+
+                    //alert('aqui'); 
+                    //alert($('#tipo_identificacion').val());
+                    //return;
+
+                    if ($('#tipo_identificacion').val() == "-1") {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Debe Seleccionar el tipo de identificación.',
+                        });
+                        $('.nav-tabs a[href="#datos_generales"]').tab('show');
+                        $('#tipo_identificacion').focus();
+                        return false;
                     }
 
-                    if (!/^\d{10}$/.test($('#identificacion_sin_ruc').val())) {
+                    /*if (!/^\d{10}$/.test($('#identificacion_sin_ruc').val())) {
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
                             icon: 'error',
@@ -1654,7 +1694,7 @@ function toggleNaturalConRuc(active) {
                         $('.nav-tabs a[href="#datos_generales"]').tab('show');
                         $('#identificacion_sin_ruc').focus();
                         return false;
-                    }
+                    }*/
                 }
 
                 if ($('#tipo_personeria').val() == 2 || $('#tipo_personeria').val() == 3){
