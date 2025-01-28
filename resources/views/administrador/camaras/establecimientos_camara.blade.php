@@ -150,13 +150,13 @@
                                         <table class="table table-bordered table-striped mb-0 " id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Fecha de Inicio de Actividades</th>
-                                                    <th>Secuencial</th>
-                                                    <th>Nombre Comercial</th>
-                                                    <th>Dirección</th>
-                                                    <th>Correo</th>
-                                                    <th>Estado</th>
-                                                    <th>Acciones</th>
+                                                    <th>FECHA INICIO DE ACTIVIDADES</th>
+                                                    <th>SECUENCIAL</th>
+                                                    <th>NOMBRE COMERCIAL</th>
+                                                    <th>DIRECCIÓN</th>
+                                                    <th>CORREO</th>
+                                                    <th>ESTADO</th>
+                                                    <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -212,7 +212,40 @@
                                 <div class="col-md-4">
                                     &nbsp;
                                 </div>
-                            </div>-->
+                            </div>-->  
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Nombre Comercial
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="nombre_comercial" id="nombre_comercial"
+                                        placeholder="Nombre Comercial">
+                                </div>
+                                <div class="col-md-2">
+                                    Fecha de inicio de actividades
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control"
+                                        name="fecha_inicio_actividades" id="fecha_inicio_actividades"
+                                        placeholder="Fecha de Inicio de Actividades">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>Dirección</b>
+                                </div> 
+                            </div>
                             <div class="row">
                                 &nbsp;
                             </div>
@@ -273,26 +306,6 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Nombre Comercial
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" name="nombre_comercial" id="nombre_comercial"
-                                        placeholder="Nombre Comercial">
-                                </div>
-                                <div class="col-md-2">
-                                    Fecha de inicio de actividades
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control"
-                                        name="fecha_inicio_actividades" id="fecha_inicio_actividades"
-                                        placeholder="Fecha de Inicio de Actividades">
                                 </div>
                             </div>
                             <div class="row">
@@ -383,6 +396,14 @@
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="telefono3" id="telefono3"
                                         placeholder="Teléfono">
+                                </div>
+                            </div>
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
                                 </div>
                             </div>
                             <div class="row">
@@ -531,6 +552,60 @@
                             </div>
                             <div class="row">
                                 &nbsp;
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Nombre Comercial
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="nombre_comercial_mod"
+                                        id="nombre_comercial_mod" placeholder="Nombre Comercial">
+                                </div>
+                                <div class="col-md-2">
+                                    Fecha de inicio de actividades
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control"
+                                        name="fecha_inicio_actividades_mod" id="fecha_inicio_actividades_mod"
+                                        placeholder="Fecha de Inicio de Actividades">
+                                </div>
+                            </div> 
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Fecha de Cese Actividades
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control"
+                                        name="fecha_cese_actividades_mod" id="fecha_cese_actividades_mod"
+                                        placeholder="Fecha de Reinicio de Actividades" disabled>
+                                </div>
+                                <div class="col-md-2">
+                                    Fecha de Reinicio de actividades
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" data-plugin-datepicker class="form-control"
+                                        name="fecha_reinicio_actividades_mod" id="fecha_reinicio_actividades_mod"
+                                        placeholder="Fecha de Cese de Actividades" disabled>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>Dirección</b>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                &nbsp;
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
@@ -590,27 +665,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row">
-                                &nbsp;
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    Nombre Comercial
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" name="nombre_comercial_mod"
-                                        id="nombre_comercial_mod" placeholder="Nombre Comercial">
-                                </div>
-                                <div class="col-md-2">
-                                    Fecha de inicio de actividades
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" data-plugin-datepicker class="form-control"
-                                        name="fecha_inicio_actividades_mod" id="fecha_inicio_actividades_mod"
-                                        placeholder="Fecha de Inicio de Actividades">
-                                </div>
-                            </div>
+                            </div> 
                             <div class="row">
                                 &nbsp;
                             </div>
@@ -703,6 +758,11 @@
                             </div>
                             <div class="row">
                                 &nbsp;
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 text-center">
@@ -818,6 +878,13 @@
 
     <script>
         $(document).ready(function() {
+
+            var FechaInicioActividades = $('#fecha_inicio_actividades_mod');
+            var FechaCeseActividades = $('#fecha_cese_actividades_mod');
+            var FechaReinicioActividades = $('#fecha_reinicio_actividades_mod');
+            var Estado = $('#estado_mod');
+
+
             let establecimiento_camara_selected = null;
             let actividadesEconomicas = @json($actividadesEconomicas);
             let camaras = @json($camaras);
@@ -1845,13 +1912,7 @@
                         }); 
                     }
                 });
-            });
-
-            function convertirFecha(fechaISO) {
-                if (!fechaISO) return ''; // Maneja casos nulos o indefinidos
-                const partes = fechaISO.split('-'); // Divide por guión
-                return `${partes[2]}/${partes[1]}/${partes[0]}`; // Formato DD/MM/YYYY
-            }
+            });  
 
             // Establecer el idioma de forma global para todos los datepickers
             $.datepicker.regional['es'] = {
@@ -1891,6 +1952,142 @@
                 language: 'es' // Asegúrate de establecer el idioma correcto
             });
 
+            $('#fecha_cese_actividades_mod').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+                todayHighlight: true, // Resalta la fecha actual
+                language: 'es' // Asegúrate de establecer el idioma correcto
+            });
+
+            $('#fecha_reinicio_actividades_mod').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+                todayHighlight: true, // Resalta la fecha actual
+                language: 'es' // Asegúrate de establecer el idioma correcto
+            });
+
+            function convertirFecha(fechaISO) {
+                if (!fechaISO) return ''; // Maneja casos nulos o indefinidos
+                const partes = fechaISO.split('-'); // Divide por guión
+                return `${partes[2]}/${partes[1]}/${partes[0]}`; // Formato DD/MM/YYYY
+            } 
+
+            // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd
+            function convertirFechaInv(fecha) {
+                if (!fecha) return null;
+                var partes = fecha.split('/');
+                return new Date(partes[2], partes[1] - 1, partes[0]);
+            }
+
+            // Función para validar fechas
+            function validarFechasCese() {
+                var fechaInicio = convertirFechaInv(FechaInicioActividades.val());
+                var fechaCese = convertirFechaInv(FechaCeseActividades.val());
+                var fechaReinicio = convertirFechaInv(FechaReinicioActividades.val());
+
+                // Validación para fecha de cese
+                if (fechaCese) {
+                    if (fechaReinicio && fechaCese < fechaReinicio) {
+                        //alert("La fecha de cese no puede ser menor que la fecha de reinicio.");
+                        Swal.fire({
+                            target: document.getElementById('ModalModificarEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'La fecha de cese no puede ser menor que la fecha de reinicio',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        }); 
+                        FechaCeseActividades.val('');
+                        return false;
+                    }
+                    if (fechaCese < fechaInicio) {
+                        //alert("La fecha de cese no puede ser menor que la fecha de inicio.");
+                        Swal.fire({
+                            target: document.getElementById('ModalModificarEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'La fecha de cese no puede ser menor que la fecha de inicio',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        }); 
+                        FechaCeseActividades.val('');
+                        return false;
+                    }
+                } 
+
+                return true;
+            }
+
+            function validarFechasReinicio() {
+                var fechaInicio = convertirFechaInv(FechaInicioActividades.val());
+                var fechaCese = convertirFechaInv(FechaCeseActividades.val());
+                var fechaReinicio = convertirFechaInv(FechaReinicioActividades.val());
+ 
+
+                // Validación para fecha de reinicio
+                if (fechaReinicio) {
+                    if (fechaReinicio < fechaInicio) {
+                        //alert("La fecha de reinicio no puede ser menor que la fecha de inicio.");
+                        Swal.fire({
+                            target: document.getElementById('ModalModificarEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'La fecha de reinicio no puede ser menor que la fecha de inicio.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        }); 
+                        FechaReinicioActividades.val('');
+                        return false;
+                    }
+                    if (fechaCese && fechaReinicio < fechaCese) {
+                        //alert("La fecha de reinicio no puede ser menor que la fecha de cese.");
+                        Swal.fire({
+                            target: document.getElementById('ModalModificarEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'La fecha de reinicio no puede ser menor que la fecha de cese.',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        }); 
+                        FechaReinicioActividades.val('');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            // Función para habilitar/deshabilitar campos según el estado
+            function actualizarEstadoCampos() {
+                var estado = Estado.val();
+
+                if (estado == 1) { // Abierto
+                    FechaCeseActividades.prop('disabled', true);
+
+                    // Verificar si FechaCeseActividades tiene algún valor
+                    if (FechaCeseActividades.val() !== null && FechaCeseActividades.val().trim() !== "") {
+                        FechaReinicioActividades.prop('disabled', false); // Habilitar si tiene valor
+                    } else {
+                        FechaReinicioActividades.prop('disabled', true); // Deshabilitar si no tiene valor
+                    }
+                } else if (estado == 2) { // Cerrado
+                    FechaCeseActividades.prop('disabled', false);
+                    FechaReinicioActividades.prop('disabled', true);
+                }
+            }
+
+            Estado.change(function () {
+                actualizarEstadoCampos();
+            });
+
+            // Escuchar cambios en las fechas para validación en tiempo real
+            FechaCeseActividades.change(function () {
+                validarFechasCese();
+            });
+
+            FechaReinicioActividades.change(function () {
+                validarFechasReinicio();
+            });
 
 
             // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
@@ -1925,8 +2122,7 @@
                         establecimiento_camara_selected = response;
 
                         var establecimientoId = $('#establecimiento_id');
-                        var camaraId = $('#camaraHiddenMod');
-                        var FechaInicioACtividades = $('#fecha_inicio_actividades_mod');
+                        var camaraId = $('#camaraHiddenMod'); 
 
                         var Secuencial = $('#secuencial_mod');
                         var Pais = $('#pais_mod');
@@ -1947,19 +2143,26 @@
                         var ApellidosContacto = $('#apellidos_contacto_mod');
                         var TelefonoContacto = $('#telefono_contacto_mod');
                         var EmailContacto = $('#email_contacto_mod');
-                        var ActividadEconomica = $('#actividad_economica_mod');
-                        var Estado = $('#estado_mod');
+                        var ActividadEconomica = $('#actividad_economica_mod'); 
                         var HiddenSelectedItemsMod = $('#hiddenSelectedItemsMod');
 
                         establecimientoId.val(response.id);
                         Secuencial.val(response.secuencial);
                         camaraId.val(response.id_camara);
-                        FechaInicioACtividades.val(convertirFecha(response.fecha_inicio_actividades));
+                        FechaInicioActividades.val(convertirFecha(response.fecha_inicio_actividades)); 
+                        if (response.fecha_cese_actividades  !== null) {
+                            FechaCeseActividades .val(convertirFecha(response.fecha_cese_actividades));
+                        }
+                        if (response.fecha_reinicio_actividades !== null) {
+                            FechaReinicioActividades.val(convertirFecha(response.fecha_reinicio_actividades));
+                        }
                         Pais.val(response.id_pais);
                         Provincia.val(response.id_provincia);
                         Canton.val(response.id_canton);
                         Parroquia.val(response.id_parroquia);
                         Estado.val(response.estado);
+
+                        actualizarEstadoCampos();
 
                         $('#nombreCamaraSeleccionadaMod').text(response.camara.razon_social);
 
@@ -2446,6 +2649,40 @@
                     $('#correo_mod').focus();
                     return;
                 }
+
+                if($('#estado_mod').val() == 1){
+                    if ($('#fecha_cese_actividades_mod').val() != ""){
+                        if($('#fecha_reinicio_actividades_mod').val() == ""){
+                            await Swal.fire({
+                                target: document.getElementById('ModalModificarEstablecimiento'),
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Debe registrar una fecha de Reinicio de Actividades',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
+                            $('#fecha_reinicio_actividades_mod').focus();
+                            return;
+                        }
+                    }
+                }
+
+                if($('#estado_mod').val() == 2){
+                    if ($('#fecha_cese_actividades_mod').val() == ""){ 
+                        await Swal.fire({
+                            target: document.getElementById('ModalModificarEstablecimiento'),
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Debe registrar una fecha de Cese de Actividades',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
+                        $('#fecha_cese_actividades_mod').focus();
+                        return;
+                    } 
+                }
+
+                //alert($('#fecha_cese_actividades_mod').val()); return;
 
                 //$('#carga').show();
                 Swal.fire({
