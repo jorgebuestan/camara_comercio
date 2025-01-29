@@ -229,7 +229,7 @@
                                                         </label>
                                                         <select id="tipo_identificacion" name="tipo_identificacion"
                                                             class="form-control populate">
-                                                            <option value="-1" selected>Seleccionar</option>
+                                                            <option value=-1 selected>Seleccionar</option>
                                                             @foreach ($tipo_identificacion as $id => $descripcion)
                                                                 <option value={{ $id }}>{{ $descripcion }}
                                                                 </option>
@@ -532,6 +532,48 @@
                                                         <label>Referencia</label>
                                                         <input type="text" class="form-control" name="referencia"
                                                             id="referencia" placeholder="Referencia" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-12">
+                                                        <h2
+                                                            class="card-title
+                                                            ">
+                                                            Actividades Económicas</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <select name="actividad_economica[]" id="actividad_economica"
+                                                            multiple data-plugin-selectTwo>
+                                                            @foreach ($actividadesEconomicas as $id => $descripcion)
+                                                                <option value={{ $id }}>
+                                                                    {{ $descripcion }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <input type="hidden" id="hiddenSelectedItems"
+                                                            name="hiddenSelectedItems">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <div class="container-selected-items">
+                                                            <div id="selectedItemsContainer" class="selected-items">
+                                                                <strong>Seleccionados:</strong>
+                                                                <div id="selectedList"></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1136,10 +1178,77 @@ function toggleNaturalConRuc(active) {
                 }
             });
 
+            $('#actividad_economica').select2({
+                placeholder: "Selecciona una o más opciones",
+                width: '100%',
+                allowClear: true
+            });
+
+            function syncHiddenInput() {
+                $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
+                console.log('Contenido actualizado de selectedItems:', selectedItems);
+            }
+
+            let selectedItems = [];
+
+            // Manejar selección de elementos
+            $('#actividad_economica').on('select2:select', function(e) {
+                const selectedId = parseInt(e.params.data.id); // Convertir a cadena
+                const selectedText = e.params.data.text;
+
+                if (!selectedItems.includes(selectedId)) {
+                    selectedItems.push(selectedId); // Agregar al array como cadena
+                    $('#selectedList').append(`
+                <span class="badge bg-primary me-2 selected-item" data-id=${selectedId}>
+                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                </span>
+            `);
+                    syncHiddenInput(); // Sincronizar el campo oculto
+                }
+
+                $(this).val(null).trigger('change'); // Resetear el dropdown
+            });
+
+            // Manejar eliminación de elementos seleccionados (badge)
+            $('#selectedList').on('click', '.remove-item', function() {
+                const badge = $(this).closest('.selected-item');
+                const id = badge.data('id'); // Convertir a cadena
+
+                // Eliminar el ID del array
+                selectedItems = selectedItems.filter(item => item !== id);
+                console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
+
+                // Eliminar visualmente el badge
+                badge.remove();
+
+                // Restaurar la opción en el dropdown
+                const optionElement = $(`#actividad_economica option[value=${id}]`);
+                optionElement.prop('disabled', false).prop('selected', false);
+
+                syncHiddenInput(); // Sincronizar el campo oculto
+            });
+
+            // Sincronizar al quitar desde el dropdown
+            $('#actividad_economica').on('select2:unselect', function(e) {
+                const unselectedId = (e.params.data.id); // Convertir a cadena
+
+                // Eliminar visualmente el badge
+                $(`#selectedList .selected-item[data-id=${unselectedId}]`).remove();
+
+                // Eliminar el ID del array
+                selectedItems = selectedItems.filter(item => item !== unselectedId);
+                console.log(
+                    `Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`
+                ); // Depuración
+
+                syncHiddenInput(); // Sincronizar el campo oculto
+            });
+
             $("#btn_register_socio").click(function() {
                 if (!validarRegistro()) {
                     return;
                 }
+               // alert($('#hiddenSelectedItems').val()); return;
 
                 let formData = new FormData();
                 const data = {};
@@ -1152,7 +1261,7 @@ function toggleNaturalConRuc(active) {
                     'contribuyente_especial', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
                     'manzana',
                     'numero',
-                    'interseccion', 'referencia'
+                    'interseccion', 'referencia', 'hiddenSelectedItems'
                 ];
 
                 const requiredFieldsJuridico = commonFields.concat([
@@ -1242,7 +1351,7 @@ function toggleNaturalConRuc(active) {
                     'pais', 'provincia', 'canton', 'parroquia', 'calle',
                     'manzana',
                     'numero',
-                    'interseccion', 'referencia'
+                    'interseccion', 'referencia', 'hiddenSelectedItems'
                 ];
 
                 const requiredFieldsJuridico = commonFields.concat([
@@ -1515,6 +1624,85 @@ function toggleNaturalConRuc(active) {
                 $('#ModalSocio').find('#numero').val(data.numero);
                 $('#ModalSocio').find('#interseccion').val(data.interseccion);
                 $('#ModalSocio').find('#referencia').val(data.referencia);
+
+
+                // Limpia la lista visual y el array
+                selectedItems = [];
+                $('#selectedList').empty();
+
+                console.log('jbuestan: pruebas de actividades economicas');
+                //console.log(data.datos_tributarios);
+                //console.log(data.datos_tributarios.actividades_economicas);
+
+                // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
+                //if (data.datos_tributarios.actividades_economicas) {
+                if (data.datos_tributarios?.actividades_economicas) {
+                    // Decodifica el JSON si es necesario
+                    let actividadesEconomicas = data.datos_tributarios.actividades_economicas;
+
+                    // Verifica si es un string y necesita ser decodificado
+                    if (typeof actividadesEconomicas === 'string') {
+                        try {
+                            actividadesEconomicas = JSON.parse(actividadesEconomicas);
+                            console.log(actividadesEconomicas);
+                        } catch (error) {
+                            console.error(
+                                "Error al decodificar actividades_economicas:",
+                                error);
+                            actividadesEconomicas = [];
+                        }
+                    }
+
+                    // Asegúrate de que ahora sea un array
+                    if (Array.isArray(actividadesEconomicas) && actividadesEconomicas
+                        .length > 0) {
+                        console.log("Actividades económicas recibidas:",
+                            actividadesEconomicas);
+
+                        actividadesEconomicas.forEach(function(id) {
+                            id = parseInt(
+                                id); // Asegúrate de que el ID es un entero
+
+                            // Obtener el texto de la opción seleccionada
+                            var optionText = $(
+                                `#actividad_economica option[value=${id}]`
+                            ).text();
+
+                            // Añadir ID al array de elementos seleccionados
+                            console.log('ID:', id);
+                            console.log(typeof id);
+                            selectedItems.push(id);
+
+                            // Añadir el badge visualmente en la lista
+                            $('#selectedList').append(`
+                            <span class="badge bg-primary me-2 selected-item" data-id=${id}>
+                                ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                            </span>
+                        `);
+
+                            // Marcar la opción como seleccionada
+                            $(`#actividad_economica option[value=${id}]`)
+                                .prop('selected', true);
+                        });
+
+                        // Actualiza el input oculto para sincronizar
+                        syncHiddenInput();
+
+                        // Activa Select2 y muestra los valores seleccionados
+                        $('#actividad_economica').val(null).trigger('change');
+                    } else {
+                        console.warn(
+                            "No se recibieron actividades económicas o el array está vacío."
+                        );
+                    }
+                } else {
+                    console.warn(
+                        "No se encontraron actividades económicas en dato_tributario."
+                    );
+                }
+
+
+
                 $('#ModalSocio').find('#btn_register_socio').hide();
                 $('#ModalSocio').find('#btn_update_socio').show();
                 $('#ModalSocio').modal('show');
@@ -1600,6 +1788,8 @@ function toggleNaturalConRuc(active) {
              * Functions
              */
             function limpiarFormulario() {
+                selectedItems = [];
+                $('#selectedList').empty();
                 $('#ModalSocio').find('input, select, textarea').val('');
                 $('#ModalSocio').find(
                         '#tipo_personeria, #tipo_regimen, #agente_retencion, #contribuyente_especial, #pais, #provincia, #canton, #parroquia'
@@ -2196,6 +2386,21 @@ function toggleNaturalConRuc(active) {
                         $('#referencia').focus();
                         return false;
                     }
+
+                    if ($('#hiddenSelectedItems').val() == "") {
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    Swal.fire({
+                        target: document.getElementById('ModalSocio'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    $('.nav-tabs a[href="#datos_tributarios_mod"]').tab('show');
+                    $('#hiddenSelectedItems').focus();
+                    return;
+                }
 
                 }
                 

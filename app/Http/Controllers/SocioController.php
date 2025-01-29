@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\LogActivity;
+use App\Models\ActividadEconomica;
  
 use Illuminate\Support\Str; 
 
@@ -38,6 +39,8 @@ class SocioController extends Controller
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $tipo_identificacion =  TipoIdentificacion::pluck('descripcion', 'id');
+        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
+
 
         $tiposPersoneria = TipoPersoneria::pluck('descripcion', 'id'); // Obtenemos los tipos de personeria
 
@@ -57,7 +60,7 @@ class SocioController extends Controller
         }
 
 
-        return view('administrador.socios.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria', 'tipo_identificacion'));
+        return view('administrador.socios.maestro_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria', 'tipo_identificacion', 'actividadesEconomicas'));
     }
 
     public function obtener_listado_socios(Request $request)
@@ -374,14 +377,14 @@ class SocioController extends Controller
     {
         $storedFilePath = null;
         //return ("mensaje");
+        //return('actividades: '.$request->input('hiddenSelectedItems'));
         try { 
-            //return($request->input('tipo_personeria'));
+            //return("Identificacion: ".$request->input('tipo_personeria'));
             if($request->input('tipo_personeria') != 1){ 
 
                 if($request->input('tipo_personeria') == 2){
                     $validator = Validator::make($request->all(), [
-                        'fecha_ingreso' => 'required|date_format:d/m/Y',
-                        'tipo_identificacion' => 'nullable|integer',
+                        'fecha_ingreso' => 'required|date_format:d/m/Y', 
                         'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                         'tipo_personeria' => 'required|integer',
                         'identificacion' => 'required|string',
@@ -410,11 +413,11 @@ class SocioController extends Controller
                         'numero' => 'required|string|max:255',
                         'interseccion' => 'required|string|max:255',
                         'referencia' => 'required|string|max:255',
+                        'hiddenSelectedItems' => 'required|string|max:255',
                     ]);
                 }else{
                     $validator = Validator::make($request->all(), [
-                        'fecha_ingreso' => 'required|date_format:d/m/Y',
-                        'tipo_identificacion' => 'nullable|integer',
+                        'fecha_ingreso' => 'required|date_format:d/m/Y', 
                         'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                         'tipo_personeria' => 'required|integer',
                         'identificacion' => 'required|string',
@@ -444,6 +447,7 @@ class SocioController extends Controller
                         'numero' => 'required|string|max:255',
                         'interseccion' => 'required|string|max:255',
                         'referencia' => 'required|string|max:255',
+                        'hiddenSelectedItems' => 'required|string|max:255',
                     ]);
                 }  
             }else{
@@ -573,6 +577,12 @@ class SocioController extends Controller
                 if (!$socio) {
                     throw new \Exception("Error al crear el socio");
                 }
+                
+                $actividadesEconomicasSeleccionadas = $data['hiddenSelectedItems'];
+                //return("actividades: ".$actividadesEconomicasSeleccionadas);
+                // Convertir la cadena en un array (si no está vacío)
+                $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? array_map('intval', explode(',', $actividadesEconomicasSeleccionadas)) : [];
+    
 
                 // Creación de datos tributarios
                 $datos_tributarios = DatoTributarioSocio::create([
@@ -606,6 +616,7 @@ class SocioController extends Controller
                     'numero' => $data['numero'],
                     'interseccion' => $data['interseccion'] ?? null,
                     'referencia' => $data['referencia'] ?? null,
+                    'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
                 ]);
 
 
@@ -697,6 +708,7 @@ class SocioController extends Controller
                         'numero' => 'required|string|max:255',
                         'interseccion' => 'required|string|max:255',
                         'referencia' => 'required|string|max:255',
+                        'hiddenSelectedItems' => 'required|string|max:255',
                     ]);
                 }else{
                     $validator = Validator::make($request->all(), [
@@ -731,6 +743,7 @@ class SocioController extends Controller
                         'numero' => 'required|string|max:255',
                         'interseccion' => 'required|string|max:255',
                         'referencia' => 'required|string|max:255',
+                        'hiddenSelectedItems' => 'required|string|max:255',
                     ]);
                 }  
             }else{
@@ -864,6 +877,12 @@ class SocioController extends Controller
                     'estado' => 1,
                 ]);
 
+                $actividadesEconomicasSeleccionadas = $data['hiddenSelectedItems'];
+                //return("actividades: ".$actividadesEconomicasSeleccionadas);
+                // Convertir la cadena en un array (si no está vacío)
+                $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? array_map('intval', explode(',', $actividadesEconomicasSeleccionadas)) : [];
+    
+
                 // Actualización o creación de los datos tributarios
                 $datosTributarios = DatoTributarioSocio::updateOrCreate(
                     ['id_socio' => $socioId], // Condición de búsqueda (en este caso, el id_socio)
@@ -897,7 +916,8 @@ class SocioController extends Controller
                         'manzana' => $data['manzana'],
                         'numero' => $data['numero'],
                         'interseccion' => $data['interseccion'] ?? null,
-                        'referencia' => $data['referencia'] ?? null,
+                        'referencia' => $data['referencia'] ?? null, 
+                        'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray)
                     ]
                 );
 

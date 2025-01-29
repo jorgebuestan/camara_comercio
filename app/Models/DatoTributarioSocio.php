@@ -29,6 +29,7 @@ class DatoTributarioSocio extends Model
         'numero',
         'interseccion',
         'referencia',
+        'actividades_economicas'
     ];
 
     public function socio()
