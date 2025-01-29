@@ -319,9 +319,7 @@ class EstablecimientoSocioController extends Controller
     {
         try {
 
-            DB::beginTransaction();
-            // Convertir fecha_ingreso al formato MySQL (YYYY-MM-DD)
-            $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
+            DB::beginTransaction(); 
 
             // Buscar el registro existente por ID 
             $establecimiento = EstablecimientoSocio::find($request->input('establecimiento_id'));
@@ -334,7 +332,17 @@ class EstablecimientoSocioController extends Controller
             $actividadesEconomicasSeleccionadasArray = $actividadesEconomicasSeleccionadas ? explode(',', $actividadesEconomicasSeleccionadas) : [];
             $actividadesEconomicasSeleccionadasArray = array_map('intval', $actividadesEconomicasSeleccionadasArray);
 
-            // Actualizar los campos del registro existente
+            $fecha_inicio_actividades = \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio_actividades_mod'))->format('Y-m-d');
+
+            $fecha_cese_actividades = $request->input('fecha_cese_actividades_mod') 
+            ? \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_cese_actividades_mod'))->format('Y-m-d') 
+            : null;
+
+            $fecha_reinicio_actividades = $request->input('fecha_reinicio_actividades_mod') 
+            ? \Carbon\Carbon::createFromFormat('d/m/Y', $request->input('fecha_reinicio_actividades_mod'))->format('Y-m-d') 
+            : null;
+
+            // Actualizar los campos del registro existente 
             $establecimiento->update([
                 'nombre_comercial' => strtoupper($request->input('nombre_comercial_mod')),
                 'id_pais' => $request->input('pais_mod'),
@@ -355,6 +363,8 @@ class EstablecimientoSocioController extends Controller
                 'telefono_contacto' => strtoupper($request->input('telefono_contacto_mod')),
                 'email_contacto' => strtoupper($request->input('email_contacto_mod')),
                 'fecha_inicio_actividades' => $fecha_inicio_actividades,
+                'fecha_cese_actividades' => $fecha_cese_actividades,
+                'fecha_reinicio_actividades' => $fecha_reinicio_actividades,
                 'actividades_economicas' =>  json_encode($actividadesEconomicasSeleccionadasArray), 
                 'estado' => $request->input('estado_mod')  
 

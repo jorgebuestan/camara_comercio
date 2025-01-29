@@ -591,9 +591,10 @@ class SocioController extends Controller
                     'fecha_constitucion' => array_key_exists('fecha_constitucion', $data) && validarFecha($data['fecha_constitucion']) 
                         ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
                         : null,
-                    'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
+                    /*'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
                         ? Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d') 
-                        : null,
+                        : null,*/
+                    'fecha_nacimiento' => $data['fecha_nacimiento'],
                     'agente_retencion' => $data['agente_retencion'],
                     'contribuyente_especial' => $data['contribuyente_especial'],
                     'id_pais' => $data['pais'],
@@ -808,6 +809,7 @@ class SocioController extends Controller
                 $data['vencimiento_nombramiento'] = Carbon::createFromFormat('d/m/Y', $data['vencimiento_nombramiento'])->format('Y-m-d');
             }
 
+           
             if ($data['tipo_personeria'] == 2) {
                 $data['cedula_representante'] = null;
                 $data['nombre_representante'] = null;
@@ -825,7 +827,7 @@ class SocioController extends Controller
             if (!isset($rutaFoto)) {
                 $rutaFoto = $socio->foto;
             }
-
+            //return("Fecha nacimiento". $data['fecha_nacimiento']);
             
 
             if($data['tipo_personeria'] != 1){
@@ -881,9 +883,10 @@ class SocioController extends Controller
                         'fecha_constitucion' => array_key_exists('fecha_constitucion', $data) && validarFecha($data['fecha_constitucion']) 
                         ? Carbon::createFromFormat('d/m/Y', $data['fecha_constitucion'])->format('Y-m-d') 
                         : null,
-                        'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
+                        /*'fecha_nacimiento' => validarFecha($data['fecha_nacimiento']) 
                             ? Carbon::createFromFormat('d/m/Y', $data['fecha_nacimiento'])->format('Y-m-d') 
-                            : null,
+                            : null,*/
+                        'fecha_nacimiento' =>  $data['fecha_nacimiento'],
                         'agente_retencion' => $data['agente_retencion'],
                         'contribuyente_especial' => $data['contribuyente_especial'],
                         'id_pais' => $data['pais'] ?? null,

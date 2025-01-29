@@ -116,7 +116,7 @@
                                                     <th>IDEMNTIFICACIÓN</th>
                                                     <th>RAZÓN SOCIAL</th>
                                                     <th>TIPO DE PERSONERÍA</th>
-                                                    <th>ESTADO</th>
+                                                    <!--<th>ESTADO</th>-->
                                                     <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
@@ -421,6 +421,11 @@
                                                                 class="form-control" name="fecha_nacimiento"
                                                                 id="fecha_nacimiento" placeholder="Fecha de Nacimiento">
                                                         </div>
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Años de Edad</label>
+                                                            <input type="text" class="form-control" name="anios_edad"
+                                                                id="anios_edad" placeholder="Años de Edad" disabled>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -649,10 +654,10 @@
                         data: 'tipo_personeria',
                         width: '12%'
                     },
-                    {
+                    /*{
                         data: 'estado',
                         width: '3%'
-                    },
+                    },*/
                     {
                         data: 'btn',
                         width: '20%',
@@ -2492,6 +2497,10 @@ function toggleNaturalConRuc(active) {
 
             calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
                 'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
+            );
+
+            calcularDuracion('fecha_registro_sri', 'fecha_nacimiento',
+                'La fecha de nacimiento debe ser menor que la fecha de registro al SRI.', 'anios_edad'
             );
         });
     </script>
