@@ -81,6 +81,8 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/get-establecimientos-camara', [FuncionesGeneralesController::class, 'get_establecimientos_camara'])->middleware('auth')->name('funciones_generales.get_establecimientos_camara');
     Route::get('/get-entidades-establecimiento', [FuncionesGeneralesController::class, 'get_entidades_establecimientos'])->middleware('auth')->name('funciones_generales.get_entidades_establecimientos');
 
+    Route::get('/get-actividades-economicas-socios', [FuncionesGeneralesController::class, 'get_actividades_economicas_por_socio'])->middleware('auth')->name('funciones_generales.get_actividades_economicas_por_socio');
+
     //Funciones Administrador
 
     //Maestro de Camaras

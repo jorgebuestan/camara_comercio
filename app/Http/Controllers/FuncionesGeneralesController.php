@@ -13,7 +13,9 @@ use App\Models\SocioObligacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Establecimiento;
-use App\Models\Entidad;
+use App\Models\Entidad;  
+use App\Models\DatoTributarioSocio; 
+use App\Models\ActividadEconomica; 
 
 class FuncionesGeneralesController extends Controller
 {
@@ -204,6 +206,42 @@ class FuncionesGeneralesController extends Controller
             'entidades' => $entidades->map(function ($entidad, $id) {
                 return ['id' => $id, 'nombre' => $entidad];
             })->values(),
+        ]);
+    }
+
+    public function get_actividades_economicas_por_socio(Request $request)
+    {
+        $id_socio = $request->input('id_socio'); // Utiliza input() para obtener el valor del request
+
+        // Obtener el objeto DatoTributarioSocio con el id de socio proporcionado
+        $datoTributarioSocio = DatoTributarioSocio::where('id_socio', $id_socio)->first();
+
+        // Verificar si el campo actividades_economicas existe y no está vacío
+        if ($datoTributarioSocio && !empty($datoTributarioSocio->actividades_economicas)) {
+            // Asegurarse de que actividades_economicas sea un array
+            $actividades_economicas = is_array($datoTributarioSocio->actividades_economicas) 
+                ? $datoTributarioSocio->actividades_economicas 
+                : json_decode($datoTributarioSocio->actividades_economicas, true);
+
+            // Si es un array no vacío, obtener las actividades económicas
+            if (!empty($actividades_economicas)) {
+                $actividades = ActividadEconomica::whereIn('id', $actividades_economicas)
+                    ->orderBy('descripcion') // Ordenar por el campo que necesites
+                    ->pluck('descripcion', 'id');
+            } else {
+                // Si el array está vacío, retornar colección vacía
+                $actividades = collect();
+            }
+        } else {
+            // Si actividades_economicas es null o vacío, retornar colección vacía
+            $actividades = collect();
+        }
+
+        // Formato de respuesta esperado
+        return response()->json([
+            'actividades_economicas' => $actividades->map(function ($descripcion, $id) {
+                return ['id' => $id, 'descripcion' => $descripcion];
+            })->values(), // .values() asegura que el array de datos esté correctamente indexado
         ]);
     }
     

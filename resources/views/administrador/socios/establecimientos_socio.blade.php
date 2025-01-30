@@ -436,9 +436,9 @@
                             <div class="row">
                                 &nbsp;
                             </div>
-                            <!-- <div class="row">
+                            <div class="row">
                                     <div class="col-md-12">
-                                        <h2 class="card-title">Actividades Economicas</h2>
+                                        <h2 class="card-title">Actividades Económicas</h2>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -472,7 +472,7 @@
                                     <div class="row">
                                         &nbsp;
                                     </div>
-                                </div> -->
+                                </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -785,9 +785,9 @@
                             <div class="row">
                                 &nbsp;
                             </div>
-                            <!-- <div class="row">
+                            <div class="row">
                                 <div class="col-md-12">
-                                    <h2 class="card-title">Actividades Economicas</h2>
+                                    <h2 class="card-title">Actividades Económicas</h2>
                                 </div>
                             </div>
                             <div class="row">
@@ -818,7 +818,7 @@
                                         <div id="selectedList_mod"></div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -855,6 +855,7 @@
             var actividadesEconomicas = @json($actividadesEconomicas);
             var socios = @json($socios);
             let establecimientoSocioSelected = null;
+            let actividadesDisponibles = null;
 
             var FechaInicioActividades = $('#fecha_inicio_actividades_mod');
             var FechaCeseActividades = $('#fecha_cese_actividades_mod');
@@ -1000,7 +1001,13 @@
                 var selectedSocio = $(this).val();
 
                 if (selectedSocio === '-1') {
-                    //alert('Por favor selecciona un Socio válido.'); 
+                    // Limpiar los selects y mostrar mensaje de error
+                    let $actividadesSelect = $('#actividad_economica');
+                    let $actividadesSelectMod = $('#actividad_economica_mod'); 
+
+                    $actividadesSelect.empty(); // Limpiar el select de actividades
+                    $actividadesSelectMod.empty(); // Limpiar el select de actividades
+
                     await Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -1008,6 +1015,7 @@
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
+
                     table.ajax.reload();
                 } else {
                     Swal.fire({
@@ -1019,6 +1027,58 @@
                             Swal.showLoading()
                         }
                     });
+
+                    $.ajax({
+                        url: '/get-actividades-economicas-socios', // Ruta para obtener las actividades económicas
+                        method: 'GET',
+                        data: {
+                            id_socio: selectedSocio
+                        },
+                        success: function(response) {
+                            let actividades_economicas = response.actividades_economicas; // Obtener las actividades económicas
+                            let $actividadesSelect = $('#actividad_economica');
+                            let $actividadesSelectMod = $('#actividad_economica_mod');
+
+                            // Limpiar ambos selects antes de llenarlos
+                            $actividadesSelect.empty();
+                            $actividadesSelectMod.empty();
+
+                            // Opción por defecto
+                            $actividadesSelect.append('<option value="-1">Seleccionar</option>');
+                            $actividadesSelectMod.append('<option value="-1">Seleccionar</option>');
+
+                            // Asegurarnos que actividades_economicas sea un array válido
+                            if (Array.isArray(actividades_economicas) && actividades_economicas.length > 0) {
+                                // Llenar la variable `actividadesDisponibles` con las actividades
+                                actividadesDisponibles = actividades_economicas.map(function(actividad) {
+                                    return {
+                                        id: actividad.id,
+                                        descripcion: actividad.descripcion
+                                    };
+                                });
+
+                                // Llenar los selects con las opciones correspondientes
+                                actividades_economicas.forEach(function(actividad) {
+                                    // Añadir las opciones al select actividad_economica
+                                    $actividadesSelect.append(
+                                        `<option value="${actividad.id}">${actividad.descripcion}</option>`
+                                    );
+
+                                    // Añadir las opciones al select actividad_economica_mod
+                                    $actividadesSelectMod.append(
+                                        `<option value="${actividad.id}">${actividad.descripcion}</option>`
+                                    );
+                                });
+                            }
+
+                            // Sincronizar el campo oculto con los valores seleccionados si es necesario
+                            syncHiddenInputMod();
+                        },
+                        error: function() {
+                            alert('Hubo un error al cargar las actividades económicas.');
+                        }
+                    });
+
                     table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
                 }
             });
@@ -1780,6 +1840,19 @@
                     $('#referencia').focus();
                     return;
                 }
+
+                if ($('#hiddenSelectedItems').val() == "") {
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    Swal.fire({
+                        target: document.getElementById('ModalEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    return;
+                }
                 
 
                 var formData = new FormData(document.getElementById("ModalEstablecimiento"));
@@ -2071,7 +2144,7 @@
 
                 // **LIMPIAR EL SELECT Y EL INPUT HIDDEN ANTES DE CARGAR DATOS**
                 selectedItemsMod = []; // Vaciar el array de actividades económicas seleccionadas
-                $('#selectedList_mod').empty(); // Vaciar la lista de badges visuales
+                //$('#selectedList_mod').empty(); // Vaciar la lista de badges visuales
                 $('#actividad_economica_mod').val(null).trigger(
                     'change'); // Limpiar y deseleccionar el select2
                 $('#hiddenSelectedItemsMod').val(''); // Limpiar el input hidden
@@ -2176,35 +2249,36 @@
                         selectedItemsMod = [];
                         $('#selectedList_mod').empty();
 
-                        console.log(response.actividades_economicas);
+                        console.log('actJB:', response.actividades_economicas); // Muestra lo que realmente llega
 
                         // Verifica si response.dato_tributario y response.dato_tributario.actividades_economicas tienen valores
                         if (response.actividades_economicas) {
                             // Decodifica el JSON si es necesario
-                            let actividadesEconomicas = response.actividades_economicas;
+                            let actividadesEstablecimiento = response.actividades_economicas;
 
                             // Verifica si es un string y necesita ser decodificado
-                            if (typeof actividadesEconomicas === 'string') {
+                            if (typeof actividadesEstablecimiento === 'string') {
                                 try {
-                                    actividadesEconomicas = JSON.parse(actividadesEconomicas);
+                                    actividadesEstablecimiento = JSON.parse(
+                                        actividadesEstablecimiento);
                                 } catch (error) {
                                     console.error(
                                         "Error al decodificar actividades_economicas:",
                                         error);
-                                    actividadesEconomicas = [];
+                                    actividadesEstablecimiento = [];
                                 }
                             }
 
                             // Asegúrate de que ahora sea un array
-                            if (Array.isArray(actividadesEconomicas) && actividadesEconomicas
+                            if (Array.isArray(actividadesEstablecimiento) &&
+                                actividadesEstablecimiento
                                 .length > 0) {
-                                console.log("Actividades económicas recibidas:",
-                                    actividadesEconomicas);
 
-                                actividadesEconomicas.forEach(function(id) {
-                                    id = parseInt(
-                                        id); // Asegúrate de que el ID es una cadena
-
+                                actividadesEstablecimiento = actividadesEstablecimiento
+                                    .filter(id => actividadesDisponibles.some(actividad =>
+                                        parseInt(actividad.id) === parseInt(id)));
+                                actividadesEstablecimiento.forEach(function(id) {
+                                    id = parseInt(id);
                                     // Obtener el texto de la opción seleccionada
                                     var optionText = $(
                                         `#actividad_economica_mod option[value=${id}]`
@@ -2215,16 +2289,15 @@
 
                                     // Añadir el badge visualmente en la lista
                                     $('#selectedList_mod').append(`
-                                <span class="badge bg-primary me-2 selected-item" data-id=${id}>
-                                    ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
-                                </span>
-                            `);
+                                            <span class="badge bg-primary me-2 selected-item" data-id=${id}>
+                                                ${optionText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                                            </span>
+                                        `);
 
                                     // Marcar la opción como seleccionada
                                     $(`#actividad_economica_mod option[value=${id}]`)
                                         .prop('selected', true);
                                 });
-
                                 // Actualiza el input oculto para sincronizar
                                 syncHiddenInputMod();
 
@@ -2240,6 +2313,7 @@
                                 "No se encontraron actividades económicas en dato_tributario."
                             );
                         }
+ 
 
                         //$('#carga').hide();
                         $('#ModalModificarEstablecimiento').modal('show');
@@ -2612,18 +2686,6 @@
                     return;
                 }
 
-                //$('#carga').show();
-                Swal.fire({
-                    target: document.getElementById('ModalModificarEstablecimiento'),
-                    title: 'Cargando',
-                    text: 'Por favor espere',
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    }
-                });
-
                 if($('#estado_mod').val() == 1){
                     if ($('#fecha_cese_actividades_mod').val() != ""){
                         if($('#fecha_reinicio_actividades_mod').val() == ""){
@@ -2654,8 +2716,24 @@
                         $('#fecha_cese_actividades_mod').focus();
                         return;
                     } 
+                } 
+
+
+                if ($('#hiddenSelectedItemsMod').val() == "") {
+                    //alert('Debe seleccionar al menos una Actividad Económica');
+                    Swal.fire({
+                        target: document.getElementById('ModalModificarEstablecimiento'),
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Debe seleccionar al menos una Actividad Económica',
+                        confirmButtonText: 'Aceptar',
+                        allowOutsideClick: false
+                    });
+                    return;
                 }
 
+                //$('#carga').show(); 
+                
                 Swal.fire({
                     target: document.getElementById('ModalModificarEstablecimiento'),
                     title: 'Enviando datos para modificación de Establecimiento',

@@ -459,7 +459,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h2 class="card-title">Actividades Economicas</h2>
+                                    <h2 class="card-title">Actividades Económicas</h2>
                                 </div>
                             </div>
                             <div class="row">
@@ -814,7 +814,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h2 class="card-title">Actividades Economicas</h2>
+                                    <h2 class="card-title">Actividades Económicas</h2>
                                 </div>
                             </div>
                             <div class="row">
