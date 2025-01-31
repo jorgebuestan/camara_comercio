@@ -14,55 +14,52 @@ use App\Models\Provincia;
 use App\Models\Canton;
 use App\Models\Parroquia;
 use App\Models\ActividadEconomica;
-use App\Models\Camara;
+use App\Models\Socio;
 use App\Models\Entidad;
 use App\Models\DatoTributario;
 use App\Models\LogActivity;
-use App\Models\CamaraObligacion;  
+use App\Models\SocioObligacion;  
 use Carbon\Carbon;
-use App\Models\ArchivoObligacionCamara;
+use App\Models\ArchivoObligacionSocio;
 
-class EstablecimientoCamaraObligacionController extends Controller
+class EstablecimientoSocioObligacionController extends Controller
 {
     //
-    public function obligaciones_establecimientos()
+    public function obligaciones_establecimientos_socio()
     {
-        $isAdmin = Auth::user()->hasRole('admin');
-        $camarasSelect = [];
-        if ($isAdmin) {
-            $camarasSelect = Camara::pluck('razon_social', 'id');
-        } else {
-            $camarasSelect = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
-            if (!$camarasSelect || $camarasSelect->isEmpty()) {
-                return redirect()->route('dashboard')->with('error', 'No tiene permisos para acceder a esta sección');
-            }
-        } 
+        $sociosSelect = Socio::where('estado', 1)
+        ->whereIn('id_tipo_personeria', [2, 3])
+        ->whereIn('id', function ($query) {
+            $query->select('id_socio')
+                ->from('datos_tributarios_socio'); // Nombre de la tabla correspondiente
+        })
+        ->pluck('razon_social', 'id');
         $entidades = Entidad::with('obligaciones.obligacion.tiempo_presentacion', 'obligaciones.obligacion.tipo_presentacion')->where('estado', 1)->get();
         $entidadesSelect = $entidades->pluck('entidad', 'id');
-        return view('administrador.camaras.obligaciones_establecimientos', compact('camarasSelect', 'entidadesSelect', 'isAdmin'));
+        return view('administrador.socios.obligaciones_establecimientos', compact('sociosSelect', 'entidadesSelect'));
     }
 
-    public function obtener_listado_obligaciones_establecimientos(Request $request)
+    public function obtener_listado_obligaciones_establecimientos_socios(Request $request)
     {
         $columns = [
-            0 => 'camaras_obligaciones.id',
-            1 => 'establecimientos.secuencial',
+            0 => 'socios_obligaciones.id',
+            1 => 'establecimientos_socios.secuencial',
             2 => 'entidades.entidad',
             3 => 'obligaciones.obligacion'
         ];
 
-        $query = DB::table('camaras_obligaciones')
-            ->join('camaras', 'camaras.id', '=', 'camaras_obligaciones.id_camara')
-            ->join('establecimientos', 'establecimientos.id', '=', 'camaras_obligaciones.id_establecimiento')
-            ->join('entidades', 'entidades.id', '=', 'camaras_obligaciones.id_entidad')
-            ->join('obligaciones', 'obligaciones.id', '=', 'camaras_obligaciones.id_obligacion')
+        $query = DB::table('socios_obligaciones')
+            ->join('socios', 'socios.id', '=', 'socios_obligaciones.id_socio')
+            ->join('establecimientos_socios', 'establecimientos_socios.id', '=', 'socios_obligaciones.id_establecimiento')
+            ->join('entidades', 'entidades.id', '=', 'socios_obligaciones.id_entidad')
+            ->join('obligaciones', 'obligaciones.id', '=', 'socios_obligaciones.id_obligacion')
             ->select(
-                'camaras_obligaciones.id', 
-                'establecimientos.secuencial',
+                'socios_obligaciones.id', 
+                'establecimientos_socios.secuencial',
                 'entidades.entidad',
                 'obligaciones.obligacion'
             )
-            ->where('camaras_obligaciones.estado', 1);
+            ->where('socios_obligaciones.estado', 1);
 
         // Filtro de localidad 
 
@@ -70,14 +67,14 @@ class EstablecimientoCamaraObligacionController extends Controller
         if ($search = $request->input('search.value')) {
             $query->where(function ($query) use ($search) {
                 $query->where('entidades.entidad', 'LIKE', "%{$search}%") 
-                ->orWhere('establecimientos.secuencial', 'LIKE', "%{$search}%")
+                ->orWhere('establecimientos_socios.secuencial', 'LIKE', "%{$search}%")
                 ->orWhere('obligaciones.obligacion', 'LIKE', "%{$search}%");
             });
         }
 
-        // **Filtrar por id_camara si está presente en el request**
-        if ($idEntidad = $request->input('id_camara')) {
-            $query->where('camaras_obligaciones.id_camara', $idEntidad);
+        // **Filtrar por id_socio si está presente en el request**
+        if ($idEntidad = $request->input('id_socio')) {
+            $query->where('socios_obligaciones.id_socio', $idEntidad);
         }
 
         $totalFiltered = $query->count();
@@ -122,12 +119,12 @@ class EstablecimientoCamaraObligacionController extends Controller
         return response()->json($json_data);
     }
 
-    public function registrar_obligacion_establecimiento(Request $request)
+    public function registrar_obligacion_establecimiento_socio(Request $request)
     {
         try {
             // Validación de los datos
             $validator = Validator::make($request->all(), [
-                'id_camara' => 'required|integer',
+                'id_socio' => 'required|integer',
                 'id_establecimiento' => 'required|integer',
                 'id_entidad' => 'required|integer',
                 'id_obligacion' => 'required|integer',
@@ -141,11 +138,12 @@ class EstablecimientoCamaraObligacionController extends Controller
 
             $data = $validator->validated();
 
+            //return($data);
             // Comienza la transacción
             DB::beginTransaction();
 
             // Verifica si la obligación ya existe
-            $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
+            $existeObligacion = SocioObligacion::where('id_socio', $data['id_socio'])
                 ->where('id_establecimiento', $data['id_establecimiento'])
                 ->where('id_entidad', $data['id_entidad'])
                 ->where('id_obligacion', $data['id_obligacion'])
@@ -167,14 +165,14 @@ class EstablecimientoCamaraObligacionController extends Controller
             $data['estado'] = 1;
 
             // Crear la obligación
-            $camaraObligacion = CamaraObligacion::create($data);
+            $socioObligacion = SocioObligacion::create($data);
 
             // Crear el registro de archivo
-            ArchivoObligacionCamara::create([
-                'id_camara' => $camaraObligacion->id_camara,
-                'id_establecimiento' => $camaraObligacion->id_establecimiento,
-                'id_entidad' => $camaraObligacion->id_entidad,
-                'id_obligacion' => $camaraObligacion->id_obligacion,
+            ArchivoObligacionSocio::create([
+                'id_socio' => $socioObligacion->id_socio,
+                'id_establecimiento' => $socioObligacion->id_establecimiento,
+                'id_entidad' => $socioObligacion->id_entidad,
+                'id_obligacion' => $socioObligacion->id_obligacion,
                 'ruta_archivo' => '',
                 'validado' => 0,
                 'estado' => 1,
@@ -194,24 +192,24 @@ class EstablecimientoCamaraObligacionController extends Controller
         }
     }
 
-    public function eliminarObligacionEstablecimiento($id)
+    public function eliminarObligacionEstablecimientoSocio($id)
     {
         try {
             DB::beginTransaction();
-            $camaraObligacion = CamaraObligacion::find($id);
-            if (!$camaraObligacion) {
+            $socioObligacion = SocioObligacion::find($id);
+            if (!$socioObligacion) {
                 return response()->json(['message' => 'La obligación no existe'], 400);
             }
-            $camaraObligacion->estado = 0;
-            $camaraObligacion->save();
+            $socioObligacion->estado = 0;
+            $socioObligacion->save();
 
-            $archivoObligacionCamara = ArchivoObligacionCamara::where('id_camara', $camaraObligacion->id_camara)
-                ->where('id_establecimiento', $camaraObligacion->id_establecimiento)
-                ->where('id_entidad', $camaraObligacion->id_entidad)
-                ->where('id_obligacion', $camaraObligacion->id_obligacion)
+            $archivoObligacionSocio = ArchivoObligacionSocio::where('id_socio', $socioObligacion->id_socio)
+                ->where('id_establecimiento', $socioObligacion->id_establecimiento)
+                ->where('id_entidad', $socioObligacion->id_entidad)
+                ->where('id_obligacion', $socioObligacion->id_obligacion)
                 ->first();
-            $archivoObligacionCamara->estado = 0;
-            $archivoObligacionCamara->save();
+            $archivoObligacionSocio->estado = 0;
+            $archivoObligacionSocio->save();
 
             DB::commit();
             return response()->json(['message' => 'Obligación eliminada correctamente'], 200);
@@ -222,25 +220,25 @@ class EstablecimientoCamaraObligacionController extends Controller
         }
     }
 
-    public function detalle_obligacion_establecimiento($id)
+    public function detalle_obligacion_establecimiento_socio($id)
     {
         // Buscar la cámara por ID
-        $camara = CamaraObligacion::find($id);
-        $camara = CamaraObligacion::with(['camara', 'entidad', 'obligacion', 'establecimientos'])->find($id);
+        $socio = SocioObligacion::find($id);
+        $socio = SocioObligacion::with(['socio', 'entidad', 'obligacion', 'establecimientos'])->find($id);
 
-        if (!$camara) {
+        if (!$socio) {
             return response()->json(['error' => 'Registro no encontrado'], 404);
         }
 
         // Convertir el modelo Camara a un array
-        $camaraArray = $camara->toArray();
+        $socioArray = $socio->toArray();
 
         
 
-        $logCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'insert')->get();
-        $logCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'update')->get();
+        $logSocioObligacionIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'socios_obligaciones')->where('action', 'insert')->get();
+        $logSocioObligacionMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'socios_obligaciones')->where('action', 'update')->get();
 
-        $logCamaraIns = $logCamaraIns->map(function ($log) {
+        $logSocioObligacionIns = $logSocioObligacionIns->map(function ($log) {
             return [
                 'created_at' => $log->created_at,
                 'user_id' => $log->user_id,
@@ -252,7 +250,7 @@ class EstablecimientoCamaraObligacionController extends Controller
             ];
         });
 
-        $logCamaraMod = $logCamaraMod->map(function ($log) {
+        $logSocioObligacionMod = $logSocioObligacionMod->map(function ($log) {
             return [
                 'created_at' => $log->created_at,
                 'user_id' => $log->user_id,
@@ -264,19 +262,19 @@ class EstablecimientoCamaraObligacionController extends Controller
             ];
         });
 
-        $logCamara = [
-            'insert' => $logCamaraIns[0] ?? null,
-            'update' => $logCamaraMod ?? null
+        $logSocioObligacion = [
+            'insert' => $logSocioObligacionIns[0] ?? null,
+            'update' => $logSocioObligacionMod ?? null
         ]; 
 
         // Combinar todo en el array de respuesta
-        $camaraArray = array_merge($camaraArray, $logCamara);
+        $socioArray = array_merge($socioArray, $logSocioObligacion);
    
         // Devolver la respuesta JSON
-        return response()->json($camaraArray);
+        return response()->json($socioArray);
     }
 
-    public function modificar_obligacion_establecimiento(Request $request)
+    public function modificar_obligacion_establecimiento_socio(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -292,8 +290,8 @@ class EstablecimientoCamaraObligacionController extends Controller
             }
             $data = $validator->validated();
             DB::beginTransaction();
-            $camaraObligacion = CamaraObligacion::find($data['id']);
-            if (!$camaraObligacion) {
+            $socioObligacion = SocioObligacion::find($data['id']);
+            if (!$socioObligacion) {
                 return response()->json(['message' => 'La obligación no existe'], 400);
             }
             if (isset($data['fecha_inicio'])) {
@@ -304,7 +302,7 @@ class EstablecimientoCamaraObligacionController extends Controller
                 $data['fecha_presentacion'] =
                     Carbon::createFromFormat('d/m/Y', $data['fecha_presentacion'])->format('Y-m-d');
             }
-            $camaraObligacion->update($data);
+            $socioObligacion->update($data);
             DB::commit();
             return response()->json(['message' => 'Obligación actualizada correctamente'], 200);
         } catch (\Throwable $th) {

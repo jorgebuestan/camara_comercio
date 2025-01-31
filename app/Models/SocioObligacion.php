@@ -12,6 +12,7 @@ class SocioObligacion extends Model
     protected $table = 'socios_obligaciones';
     protected $fillable = [
         'id_socio',
+        'id_establecimiento',
         'id_entidad',
         'id_obligacion',
         'fecha_inicio',
@@ -32,5 +33,10 @@ class SocioObligacion extends Model
     public function obligacion()
     {
         return $this->belongsTo(Obligacion::class, 'id_obligacion', 'id');
+    }
+
+    public function establecimientos()
+    {
+        return $this->belongsTo(EstablecimientoSocio::class, 'id_establecimiento', 'id');
     }
 }

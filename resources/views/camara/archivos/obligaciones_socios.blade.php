@@ -106,6 +106,7 @@
                                                     <table class="table table-bordered table-striped mb-0" id="dataTable">
                                                         <thead>
                                                             <tr>
+                                                                <th>Establecimiento</th>
                                                                 <th>Entidad</th>
                                                                 <th>Obligación</th>
                                                                 <th>Archivo</th>
@@ -165,12 +166,15 @@
                 },
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
+                        data: 'secuencial',
+                        width: '20%'
+                    },{
                         data: 'entidad',
-                        width: '40%'
+                        width: '30%'
                     },
                     {
                         data: 'obligacion',
-                        width: '40%'
+                        width: '30%'
                     },
                     {
                         data: 'archivo',

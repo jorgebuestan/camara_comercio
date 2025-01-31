@@ -52,10 +52,12 @@ class ArchivoObligacionSocioController extends Controller
 
         $query = DB::table('archivos_obligaciones_socios')
             ->join('entidades', 'entidades.id', '=', 'archivos_obligaciones_socios.id_entidad') 
+            ->join('establecimientos_socios', 'establecimientos_socios.id', '=', 'archivos_obligaciones_socios.id_establecimiento') 
             ->join('obligaciones', 'obligaciones.id', '=', 'archivos_obligaciones_socios.id_obligacion') 
             ->select(
                 'archivos_obligaciones_socios.id',
                 'entidades.entidad',
+                'establecimientos_socios.secuencial',
                 'obligaciones.obligacion',
                 'archivos_obligaciones_socios.validado',
                 'archivos_obligaciones_socios.ruta_archivo'
@@ -115,6 +117,7 @@ class ArchivoObligacionSocioController extends Controller
             }
         
             return [
+                'secuencial' => $archivo->secuencial,
                 'entidad' => $archivo->entidad,
                 'obligacion' => $archivo->obligacion,
                 'archivo' => $boton

@@ -408,7 +408,10 @@
                                         <li><a href="{{ route('admin.adherentes_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Adherentes por Socios</a>
                                         </li>
-                                        <li><a href="{{ route('admin.obligaciones_socio') }}"
+                                        <!-- <li><a href="{{ route('admin.obligaciones_socio') }}"
+                                                class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
+                                        </li> -->
+                                        <li><a href="{{ route('admin.obligaciones_establecimientos_socio') }}"
                                                 class="block text-gray-300 hover:text-white">Obligaciones por Socios</a>
                                         </li>
                                         <li><a href="{{ route('camara.archivos_obligaciones_socio') }}"

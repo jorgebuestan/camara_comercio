@@ -20,7 +20,8 @@ use App\Http\Controllers\ArchivoObligacionCamaraController;
 use App\Http\Controllers\ArchivoObligacionSocioController; 
 use App\Http\Controllers\PasswordController; 
 use App\Http\Controllers\SolicitudController;  
-use App\Http\Controllers\EstablecimientoCamaraObligacionController; 
+use App\Http\Controllers\EstablecimientoCamaraObligacionController;   
+use App\Http\Controllers\EstablecimientoSocioObligacionController; 
 
 
 
@@ -82,6 +83,9 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/get-entidades-establecimiento', [FuncionesGeneralesController::class, 'get_entidades_establecimientos'])->middleware('auth')->name('funciones_generales.get_entidades_establecimientos');
 
     Route::get('/get-actividades-economicas-socios', [FuncionesGeneralesController::class, 'get_actividades_economicas_por_socio'])->middleware('auth')->name('funciones_generales.get_actividades_economicas_por_socio');
+
+    Route::get('/get-establecimientos-socio', [FuncionesGeneralesController::class, 'get_establecimientos_socio'])->middleware('auth')->name('funciones_generales.get_establecimientos_socio');
+    Route::get('/get-entidades-establecimiento-socio', [FuncionesGeneralesController::class, 'get_entidades_establecimientos_socio'])->middleware('auth')->name('funciones_generales.get_entidades_establecimientos_socio');
 
     //Funciones Administrador
 
@@ -200,13 +204,21 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/maestro_solicitudes', [SolicitudController::class, 'index'])->middleware('auth')->name('admin.maestro_solicitudes');
     Route::get('/administrador/obtener_listado_solicitudes', [SolicitudController::class, 'obtener_listado_solicitudes'])->middleware('auth')->name('admin.obtener_listado_solicitudes');
     
-    //Obligaciones por Establecimiento
+    //Obligaciones por Establecimientos de Cámara
     Route::get('/administrador/camara/obligaciones_establecimientos_camara', [EstablecimientoCamaraObligacionController::class, 'obligaciones_establecimientos'])->middleware('auth')->name('admin.obligaciones_establecimientos');
     Route::get('/administrador/obtener_listado_obligaciones_establecimientos', [EstablecimientoCamaraObligacionController::class, 'obtener_listado_obligaciones_establecimientos'])->middleware('auth')->name('admin.obtener_listado_obligaciones_establecimientos');
     Route::post('/administrador/obligacion_camara/registrar_obligacion_establecimiento', [EstablecimientoCamaraObligacionController::class, 'registrar_obligacion_establecimiento'])->middleware('auth')->name('admin.registrar_obligacion_establecimiento');
     Route::post('/administrador/obligacion_establecimiento/eliminar/{id}', [EstablecimientoCamaraObligacionController::class, 'eliminarObligacionEstablecimiento'])->middleware('auth')->name('admin.eliminar_obligacion_establecimiento');
     Route::get('/administrador/obligacion_establecimiento/detalle/{id}', [EstablecimientoCamaraObligacionController::class, 'detalle_obligacion_establecimiento'])->middleware('auth')->name('admin.detalle_obligacion_establecimiento');
     Route::post('/administrador/obligacion_camara/modificar_obligacion_establecimiento', [EstablecimientoCamaraObligacionController::class, 'modificar_obligacion_establecimiento'])->middleware('auth')->name('admin.modificar_obligacion_establecimiento');
+    
+    //Obligaciones por Establecimientos de Socios
+    Route::get('/administrador/camara/obligaciones_establecimientos_socio', [EstablecimientoSocioObligacionController::class, 'obligaciones_establecimientos_socio'])->middleware('auth')->name('admin.obligaciones_establecimientos_socio');
+    Route::get('/administrador/obtener_listado_obligaciones_establecimientos_socios', [EstablecimientoSocioObligacionController::class, 'obtener_listado_obligaciones_establecimientos_socios'])->middleware('auth')->name('admin.obtener_listado_obligaciones_establecimientos_socios');
+    Route::post('/administrador/obligacion_socio/registrar_obligacion_establecimiento_socio', [EstablecimientoSocioObligacionController::class, 'registrar_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.registrar_obligacion_establecimiento_socio');
+    Route::post('/administrador/obligacion_establecimiento_socio/eliminar/{id}', [EstablecimientoSocioObligacionController::class, 'eliminarObligacionEstablecimientoSocio'])->middleware('auth')->name('admin.eliminarObligacionEstablecimientoSocio');
+    Route::get('/administrador/obligacion_establecimiento_socio/detalle/{id}', [EstablecimientoSocioObligacionController::class, 'detalle_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.detalle_obligacion_establecimiento_socio');
+    Route::post('/administrador/obligacion_socio/modificar_obligacion_establecimiento', [EstablecimientoSocioObligacionController::class, 'modificar_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.modificar_obligacion_establecimiento_socio');
     
 });
 

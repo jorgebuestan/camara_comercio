@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('pagename')
-    Obligaciones por Cámara
+    Obligaciones por Socio
 @endsection
 
 @section('content')
@@ -114,7 +114,7 @@
             <div class="col-lg-12">
                 <section class="card" id="w3">
                     <header class="card-header">
-                        <h2 class="card-title">Gestión de Obligaciones por Establecimientos de Cámara</h2>
+                        <h2 class="card-title">Gestión de Obligaciones por Establecimientos de Socio</h2>
                     </header>
                     <div class="card-body">
                         <div class="row">
@@ -130,12 +130,9 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <select id="camara" name="camara" data-plugin-selectTwo class="form-control  populate"
-                                            @if (!$isAdmin) disabled @endif>
-                                            @if ($isAdmin)
-                                                <option value=-1>Seleccionar Cámara</option>
-                                            @endif
-                                            @foreach ($camarasSelect as $id => $descripcion)
+                                        <select id="socio" name="socio" data-plugin-selectTwo class="form-control  populate" > 
+                                            <option value=-1>Seleccionar Socio</option> 
+                                            @foreach ($sociosSelect as $id => $descripcion)
                                                 <option value={{ $id }}>{{ $descripcion }}</option>
                                             @endforeach
                                         </select>
@@ -147,7 +144,7 @@
                             <div class="col">
                                 <section class="card">
                                     <header class="card-header">
-                                        <h2 class="card-title">Listado de Obligaciones de Establecimientos registrados por Cámara</h2>
+                                        <h2 class="card-title">Listado de Obligaciones de Establecimientos registrados por Socio</h2>
                                     </header>
                                     <div class="card-body overflow-x-auto max-w-full">
                                         <table class="table table-bordered table-striped mb-0 " id="dataTable">
@@ -183,8 +180,8 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <p><strong>Cámara Seleccionada:</strong>&nbsp;<span id="nombreCamaraSeleccionada"></span></p>
-                                    <input type="hidden" id="id_camara" name="id_camara" value="">
+                                    <p><strong>Socio Seleccionado:</strong>&nbsp;<span id="nombresocioSeleccionada"></span></p>
+                                    <input type="hidden" id="id_socio" name="id_socio" value="">
                                 </div>
                                 <div class="col-lg-2">
                                     <p><strong>Establecimiento:</strong></p>
@@ -286,7 +283,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <p><strong>Cámara:</strong> <span id="camaraModSeleccionada"></span></p>
+                                    <p><strong>Cámara:</strong> <span id="socioModSeleccionada"></span></p>
                                     <input type="hidden" id="id_establecimiento_obligacion" name="id_establecimiento_obligacion" value="">
                                 </div>
                                 <div class="col-lg-2">
@@ -371,14 +368,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $(document).ready(function() {
-            let establecimiento_camara_selected = null; 
-            if (!@json($isAdmin)) {
-                let selectedCamera = $('#camara').val();
-                let filtered = camaras.find(function(camara) {
-                    return camara.id == selectedCamera;
-                }); 
-            }
+        $(document).ready(function() { 
 
             $.datepicker.regional['es'] = {
                 closeText: 'Cerrar',
@@ -443,12 +433,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.obtener_listado_obligaciones_establecimientos') }}",
+                    url: "{{ route('admin.obtener_listado_obligaciones_establecimientos_socios') }}",
                     type: "GET",
                     data: function(d) {
                         d.start = d.start || 0;
                         d.length = d.length || 10;
-                        d.id_camara = $('#camara').val(); // Enviar el valor de localidad seleccionada
+                        d.id_socio = $('#socio').val(); // Enviar el valor de localidad seleccionada
                     },
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
@@ -541,14 +531,14 @@
             
 
             // Escuchar el evento change del select de cámaras
-            $('#camara').change(function() {
+            $('#socio').change(function() {
                 let selectedCamera = $(this).val();
                 if (selectedCamera === '-1') {
                     //alert('Por favor selecciona una cámara válida.');
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Por favor selecciona una cámara válida.',
+                        text: 'Por favor selecciona una socio válido.',
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
@@ -571,40 +561,41 @@
                 e.preventDefault(); // Evita el comportamiento predeterminado del botón
 
                 // Verificar si se seleccionó una opción válida en el select
-                var camaraSeleccionada = $('#camara').val();
-                var nombreCamaraSeleccionada = $('#camara option:selected').text();
+                var socioSeleccionada = $('#socio').val();
+                var nombresocioSeleccionada = $('#socio option:selected').text();
  
+                //alert(socioSeleccionada);
                 let $entidadSelect = $('#entidad');  
                 $entidadSelect.empty();
 
-                if (camaraSeleccionada == -1) {
+                if (socioSeleccionada == -1) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         showConfirmButton: true,
                         allowOutsideClick: false,
                         confirmButtonText: 'Aceptar',
-                        text: 'Por favor selecciona una cámara válida.',
+                        text: 'Por favor selecciona un Socio válido.',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            console.error("Por favor selecciona una cámara válida.");
+                            console.error("Por favor selecciona un Socio válido.");
                         }
                     });
                     return;
                 } else {
 
-                   // alert(camaraSeleccionada);
-                    $('#nombreCamaraSeleccionada').text(nombreCamaraSeleccionada);
-                    $('#id_camara').val(camaraSeleccionada);
+                   // alert(socioSeleccionada);
+                    $('#nombresocioSeleccionada').text(nombresocioSeleccionada);
+                    $('#id_socio').val(socioSeleccionada);
                     //limpiarFormulario();
                    // tableObligaciones.clear().draw();
                     // Abrir el modal
-                    //Carga de Select con los Establecimientos de la Camara
+                    //Carga de Select con los Establecimientos de la socio
                     $.ajax({
-                        url: '/get-establecimientos-camara', // Ruta para obtener las parroquias
+                        url: '/get-establecimientos-socio', // Ruta para obtener las parroquias
                         method: 'GET',
                         data: {
-                            id_camara: camaraSeleccionada, // Enviamos el ID de la cámara
+                            id_socio: socioSeleccionada, // Enviamos el ID de la cámara
                         },
                         success: function(response) {
                             let establecimientos = response.establecimientos;  
@@ -705,7 +696,7 @@
 
                 if (establecimientoId != -1 ) {
                     $.ajax({
-                        url: '/get-entidades-establecimiento', // Ruta para obtener las parroquias
+                        url: '/get-entidades-establecimiento-socio', // Ruta para obtener las parroquias
                         method: 'GET',
                         data: {
                             id_establecimiento: establecimientoId 
@@ -880,11 +871,13 @@
                 if (!validarRegistro()) {
                     return;
                 }
+                //alert($("#id_socio").val());return;
+                //alert($("#id_obligacion").val());return;
 
                 let formData = new FormData();
                 formData.append("id_entidad", $("#entidad").val());
                 formData.append("id_obligacion", $("#id_obligacion").val());
-                formData.append("id_camara", $("#id_camara").val());
+                formData.append("id_socio", $("#id_socio").val());
                 formData.append("id_establecimiento", $("#establecimiento").val());
                 formData.append("fecha_presentacion", $("#fecha_presentacion").val());
                 formData.append("fecha_inicio", $("#fecha_inicio").val());
@@ -902,7 +895,7 @@
 
                 if (registro.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('admin.registrar_obligacion_establecimiento') }}",
+                        url: "{{ route('admin.registrar_obligacion_establecimiento_socio') }}",
                         type: "POST",
                         data: formData,
                         cache: false,
@@ -973,7 +966,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "/administrador/obligacion_establecimiento/eliminar/" + id,
+                            url: "/administrador/obligacion_establecimiento_socio/eliminar/" + id,
                             type: 'POST',
                             data: {
                                 id: id
@@ -1064,15 +1057,15 @@
                 }
 
                 $.ajax({
-                    url: '/administrador/obligacion_establecimiento/detalle/' + Id,
+                    url: '/administrador/obligacion_establecimiento_socio/detalle/' + Id,
                     method: 'GET',
                     success: function(response) {
-                        camara_selected = response;
+                        socio_selected = response;
                         console.log('Datos recibidos:', response);
  
                         var IdEstablecimientoObligacion = $('#id_establecimiento_obligacion'); 
-                        var Camara = $('#camaraModSeleccionada ');
-                        var Establecimeinto = $('#establecimientoMod');
+                        var socio = $('#socioModSeleccionada ');
+                        var Establecimiento = $('#establecimientoMod');
                         var Entidad = $('#entidad_mod');
                         var Obligacion = $('#obligacion_mod');
                         var TiempoPresentacion = $('#tiempo_presentacion_mod');
@@ -1080,8 +1073,8 @@
                         var TipoPresentacion = $('#tipo_presentacion_mod');
                         var FechaInicio = $('#fecha_inicio_mod');  
 
-                        Camara.text(null);  
-                        Establecimeinto.text(null); 
+                        socio.text(null);  
+                        Establecimiento.text(null); 
                         Entidad.val(null); 
                         Obligacion.val(null); 
                         TiempoPresentacion.val(null); 
@@ -1091,8 +1084,8 @@
                         //alert(response.id);
 
                         IdEstablecimientoObligacion.val(response.id);  
-                        Camara.text(response.camara.razon_social);  
-                        Establecimeinto.text(response.establecimientos.secuencial); 
+                        socio.text(response.socio.razon_social);  
+                        Establecimiento.text(response.establecimientos.secuencial); 
                         Entidad.val(response.entidad.entidad); 
                         Obligacion.val(response.obligacion.obligacion); 
 
@@ -1156,14 +1149,15 @@
                                 FechaInicio.val("");
                             }
                         }
-                        //alert(response.camara.razon_social);
+                        //alert(response.socio.razon_social);
 
                         Swal.close();
-                        $('#ModalModificarCamara').modal('show');
+                        $('#ModalModificarsocio').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
                         Swal.fire({
+                            target: document.getElementById("ModalModificarObligacion"),
                             icon: 'error',
                             title: 'Error',
                             text: 'Error al momento de Cargar el Establecimiento',
@@ -1201,7 +1195,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ route('admin.modificar_obligacion_establecimiento') }}",
+                            url: "{{ route('admin.modificar_obligacion_establecimiento_socio') }}",
                             type: 'POST',
                             data: data,
                             headers: {

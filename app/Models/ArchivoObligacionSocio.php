@@ -12,6 +12,7 @@ class ArchivoObligacionSocio extends Model
     protected $table = 'archivos_obligaciones_socios';
     protected $fillable = [
         'id_socio',
+        'id_establecimiento',
         'id_entidad',
         'id_obligacion',
         'ruta_archivo',
