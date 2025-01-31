@@ -144,17 +144,6 @@ class EstablecimientoCamaraObligacionController extends Controller
             // Comienza la transacción
             DB::beginTransaction();
 
-            // Verifica si la obligación ya existe
-            $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
-                ->where('id_establecimiento', $data['id_establecimiento'])
-                ->where('id_entidad', $data['id_entidad'])
-                ->where('id_obligacion', $data['id_obligacion'])
-                ->first();
-
-            if ($existeObligacion) {
-                return response()->json(['message' => 'La obligación ya existe para el Establecimiento'], 409);
-            }
-
             // Formatear fechas
             $data['fecha_inicio'] = isset($data['fecha_inicio'])
                 ? Carbon::createFromFormat('d/m/Y', $data['fecha_inicio'])->format('Y-m-d')
@@ -165,6 +154,42 @@ class EstablecimientoCamaraObligacionController extends Controller
                 : null;
 
             $data['estado'] = 1;
+
+            // Verifica si la obligación ya existe
+            $existeObligacion = CamaraObligacion::where('id_camara', $data['id_camara'])
+                ->where('id_establecimiento', $data['id_establecimiento'])
+                ->where('id_entidad', $data['id_entidad'])
+                ->where('id_obligacion', $data['id_obligacion'])
+                ->first();
+
+            /*if ($existeObligacion) {
+                return response()->json(['message' => 'La obligación ya existe para el Establecimiento'], 409);
+            }*/
+            if ($existeObligacion) {
+                // Si existe una obligación con estado 0, se actualiza a 1
+                $existeObligacion->fecha_inicio = $data['fecha_inicio'];
+                $existeObligacion->fecha_presentacion = $data['fecha_presentacion'];
+                $existeObligacion->estado = 1;
+                $existeObligacion->save();
+        
+                // Ahora se debe actualizar el estado en la tabla ArchivoObligacionCamara
+                $archivoObligacion = ArchivoObligacionCamara::where('id_camara', $data['id_camara'])
+                    ->where('id_establecimiento', $data['id_establecimiento'])
+                    ->where('id_entidad', $data['id_entidad'])
+                    ->where('id_obligacion', $data['id_obligacion'])
+                    ->first();
+        
+                if ($archivoObligacion) {
+                    $archivoObligacion->estado = 1;  // Cambiar estado a 1 
+                    $archivoObligacion->save();
+                }
+        
+                // Devolver respuesta si todo se actualizó correctamente
+                DB::commit();
+                return response()->json(['message' => 'Obligación registrada con éxito'], 200);
+            }
+
+            
 
             // Crear la obligación
             $camaraObligacion = CamaraObligacion::create($data);
