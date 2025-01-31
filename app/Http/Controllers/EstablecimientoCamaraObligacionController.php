@@ -237,8 +237,8 @@ class EstablecimientoCamaraObligacionController extends Controller
 
         
 
-        $logCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'insert')->get();
-        $logCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras')->where('action', 'update')->get();
+        $logCamaraIns = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_obligaciones')->where('action', 'insert')->get();
+        $logCamaraMod = LogActivity::with('user')->where('record_id', $id)->where('table_name', 'camaras_obligaciones')->where('action', 'update')->get();
 
         $logCamaraIns = $logCamaraIns->map(function ($log) {
             return [

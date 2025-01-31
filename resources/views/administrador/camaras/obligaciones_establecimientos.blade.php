@@ -1067,7 +1067,7 @@
                     url: '/administrador/obligacion_establecimiento/detalle/' + Id,
                     method: 'GET',
                     success: function(response) {
-                        camara_selected = response;
+                        establecimiento_camara_selected = response;
                         console.log('Datos recibidos:', response);
  
                         var IdEstablecimientoObligacion = $('#id_establecimiento_obligacion'); 
@@ -1248,6 +1248,72 @@
                             });
                         });
                     }
+                });
+            });
+
+            $('#btn-more-info').on('click', function() {
+                let camaraLogInsert = establecimiento_camara_selected.insert;
+                let camaraLogUpdate = establecimiento_camara_selected.update;
+
+                // Manejo del caso cuando camaraLogUpdate es vacío
+                let lastItem = null;
+                if (Array.isArray(camaraLogUpdate) && camaraLogUpdate.length > 0) {
+                    lastItem = camaraLogUpdate[camaraLogUpdate.length - 1];
+                } else {
+                    lastItem = {
+                        created_at: 'No hay modificaciones',
+                        user: {
+                            name: 'N/A'
+                        }
+                    };
+                }
+
+                // Función para formatear fechas
+                const formatDate = (dateString) => {
+                    if (dateString === 'No hay modificaciones') {
+                        return dateString;
+                    }
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false, // Para formato 24 horas
+                    };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                };
+
+                // Formatear las fechas
+                const formattedCreatedAt = formatDate(camaraLogInsert.created_at);
+                const formattedUpdatedAt = formatDate(lastItem?.created_at);
+
+                // Mostrar el modal con SweetAlert2
+                const swalInfo = Swal.fire({
+                    target: document.getElementById('ModalModificarObligacion'),
+                    title: 'Información adicional',
+                    html: `
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Creación</strong></h5>
+                                <p><strong>Usuario:</strong> ${camaraLogInsert.user.name}</p>
+                                <p><strong>Fecha de creación:</strong> ${formattedCreatedAt}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5><strong>Última modificación</strong></h5>
+                                <p><strong>Usuario:</strong> ${lastItem?.user?.name}</p>
+                                <p><strong>Fecha de modificación:</strong> ${formattedUpdatedAt}</p>
+                            </div>
+                        </div>
+                    </div>
+                    `,
+                    showCloseButton: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
                 });
             });
                         
