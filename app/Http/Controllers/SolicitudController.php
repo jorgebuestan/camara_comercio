@@ -111,6 +111,8 @@ class SolicitudController extends Controller
 
             $boton1 = "";
             $boton2 = "";
+            $boton3 = "";
+            $boton4 = "";
 
             if ($solicitud->ruta_archivo1 ) {
                 // Generar el botón con el enlace al archivo
@@ -136,6 +138,30 @@ class SolicitudController extends Controller
                 $boton2 = "<span class='text-muted'>Sin archivo</span>";
             }
 
+            if ($solicitud->ruta_archivo3 ) {
+                // Generar el botón con el enlace al archivo
+                $boton3 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo3) . "' 
+                            target='_blank' 
+                            class='btn btn-primary btn-sm'>
+                            Ver Archivo
+                          </a>";
+            } else {
+                // Si no está validado, mostrar un texto o mantener vacío
+                $boton3 = "<span class='text-muted'>Sin archivo</span>";
+            }
+
+            if ($solicitud->ruta_archivo4 ) {
+                // Generar el botón con el enlace al archivo
+                $boton4 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo4) . "' 
+                            target='_blank' 
+                            class='btn btn-primary btn-sm'>
+                            Ver Archivo
+                          </a>";
+            } else {
+                // Si no está validado, mostrar un texto o mantener vacío
+                $boton4 = "<span class='text-muted'>Sin archivo</span>";
+            }
+
             return [
                 'fecha_solicitud' => $solicitud->fecha_solicitud,
                 'tipo_personeria' => $solicitud->tipo_personeria,
@@ -147,6 +173,8 @@ class SolicitudController extends Controller
                 'direccion' => $solicitud->direccion,
                 'ruta_archivo1' => $boton1,
                 'ruta_archivo2' => $boton2,
+                'ruta_archivo3' => $boton3,
+                'ruta_archivo4' => $boton4,
                 'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $solicitud->id . '">Modificar</button>'
             ];
         });

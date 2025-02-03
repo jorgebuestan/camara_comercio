@@ -1168,6 +1168,20 @@ class SocioController extends Controller
 
         // Si Tipo Personeria es 3, se procesa el 3er archivo, Persona Juridica
         if ($data['tipo_personeria'] == '3') {
+
+            // Verificamos si el archivo 3 existe
+            if (isset($data['file3']) && isset($data['name3']) && isset($data['type3']) && !empty($data['file3'])) {
+                $fileContent3 = base64_decode($data['file3']);
+                $fileName3 = $data['name3'] . '.' . $data['type3'];
+                $filePath3 = $folderPath . '/' . $fileName3;
+                Storage::disk('public')->put($filePath3, $fileContent3);
+            } else {
+                // Si el archivo no existe, asignamos null
+                $fileContent3 = null;
+                $fileName3 = null;
+                $filePath3 = null;
+            }
+            
             // Verificamos si el archivo 4 existe
             if (isset($data['file4']) && isset($data['name4']) && isset($data['type4']) && !empty($data['file4'])) {
                 $fileContent4 = base64_decode($data['file4']);

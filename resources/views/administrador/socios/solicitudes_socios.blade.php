@@ -118,6 +118,8 @@
                                                     <th>Razón Social</th> 
                                                     <th>Archivo 1</th>
                                                     <th>Archivo 2</th>
+                                                    <th>Archivo 3</th>
+                                                    <th>Archivo 4</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -622,12 +624,22 @@
                     },
                     {
                         data: 'ruta_archivo1',
-                        width: '10%',
+                        width: '5%',
                         sortable: false,
                     },
                     {
                         data: 'ruta_archivo2',
-                        width: '10%',
+                        width: '5%',
+                        sortable: false,
+                    },
+                    {
+                        data: 'ruta_archivo3',
+                        width: '5%',
+                        sortable: false,
+                    },
+                    {
+                        data: 'ruta_archivo4',
+                        width: '5%',
                         sortable: false,
                     }
                 ],
