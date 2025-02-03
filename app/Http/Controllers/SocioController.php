@@ -1057,11 +1057,17 @@ class SocioController extends Controller
         // Validar los campos
         $request->validate([
             'file1' => 'required|string', // Base64 del primer archivo
-            'file2' => 'nullable|string', // Base64 del segundo archivo (opcional)
+            'file2' => 'required|string', // Base64 del segundo archivo (opcional)
+            'file3' => 'nullable|string', // Base64 del segundo archivo (opcional)
+            'file4' => 'nullable|string', // Base64 del segundo archivo (opcional)
             'name1' => 'required|string', // Nombre del primer archivo
-            'name2' => 'nullable|string', // Nombre del segundo archivo (opcional)
+            'name2' => 'required|string', // Nombre del segundo archivo (opcional)
+            'name3' => 'nullable|string', // Nombre del segundo archivo (opcional)
+            'name4' => 'nullable|string', // Nombre del segundo archivo (opcional)
             'type1' => 'required|in:pdf,docx', // Tipo del primer archivo
-            'type2' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
+            'type2' => 'required|in:pdf,docx', // Tipo del segundo archivo (opcional)
+            'type3' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
+            'type4' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
             'tipo_personeria' => 'required|in:1,2,3', // Debe ser 1, 2 o 3
             'tipo_identificacion' => 'required|in:1,2', // Debe ser 1 o 2
             'cedula_ruc' => [
@@ -1074,6 +1080,25 @@ class SocioController extends Controller
             'direccion' => 'nullable|string',
         ]);
 
+        if ($request->input('tipo_personeria') == 2) {
+            $request->validate([
+                'file3' => 'required|string', // Si tipo_personeria es 2, file3 es obligatorio
+                'name3' => 'nullable|string', // Nombre del segundo archivo (opcional)
+                'type3' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
+            ]);
+        }
+
+        if ($request->input('tipo_personeria') == 3) {
+            $request->validate([
+                'file3' => 'required|string', // Si tipo_personeria es 2, file3 es obligatorio
+                'name3' => 'required|string', // Nombre del segundo archivo (opcional)
+                'type3' => 'required|in:pdf,docx', // Tipo del segundo archivo (opcional)
+                'file4' => 'required|string', // Si tipo_personeria es 2, file3 es obligatorio
+                'name4' => 'required|string', // Nombre del segundo archivo (opcional)
+                'type4' => 'required|in:pdf,docx', // Tipo del segundo archivo (opcional)
+            ]);
+        }
+
         $data = $request->all();
 
         // Verificar si ya existe un registro con la misma cédula o RUC
@@ -1084,21 +1109,15 @@ class SocioController extends Controller
                 'codigo' => '400',
                 'message' => 'Ya existe una Solicitud con la misma Cédula o RUC.',
             ], 400);
-        }
+        } 
 
-
-        // Validar longitud de cédula o RUC y tipo de identificación según tipo de personería
-        if (
-            // Validar para tipo_personeria 1
-            ($data['tipo_personeria'] == '1' && 
-                (!in_array($data['tipo_identificacion'], ['2', '3', '4']) || strlen($data['cedula_ruc']) != 10)) ||
-
+        if (  
             // Validar para tipo_personeria 2 o 3
             (in_array($data['tipo_personeria'], ['2', '3']) && 
                 ($data['tipo_identificacion'] != '1' || strlen($data['cedula_ruc']) != 13))
         ) {
             return response()->json([
-                'message' => 'Error: El tipo de identificación o la longitud de la cédula o RUC no corresponde con el tipo de personería.',
+                'message' => 'Error: El tipo de identificación o la longitud del RUC no corresponde con el tipo de personería.',
             ], 400);
         }
 
@@ -1109,13 +1128,7 @@ class SocioController extends Controller
         if (!Storage::disk('public')->exists($folderPath)) {
             Storage::disk('public')->makeDirectory($folderPath);
         }
-
-
-        //$route_file = 'documentos/' . $cedula . '/' . date('Ymdhmi') . '.' . $extension; 
-        // Guardar el archivo en el disco público
-        //Storage::disk('public')->put($route_file, \File::get($file));
-
-
+ 
         // Procesar el primer archivo
         $fileContent1 = base64_decode($data['file1']);
         $fileName1 = $data['name1'] . '.' . $data['type1'];
@@ -1123,13 +1136,53 @@ class SocioController extends Controller
         Storage::disk('public')->put($filePath1, $fileContent1);
 
         // Si el tipo de personería no es 1, procesamos el segundo archivo
-        $filePath2 = null;
-        if ($data['tipo_personeria'] != '1') {
-            $fileContent2 = base64_decode($data['file2']);
-            $fileName2 = $data['name2'] . '.' . $data['type2'];
-            $filePath2 = $folderPath . '/' . $fileName2;
-            Storage::disk('public')->put($filePath2, $fileContent2);
+        $filePath2 = null; 
+        $fileContent2 = base64_decode($data['file2']);
+        $fileName2 = $data['name2'] . '.' . $data['type2'];
+        $filePath2 = $folderPath . '/' . $fileName2;
+        Storage::disk('public')->put($filePath2, $fileContent2); 
+
+        // Inicializamos las variables como null
+        $fileContent3 = null;
+        $fileName3 = null;
+        $filePath3 = null;
+        $fileContent4 = null;
+        $fileName4 = null;
+        $filePath4 = null;
+
+        // Si Tipo Personeria es 2, se procesa el 3er archivo, Natural con Ruc
+        if ($data['tipo_personeria'] == '2') {
+            // Verificamos si el archivo 3 existe
+            if (isset($data['file3']) && isset($data['name3']) && isset($data['type3']) && !empty($data['file3'])) {
+                $fileContent3 = base64_decode($data['file3']);
+                $fileName3 = $data['name3'] . '.' . $data['type3'];
+                $filePath3 = $folderPath . '/' . $fileName3;
+                Storage::disk('public')->put($filePath3, $fileContent3);
+            } else {
+                // Si el archivo no existe, asignamos null
+                $fileContent3 = null;
+                $fileName3 = null;
+                $filePath3 = null;
+            }
         }
+
+        // Si Tipo Personeria es 3, se procesa el 3er archivo, Persona Juridica
+        if ($data['tipo_personeria'] == '3') {
+            // Verificamos si el archivo 4 existe
+            if (isset($data['file4']) && isset($data['name4']) && isset($data['type4']) && !empty($data['file4'])) {
+                $fileContent4 = base64_decode($data['file4']);
+                $fileName4 = $data['name4'] . '.' . $data['type4'];
+                $filePath4 = $folderPath . '/' . $fileName4;
+                Storage::disk('public')->put($filePath4, $fileContent4);
+            } else {
+                // Si el archivo no existe, asignamos null
+                $fileContent4 = null;
+                $fileName4 = null;
+                $filePath4 = null;
+            }
+        } 
+
+
 
         // Guardar en la base de datos la Solicitud para nuevo Socio
         $socio = SolicitudSocio::create([
@@ -1143,6 +1196,8 @@ class SocioController extends Controller
             'id_estado_formulario' => 1, 
             'ruta_archivo1' => $filePath1, // Ruta del primer archivo
             'ruta_archivo2' => $filePath2, // Ruta del segundo archivo (puede ser null si tipo_personeria es 1)
+            'ruta_archivo3' => $filePath3, // Ruta del primer archivo
+            'ruta_archivo4' => $filePath4, // Ruta del segundo archivo (puede ser null si tipo_personeria es 1)
         ]);
 
         /*return response()->json([

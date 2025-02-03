@@ -20,6 +20,8 @@ class SolicitudSocio extends Model
         'direccion',
         'ruta_archivo1',
         'ruta_archivo2',
+        'ruta_archivo3',
+        'ruta_archivo4',
         'id_estado_formulario' 
     ]; 
 }

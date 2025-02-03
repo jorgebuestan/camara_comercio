@@ -68,7 +68,9 @@ class SolicitudController extends Controller
                 'solicitudes_socios.telefono',
                 'solicitudes_socios.direccion',
                 'solicitudes_socios.ruta_archivo1',
-                'solicitudes_socios.ruta_archivo2'
+                'solicitudes_socios.ruta_archivo2',
+                'solicitudes_socios.ruta_archivo3',
+                'solicitudes_socios.ruta_archivo4'
             )
             ->whereIn('solicitudes_socios.id_estado_formulario', [1, 2]);
 
