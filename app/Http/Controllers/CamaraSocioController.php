@@ -22,7 +22,8 @@ class CamaraSocioController extends Controller
         $camaras = [];
         $isAdmin = Auth::user()->hasRole('admin');
         if ($isAdmin) {
-            $camaras = Camara::pluck('razon_social', 'id');
+            //$camaras = Camara::pluck('razon_social', 'id');
+            $camaras = Camara::where('estado', 1)->pluck('razon_social', 'id');
         } else {
             $camaras = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
             if (!$camaras || $camaras->isEmpty()) {
@@ -55,7 +56,7 @@ class CamaraSocioController extends Controller
                 DB::raw("DATE_FORMAT(camaras_socios.fecha_desafiliacion, '%d/%m/%Y') as fecha_desafiliacion"),
                 'camaras_socios.motivo_desafiliacion'
             ) 
-            ->orderBy('socios.razon_social', 'asc');
+            ->orderBy('socios.numero_consecutivo', 'asc');
 
         // Filtro de localidad 
 
