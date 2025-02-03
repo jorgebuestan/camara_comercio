@@ -97,13 +97,33 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <!-- <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstablecimiento">Agregar Nuevo Registro</button> -->
                                         <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Socio</button>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                Estado
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <select id="estado_socios" name="estado_socios" class="form-control populate">  
+                                        <option value=1>Todos</option> 
+                                        <option value=2>Afiliados</option> 
+                                        <option value=3>Desafiliados</option> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                &nbsp;
                             </div>
                         </div>
                         <div class="row">
@@ -323,6 +343,7 @@
                         d.start = d.start || 0;
                         d.length = d.length || 10;
                         d.id_camara = $('#camara').val(); // Enviar el valor de localidad seleccionada
+                        d.estado = $('#estado_socios').val(); // Enviar el valor de localidad seleccionada
                     },
                     error: function(error) {
                         console.error("Error al cargar los datos: ", error);
@@ -403,6 +424,19 @@
                     });
                     table.ajax.reload(); // Recargar la tabla con la cámara seleccionada
                 }
+            });
+
+            $('#estado_socios').change(function() { 
+                Swal.fire({
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                table.ajax.reload(); // Recargar la tabla con la cámara seleccionada 
             });
 
 

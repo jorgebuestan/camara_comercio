@@ -73,6 +73,18 @@ class CamaraSocioController extends Controller
             $query->where('camaras_socios.id_camara', $idEntidad);
         }
 
+        if ($idEstado = $request->input('estado')) {
+            if($idEstado == 1){
+                $query->wherein('camaras_socios.estado', [0,1]);
+            }
+            if($idEstado == 2){
+                $query->where('camaras_socios.estado', 1);
+            }
+            if($idEstado == 3){
+                $query->where('camaras_socios.estado', 0);
+            }
+        }
+
         $totalFiltered = $query->count();
 
         // Orden

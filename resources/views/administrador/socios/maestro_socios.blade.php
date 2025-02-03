@@ -214,17 +214,6 @@
                                                     </div>
                                                     <div id="id_sin_ruc" class="col-md-6 gap-1">
                                                         <label>
-                                                            Identificación
-                                                        </label>
-                                                        <input type="text" class="form-control" name="identificacion_sin_ruc"
-                                                            id="identificacion_sin_ruc" placeholder="Identificación sin Ruc" />
-                                                        <div id="error_identificacion_sin_ruc" style="color: red; display: none;">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2" id="div_tipo_identificacion">
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>
                                                             Tipo de Identificación
                                                         </label>
                                                         <select id="tipo_identificacion" name="tipo_identificacion"
@@ -235,6 +224,20 @@
                                                                 </option>
                                                             @endForEach
                                                         </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2" id="div_tipo_identificacion">
+                                                    <div class="col-md-6 gap-1">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>
+                                                            Identificación
+                                                        </label>
+                                                        <input type="text" class="form-control" name="identificacion_sin_ruc"
+                                                            id="identificacion_sin_ruc" placeholder="Identificación sin Ruc" />
+                                                        <div id="error_identificacion_sin_ruc" style="color: red; display: none;">
+                                                        </div> 
                                                     </div>
                                                 </div> 
                                                 <div class="row mb-2">
