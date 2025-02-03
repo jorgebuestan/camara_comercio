@@ -71,6 +71,8 @@ class SocioController extends Controller
                 1 => 'razon_social',
             ];
 
+            //return($request->input('search'));
+
             // Construcción de la consulta inicial
             $query = Socio::with([
                 'tipo_identificacion',
@@ -80,15 +82,16 @@ class SocioController extends Controller
                 'datos_tributarios.pais',
                 'datos_tributarios.canton',
                 'datos_tributarios.parroquia',
-            ])->whereIn('estado', [1, 2]);
-            // Búsqueda
+            ])->whereIn('estado', [1, 2]); 
+
             if ($search = $request->input('search.value')) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('razon_social', 'LIKE', "%{$search}%")
-                        ->orWhere('tipo_persona.descripcion', 'LIKE', "%{$search}%")
-                        ->orWhere('tipo_identificacion.descripcion', 'LIKE', "%{$search}%");
+                $query->where(function ($query) use ($search) {
+                    $query->where('socios.identificacion', 'LIKE', "%{$search}%") 
+                          ->orWhere('socios.razon_social', 'LIKE', "%{$search}%"); // Cambia "nombre" por el campo adecuado en la tabla de tipo_personeria
                 });
             }
+
+            //return $query;
 
             // Conteo para recordsFiltered
             $totalFiltered = $query->count();
