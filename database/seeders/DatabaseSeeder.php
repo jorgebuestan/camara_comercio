@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoEntidadSeeder::class);  
         $this->call(TiempoPresentacionSeeder::class); 
         $this->call(TipoPresentacionSeeder::class);
+        $this->call(EstadoFormularioSeeder::class);
     }
 }
