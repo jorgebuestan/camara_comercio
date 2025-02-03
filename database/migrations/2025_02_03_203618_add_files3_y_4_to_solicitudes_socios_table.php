@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('solicitudes_socios', function (Blueprint $table) {
             //
-            $table->json('ruta_archivo3')->nullable()->after('ruta_archivo2'); 
-            $table->json('ruta_archivo4')->nullable()->after('ruta_archivo3');
+            $table->text('ruta_archivo3')->nullable()->after('ruta_archivo2'); 
+            $table->text('ruta_archivo4')->nullable()->after('ruta_archivo3');
         });
     }
 
