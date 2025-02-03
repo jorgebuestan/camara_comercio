@@ -85,12 +85,37 @@ class SocioController extends Controller
             ])->whereIn('estado', [1, 2]); 
 
             if ($search = $request->input('search.value')) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('socios.identificacion', 'LIKE', "%{$search}%") 
-                          ->orWhere('socios.razon_social', 'LIKE', "%{$search}%"); // Cambia "nombre" por el campo adecuado en la tabla de tipo_personeria
+                $search = trim($search);  // Eliminar espacios al principio o al final
+
+                // Verificar si el search es una fecha en formato d/m/Y
+                $searchDate = null;
+                $formattedSearch = null;
+            
+                // Intentar convertir la fecha a un formato válido
+                try {
+                    $searchDate = Carbon::createFromFormat('d/m/Y', $search);
+                    $formattedSearch = $searchDate->format('Y-m-d'); // Convertir a formato Y-m-d
+                } catch (\Exception $e) {
+                    // Si la conversión falla, significa que no es una fecha válida
+                    $formattedSearch = $search;  // Mantener la búsqueda como está si no es una fecha
+                }
+            
+                // Realizar la consulta
+                $query->where(function ($query) use ($formattedSearch) {
+                    $query->where('socios.identificacion', 'LIKE', "%{$formattedSearch}%")
+                          ->orWhere('socios.razon_social', 'LIKE', "%{$formattedSearch}%");
+            
+                    // Si la búsqueda es una fecha, buscar también en la fecha de ingreso
+                    if (Carbon::hasFormat($formattedSearch, 'Y-m-d')) {
+                        $query->orWhereDate('socios.fecha_ingreso', '=', $formattedSearch);  // Compara solo la fecha, no la hora
+                    }
+                });
+            
+                // Agregar condición para la relación tipo_personeria
+                $query->orWhereHas('tipo_personeria', function ($query) use ($search) {
+                    $query->where('descripcion', 'LIKE', "%{$search}%");
                 });
             }
-
             //return $query;
 
             // Conteo para recordsFiltered
