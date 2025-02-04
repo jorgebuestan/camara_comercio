@@ -317,6 +317,7 @@ class CamaraSocioController extends Controller
             $validator = Validator::make($request->all(), [
                 'socio_id' => 'required|integer',
                 'motivo' => 'required|string|max:255',
+                'fecha_desafiliacion' => 'required|string',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first()], 422);
@@ -327,15 +328,19 @@ class CamaraSocioController extends Controller
             //$colaborador = Colaborador::find($id);
             $socioId = $data['socio_id'];
             $motivo = $data['motivo'];
+            $fecha_desafiliacion = $data['fecha_desafiliacion'];
             $camara_socio = CamaraSocio::where('id', $socioId)->first();
 
             if (!$camara_socio) {
                 return response()->json(['error' => 'Socio no encontrado'], 404);
             }
+ 
+            $fecha_desafiliacion = \Carbon\Carbon::createFromFormat('d/m/Y', $data['fecha_desafiliacion'])->format('Y-m-d');
+
 
             // Cambiar el valor del campo 'activo' a 0
             $camara_socio->estado = 0;
-            $camara_socio->fecha_desafiliacion = Carbon::now();
+            $camara_socio->fecha_desafiliacion = $fecha_desafiliacion;
             $camara_socio->motivo_desafiliacion = $motivo;
             $camara_socio->save();
 

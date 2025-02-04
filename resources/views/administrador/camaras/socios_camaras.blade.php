@@ -613,6 +613,13 @@
                 language: 'es' // Asegúrate de establecer el idioma correcto
             });
 
+            $('#swal-fecha').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+                todayHighlight: true, // Resalta la fecha actual
+                language: 'es' // Asegúrate de establecer el idioma correcto
+            });
+
             $(document).on('click', '.seleccionar-socio', function() {
                 var button = $(this);
                 var socioId = button.data('id');
@@ -817,7 +824,7 @@
                 var button = $(this);
                 var socioId = button.data('id');
 
-                const {
+                /*const {
                     value: motivo
                 } = await Swal.fire({
                     title: '¿Está seguro de desafiliar al Socio?',
@@ -836,9 +843,55 @@
                     confirmButtonText: 'Aceptar',
                     cancelButtonText: 'Cancelar',
                     allowOutsideClick: false,
+                });*/
+                const {
+                    value: { motivo, fechaDesafiliacion }
+                } = await Swal.fire({
+                    title: '¿Está seguro de desafiliar al Socio?',
+                    text: "Indíquenos el motivo de la desafiliación y la fecha",
+                    html: ` 
+                        <div class="row">
+                            <div class="col-6"> 
+                                <b>Fecha Desafiliación: </b>
+                            </div>
+                            <div class="col-6"> 
+                                <input type="text" class="form-control" name="swal-fecha" id="swal-fecha" placeholder="Fecha de Desafiliación">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12"> 
+                                <textarea id="swal-motivo" class="form-control" rows="3" data-plugin-maxlength maxlength="140" placeholder="Motivo de la desafiliación" style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        // Inicializar el datepicker después de que se ha abierto el modal de SweetAlert
+                        $('#swal-fecha').datepicker({
+                            format: 'yyyy-mm-dd',  // Formato de fecha
+                            autoclose: true,        // Cerrar el picker después de seleccionar una fecha
+                            todayHighlight: true    // Resaltar el día de hoy
+                        });
+                    },
+                    preConfirm: () => {
+                        const motivo = document.getElementById('swal-motivo').value;
+                        const fechaDesafiliacion = document.getElementById('swal-fecha').value;
+                        return { motivo, fechaDesafiliacion };
+                    }
                 });
-
-                if (motivo) {
+                
+                if (motivo && fechaDesafiliacion) {
                     Swal.fire({
                         title: 'Cargando',
                         text: 'Por favor espere',
@@ -854,6 +907,7 @@
                         data: {
                             socio_id: socioId,
                             motivo: motivo.toUpperCase(),
+                            fecha_desafiliacion: fechaDesafiliacion.toUpperCase(),
                             _token: '{{ csrf_token() }}'
                         },
                     }).done(async function(response) {
@@ -887,6 +941,22 @@
                 } else {
                     // El usuario canceló la eliminación
                     console.log('Eliminación cancelada por el usuario.');
+                    if (!motivo) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Motivo requerido',
+                            text: 'Por favor, ingrese un motivo para la desafiliación.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                    if (!fechaDesafiliacion) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Fecha requerida',
+                            text: 'Por favor, ingrese una fecha de desafiliación.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
                 }
             });
 

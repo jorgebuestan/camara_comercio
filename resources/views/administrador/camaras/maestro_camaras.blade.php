@@ -127,8 +127,33 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstablecimiento">Agregar Nuevo Registro</button> -->
+                                        <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Socio</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                Estado
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <select id="estado_camara" name="estado_camara" class="form-control populate">  
+                                        <option value=1>Todos</option> 
+                                        <option value=2>Afiliados</option> 
+                                        <option value=3>Desafiliados</option> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                &nbsp;
                             </div>
                         </div>
                         <div class="row">
@@ -141,13 +166,15 @@
                                         <table class="table table-bordered table-striped mb-0" id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Fecha de Ingreso</th>
-                                                    <th>Ruc</th>
-                                                    <th>Razón Social</th>
-                                                    <th>Representante Legal</th>
-                                                    <th>Cédula Rep. Legal</th>
-                                                    <th>Estado</th>
-                                                    <th>Acciones</th>
+                                                    <th>FECHA DE INGRESO</th>
+                                                    <th>RUC</th>
+                                                    <th>RAZÓN SOCIAL</th>
+                                                    <th>REPRESENTANTE LEGAL</th>
+                                                    <th>CÉDULA REP. LEGAL</th>
+                                                    <!-- <th>Estado</th> --> 
+                                                    <th>FECHA DESAFILIACIÓN</th>
+                                                    <th>MOTIVO DESAFILIACIÓN</th>
+                                                    <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -925,6 +952,7 @@
       data: function(d) {
         d.start = d.start || 0;
         d.length = d.length || 10;
+        d.estado = $('#estado_camara').val(); // Enviar el valor de localidad seleccionada
       },
       error: function(error) {
         Swal.fire({
@@ -944,12 +972,19 @@
     },
     pageLength: 10,
     columns: [
-      { data: 'fecha_ingreso', width: '15%' },
+      { data: 'fecha_ingreso', width: '5%' },
       { data: 'ruc', width: '10%' },
       { data: 'razon_social', width: '20%' },
-      { data: 'representante_legal', width: '20%' },
+      { data: 'representante_legal', width: '15%' },
       { data: 'cedula_representante_legal', width: '15%' },
-      { data: 'estado', width: '5%' },
+      {
+        data: 'fecha_desafiliacion',
+        width: '5%'
+      },
+      {
+        data: 'motivo_desafiliacion',
+        width: '10%'
+      }, 
       { data: 'btn', width: '15%' }
     ],
     order: [[0, "asc"]],
@@ -961,6 +996,19 @@
       td2.attr("title", td2.text());
     }
   });
+
+            $('#estado_camara').change(function() { 
+                Swal.fire({
+                    title: 'Cargando',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                table.ajax.reload(); // Recargar la tabla con la cámara seleccionada 
+            });
             // Inicializar Select2 con búsqueda habilitada
             // Inicializar Select2
             // Inicializar Select2
@@ -2133,6 +2181,13 @@
             $('#fecha_constitucion_mod').datepicker('destroy').datepicker({
                 format: 'mm/dd/yyyy', // Define el formato de fecha
                 autoclose: true, // Cierra automáticamente al seleccionar
+            });
+
+            $('#swal-fecha').datepicker('destroy').datepicker({
+                format: 'dd/mm/yyyy', // Define el formato de fecha
+                autoclose: true, // Cierra automáticamente al seleccionar
+                todayHighlight: true, // Resalta la fecha actual
+                language: 'es' // Asegúrate de establecer el idioma correcto
             });
 
             // Delegar el evento de clic al documento para asegurar que funcione con elementos dinámicos
@@ -3402,6 +3457,193 @@
                 });
             });
 
-        });
-    </script>
+
+            $(document).on('click', '.desafiliar-camara', async function() {
+                var button = $(this);
+                var camaraId = button.data('id'); 
+
+                const {
+                    value: { motivo, fechaDesafiliacion }
+                } = await Swal.fire({
+                    title: '¿Está seguro de desafiliar la Cámara?',
+                    text: "Indíquenos el motivo de la desafiliación y la fecha",
+                    html: ` 
+                        <div class="row">
+                            <div class="col-6"> 
+                                <b>Fecha Desafiliación: </b>
+                            </div>
+                            <div class="col-6"> 
+                                <input type="text" class="form-control" name="swal-fecha" id="swal-fecha" placeholder="Fecha de Desafiliación">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12"> 
+                                <textarea id="swal-motivo" class="form-control" rows="3" data-plugin-maxlength maxlength="140" placeholder="Motivo de la desafiliación" style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        // Inicializar el datepicker después de que se ha abierto el modal de SweetAlert
+                        $('#swal-fecha').datepicker({
+                            format: 'yyyy-mm-dd',  // Formato de fecha
+                            autoclose: true,        // Cerrar el picker después de seleccionar una fecha
+                            todayHighlight: true    // Resaltar el día de hoy
+                        });
+                    },
+                    preConfirm: () => {
+                        const motivo = document.getElementById('swal-motivo').value;
+                        const fechaDesafiliacion = document.getElementById('swal-fecha').value;
+                        return { motivo, fechaDesafiliacion };
+                    }
+                });
+                
+                if (motivo && fechaDesafiliacion) {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('admin.desafiliar_camara') }}",
+                        type: "POST",
+                        data: {
+                            camara_id: camaraId,
+                            motivo: motivo.toUpperCase(),
+                            fecha_desafiliacion: fechaDesafiliacion.toUpperCase(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                    }).done(async function(response) {
+                        Swal.close();
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: response.message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                        });
+                        table.ajax.reload(null, false);
+                    }).fail(function(error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.message ||
+                                "Error al eliminar el socio.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
+                        });
+                        return;
+                    });
+                } else {
+                    // El usuario canceló la eliminación
+                    console.log('Eliminación cancelada por el usuario.');
+                    if (!motivo) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Motivo requerido',
+                            text: 'Por favor, ingrese un motivo para la desafiliación.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                    if (!fechaDesafiliacion) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Fecha requerida',
+                            text: 'Por favor, ingrese una fecha de desafiliación.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                }
+            });
+
+            $(document).on('click', '.reafiliar-camara', async function() {
+                var button = $(this);
+                var camaraId = button.data('id');
+
+                var result = await Swal.fire({
+                    title: '¿Está seguro de reafiliar al Socio?', 
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
+
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor espere',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('admin.reafiliar_camara') }}",
+                        type: "POST",
+                        data: {
+                            camara_id: camaraId, 
+                            _token: '{{ csrf_token() }}'
+                        },
+                    }).done(async function(response) {
+                        Swal.close();
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: response.message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                        });
+                        table.ajax.reload(null, false);
+                    }).fail(function(error) {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: error.responseJSON?.message ||
+                                "Error al reafiliar la cámara.",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.error("Error al cargar los datos: ", error);
+                            }
+                        });
+                        return;
+                    });
+                } else {
+                    // El usuario canceló la eliminación
+                    console.log('Eliminación cancelada por el usuario.');
+                }
+            });
+
+    });
+</script>
 @endsection

@@ -96,7 +96,9 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::post('/administrador/camara/eliminar/{id}', [CamaraController::class, 'eliminar_camara'])->middleware('auth')->name('admin.eliminar_camara');;
     Route::get('/administrador/camara/detalle/{id}', [CamaraController::class, 'detalle_camara'])->middleware('auth')->name('admin.detalle_camara');
     Route::post('/administrador/camara/modificar_camara', [CamaraController::class, 'modificar_camara'])->middleware('auth')->name('admin.modificar_camara');
-
+    Route::post('/administrador/camara/desafiliar_camara', [CamaraController::class, 'desafiliar_camara'])->middleware('auth')->name('admin.desafiliar_camara');;
+    Route::post('/administrador/camara/reafiliar_camara', [CamaraController::class, 'reafiliar_camara'])->middleware('auth')->name('admin.reafiliar_camara');
+    
     //Maestro de Establecimientos de Camara
     Route::get('/administrador/establecimientos_camara', [EstablecimientoController::class, 'establecimientos_camara'])->middleware('auth')->name('admin.establecimientos_camara');
     Route::get('/administrador/obtener_listado_establecimientos_camara', [EstablecimientoController::class, 'obtener_listado_establecimientos_camara'])->middleware('auth')->name('admin.obtener_listado_establecimientos_camara');

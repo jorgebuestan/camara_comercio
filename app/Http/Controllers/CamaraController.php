@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\LogActivity;
+use Illuminate\Support\Facades\Validator; 
 
 class CamaraController extends Controller
 {
@@ -68,9 +69,10 @@ class CamaraController extends Controller
                 'camaras.cedula_representante_legal',
                 'camaras.nombres_representante_legal',
                 'camaras.apellidos_representante_legal',
-                'camaras.estado'
-            ) 
-            ->whereIn('camaras.estado', [1, 2])
+                'camaras.estado_confecam',
+                'camaras.fecha_desafiliacion',
+                'camaras.motivo_desafiliacion'
+            )  
             ->orderBy('camaras.razon_social', 'asc');
 
         // Filtro de localidad 
@@ -85,6 +87,19 @@ class CamaraController extends Controller
                     ->orWhere('camaras.apellidos_representante_legal', 'LIKE', "%{$search}%");
             });
         }
+
+        if ($idEstado = $request->input('estado')) {
+            if($idEstado == 1){
+                $query->wherein('camaras.estado_confecam', [0,1]);
+            }
+            if($idEstado == 2){
+                $query->where('camaras.estado_confecam', 1);
+            }
+            if($idEstado == 3){
+                $query->where('camaras.estado_confecam', 0);
+            }
+        }
+
 
         $totalFiltered = $query->count();
 
@@ -110,12 +125,25 @@ class CamaraController extends Controller
             $representante_legal = $camara->nombres_representante_legal . " " . $camara->apellidos_representante_legal;
    
             $estado = "";
-            if($camara->estado ==1){
+            if($camara->estado_confecam ==1){
                 $estado = '<span class="badge bg-success text-light">ACTIVO</span>';
             }
-            if($camara->estado ==2){
+            if($camara->estado_confecam ==0){
                 $estado = '<span class="badge bg-danger text-light">INACTIVO</span>';
             }
+
+            $boton = "";
+            $fecha_desafiliacion = "";
+            $motivo_desafiliacion = "";
+
+            if($camara->estado_confecam == 1){
+                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 desafiliar-camara" data-id="' . $camara->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
+            }else{
+                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-camara" data-id="' . $camara->id . '">&nbsp;&nbsp;&nbsp;Afiliar&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-plus"></i></button>';
+                $fecha_desafiliacion = $camara->fecha_desafiliacion;
+                $motivo_desafiliacion = $camara->motivo_desafiliacion;
+            } 
+
 
             return [
                 'fecha_ingreso' => $camara->fecha_ingreso,
@@ -123,11 +151,17 @@ class CamaraController extends Controller
                 'razon_social' => $camara->razon_social,
                 'cedula_representante_legal' => $camara->cedula_representante_legal,
                 'representante_legal' => $representante_legal,
+                'fecha_desafiliacion' => $fecha_desafiliacion, 
+                'motivo_desafiliacion' => $motivo_desafiliacion, 
                 'estado' => $estado,
-                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                /*'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
                             '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                             '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
-                         '</div>'
+                         '</div>'*/
+                'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            $boton .
+                         '</div>'         
             ];
         });
 
@@ -541,6 +575,101 @@ class CamaraController extends Controller
                 'error' => 'Error al modificar la Cámara: ' . $e->getMessage(),
                 'debug' => app()->isLocal() ? $errorMessage : null // Incluir detalles solo en entornos locales
             ], 500);
+        }
+    }
+
+    public function desafiliar_camara(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'camara_id' => 'required|integer',
+                'motivo' => 'required|string|max:255',
+                'fecha_desafiliacion' => 'required|string',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
+            DB::beginTransaction();
+
+            //$colaborador = Colaborador::find($id);
+            $camaraId = $data['camara_id'];
+            $motivo = $data['motivo'];
+            $fecha_desafiliacion = $data['fecha_desafiliacion'];
+            $camara = Camara::where('id', $camaraId)->first();
+
+            if (!$camara) {
+                return response()->json(['error' => 'Cámara no encontrada'], 404);
+            }
+ 
+            $fecha_desafiliacion = \Carbon\Carbon::createFromFormat('d/m/Y', $data['fecha_desafiliacion'])->format('Y-m-d');
+
+
+            // Cambiar el valor del campo 'activo' a 0
+            $camara->estado_confecam = 0;
+            $camara->fecha_desafiliacion = $fecha_desafiliacion;
+            $camara->motivo_desafiliacion = $motivo;
+            $camara->save();
+
+            DB::commit();
+
+            //return response()->json(['success' => 'Socio por Cámara desafiliado correctamente']);
+            return response()->json(['message' => 'Cámara desafiliada correctamente'], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            //return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+            return response()->json(
+                [
+                    'error' => $e->getMessage(),
+                    'message' => 'Error al desafiliar la Cámara',
+                ],
+                500
+            );
+        }
+    }
+
+    public function reafiliar_camara(Request $request)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'camara_id' => 'required|integer', 
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 422);
+            }
+            $data = $validator->validated();
+            DB::beginTransaction();
+
+            //$colaborador = Colaborador::find($id);
+            $camaraId = $data['camara_id']; 
+            $camara = Camara::where('id', $camaraId)->first();
+
+            if (!$camara) {
+                return response()->json(['error' => 'Cámara no encontrado'], 404);
+            }
+
+            // Cambiar el valor del campo 'activo' a 0
+            $camara->estado_confecam = 1; 
+            $camara->save();
+
+            DB::commit();
+
+            //return response()->json(['success' => 'Socio por Cámara desafiliado correctamente']);
+            return response()->json(['message' => 'Cámara reafiliada correctamente a ConfeCam'], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            //return response()->json(['error' => 'Error al eliminar el Socio por Cámara: ' . $e->getMessage()], 500);
+            return response()->json(
+                [
+                    'error' => $e->getMessage(),
+                    'message' => 'Error al reafiliar al Socio',
+                ],
+                500
+            );
         }
     }
 }
