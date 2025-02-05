@@ -599,7 +599,7 @@ class SocioController extends Controller
                         : null,
                     'fecha_desafiliacion' => null,
                     'motivo_desafiliacion' => null,
-                    'estado' => 2,
+                    'estado' => 1,
                 ]);
 
                 if (!$socio) {
