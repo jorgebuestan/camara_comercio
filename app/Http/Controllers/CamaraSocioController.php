@@ -157,8 +157,8 @@ class CamaraSocioController extends Controller
                 'socios.identificacion',
                 'socios.razon_social',
                 'tipo_personeria.descripcion as tipo_personeria'
-            )
-            ->where('socios.estado', 1)
+            ) 
+            ->wherein('socios.estado', [1,2])
             ->orderBy('socios.razon_social', 'asc');
 
         // Filtro de localidad 
