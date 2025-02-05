@@ -722,7 +722,8 @@
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
-                    //location.reload(); // Recargar la página
+                    //location.reload(); // Recargar la página 
+                    $('#ModalSocio').modal('hide');
                     table.ajax.reload();
                 }).fail(function(res) {
                     //$('#carga').hide(); 
@@ -1076,6 +1077,7 @@
                     });
                     //alert(msg);
                     //location.reload();
+                    $('#ModalModificarSocio').modal('hide');
                     table.ajax.reload();
                 }).fail(function(res) {
                     let errorMessage = 'Ocurrió un error inesperado.';
