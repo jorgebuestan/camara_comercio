@@ -722,7 +722,8 @@
                         confirmButtonText: 'Aceptar',
                         allowOutsideClick: false
                     });
-                    location.reload(); // Recargar la página
+                    //location.reload(); // Recargar la página
+                    table.ajax.reload();
                 }).fail(function(res) {
                     //$('#carga').hide(); 
 
@@ -1074,7 +1075,8 @@
                         allowOutsideClick: false
                     });
                     //alert(msg);
-                    location.reload();
+                    //location.reload();
+                    table.ajax.reload();
                 }).fail(function(res) {
                     let errorMessage = 'Ocurrió un error inesperado.';
                     // Si la respuesta contiene datos JSON
