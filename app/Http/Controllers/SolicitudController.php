@@ -15,6 +15,7 @@ use App\Models\TipoPersoneria;
 use App\Models\SolicitudSocio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class SolicitudController extends Controller
 {
@@ -161,9 +162,9 @@ class SolicitudController extends Controller
                 // Si no está validado, mostrar un texto o mantener vacío
                 $boton4 = "<span class='text-muted'>Sin archivo</span>";
             }
-
+            
             return [
-                'fecha_solicitud' => $solicitud->fecha_solicitud,
+                'fecha_solicitud' => Carbon::parse($solicitud->fecha_solicitud)->format('d/m/Y'),
                 'tipo_personeria' => $solicitud->tipo_personeria,
                 'tipo_identificacion' => $solicitud->tipo_identificacion,
                 'cedula_ruc' => $solicitud->cedula_ruc,

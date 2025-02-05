@@ -131,7 +131,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <!-- <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstablecimiento">Agregar Nuevo Registro</button> -->
-                                        <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Socio</button>
+                                        <!-- <button id="abrirModal" class="btn btn-primary mb-3">Agregar Nuevo Socio</button>-->
                                     </div>
                                 </div>
                             </div>
