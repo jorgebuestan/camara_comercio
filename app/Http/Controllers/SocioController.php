@@ -1069,7 +1069,7 @@ class SocioController extends Controller
             'type3' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
             'type4' => 'nullable|in:pdf,docx', // Tipo del segundo archivo (opcional)
             'tipo_personeria' => 'required|in:1,2,3', // Debe ser 1, 2 o 3
-            'tipo_identificacion' => 'required|in:1,2', // Debe ser 1 o 2
+            'tipo_identificacion' => 'required|in:1,2,3,4', // Debe ser 1 o 2 o 3 o 4
             'cedula_ruc' => [
                 'required',
                 'regex:/^\d{10}|\d{13}$/', // Solo acepta 10 o 13 dígitos

@@ -254,7 +254,7 @@
                                                             </label>
                                                             <input type="text" class="form-control"
                                                                 name="razon_social_nombre" id="razon_social_nombre"
-                                                                placeholder="Razón Social" />
+                                                                placeholder="Nombres y Apellidos" />
                                                         </div>
                                                     </div>
                                                     <div id="con_razon_social" class="row mb-2">
@@ -264,7 +264,7 @@
                                                             </label>
                                                             <input type="text" class="form-control"
                                                                 name="razon_social" id="razon_social"
-                                                                placeholder="Razón Social" />
+                                                                placeholder="Razón Social (Nombres y Apellidos)" />
                                                         </div>
                                                     </div>
                                                     <div id="natural" class="row mb-2" style="display:none">

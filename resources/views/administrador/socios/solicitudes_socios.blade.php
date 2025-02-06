@@ -120,6 +120,7 @@
                                                     <th>Archivo 2</th>
                                                     <th>Archivo 3</th>
                                                     <th>Archivo 4</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -133,7 +134,7 @@
         </div>
     </div>
     <div class="container">
-        <form enctype="multipart/form-data" class="modal fade" id="ModalSocio" tabindex="-1"
+    <form enctype="multipart/form-data" class="modal fade" id="ModalSocio" tabindex="-1"
             aria-labelledby="ModalSocioLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog modal-xl">
@@ -161,6 +162,18 @@
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6">  
+                                                        <div id="image-container">
+                                                            <a id="image-link" href="#" data-lightbox="example" target="_blank" style="display: none;">
+                                                                <img id="image-preview" src="#" alt="Imagen reducida" style="max-width: 200px; height: auto; display: none;">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                         &nbsp;
+                                                    </div>
+                                                </div>
                                                 <div class="row mb-2">
                                                     <div class="col-md-6 gap-1 flex flex-col">
                                                         <label>
@@ -204,14 +217,32 @@
                                                     </div>
                                                     <div id="id_sin_ruc" class="col-md-6 gap-1">
                                                         <label>
+                                                            Tipo de Identificación
+                                                        </label>
+                                                        <select id="tipo_identificacion" name="tipo_identificacion"
+                                                            class="form-control populate">
+                                                            <option value=-1 selected>Seleccionar</option>
+                                                            @foreach ($tipo_identificacion as $id => $descripcion)
+                                                                <option value={{ $id }}>{{ $descripcion }}
+                                                                </option>
+                                                            @endForEach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2" id="div_tipo_identificacion">
+                                                    <div class="col-md-6 gap-1">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="col-md-6 gap-1">
+                                                        <label>
                                                             Identificación
                                                         </label>
                                                         <input type="text" class="form-control" name="identificacion_sin_ruc"
                                                             id="identificacion_sin_ruc" placeholder="Identificación sin Ruc" />
                                                         <div id="error_identificacion_sin_ruc" style="color: red; display: none;">
-                                                        </div>
+                                                        </div> 
                                                     </div>
-                                                </div>
+                                                </div> 
                                                 <div class="row mb-2">
                                                     <div class="col-md-12">
                                                         <h4>Datos Personales</h4>
@@ -226,7 +257,7 @@
                                                             </label>
                                                             <input type="text" class="form-control"
                                                                 name="razon_social_nombre" id="razon_social_nombre"
-                                                                placeholder="Razón Social" />
+                                                                placeholder="Nombres y Apellidos" />
                                                         </div>
                                                     </div>
                                                     <div id="con_razon_social" class="row mb-2">
@@ -236,7 +267,7 @@
                                                             </label>
                                                             <input type="text" class="form-control"
                                                                 name="razon_social" id="razon_social"
-                                                                placeholder="Razón Social" />
+                                                                placeholder="Razón Social (Nombres y Apellidos)" />
                                                         </div>
                                                     </div>
                                                     <div id="natural" class="row mb-2" style="display:none">
@@ -373,18 +404,20 @@
                                                             placeholder="Fecha Actualización RUC">
                                                     </div>
                                                 </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>Fecha de Constitución</label>
-                                                        <input type="text" data-plugin-datepicker class="form-control"
-                                                            name="fecha_constitucion" id="fecha_constitucion"
-                                                            placeholder="Fecha de Constitución">
-                                                    </div>
-                                                    <div class="col-md-6 gap-1">
-                                                        <label>Años de Creación</label>
-                                                        <input type="text" class="form-control" name="anios_creacion"
-                                                            id="anios_creacion" readonly />
-                                                    </div>
+                                                <div id="fechaconstitucion" style="display: none">
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Fecha de Constitución</label>
+                                                            <input type="text" data-plugin-datepicker class="form-control"
+                                                                name="fecha_constitucion" id="fecha_constitucion"
+                                                                placeholder="Fecha de Constitución">
+                                                        </div>
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Años de Creación</label>
+                                                            <input type="text" class="form-control" name="anios_creacion"
+                                                                id="anios_creacion" readonly />
+                                                        </div>
+                                                    </div> 
                                                 </div>
                                                 <div id="tributario_natural" style="display:none">
                                                     <div class="row mb-2">
@@ -393,6 +426,11 @@
                                                             <input type="text" data-plugin-datepicker
                                                                 class="form-control" name="fecha_nacimiento"
                                                                 id="fecha_nacimiento" placeholder="Fecha de Nacimiento">
+                                                        </div>
+                                                        <div class="col-md-6 gap-1">
+                                                            <label>Años de Edad</label>
+                                                            <input type="text" class="form-control" name="anios_edad"
+                                                                id="anios_edad" placeholder="Años de Edad" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -502,6 +540,48 @@
                                                             id="referencia" placeholder="Referencia" />
                                                     </div>
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-12">
+                                                        <h2
+                                                            class="card-title
+                                                            ">
+                                                            Actividades Económicas</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <select name="actividad_economica[]" id="actividad_economica"
+                                                            multiple data-plugin-selectTwo>
+                                                            @foreach ($actividadesEconomicas as $id => $descripcion)
+                                                                <option value={{ $id }}>
+                                                                    {{ $descripcion }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <input type="hidden" id="hiddenSelectedItems"
+                                                            name="hiddenSelectedItems">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-12 gap-1">
+                                                        <div class="container-selected-items">
+                                                            <div id="selectedItemsContainer" class="selected-items">
+                                                                <strong>Seleccionados:</strong>
+                                                                <div id="selectedList"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -510,7 +590,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary cerrar-modal">Cerrar</button>&nbsp;
-                            <button type="button" class="btn btn-primary" id="btn_register_socio">Guardar</button>
+                            <button type="button" class="btn btn-primary" id="btn_register_socio">Guardar</button>&nbsp;
                             <button type="button" class="btn btn-primary" style="display: none;"
                                 id="btn_update_socio">Actualizar</button>
                         </div>
@@ -641,6 +721,11 @@
                         data: 'ruta_archivo4',
                         width: '5%',
                         sortable: false,
+                    },
+                    {
+                        data: 'btn',
+                        width: '5%',
+                        sortable: false,
                     }
                 ],
                 order: [
@@ -659,10 +744,12 @@
             $('#con_razon_social').hide();
             $('#id_con_ruc').hide();
             $('#id_sin_ruc').hide();
+            $('#div_tipo_identificacion').hide();
             //$('#datos_tributarios').hide();  
             //$('a[href="#datos_tributarios"]').hide();
             $('#tab_item_tributario').hide();
             $('#datos_tributarios').removeClass('show active');
+
 
 
             /**
@@ -824,8 +911,11 @@ function toggleNaturalConRuc(active) {
                     $('#id_sin_ruc').show();
                     $('#con_razon_social').hide();
                     $('#juridico').hide();
-                    $('#natural').hide();
+                    $('#natural').hide(); 
+                    $('#fechaconstitucion').hide();
                     $('#tributario_natural').hide();
+                    $('#div_tipo_identificacion').show();
+                    $('#tipo_identificacion').val('-1');  
 
                     // Ocultar el botón del tab y el contenido si está activo
                     $('#tab_item_tributario').hide();
@@ -845,6 +935,9 @@ function toggleNaturalConRuc(active) {
                     $('#con_razon_social').show();
                     $('#natural').show();
                     $('#tributario_natural').show();
+                    $('#fechaconstitucion').hide();
+                    $('#juridico').hide();
+                    $('#div_tipo_identificacion').hide();
 
                     $('#tab_item_tributario').show();
 
@@ -855,6 +948,8 @@ function toggleNaturalConRuc(active) {
                     $('#id_sin_ruc').hide();
                     $('#con_razon_social').show();
                     $('#juridico').show();
+                    $('#fechaconstitucion').show();
+                    $('#div_tipo_identificacion').hide();
 
                     // Ocultar los elementos relacionados con "natural"
                     $('#natural').hide();
@@ -1106,23 +1201,91 @@ function toggleNaturalConRuc(active) {
                 }
             });
 
+            $('#actividad_economica').select2({
+                placeholder: "Selecciona una o más opciones",
+                width: '100%',
+                allowClear: true
+            });
+
+            function syncHiddenInput() {
+                $('#hiddenSelectedItems').val(selectedItems.join(',')); // Actualizar el campo oculto
+                console.log('Contenido actualizado de selectedItems:', selectedItems);
+            }
+
+            let selectedItems = [];
+
+            // Manejar selección de elementos
+            $('#actividad_economica').on('select2:select', function(e) {
+                const selectedId = parseInt(e.params.data.id); // Convertir a cadena
+                const selectedText = e.params.data.text;
+
+                if (!selectedItems.includes(selectedId)) {
+                    selectedItems.push(selectedId); // Agregar al array como cadena
+                    $('#selectedList').append(`
+                <span class="badge bg-primary me-2 selected-item" data-id=${selectedId}>
+                    ${selectedText} <span class="remove-item" style="cursor: pointer;">&times;</span>
+                </span>
+            `);
+                    syncHiddenInput(); // Sincronizar el campo oculto
+                }
+
+                $(this).val(null).trigger('change'); // Resetear el dropdown
+            });
+
+            // Manejar eliminación de elementos seleccionados (badge)
+            $('#selectedList').on('click', '.remove-item', function() {
+                const badge = $(this).closest('.selected-item');
+                const id = badge.data('id'); // Convertir a cadena
+
+                // Eliminar el ID del array
+                selectedItems = selectedItems.filter(item => item !== id);
+                console.log(`Eliminado del array: ${id}, Nuevo contenido: ${selectedItems}`); // Depuración
+
+                // Eliminar visualmente el badge
+                badge.remove();
+
+                // Restaurar la opción en el dropdown
+                const optionElement = $(`#actividad_economica option[value=${id}]`);
+                optionElement.prop('disabled', false).prop('selected', false);
+
+                syncHiddenInput(); // Sincronizar el campo oculto
+            });
+
+            // Sincronizar al quitar desde el dropdown
+            $('#actividad_economica').on('select2:unselect', function(e) {
+                const unselectedId = (e.params.data.id); // Convertir a cadena
+
+                // Eliminar visualmente el badge
+                $(`#selectedList .selected-item[data-id=${unselectedId}]`).remove();
+
+                // Eliminar el ID del array
+                selectedItems = selectedItems.filter(item => item !== unselectedId);
+                console.log(
+                    `Eliminado desde dropdown: ${unselectedId}, Nuevo contenido: ${selectedItems}`
+                ); // Depuración
+
+                syncHiddenInput(); // Sincronizar el campo oculto
+            });
+
+
             $("#btn_register_socio").click(function() {
                 if (!validarRegistro()) {
                     return;
                 }
+               // alert($('#hiddenSelectedItems').val()); return;
 
                 let formData = new FormData();
                 const data = {};
 
                 const commonFields = [
-                    'fecha_ingreso', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
+                    'fecha_ingreso', 'tipo_identificacion', 'tipo_personeria', 'identificacion', 'identificacion_sin_ruc', 
                     'fotoFile', 'razon_social', 'estado_sri', 'tipo_regimen', 'razon_social_nombre', 
                     'fecha_registro_sri',
                     'fecha_actualizacion_ruc', 'fecha_constitucion', 'agente_retencion',
                     'contribuyente_especial', 'pais', 'provincia', 'canton', 'parroquia', 'calle',
                     'manzana',
                     'numero',
-                    'interseccion', 'referencia'
+                    'interseccion', 'referencia', 'hiddenSelectedItems'
                 ];
 
                 const requiredFieldsJuridico = commonFields.concat([
@@ -1364,91 +1527,84 @@ function toggleNaturalConRuc(active) {
                     });
                 }
             });
-            $(document).on('click', '.edit-modal', async function() {
+            $(document).on('click', '.open-modal', async function() {
                 let button = $(this);
-                socioSelected = button.data('id');
+                solicitudID = button.data('id');
+                //alert(solicitudID); return;
                 limpiarFormulario();
-                $('#ModalSocioLabel').html('<b>Actualizar Socio</b>');
+                $('#ModalSocioLabel').html('<b>Registrar Socio</b>');
                 $('#estado_sri').prop('readonly', false);
                 $('#btn-more-info').show();
 
+                Swal.fire({
+                    title: 'Cargando información de la Solicitud',
+                    text: 'Por favor espere',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+
+                $.ajax({
+                    url: '/administrador/solicitud/detalle/' + solicitudID,
+                    method: 'GET',
+                    success: function(response) {
+                         
+                        Swal.close();
+                        console.log('Datos recibidos:', response);
+
+                        var tipoPersoneria = $('#tipo_personeria');
+                        var tipoIdentificacion = $('#tipo_identificacion');
+                        var IdentificacionSinRuc = $('#identificacion_sin_ruc');  identificacion
+                        var Identificacion = $('#identificacion');
+                        var RazonSocial = $('#razon_social_nombre');
+                        var RazonSocialNombre = $('#razon_social');
+                        var Correo = $('#correo');
+                        var Telefono = $('#telefono');
+                        var CorreoRepresentante = $('#correo_representante');
+                        var TelefonoRepresentante = $('#telefono_representante');
+ 
+                        //FechaIngreso.val(response.fecha_ingreso); 
+                        //tipoPersoneria.val(response.tipo_personeria);
+                        
+                        console.log('Tipo Personeria:', response.id_tipo_personeria);
+                        $('#ModalSocio').find('#tipo_personeria').val(response.id_tipo_personeria).trigger(
+                            'change');
+                        //tipoPersoneria.val(response.tipo_personeria);
+                        tipoIdentificacion.val(response.id_tipo_identificacion);
+                        Identificacion.val(response.cedula_ruc);
+                        IdentificacionSinRuc.val(response.cedula_ruc);
+
+                        RazonSocial.val(response.razon_social);
+                        RazonSocialNombre.val(response.razon_social);
+
+                        Correo.val(response.correo);
+                        Telefono.val(response.telefono); 
+                         
+                        CorreoRepresentante.val(response.correo);
+                        TelefonoRepresentante.val(response.telefono);
+ 
+ 
+                        
+                        $('#ModalSocio').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al momento de Cargar la Cámara',
+                            confirmButtonText: 'Aceptar',
+                            allowOutsideClick: false
+                        });
+                    }
+                });
 
                 $('.nav-tabs a[href="#datos_generales"]').tab('show');
-
-                let data = socios.find(socio => socio.id == socioSelected);
-                if (data.logo) {
-                    let logoPath = data.logo;
-                    //Logic to show the image in the modal
-                }
-                // Populate modal fields with the row data
-                $('#ModalSocio').find('#fecha_ingreso').val(data.fecha_ingreso);
-                $('#ModalSocio').find('#tipo_personeria').val(data.id_tipo_personeria).trigger(
-                    'change');
-                $('#ModalSocio').find('#identificacion').val(data.identificacion);
-                $('#ModalSocio').find('#identificacion_sin_ruc').val(data.identificacion);
-                $('#ModalSocio').find('#razon_social').val(data.razon_social);
-                $('#ModalSocio').find('#razon_social_nombre').val(data.razon_social);
-                if (data.id_tipo_personeria == 2) {
-                    $('#ModalSocio').find('#telefono').val(data.telefono);
-                    $('#ModalSocio').find('#correo').val(data.correo);
-                    $('#ModalSocio').find('#fecha_nacimiento').val(data.fecha_nacimiento).trigger(
-                        'change');
-                } else if (data.id_tipo_personeria == 3) {
-                    $('#ModalSocio').find('#cedula_representante').val(data
-                        .cedula_representante_legal);
-                    $('#ModalSocio').find('#nombre_representante').val(data
-                        .nombres_representante_legal);
-                    $('#ModalSocio').find('#apellido_representante').val(data
-                        .apellidos_representante_legal);
-                    $('#ModalSocio').find('#telefono_representante').val(data
-                        .telefono_representante_legal);
-                    $('#ModalSocio').find('#correo_representante').val(data
-                        .correo_representante_legal);
-                    $('#ModalSocio').find('#fecha_registro_mercantil').val(data
-                        .fecha_registro_mercantil);
-                    $('#ModalSocio').find('#vencimiento_nombramiento').val(data
-                        .fecha_vencimiento_nombramiento).trigger('change');
-                }
-                //alert('mod');
-                //alert(data.fecha_registro_sri);
-                $('#ModalSocio').find('#estado_sri').val(data.estado_sri);
-                $('#ModalSocio').find('#fecha_registro_sri').val(data.fecha_registro_sri).trigger(
-                    'change');
-                $('#ModalSocio').find('#fecha_actualizacion_ruc').val(data.fecha_actualizacion_ruc);
-                $('#ModalSocio').find('#fecha_constitucion').val(data.fecha_constitucion).trigger(
-                    'change');
-                $('#ModalSocio').find('#tipo_regimen').val(data.tipo_regimen);
-                $('#ModalSocio').find('#agente_retencion').val(data.agente_retencion);
-                $('#ModalSocio').find('#contribuyente_especial').val(data.contribuyente_especial);
-                $('#ModalSocio').find('#pais').val(data.id_pais ?? -1).trigger('change');
-
-                // Cargar provincias y asignar provincia
-                cargarProvincias(data.id_pais ?? -1).then(() => {
-                    $('#provincia').val(data.id_provincia ?? -1).trigger('change');
-
-                    // Cargar cantones y asignar cantón
-                    cargarCantones(data.id_pais, data
-                        .id_provincia).then(() => {
-                        $('#canton').val(data.id_canton ?? -1).trigger('change');
-
-                        // Cargar parroquias y asignar parroquia
-                        cargarParroquias(
-                            data.id_pais,
-                            data.id_provincia,
-                            data.id_canton
-                        ).then(() => {
-                            $('#parroquia').val(data
-                                .id_parroquia ?? -1);
-                        });
-                    });
-                });
-                $('#ModalSocio').find('#calle').val(data.calle);
-                $('#ModalSocio').find('#manzana').val(data.manzana);
-                $('#ModalSocio').find('#numero').val(data.numero);
-                $('#ModalSocio').find('#interseccion').val(data.interseccion);
-                $('#ModalSocio').find('#referencia').val(data.referencia);
-                $('#ModalSocio').find('#btn_register_socio').hide();
-                $('#ModalSocio').find('#btn_update_socio').show();
+ 
+                $('#ModalSocio').find('#btn_register_socio').show();
+                $('#ModalSocio').find('#btn_update_socio').hide();
                 $('#ModalSocio').modal('show');
             });
             $('#btn-more-info').on('click', function() {

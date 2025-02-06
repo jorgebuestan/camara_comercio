@@ -205,6 +205,7 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     //Manejo de Solicitudes de Nuevos Socios
     Route::get('/administrador/maestro_solicitudes', [SolicitudController::class, 'index'])->middleware('auth')->name('admin.maestro_solicitudes');
     Route::get('/administrador/obtener_listado_solicitudes', [SolicitudController::class, 'obtener_listado_solicitudes'])->middleware('auth')->name('admin.obtener_listado_solicitudes');
+    Route::get('/administrador/solicitud/detalle/{id}', [SolicitudController::class, 'detalle_solicitud'])->middleware('auth')->name('admin.detalle_solicitud');
     
     //Obligaciones por Establecimientos de Cámara
     Route::get('/administrador/camara/obligaciones_establecimientos_camara', [EstablecimientoCamaraObligacionController::class, 'obligaciones_establecimientos'])->middleware('auth')->name('admin.obligaciones_establecimientos');

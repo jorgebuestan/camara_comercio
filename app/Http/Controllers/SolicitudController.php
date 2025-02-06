@@ -16,6 +16,8 @@ use App\Models\SolicitudSocio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\TipoIdentificacion; 
+use App\Models\ActividadEconomica; 
 
 class SolicitudController extends Controller
 {
@@ -27,8 +29,10 @@ class SolicitudController extends Controller
         $provincias = Provincia::where('id_pais', 57)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
-
+       
         $tiposPersoneria = TipoPersoneria::pluck('descripcion', 'id'); // Obtenemos los tipos de personeria
+        $tipo_identificacion =  TipoIdentificacion::pluck('descripcion', 'id');
+        $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
@@ -45,7 +49,7 @@ class SolicitudController extends Controller
             $parroquias->put($parroquiaDefault->id, $parroquiaDefault->nombre); // Añadimos al listado
         }  
         
-        return view('administrador.socios.solicitudes_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria'));
+        return view('administrador.socios.solicitudes_socios', compact('regimenes', 'paises', 'provincias', 'cantones', 'parroquias', 'tiposPersoneria', 'tipo_identificacion', 'actividadesEconomicas'));
     }
     
     public function obtener_listado_solicitudes(Request $request)
@@ -176,7 +180,7 @@ class SolicitudController extends Controller
                 'ruta_archivo2' => $boton2,
                 'ruta_archivo3' => $boton3,
                 'ruta_archivo4' => $boton4,
-                'btn' => '<button class="btn btn-primary mb-3 open-modal" data-id="' . $solicitud->id . '">Modificar</button>'
+                'btn' => '<button class="btn btn-success btn-sm mb-3 open-modal" data-id="' . $solicitud->id . '">Nuevo Socio</button>'
             ];
         });
 
@@ -189,4 +193,21 @@ class SolicitudController extends Controller
 
         return response()->json($json_data);
     }
+
+    public function detalle_solicitud($id)
+    {
+        // Buscar la cámara por ID
+        $solicitud = SolicitudSocio::find($id);
+
+        if (!$solicitud) {
+            return response()->json(['error' => 'Solicitud no encontrada'], 404);
+        }
+
+        // Convertir el modelo Camara a un array
+        $solicitudArray = $solicitud->toArray(); 
+
+        // Devolver la respuesta JSON
+        return response()->json($solicitudArray);
+    }
+
 }
