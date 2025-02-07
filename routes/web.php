@@ -225,9 +225,17 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/obligacion_establecimiento_socio/detalle/{id}', [EstablecimientoSocioObligacionController::class, 'detalle_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.detalle_obligacion_establecimiento_socio');
     Route::post('/administrador/obligacion_socio/modificar_obligacion_establecimiento', [EstablecimientoSocioObligacionController::class, 'modificar_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.modificar_obligacion_establecimiento_socio');
     
+    //Para manejo de Documentos por Cámara
     Route::get('/administrador/camara/documentos/{id}', [DocumentoCamaraController::class, 'documentos_camara'])->middleware('auth')->name('admin.documentos_camara');
+    Route::post('/administrador/camara/documentos/registrar_documento', [DocumentoCamaraController::class, 'registrar_documento_camara'])->middleware('auth')->name('admin.registrar_documento_camara');
+    Route::get('/administrador/camara/file/ver/{id}', [DocumentoCamaraController::class, 'ver_doc_camara'])->middleware('auth')->name('admin.ver_doc_camara');
+    Route::get('/administrador/camara/file/eliminar/{id}', [DocumentoCamaraController::class, 'eliminar_archivo_camara'])->middleware('auth')->name('admin.eliminar_archivo_camara');
+
+    //Para manejo de Documentos por Socio
     Route::get('/administrador/socio/documentos/{id}', [DocumentoSocioController::class, 'documentos_socio'])->middleware('auth')->name('admin.documentos_socio');
+    Route::post('/administrador/socio/documentos/registrar_documento', [DocumentoSocioController::class, 'registrar_documento_socio'])->middleware('auth')->name('admin.registrar_documento_socio');
     
+    //Mostar el Archivo
 });
 
 require __DIR__ . '/auth.php';
