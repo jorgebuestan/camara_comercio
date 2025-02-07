@@ -2464,7 +2464,7 @@ function toggleNaturalConRuc(active) {
                 );
             }
 
-            function validarFechaOnBlur(idCampoFecha) {
+            /*function validarFechaOnBlur(idCampoFecha) {
                 let fecha = $('#' + idCampoFecha);
                 fecha.on('blur', function() {
                     let value = $(this).val();
@@ -2476,6 +2476,32 @@ function toggleNaturalConRuc(active) {
                         setTimeout(() => {
                             fecha.focus();
                         }, 0);
+                    }
+                });
+            }*/
+
+            function validarFechaOnBlur(idCampoFecha) {
+                let fecha = $('#' + idCampoFecha);
+                fecha.on('blur', function() {
+                    let value = $(this).val();
+
+                    if (value && !esFechaValida(value)) {
+                        Swal.fire({
+                            target: document.getElementById('ModalSocio'),  // Especifica el modal como objetivo
+                            icon: 'error',
+                            title: 'Error',
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Aceptar',
+                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
+                            didClose: () => {
+                                // Mantener el enfoque en el campo de fecha después de cerrar el Swal
+                                fecha.focus();
+                            }
+                        });
+
+                        // Limpiar el campo de fecha, solo después de mostrar el Swal
+                        fecha.val('');
                     }
                 });
             }
