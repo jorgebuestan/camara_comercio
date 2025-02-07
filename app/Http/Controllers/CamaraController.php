@@ -159,6 +159,9 @@ class CamaraController extends Controller
                             '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-camara" data-id="' . $camara->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
                          '</div>'*/
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
+                         //'<button class="btn btn-outline-primary mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-file"></i>&nbsp;Archivos</button>'.
+                          
+                         '<button class="btn btn-outline-primary btn-sm rounded-pill" onclick="window.open(\'/administrador/camara/documentos/' . $camara->id . '\', \'_blank\')"><i class="fa-solid fa-file"></i>&nbsp;Archivos</button>'.
                             '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
                             $boton .
                          '</div>'         

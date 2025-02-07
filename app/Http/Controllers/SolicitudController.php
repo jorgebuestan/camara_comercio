@@ -123,8 +123,8 @@ class SolicitudController extends Controller
                 // Generar el botón con el enlace al archivo
                 $boton1 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo1) . "' 
                             target='_blank' 
-                            class='btn btn-primary btn-sm'>
-                            Ver Archivo
+                            class='btn btn-outline-primary btn-sm rounded-pill'>
+                            ".'<i class="fa-solid fa-file"></i>&nbsp;'."Ver
                           </a>";
             } else {
                 // Si no está validado, mostrar un texto o mantener vacío
@@ -135,8 +135,8 @@ class SolicitudController extends Controller
                 // Generar el botón con el enlace al archivo
                 $boton2 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo2) . "' 
                             target='_blank' 
-                            class='btn btn-primary btn-sm'>
-                            Ver Archivo
+                            class='btn btn-outline-primary btn-sm rounded-pill'>
+                            ".'<i class="fa-solid fa-file"></i>&nbsp;'."Ver
                           </a>";
             } else {
                 // Si no está validado, mostrar un texto o mantener vacío
@@ -147,8 +147,8 @@ class SolicitudController extends Controller
                 // Generar el botón con el enlace al archivo
                 $boton3 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo3) . "' 
                             target='_blank' 
-                            class='btn btn-primary btn-sm'>
-                            Ver Archivo
+                            class='btn btn-outline-primary btn-sm rounded-pill'>
+                            ".'<i class="fa-solid fa-file"></i>&nbsp;'."Ver
                           </a>";
             } else {
                 // Si no está validado, mostrar un texto o mantener vacío
@@ -159,8 +159,8 @@ class SolicitudController extends Controller
                 // Generar el botón con el enlace al archivo
                 $boton4 = "<a href='" . asset('storage/' . $solicitud->ruta_archivo4) . "' 
                             target='_blank' 
-                            class='btn btn-primary btn-sm'>
-                            Ver Archivo
+                            class='btn btn-outline-primary btn-sm rounded-pill'>
+                            ".'<i class="fa-solid fa-file"></i>&nbsp;'."Ver
                           </a>";
             } else {
                 // Si no está validado, mostrar un texto o mantener vacío
@@ -180,7 +180,7 @@ class SolicitudController extends Controller
                 'ruta_archivo2' => $boton2,
                 'ruta_archivo3' => $boton3,
                 'ruta_archivo4' => $boton4,
-                'btn' => '<button class="btn btn-success btn-sm mb-3 open-modal" data-id="' . $solicitud->id . '">Nuevo Socio</button>'
+                'btn' => '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 open-modal" data-id="' . $solicitud->id . '">Nuevo Socio</button>'
             ];
         });
 

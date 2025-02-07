@@ -21,7 +21,9 @@ use App\Http\Controllers\ArchivoObligacionSocioController;
 use App\Http\Controllers\PasswordController; 
 use App\Http\Controllers\SolicitudController;  
 use App\Http\Controllers\EstablecimientoCamaraObligacionController;   
-use App\Http\Controllers\EstablecimientoSocioObligacionController; 
+use App\Http\Controllers\EstablecimientoSocioObligacionController;     
+use App\Http\Controllers\DocumentoCamaraController; 
+use App\Http\Controllers\DocumentoSocioController; 
 
 
 
@@ -222,6 +224,9 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::post('/administrador/obligacion_establecimiento_socio/eliminar/{id}', [EstablecimientoSocioObligacionController::class, 'eliminarObligacionEstablecimientoSocio'])->middleware('auth')->name('admin.eliminarObligacionEstablecimientoSocio');
     Route::get('/administrador/obligacion_establecimiento_socio/detalle/{id}', [EstablecimientoSocioObligacionController::class, 'detalle_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.detalle_obligacion_establecimiento_socio');
     Route::post('/administrador/obligacion_socio/modificar_obligacion_establecimiento', [EstablecimientoSocioObligacionController::class, 'modificar_obligacion_establecimiento_socio'])->middleware('auth')->name('admin.modificar_obligacion_establecimiento_socio');
+    
+    Route::get('/administrador/camara/documentos/{id}', [DocumentoCamaraController::class, 'documentos_camara'])->middleware('auth')->name('admin.documentos_camara');
+    Route::get('/administrador/socio/documentos/{id}', [DocumentoSocioController::class, 'documentos_socio'])->middleware('auth')->name('admin.documentos_socio');
     
 });
 
