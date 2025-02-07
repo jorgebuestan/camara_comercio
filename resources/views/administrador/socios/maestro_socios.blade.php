@@ -187,6 +187,7 @@
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_ingreso" id="fecha_ingreso"
                                                             placeholder="Fecha de Ingreso" />
+                                                        <div id="error-fecha-ingreso" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -344,6 +345,7 @@
                                                                     class="form-control" name="fecha_registro_mercantil"
                                                                     id="fecha_registro_mercantil"
                                                                     placeholder="Fecha Registro Mercantil">
+                                                                <div id="error-fecha-registro-mercantil" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
                                                             </div>
                                                             <div class="col-md-6 gap-1">
                                                                 <label>Vencimiento de Nombramiento</label>
@@ -351,6 +353,8 @@
                                                                     class="form-control" name="vencimiento_nombramiento"
                                                                     id="vencimiento_nombramiento"
                                                                     placeholder="Vencimiento Nombramiento">
+                                                                <div id="error-fecha-vencimiento-nombramiento" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
+                                                                <div id="error-fecha-vencimiento-nombramiento-mayor" style="color: red; display: none;">La fecha de vencimiento del nombramiento no puede ser menor o igual a la fecha de ingreso.</div>
                                                             </div>
                                                         </div>
                                                         <div class="row mb-2">
@@ -393,12 +397,14 @@
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_registro_sri" id="fecha_registro_sri"
                                                             placeholder="Fecha Registro SRI">
+                                                        <div id="error-fecha-registro-sri" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
                                                     </div>
                                                     <div class="col-md-6 gap-1">
                                                         <label>Fecha Actualización RUC</label>
                                                         <input type="text" data-plugin-datepicker class="form-control"
                                                             name="fecha_actualizacion_ruc" id="fecha_actualizacion_ruc"
                                                             placeholder="Fecha Actualización RUC">
+                                                        <div id="error-fecha-actualizacion-ruc" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
                                                     </div>
                                                 </div>
                                                 <div id="fechaconstitucion" style="display: none">
@@ -408,6 +414,8 @@
                                                             <input type="text" data-plugin-datepicker class="form-control"
                                                                 name="fecha_constitucion" id="fecha_constitucion"
                                                                 placeholder="Fecha de Constitución">
+                                                            <div id="error-fecha-fecha-constitucion" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
+                                                            <div id="error-fecha-fecha-constitucion-mayor" style="color: red; display: none;">La fecha de constitucion debe ser menor que la fecha de registro al SRI.</div>
                                                         </div>
                                                         <div class="col-md-6 gap-1">
                                                             <label>Años de Creación</label>
@@ -423,6 +431,8 @@
                                                             <input type="text" data-plugin-datepicker
                                                                 class="form-control" name="fecha_nacimiento"
                                                                 id="fecha_nacimiento" placeholder="Fecha de Nacimiento">
+                                                            <div id="error-fecha-fecha-nacimiento" style="color: red; display: none;">Ingrese un formato de fecha válido dd/mm/YYYY</div>
+                                                            <div id="error-fecha-fecha-nacimiento-mayor" style="color: red; display: none;">La fecha de nacimiento no puede ser mayor o igual a la fecha de registro en el SRI.</div>
                                                         </div>
                                                         <div class="col-md-6 gap-1">
                                                             <label>Años de Edad</label>
@@ -2464,44 +2474,15 @@ function toggleNaturalConRuc(active) {
                 );
             }
 
-            /*function validarFechaOnBlur(idCampoFecha) {
+            function validarFechaOnBlur(idCampoFecha, error) {
                 let fecha = $('#' + idCampoFecha);
                 fecha.on('blur', function() {
                     let value = $(this).val();
 
                     if (value && !esFechaValida(value)) {
-                        alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
-                        fecha.val('');
-
-                        setTimeout(() => {
-                            fecha.focus();
-                        }, 0);
-                    }
-                });
-            }*/
-
-            function validarFechaOnBlur(idCampoFecha) {
-                let fecha = $('#' + idCampoFecha);
-                fecha.on('blur', function() {
-                    let value = $(this).val();
-
-                    if (value && !esFechaValida(value)) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),  // Especifica el modal como objetivo
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                            didClose: () => {
-                                // Mantener el enfoque en el campo de fecha después de cerrar el Swal
-                                fecha.focus();
-                            }
-                        });
-
-                        // Limpiar el campo de fecha, solo después de mostrar el Swal
-                        fecha.val('');
+                        $('#'+error).show();
+                    }else{
+                        $('#'+error).hide();
                     }
                 });
             }
@@ -2650,7 +2631,7 @@ function toggleNaturalConRuc(active) {
                         let fechaInicio = parseDate(fechaIngreso);
                         let fechaFin = parseDate(vencimiento);
 
-                        if (fechaFin >= fechaInicio) {
+                        /*if (fechaFin >= fechaInicio) {
                             Swal.fire({
                                 target: document.getElementById('ModalSocio'),
                                 icon: 'error',
@@ -2662,7 +2643,17 @@ function toggleNaturalConRuc(active) {
                             });
                             $('#' + id_fin).val('');
                             return;
+                        }*/
+
+                        if (fechaFin >= fechaInicio) {
+                            $('#' + id_fin).val('');
+                            $('#'+alertText).show();
+                            return;
+                        }else{
+                            $('#'+alertText).hide();
                         }
+
+                        
                     }
 
                     if (vencimiento) {
@@ -2685,16 +2676,13 @@ function toggleNaturalConRuc(active) {
              * Call to functions
              */
             setupDatePicker();
-            validarFechaOnBlur('fecha_ingreso');
-            validarFechaOnBlur(
-                'fecha_registro_mercantil');
-            validarFechaOnBlur('vencimiento_nombramiento');
-            validarFechaOnBlur(
-                'fecha_registro_sri');
-            validarFechaOnBlur('fecha_actualizacion_ruc');
-            validarFechaOnBlur(
-                'fecha_constitucion');
-            validarFechaOnBlur('fecha_nacimiento');
+            validarFechaOnBlur('fecha_ingreso', 'error-fecha-ingreso');
+            validarFechaOnBlur('fecha_registro_mercantil', 'error-fecha-registro-mercantil');
+            validarFechaOnBlur('vencimiento_nombramiento', 'error-fecha-vencimiento-nombramiento');
+            validarFechaOnBlur('fecha_registro_sri', 'error-fecha-registro-sri');
+            validarFechaOnBlur('fecha_actualizacion_ruc', 'error-fecha-actualizacion-ruc');
+            validarFechaOnBlur('fecha_constitucion', 'error-fecha-fecha-constitucion');
+            validarFechaOnBlur('fecha_nacimiento', 'error-fecha-fecha-nacimiento');
 
             onInputUppercase('razon_social');
             onInputUppercase('razon_social_nombre');
@@ -2730,11 +2718,11 @@ function toggleNaturalConRuc(active) {
                 'anios_nombramiento');
 
             calcularDuracion('fecha_registro_sri', 'fecha_constitucion',
-                'La fecha de constitucion debe ser menor que la fecha de registro al SRI.', 'anios_creacion'
+                'error-fecha-fecha-constitucion-mayor', 'anios_creacion'
             );
 
             calcularDuracion('fecha_registro_sri', 'fecha_nacimiento',
-                'La fecha de nacimiento debe ser menor que la fecha de registro al SRI.', 'anios_edad'
+                'error-fecha-fecha-nacimiento-mayor', 'anios_edad'
             );
         });
     </script>
