@@ -2470,22 +2470,10 @@ function toggleNaturalConRuc(active) {
                     let value = $(this).val();
 
                     if (value && !esFechaValida(value)) {
-                        Swal.fire({
-                            target: document.getElementById('ModalSocio'),
-                            icon: 'error',
-                            title: 'Error',
-                            showConfirmButton: true,
-                            allowOutsideClick: false,
-                            confirmButtonText: 'Aceptar',
-                            text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
-                        });
-
-                        // Restaurar el valor del campo a vacío
+                        alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
                         fecha.val('');
 
-                        // Evitar que el modal se cierre accidentalmente
                         setTimeout(() => {
-                            // Enfocar el campo de fecha después del mensaje de error
                             fecha.focus();
                         }, 0);
                     }
