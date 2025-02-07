@@ -319,7 +319,7 @@ Documentos registrados por Cámara
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-escritura">Guardar</button>
                     </div>
                 </div>
@@ -353,7 +353,7 @@ Documentos registrados por Cámara
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-estatuto">Guardar</button>
                     </div>
                 </div>
@@ -387,7 +387,7 @@ Documentos registrados por Cámara
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-nombramiento">Guardar</button>
                     </div>
                 </div>
@@ -421,7 +421,7 @@ Documentos registrados por Cámara
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-ruc">Guardar</button>
                     </div>
                 </div>
@@ -455,7 +455,7 @@ Documentos registrados por Cámara
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>&nbsp;
                         <button type="button" class="btn btn-primary" id="btn-register-varios">Guardar</button>
                     </div>
                 </div>
