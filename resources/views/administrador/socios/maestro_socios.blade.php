@@ -2469,7 +2469,8 @@ function toggleNaturalConRuc(active) {
                 fecha.on('blur', function() {
                     let value = $(this).val();
 
-                    if (value && !esFechaValida(value)) { 
+                    if (value && !esFechaValida(value)) {
+                        //alert('Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.');
                         Swal.fire({
                             target: document.getElementById('ModalSocio'),
                             icon: 'error',
@@ -2479,11 +2480,7 @@ function toggleNaturalConRuc(active) {
                             confirmButtonText: 'Aceptar',
                             text: 'Por favor, ingrese una fecha válida en el formato dd/mm/yyyy.',
                         });
-                        fecha.val('');
-
-                        setTimeout(() => {
-                            fecha.focus();
-                        }, 0);
+                        fecha.val(''); 
                     }
                 });
             }
