@@ -690,7 +690,7 @@
                 pageLength: 10,
                 columns: [{
                         data: 'fecha_ingreso',
-                        width: '10%'
+                        width: '5%'
                     },
                     {
                         data: 'consecutivo',
@@ -710,7 +710,7 @@
                     }, 
                     {
                         data: 'btn',
-                        width: '25%',
+                        width: '30%',
                         sortable: false,
                     }
                 ],

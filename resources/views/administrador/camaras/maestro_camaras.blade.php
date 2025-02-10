@@ -972,20 +972,20 @@
     },
     pageLength: 10,
     columns: [
-      { data: 'fecha_ingreso', width: '5%' },
-      { data: 'ruc', width: '10%' },
+      { data: 'fecha_ingreso', width: '3%' },
+      { data: 'ruc', width: '5%' },
       { data: 'razon_social', width: '20%' },
       { data: 'representante_legal', width: '15%' },
       { data: 'cedula_representante_legal', width: '15%' },
       {
         data: 'fecha_desafiliacion',
-        width: '5%'
+        width: '3%'
       },
       {
         data: 'motivo_desafiliacion',
         width: '10%'
       }, 
-      { data: 'btn', width: '15%' }
+      { data: 'btn', width: '30%' }
     ],
     order: [[0, "asc"]],
     createdRow: function(row, data, dataIndex) {
