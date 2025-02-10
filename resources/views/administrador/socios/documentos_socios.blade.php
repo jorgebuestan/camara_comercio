@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('pagename')
-Documentos registrados por Cámara
+Documentos registrados por Socio
 @endsection
 
 @section('content') 
@@ -41,22 +41,22 @@ Documentos registrados por Cámara
                             <div class="col-md-6"> 
                                 <div class="row">
                                     <div class="col-md-3">  
-                                        Escrituras
+                                        Cédula
                                     </div>
                                     <div class="col-md-9">   
                                         <div class="rowborder">
-                                            @if(count($escrituras) == 0)  
-                                                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEscritura">Agregar</button>
+                                            @if(count($cedula) == 0)  
+                                                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalCedula">Agregar</button>
                                             @else 
                                                 <div class="row">
                                                     <div class="col-md-3"> 
-                                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEscritura">Agregar</button>
+                                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalCedula">Agregar</button>
                                                     </div>
                                                     <div class="col-md-9"> 
-                                                        {{ count($escrituras) }} Documento(s) cargado(s)
+                                                        {{ count($cedula) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
-                                                @foreach ($escrituras as $key => $item) 
+                                                @foreach ($cedula as $key => $item) 
                                                     <div class="row">
                                                             <div class="col-md-12"> 
                                                                 {{ $item->titulo }}
@@ -70,7 +70,7 @@ Documentos registrados por Cámara
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
                                                     </div> 
-                                                    @if(count($escrituras) > 1) 
+                                                    @if(count($cedula) > 1) 
                                                         <div class="row">
                                                             <div class="col-md-12"> 
                                                                 &nbsp;
@@ -86,22 +86,22 @@ Documentos registrados por Cámara
                             <div class="col-md-6"> 
                                 <div class="row">
                                     <div class="col-md-3">  
-                                        Estatutos
+                                        Foto
                                     </div>
                                     <div class="col-md-9">   
                                         <div class="rowborder">
-                                            @if(count($estatutos) == 0)  
-                                                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstatuto">Agregar</button>
+                                            @if(count($foto) == 0)  
+                                                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalFoto">Agregar</button>
                                             @else 
                                                 <div class="row">
                                                     <div class="col-md-3"> 
-                                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalEstatuto">Agregar</button>
+                                                        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ModalFoto">Agregar</button>
                                                     </div>
                                                     <div class="col-md-9"> 
-                                                        {{ count($estatutos) }} Documento(s) cargado(s)
+                                                        {{ count($foto) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
-                                                @foreach ($estatutos as $key => $item) 
+                                                @foreach ($foto as $key => $item) 
                                                     <div class="row">
                                                             <div class="col-md-12"> 
                                                                 {{ $item->titulo }}
@@ -115,7 +115,7 @@ Documentos registrados por Cámara
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
                                                     </div> 
-                                                    @if(count($estatutos) > 1) 
+                                                    @if(count($foto) > 1) 
                                                         <div class="row">
                                                             <div class="col-md-12"> 
                                                                 &nbsp;
@@ -292,12 +292,12 @@ Documentos registrados por Cámara
 <div class="container"> 
       <!-- Modal -->  
         <!-- Jbuestan Modales -->
-        <form enctype="multipart/form-data" class="modal fade" id="ModalEscritura" tabindex="-1" aria-labelledby="ModalEscrituraLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalCedula" tabindex="-1" aria-labelledby="ModalCedulaLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="ModalEscrituraLabel">Escritura de Cámara</h5>
+                    <h5 class="modal-title" id="ModalCedulaLabel">Cédula del Socio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -311,11 +311,11 @@ Documentos registrados por Cámara
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Archivo</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
-                            <input type="hidden" name="tipoDoc" value="2"> 
-                            <input type="hidden" name="id_camara"  id="id_camara" value="{{ $camara[0]['id']}}">
+                            <input type="hidden" name="tipoDoc" value="1"> 
+                            <input type="hidden" name="id_socio"  id="id_socio" value="{{ $socio[0]['id']}}">
                         </div>
                         <div class="form-group">
-                            Escritura de Cámara
+                            Cédula del Socio
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -326,12 +326,12 @@ Documentos registrados por Cámara
             </div>
         </form>
 
-        <form enctype="multipart/form-data" class="modal fade" id="ModalEstatuto" tabindex="-1" aria-labelledby="ModalEstatutoLabel" aria-hidden="true">
+        <form enctype="multipart/form-data" class="modal fade" id="ModalFoto" tabindex="-1" aria-labelledby="ModalFotoLabel" aria-hidden="true">
             @csrf
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="ModalEstatutoLabel">Estatuto de Cámara</h5>
+                    <h5 class="modal-title" id="ModalFotoLabel">Foto del Socio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -345,11 +345,11 @@ Documentos registrados por Cámara
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Archivo</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
-                            <input type="hidden" name="tipoDoc" value="3">
-                            <input type="hidden" name="id_camara"  id="id_camara" value="{{ $camara[0]['id']}}">
+                            <input type="hidden" name="tipoDoc" value="4">
+                            <input type="hidden" name="id_socio"  id="id_socio" value="{{ $socio[0]['id']}}">
                         </div>
                         <div class="form-group">
-                            Estatuto de Cámara
+                            Foto del Socio
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -365,7 +365,7 @@ Documentos registrados por Cámara
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="ModalNombramientoLabel">Nombramiento de Cámara</h5>
+                    <h5 class="modal-title" id="ModalNombramientoLabel">Nombramiento del Socio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -380,10 +380,10 @@ Documentos registrados por Cámara
                             <label for="exampleFormControlFile1">Archivo</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
                             <input type="hidden" name="tipoDoc" value="5">
-                            <input type="hidden" name="id_camara"  id="id_camara" value="{{ $camara[0]['id']}}">
+                            <input type="hidden" name="id_socio"  id="id_socio" value="{{ $socio[0]['id']}}">
                         </div>
                         <div class="form-group">
-                            Nombramiento de Cámara
+                            Nombramiento del Socio
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -399,7 +399,7 @@ Documentos registrados por Cámara
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="ModalRucLabel">Ruc de Cámara</h5>
+                    <h5 class="modal-title" id="ModalRucLabel">Ruc del Socio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -414,10 +414,10 @@ Documentos registrados por Cámara
                             <label for="exampleFormControlFile1">Archivo</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
                             <input type="hidden" name="tipoDoc" value="6">
-                            <input type="hidden" name="id_camara"  id="id_camara" value="{{ $camara[0]['id']}}">
+                            <input type="hidden" name="id_socio"  id="id_socio" value="{{ $socio[0]['id']}}">
                         </div>
                         <div class="form-group">
-                            Ruc de Cámara
+                            Ruc del Socio
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -433,7 +433,7 @@ Documentos registrados por Cámara
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="ModalVariosLabel">Documentos Varios de Cámara</h5>
+                    <h5 class="modal-title" id="ModalVariosLabel">Documentos Varios del Socio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -448,10 +448,10 @@ Documentos registrados por Cámara
                             <label for="exampleFormControlFile1">Archivo</label>
                             <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
                             <input type="hidden" name="tipoDoc" value="8">
-                            <input type="hidden" name="id_camara"  id="id_camara" value="{{ $camara[0]['id']}}">
+                            <input type="hidden" name="id_socio"  id="id_socio" value="{{ $socio[0]['id']}}">
                         </div>
                         <div class="form-group">
-                            Documentos Varios de Cámara
+                            Documentos Varios del Socio
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -480,13 +480,13 @@ Documentos registrados por Cámara
 
         //jbuestan
         $("#btn-register-escritura").click(function() {
-            var formData = new FormData(document.getElementById("ModalEscritura"));
+            var formData = new FormData(document.getElementById("ModalCedula"));
             
             // Cerrar el modal antes de enviar la solicitud 
             
             // Mostrar mensaje de carga mientras la solicitud está en curso
             Swal.fire({
-                target: document.getElementById('ModalEscritura'),
+                target: document.getElementById('ModalCedula'),
                 title: 'Cargando...',
                 text: 'Por favor espere, estamos procesando su solicitud.',
                 allowOutsideClick: false, // Evitar que el usuario cierre el modal o la alerta
@@ -496,7 +496,7 @@ Documentos registrados por Cámara
             });
 
             $.ajax({
-                url: "{{ route('admin.registrar_documento_camara') }}",
+                url: "{{ route('admin.registrar_documento_socio') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -509,7 +509,7 @@ Documentos registrados por Cámara
                 
                 // Mostrar mensaje de éxito
                 Swal.fire({
-                    target: document.getElementById('ModalEscritura'),
+                    target: document.getElementById('ModalCedula'),
                     icon: 'success',
                     title: '¡Éxito!',
                     text: msg,
@@ -526,26 +526,26 @@ Documentos registrados por Cámara
 
                     // Mostrar mensaje de error
                     Swal.fire({
-                        target: document.getElementById('ModalEscritura'),
+                        target: document.getElementById('ModalCedula'),
                         icon: 'error',
                         title: 'Error',
                         text: errorMsg,
                         confirmButtonText: 'Aceptar'
                     }).then(() => {
                         // Si hubo un error, reabrir el modal para que el usuario corrija la acción
-                        $('#ModalEscritura').modal('show');
+                        $('#ModalCedula').modal('show');
                     });
                 } catch (e) {
                     // Si ocurre un error al parsear, muestra un mensaje genérico
                     Swal.fire({
-                        target: document.getElementById('ModalEscritura'),
+                        target: document.getElementById('ModalCedula'),
                         icon: 'error',
                         title: 'Error',
                         text: "Ocurrió un error al procesar la solicitud.",
                         confirmButtonText: 'Aceptar'
                     }).then(() => {
                         // Si hubo un error, reabrir el modal para que el usuario corrija la acción
-                        $('#ModalEscritura').modal('show');
+                        $('#ModalCedula').modal('show');
                     });
                 }
                 console.log(res); // Muestra el error en la consola para depuración
@@ -553,13 +553,13 @@ Documentos registrados por Cámara
         }); 
         
         $("#btn-register-estatuto").click(function() {
-            var formData = new FormData(document.getElementById("ModalEstatuto"));
+            var formData = new FormData(document.getElementById("ModalFoto"));
             
             // Cerrar el modal antes de enviar la solicitud 
             
             // Mostrar mensaje de carga mientras la solicitud está en curso
             Swal.fire({
-                target: document.getElementById('ModalEstatuto'),
+                target: document.getElementById('ModalFoto'),
                 title: 'Cargando...',
                 text: 'Por favor espere, estamos procesando su solicitud.',
                 allowOutsideClick: false, // Evitar que el usuario cierre el modal o la alerta
@@ -569,7 +569,7 @@ Documentos registrados por Cámara
             });
 
             $.ajax({
-                url: "{{ route('admin.registrar_documento_camara') }}",
+                url: "{{ route('admin.registrar_documento_socio') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -582,7 +582,7 @@ Documentos registrados por Cámara
                 
                 // Mostrar mensaje de éxito
                 Swal.fire({
-                    target: document.getElementById('ModalEstatuto'),
+                    target: document.getElementById('ModalFoto'),
                     icon: 'success',
                     title: '¡Éxito!',
                     text: msg,
@@ -599,26 +599,26 @@ Documentos registrados por Cámara
 
                     // Mostrar mensaje de error
                     Swal.fire({
-                        target: document.getElementById('ModalEstatuto'),
+                        target: document.getElementById('ModalFoto'),
                         icon: 'error',
                         title: 'Error',
                         text: errorMsg,
                         confirmButtonText: 'Aceptar'
                     }).then(() => {
                         // Si hubo un error, reabrir el modal para que el usuario corrija la acción
-                        $('#ModalEstatuto').modal('show');
+                        $('#ModalFoto').modal('show');
                     });
                 } catch (e) {
                     // Si ocurre un error al parsear, muestra un mensaje genérico
                     Swal.fire({
-                        target: document.getElementById('ModalEstatuto'),
+                        target: document.getElementById('ModalFoto'),
                         icon: 'error',
                         title: 'Error',
                         text: "Ocurrió un error al procesar la solicitud.",
                         confirmButtonText: 'Aceptar'
                     }).then(() => {
                         // Si hubo un error, reabrir el modal para que el usuario corrija la acción
-                        $('#ModalEstatuto').modal('show');
+                        $('#ModalFoto').modal('show');
                     });
                 }
                 console.log(res); // Muestra el error en la consola para depuración
@@ -642,7 +642,7 @@ Documentos registrados por Cámara
             });
 
             $.ajax({
-                url: "{{ route('admin.registrar_documento_camara') }}",
+                url: "{{ route('admin.registrar_documento_socio') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -715,7 +715,7 @@ Documentos registrados por Cámara
             });
 
             $.ajax({
-                url: "{{ route('admin.registrar_documento_camara') }}",
+                url: "{{ route('admin.registrar_documento_socio') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -788,7 +788,7 @@ Documentos registrados por Cámara
             });
 
             $.ajax({
-                url: "{{ route('admin.registrar_documento_camara') }}",
+                url: "{{ route('admin.registrar_documento_socio') }}",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -846,7 +846,7 @@ Documentos registrados por Cámara
         
         function showFile(id){
             $.ajax({
-                url: "{{ asset('/administrador/camara/file/ver/') }}/"+id,
+                url: "{{ asset('/administrador/socio/file/ver/') }}/"+id,
                 type: "get",
                 dataType: "html",
                 contentType: false,
@@ -875,7 +875,7 @@ Documentos registrados por Cámara
                 // Si el usuario confirma la eliminación
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ asset('/administrador/camara/file/eliminar/') }}/" + id,
+                        url: "{{ asset('/administrador/socio/file/eliminar/') }}/" + id,
                         type: "get",
                         dataType: "html",
                         contentType: false,

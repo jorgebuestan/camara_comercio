@@ -41,8 +41,7 @@ class DocumentoCamaraController extends Controller
             $allowedExtensions = ['pdf', 'xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
 
 
-            // Tipos de documento que solo aceptan PDF
-            $pdfOnlyTypes = [19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35];
+            // Tipos de documento que solo aceptan PDF 
             $tipoDoc = $request->input('tipoDoc');
   
             if (in_array($extension, $allowedExtensions)) {

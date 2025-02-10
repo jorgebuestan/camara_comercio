@@ -115,8 +115,7 @@
                                                     <th>CONSECUTIVO</th>
                                                     <th>IDEMNTIFICACIÓN</th>
                                                     <th>RAZÓN SOCIAL</th>
-                                                    <th>TIPO DE PERSONERÍA</th>
-                                                    <!--<th>ESTADO</th>-->
+                                                    <th>TIPO DE PERSONERÍA</th> 
                                                     <th>ACCIONES</th>
                                                 </tr>
                                             </thead>
@@ -703,19 +702,15 @@
                     },
                     {
                         data: 'razon_social',
-                        width: '25%'
+                        width: '20%'
                     },
                     {
                         data: 'tipo_personeria',
                         width: '12%'
-                    },
-                    /*{
-                        data: 'estado',
-                        width: '3%'
-                    },*/
+                    }, 
                     {
                         data: 'btn',
-                        width: '20%',
+                        width: '25%',
                         sortable: false,
                     }
                 ],

@@ -234,8 +234,9 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     //Para manejo de Documentos por Socio
     Route::get('/administrador/socio/documentos/{id}', [DocumentoSocioController::class, 'documentos_socio'])->middleware('auth')->name('admin.documentos_socio');
     Route::post('/administrador/socio/documentos/registrar_documento', [DocumentoSocioController::class, 'registrar_documento_socio'])->middleware('auth')->name('admin.registrar_documento_socio');
-    
-    //Mostar el Archivo
+    Route::get('/administrador/socio/file/ver/{id}', [DocumentoSocioController::class, 'ver_doc_socio'])->middleware('auth')->name('admin.ver_doc_socio');
+    Route::get('/administrador/socio/file/eliminar/{id}', [DocumentoSocioController::class, 'eliminar_archivo_socio'])->middleware('auth')->name('admin.eliminar_archivo_socio');
+ 
 });
 
 require __DIR__ . '/auth.php';

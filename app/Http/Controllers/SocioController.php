@@ -226,8 +226,9 @@ class SocioController extends Controller
                     'identificacion' => $socio->identificacion,
                     'estado_sri' => $socio->datos_tributarios->estado_sri ?? '',
                     'estado' => $estado,
-                    'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
-                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socio->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button></div>'
+                    'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-primary btn-sm rounded-pill" onclick="window.open(\'/administrador/socio/documentos/' . $socio->id . '\', \'_blank\')"><i class="fa-solid fa-file"></i>&nbsp;Archivos</button>'.
+                             '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                             '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio flex-grow-1 flex-shrink-1"  data-id="' . $socio->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button></div>'
                 ]);
             });
 
