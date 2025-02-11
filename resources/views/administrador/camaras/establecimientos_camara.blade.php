@@ -1060,7 +1060,7 @@
                 let filtered = camaras.find(function(camara) {
                     return camara.id == selectedCamera;
                 });
-                console.log(filtered);
+                console.log(camaras);
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
                 filteredActividades = JSON.parse(filteredActividades);
                 let actividades = Object.keys(actividadesEconomicas)
