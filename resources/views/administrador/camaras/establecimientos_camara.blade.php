@@ -894,6 +894,7 @@
             let actividadesEconomicas = @json($actividadesEconomicas);
             let camaras = @json($camaras);
             let actividadesDisponibles = null;
+
             if (!@json($isAdmin)) {
                 let selectedCamera = $('#camara').val();
                 let filtered = camaras.find(function(camara) {
@@ -1059,6 +1060,7 @@
                 let filtered = camaras.find(function(camara) {
                     return camara.id == selectedCamera;
                 });
+                console.log(filtered);
                 let filteredActividades = filtered.datos_tributarios.actividades_economicas;
                 filteredActividades = JSON.parse(filteredActividades);
                 let actividades = Object.keys(actividadesEconomicas)
