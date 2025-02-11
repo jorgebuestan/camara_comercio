@@ -23,7 +23,7 @@ class CamaraSocioController extends Controller
         $isAdmin = Auth::user()->hasRole('admin');
         if ($isAdmin) {
             //$camaras = Camara::pluck('razon_social', 'id');
-            $camaras = Camara::where('estado', 1)->pluck('razon_social', 'id');
+            $camaras = Camara::whereIn('estado', [1, 2])->pluck('razon_social', 'id');
         } else {
             $camaras = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
             if (!$camaras || $camaras->isEmpty()) {

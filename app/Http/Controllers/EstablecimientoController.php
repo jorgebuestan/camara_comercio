@@ -26,7 +26,7 @@ class EstablecimientoController extends Controller
         $isAdmin = Auth::user()->hasRole('admin');
         $camarasSelect = [];
         if ($isAdmin) {
-            $camarasSelect = Camara::pluck('razon_social', 'id');
+            $camarasSelect = Camara::whereIn('estado', [1, 2])->pluck('razon_social', 'id');
         } else {
             $camarasSelect = Camara::where('ruc', Auth::user()->username)->pluck('razon_social', 'id');
             if (!$camarasSelect || $camarasSelect->isEmpty()) {
@@ -39,7 +39,7 @@ class EstablecimientoController extends Controller
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
-        $camaras = Camara::with('datos_tributarios')->where('estado', 1)->get();
+        $camaras = Camara::with('datos_tributarios')->whereIn('estado', [1, 2])->get();
 
         $provinciaDefault = Provincia::find(1); // Obtenemos la provincia con ID = 1
         if ($provinciaDefault) {
