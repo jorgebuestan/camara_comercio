@@ -39,7 +39,7 @@ class DocumentoSocioController extends Controller
             $extension = \File::extension($filename);
 
             // Lista de extensiones permitidas
-            $allowedExtensions = ['pdf', 'xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+            $allowedExtensions = ['pdf', 'xls', 'xlsx', 'doc', 'docx', 'jpg', 'jpeg', 'png','PDF', 'XLS', 'XLSX', 'DOC', 'DOCX', 'JPG', 'JPEG', 'PNG' ];
 
 
             // Tipos de documento que solo aceptan PDF 
