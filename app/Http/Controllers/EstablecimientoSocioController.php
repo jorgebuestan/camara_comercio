@@ -27,7 +27,7 @@ class EstablecimientoSocioController extends Controller
         $cantones = Canton::where('id_pais', 57)->where('id_provincia', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $parroquias = Parroquia::where('id_pais', 57)->where('id_provincia', 2)->where('id_canton', 2)->orderBy('nombre', 'asc')->pluck('nombre', 'id'); // Provincias de Ecuador
         $actividadesEconomicas = ActividadEconomica::pluck('descripcion', 'id');
-        $sociosSelect = Socio::where('estado', 1)
+        $sociosSelect = Socio::whereIn('estado', [1, 2])
         ->whereIn('id_tipo_personeria', [2, 3])
         ->whereIn('id', function ($query) {
             $query->select('id_socio')
