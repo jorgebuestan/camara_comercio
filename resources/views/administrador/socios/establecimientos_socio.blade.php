@@ -1103,7 +1103,7 @@
             $('#actividad_economica').on('select2:select', function(e) {
                 const selectedId = parseInt(e.params.data.id); // Convertir a cadena
                 const selectedText = e.params.data.text;
-                if (selectedItems.length >= 6) {
+                /*if (selectedItems.length >= 6) {
                     Swal.fire({
                         target: document.getElementById('ModalEstablecimiento'),
                         icon: 'error',
@@ -1112,7 +1112,7 @@
                     });
                     $(this).val(null).trigger('change'); // Resetear el dropdown
                     return;
-                }
+                }*/
                 if (!selectedItems.includes(selectedId)) {
                     selectedItems.push(selectedId); // Agregar al array como cadena
                     $('#selectedList').append(`
@@ -1178,7 +1178,7 @@
             $('#actividad_economica_mod').on('select2:select', function(e) {
                 const selectedId = parseInt(e.params.data.id); // Convertir a cadena
                 const selectedText = e.params.data.text;
-                if (selectedItemsMod.length >= 6) {
+                /*if (selectedItemsMod.length >= 6) {
                     Swal.fire({
                         target: document.getElementById('ModalModificarEstablecimiento'),
                         icon: 'error',
@@ -1187,7 +1187,7 @@
                     });
                     $(this).val(null).trigger('change'); // Resetear el dropdown
                     return;
-                }
+                }*/
                 if (!selectedItemsMod.includes(selectedId)) {
                     selectedItemsMod.push(selectedId); // Agregar el ID al array
                     $('#selectedList_mod').append(`
