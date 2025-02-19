@@ -492,12 +492,12 @@
                     {
                         data: 'nombres',
                         title: 'Nombres',
-                        width: '20%'
+                        width: '25%'
                     },
                     {
                         data: 'apellidos',
                         title: 'Apellidos',
-                        width: '20%'
+                        width: '25%'
                     },
                     {
                         data: 'estado',
@@ -507,7 +507,7 @@
                     {
                         data: 'btn',
                         title: 'Acciones',
-                        width: '20%'
+                        width: '10%'
                     }
                 ],
                 order: [

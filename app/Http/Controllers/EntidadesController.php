@@ -101,8 +101,8 @@ class EntidadesController extends Controller
                 'direccion' => $entidad->direccion,
                 'representante' => $entidad->representante, 
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
-                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $entidad->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
-                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-entidad" data-id="' . $entidad->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" title="Modificar" data-id="' . $entidad->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
+                            '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-entidad" title="Eliminar" data-id="' . $entidad->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button>' .
                           '</div>'
             ];
         });

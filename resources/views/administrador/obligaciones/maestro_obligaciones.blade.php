@@ -395,7 +395,7 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'obligacion',
-                        width: '50%'
+                        width: '60%'
                     },
                     {
                         data: 'tiempo_presentacion',
@@ -407,7 +407,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '10%'
                     }
                 ],
                 order: [
@@ -979,14 +979,24 @@
                 });
             });
 
-            $(document).on('click', '.delete-obligacion', function() {
+            $(document).on('click', '.delete-obligacion', async function() {
                 var button = $(this);
                 var obligacionId = button.data('id');
 
                 // Mostrar la confirmación antes de proceder con la eliminación
-                var confirmDelete = confirm('¿Está seguro de que desea eliminar este registro?');
+                const result = await Swal.fire({
+                    title: '¿Está seguro de que desea eliminar este registro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                });
 
-                if (confirmDelete) {
+                if (result.isConfirmed) {
                     $.ajax({
                         url: '/administrador/obligacion/eliminar/' + obligacionId,
                         method: 'POST',
@@ -994,14 +1004,30 @@
                             _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
                         },
                         success: function(response) {
-                            alert('Registro eliminado correctamente.');
+                            //alert('Registro eliminado correctamente.');
+                            Swal.close();
+                            //alert(res.success); // Mostrar el mensaje de éxito en un alert
+                            Swal.fire({
+                                icon: 'success', // Cambiado a 'success' para mostrar un mensaje positivo
+                                title: 'Éxito',
+                                text: 'Registro eliminado correctamente.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                             // Actualizar la interfaz, por ejemplo, recargando la página o eliminando el Cargo de la lista
                             location
                                 .reload(); // O cualquier otra lógica para actualizar la interfaz
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            alert('Hubo un problema al eliminar el Registro.');
+                            //alert('Hubo un problema al eliminar el Registro.');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al eliminar el Registro.',
+                                confirmButtonText: 'Aceptar',
+                                allowOutsideClick: false
+                            });
                         }
                     });
                 } else {

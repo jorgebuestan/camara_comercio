@@ -456,7 +456,7 @@
                     },
                     {
                         data: 'entidad',
-                        width: '35%'
+                        width: '45%'
                     },
                     {
                         data: 'obligacion',
@@ -464,7 +464,7 @@
                     }, 
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '10%'
                     }
                 ],
                 order: [

@@ -308,7 +308,7 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'obligacion',
-                        width: '50%'
+                        width: '65%'
                     },
                     {
                         data: 'tiempo_presentacion',
@@ -320,7 +320,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '5%'
                     }
                 ],
                 order: [

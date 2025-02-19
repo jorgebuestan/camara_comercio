@@ -95,8 +95,8 @@ class ObligacionesEntidadController extends Controller
             // Botón dependiendo del valor de módulo
             if ($modulo == 1) {
                 $btn = '<div class="flex items-center justify-center w-full">
-                            <button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->register . '">
-                                Eliminar&nbsp;<i class="fa-solid fa-trash"></i>
+                            <button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" title="Eliminar" data-id="' . $obligacion->register . '">
+                                &nbsp;<i class="fa-solid fa-trash"></i>&nbsp;
                             </button>
                         </div>';
             } elseif ($modulo == 2) {

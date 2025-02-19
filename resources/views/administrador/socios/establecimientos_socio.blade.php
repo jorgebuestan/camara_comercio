@@ -918,7 +918,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '15%'
+                        width: '10%'
                     }
                 ],
                 order: [

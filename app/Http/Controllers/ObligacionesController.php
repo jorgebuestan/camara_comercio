@@ -84,8 +84,8 @@ class ObligacionesController extends Controller
                     '&nbsp;&nbsp;&nbsp;';*/
 
                 $boton = '<div class="d-flex justify-content-center align-items-center gap-2">' .
-                        '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $obligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
-                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" data-id="' . $obligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button>' .
+                        '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" title="Modificar" data-id="' . $obligacion->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
+                        '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-obligacion" title="Eliminar" data-id="' . $obligacion->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button>' .
                         '</div>';
             }
 

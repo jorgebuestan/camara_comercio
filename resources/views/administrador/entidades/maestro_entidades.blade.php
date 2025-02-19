@@ -525,7 +525,7 @@
                     },
                     {
                         data: 'entidad',
-                        width: '15%'
+                        width: '25%'
                     },
                     {
                         data: 'tipo_entidad',
@@ -541,7 +541,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '10%'
                     }
                 ],
                 order: [
@@ -1369,7 +1369,7 @@
             });
 
             $(document).on('click', '.delete-entidad', async function() {
-                var button = $(this);
+                var button = $(this); 
                 var entidadId = button.data('id');
 
                 const result = await Swal.fire({

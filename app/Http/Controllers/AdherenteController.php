@@ -178,8 +178,8 @@ class AdherenteController extends Controller
                 'insert' => $logSociosAdherentesIns[0] ?? null,
                 'update' => $logSociosAdherentesMod ?? null
             ];
-            $btnModificar = '<button class="btn btn-outline-warning btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>';
-            $btnDesafiliar = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-socio-adherente flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $socioAdherente->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
+            $btnModificar = '<button class="btn btn-outline-warning btn-sm rounded-pill edit-modal" title="Modificar" data-id="' . $socioAdherente->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>&nbsp;';
+            $btnDesafiliar = '<button class="btn btn-outline-danger btn-sm rounded-pill delete-socio-adherente" title="Desafiliar" data-id="' . $socioAdherente->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button>';
             $socioAdherente->adherente->fecha_ingreso = Carbon::createFromFormat('Y-m-d', $socioAdherente->adherente->fecha_ingreso)->format('d/m/Y');
             return array_merge($socioAdherente->toArray(), [
                 'logs' => $logSociosAdherentes,
@@ -187,7 +187,7 @@ class AdherenteController extends Controller
                 'nombres' => $socioAdherente->adherente->nombres ?? '',
                 'apellidos' => $socioAdherente->adherente->apellidos ?? '',
                 'estado' => $socioAdherente->estado == 1 ? 'Afiliado' : 'No Afiliado',
-                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2">' . $btnModificar . $btnDesafiliar . '</div>'
+                'btn' => '<div class="d-flex justify-content-center align-items-center">' . $btnModificar . $btnDesafiliar . '</div>'
             ]);
         })->filter()->values();
         if ($response->isEmpty()) {
