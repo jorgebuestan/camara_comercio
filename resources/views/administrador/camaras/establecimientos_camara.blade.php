@@ -960,7 +960,7 @@
                 pageLength: 10, // Establece el número de registros por página
                 columns: [{
                         data: 'fecha_inicio_actividades',
-                        width: '15%'
+                        width: '10%'
                     },
                     {
                         data: 'secuencial',
@@ -968,11 +968,11 @@
                     },
                     {
                         data: 'nombre_comercial',
-                        width: '20%'
+                        width: '25%'
                     },
                     {
                         data: 'direccion',
-                        width: '20%'
+                        width: '30%'
                     },
                     {
                         data: 'correo',
@@ -984,7 +984,7 @@
                     },
                     {
                         data: 'btn',
-                        width: '15%'
+                        width: '5%'
                     }
                 ],
                 order: [

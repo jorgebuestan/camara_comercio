@@ -12054,10 +12054,15 @@ class ActividadEconomicaSeeder extends Seeder
                     'descripcion' => 'SERVICIOS DE COCHES CAMA FERROVIARIOS' 
                 ]);  
 
-        DB::table('actividades_economicas')->insert([ 
+      /*  DB::table('actividades_economicas')->insert([ 
                     'codigo' => 'I56100101', 
                     'descripcion' => 'VENTA DE COMIDAS Y BEBIDAS EN RESTAURANTES, INCLUSO  PARA LLEVAR' 
-                ]);  
+                ]);  */
+
+        DB::table('actividades_economicas')->insert([ 
+            'codigo' => 'I56100101', 
+            'descripcion' => 'RESTAURANTES, CEVICHERIAS, PICANTERÍAS, CAFETERÍAS, ETCETERA, INCLUIDO COMIDA PARA LLEVAR' 
+        ]); 
 
         DB::table('actividades_economicas')->insert([ 
                     'codigo' => 'I56100102', 

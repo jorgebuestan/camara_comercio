@@ -130,8 +130,8 @@ class CamaraObligacionController extends Controller
                 'establecimiento' => $camaraObligacion->establecimientos->secuencial ?? '',
                 'nombre_entidad' => $camaraObligacion->entidad->entidad ?? '',
                 'nombre_obligacion' => $camaraObligacion->obligacion->obligacion ?? '', 
-                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
-                    '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-camara-obligacion flex-grow-1 flex-shrink-1" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">Eliminar&nbsp;<i class="fa-solid fa-trash"></i></button></div>'
+                'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-warning mb-3 btn-sm rounded-pill mb-1 edit-modal flex-grow-1 flex-shrink-1" style="min-width: 100px;"  title="Modificar" data-id="' . $camaraObligacion->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
+                    '<button class="btn btn-outline-danger btn-sm rounded-pill mb-1 delete-camara-obligacion flex-grow-1 flex-shrink-1"  title="Eliminar" style="min-width: 100px;" data-id="' . $camaraObligacion->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button></div>'
             ], $logCamaraObligacion);
         });
 

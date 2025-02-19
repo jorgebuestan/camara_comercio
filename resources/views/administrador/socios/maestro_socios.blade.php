@@ -702,7 +702,7 @@
                     },
                     {
                         data: 'razon_social',
-                        width: '20%'
+                        width: '30%'
                     },
                     {
                         data: 'tipo_personeria',
@@ -710,7 +710,7 @@
                     }, 
                     {
                         data: 'btn',
-                        width: '30%',
+                        width: '10%',
                         sortable: false,
                     }
                 ],

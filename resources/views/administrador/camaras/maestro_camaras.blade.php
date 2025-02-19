@@ -974,8 +974,8 @@
     columns: [
       { data: 'fecha_ingreso', width: '3%' },
       { data: 'ruc', width: '5%' },
-      { data: 'razon_social', width: '20%' },
-      { data: 'representante_legal', width: '15%' },
+      { data: 'razon_social', width: '30%' },
+      { data: 'representante_legal', width: '25%' },
       { data: 'cedula_representante_legal', width: '15%' },
       {
         data: 'fecha_desafiliacion',
@@ -985,7 +985,7 @@
         data: 'motivo_desafiliacion',
         width: '10%'
       }, 
-      { data: 'btn', width: '30%' }
+      { data: 'btn', width: '10%' }
     ],
     order: [[0, "asc"]],
     createdRow: function(row, data, dataIndex) {

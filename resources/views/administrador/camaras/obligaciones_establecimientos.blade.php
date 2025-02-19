@@ -472,7 +472,7 @@
                     }, 
                     {
                         data: 'btn',
-                        width: '20%'
+                        width: '5%'
                     }
                 ],
                 order: [

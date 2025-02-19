@@ -137,9 +137,9 @@ class CamaraController extends Controller
             $motivo_desafiliacion = "";
 
             if($camara->estado_confecam == 1){
-                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 desafiliar-camara" data-id="' . $camara->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
+                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 desafiliar-camara" title="Desafiliar" data-id="' . $camara->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button>';
             }else{
-                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-camara" data-id="' . $camara->id . '">&nbsp;&nbsp;&nbsp;Afiliar&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-plus"></i></button>';
+                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-camara" title="Afiliar" data-id="' . $camara->id . '">&nbsp<i class="fa-solid fa-plus"></i>&nbsp;</button>';
                 $fecha_desafiliacion = $camara->fecha_desafiliacion;
                 $motivo_desafiliacion = $camara->motivo_desafiliacion;
             } 
@@ -161,8 +161,8 @@ class CamaraController extends Controller
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
                          //'<button class="btn btn-outline-primary mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-file"></i>&nbsp;Archivos</button>'.
                           
-                         '<button class="btn btn-outline-primary btn-sm rounded-pill" onclick="window.open(\'/administrador/camara/documentos/' . $camara->id . '\', \'_blank\')"><i class="fa-solid fa-file"></i>&nbsp;Archivos</button>'.
-                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                         '<button class="btn btn-outline-primary btn-sm rounded-pill" title="Archivos" onclick="window.open(\'/administrador/camara/documentos/' . $camara->id . '\', \'_blank\')">&nbsp;<i class="fa-solid fa-file"></i>&nbsp;</button>'.
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" title="Modificar" data-id="' . $camara->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
                             $boton .
                          '</div>'         
             ];

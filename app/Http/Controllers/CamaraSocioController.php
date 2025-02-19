@@ -56,7 +56,7 @@ class CamaraSocioController extends Controller
                 DB::raw("DATE_FORMAT(camaras_socios.fecha_desafiliacion, '%d/%m/%Y') as fecha_desafiliacion"),
                 'camaras_socios.motivo_desafiliacion'
             ) 
-            ->orderBy('socios.numero_consecutivo', 'asc');
+            ->orderByRaw("LPAD(socios.numero_consecutivo, 10, '0') ASC");
 
         // Filtro de localidad 
 
@@ -109,9 +109,9 @@ class CamaraSocioController extends Controller
             $motivo_desafiliacion = "";
 
             if($socio->estado == 1){
-                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-socio" data-id="' . $socio->id . '">Desafiliar&nbsp;<i class="fa-solid fa-trash"></i></button>';
+                $boton = '<button class="btn btn-outline-danger btn-sm rounded-pill mb-3 delete-socio"  title="Desafiliar" data-id="' . $socio->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button>';
             }else{
-                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-socio" data-id="' . $socio->id . '">&nbsp;&nbsp;&nbsp;Afiliar&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-plus"></i></button>';
+                $boton = '<button class="btn btn-outline-success btn-sm rounded-pill mb-3 reafiliar-socio"  title="Afiliar" data-id="' . $socio->id . '">&nbsp;<i class="fa-solid fa-plus"></i>&nbsp;</button>';
                 $fecha_desafiliacion = $socio->fecha_desafiliacion;
                 $motivo_desafiliacion = $socio->motivo_desafiliacion;
             } 
@@ -125,7 +125,7 @@ class CamaraSocioController extends Controller
                 'fecha_desafiliacion' => $fecha_desafiliacion, 
                 'motivo_desafiliacion' => $motivo_desafiliacion, 
                 'btn' => '<div class="d-flex justify-content-center align-items-center gap-2">' .
-                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal" data-id="' . $socio->id . '"><i class="fa-solid fa-pencil"></i>&nbsp;Modificar</button>' .
+                            '<button class="btn btn-outline-warning mb-3 btn-sm rounded-pill open-modal"  title="Modificar" data-id="' . $socio->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
                             $boton .
                          '</div>'
             ];
