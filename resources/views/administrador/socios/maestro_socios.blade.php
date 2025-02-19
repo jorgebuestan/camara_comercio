@@ -702,7 +702,7 @@
                     },
                     {
                         data: 'razon_social',
-                        width: '30%'
+                        width: '25%'
                     },
                     {
                         data: 'tipo_personeria',
