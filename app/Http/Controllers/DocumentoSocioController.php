@@ -105,4 +105,34 @@ class DocumentoSocioController extends Controller
             ]
         ], 201);
     }
+
+    public function get_cedulas_socio(Request $request)
+    { 
+        $cedulas = DocumentoSocio::where('id_socio', $request->socio_id)->where('id_tipo_documento', '1')->where('estado', '1')->get();  
+        return response()->json($cedulas);
+    }
+
+    public function get_fotos_socio(Request $request)
+    { 
+        $fotos = DocumentoSocio::where('id_socio', $request->socio_id)->where('id_tipo_documento', '4')->where('estado', '1')->get();  
+        return response()->json($fotos);
+    }
+
+    public function get_nombramientos_socio(Request $request)
+    { 
+        $nombramientos = DocumentoSocio::where('id_socio', $request->socio_id)->where('id_tipo_documento', '5')->where('estado', '1')->get();  
+        return response()->json($nombramientos);
+    }
+
+    public function get_ruc_socio(Request $request)
+    { 
+        $ruc = DocumentoSocio::where('id_socio', $request->socio_id)->where('id_tipo_documento', '6')->where('estado', '1')->get();  
+        return response()->json($ruc);
+    }
+
+    public function get_varios_socio(Request $request)
+    { 
+        $varios = DocumentoSocio::where('id_socio', $request->socio_id)->where('id_tipo_documento', '8')->where('estado', '1')->get();  
+        return response()->json($varios);
+    }
 }

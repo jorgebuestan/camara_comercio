@@ -237,6 +237,12 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/socio/file/ver/{id}', [DocumentoSocioController::class, 'ver_doc_socio'])->middleware('auth')->name('admin.ver_doc_socio');
     Route::get('/administrador/socio/file/eliminar/{id}', [DocumentoSocioController::class, 'eliminar_archivo_socio'])->middleware('auth')->name('admin.eliminar_archivo_socio');
  
+    Route::get('/administrador/socio/archivos/get_cedulas_socio', [DocumentoSocioController::class, 'get_cedulas_socio'])->name('admin.get_cedulas_socio');
+    Route::get('/administrador/socio/archivos/get_fotos_socio', [DocumentoSocioController::class, 'get_fotos_socio'])->name('admin.get_fotos_socio');
+    Route::get('/administrador/socio/archivos/get_nombramientos_socio', [DocumentoSocioController::class, 'get_nombramientos_socio'])->name('admin.get_nombramientos_socio');
+    Route::get('/administrador/socio/archivos/get_ruc_socio', [DocumentoSocioController::class, 'get_ruc_socio'])->name('admin.get_ruc_socio');
+    Route::get('/administrador/socio/archivos/get_varios_socio', [DocumentoSocioController::class, 'get_varios_socio'])->name('admin.get_varios_socio');
+
 });
 
 require __DIR__ . '/auth.php';

@@ -155,6 +155,10 @@
                                                 <a class="nav-link" data-bs-target="#datos_tributarios"
                                                     href="#datos_tributarios" data-bs-toggle="tab">Datos Tributarios</a>
                                             </li> 
+                                            <li id="tab_archivos" class="nav-item">
+                                                <a class="nav-link" data-bs-target="#archivos"
+                                                    href="#archivos" data-bs-toggle="tab">Archivos</a>
+                                            </li>
                                         </ul>
                                         <div class="tab-content">
                                             <div id="datos_generales" class="tab-pane active">
@@ -589,6 +593,108 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="archivos" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <section class="card" id="w3"> 
+                                                        <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">  
+                                                                                Cédula
+                                                                            </div>
+                                                                            <div class="col-md-9">   
+                                                                                <div class="rowborder">
+                                                                                    <div id="cedula-container">
+                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                    </div>
+                                                                                </div> 		 
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div> 
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">  
+                                                                                Foto
+                                                                            </div>
+                                                                            <div class="col-md-9">   
+                                                                                <div class="rowborder">
+                                                                                    <div id="foto-container">
+                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                    </div>
+                                                                                </div> 		 
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div>
+                                                                </div> 
+                                                                <div class="row">
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">  
+                                                                                Nombramiento
+                                                                            </div>
+                                                                            <div class="col-md-9">   
+                                                                                <div class="rowborder">
+                                                                                    <div id="nombramiento-container">
+                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                    </div>
+                                                                                </div> 		 
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div> 
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">  
+                                                                                RUC
+                                                                            </div>
+                                                                            <div class="col-md-9">   
+                                                                                <div class="rowborder">
+                                                                                    <div id="ruc-container">
+                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                    </div>
+                                                                                </div> 		 
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div> 
+                                                                </div> 
+                                                                <div class="row">
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">  
+                                                                                Varios
+                                                                            </div>
+                                                                            <div class="col-md-9">   
+                                                                                <div class="rowborder">
+                                                                                    <div id="varios-container">
+                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                    </div>
+                                                                                </div> 		 
+                                                                            </div>
+                                                                        </div> 
+                                                                    </div> 
+                                                                    <div class="col-md-6"> 
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">  
+                                                                                &nbsp;
+                                                                            </div> 
+                                                                        </div> 
+                                                                    </div> 
+                                                                </div>      
+                                                                <div class="row">
+                                                                    <div class="col-md-6"> 
+                                                                        &nbsp;
+                                                                    </div> 
+                                                                    <div class="col-md-6"> 
+                                                                        &nbsp;
+                                                                    </div>
+                                                                </div>    
+                                                            </div>    
+                                                        </div> 
+                                                    </section> 
+                                                </div> 
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -609,6 +715,42 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        function showFile(id) {
+    $.ajax({
+        url: "{{ url('/administrador/socio/file/ver/') }}/" + id,
+        type: "get",
+        dataType: "html",
+        contentType: false,
+        processData: false
+    }).done(function(res) {
+        console.log("Respuesta AJAX:", res);
+
+        try {
+            let response = JSON.parse(res);
+            console.log("Objeto parseado:", response);
+
+            if (response.response && response.response.url) {
+                let rutaRaiz = window.location.origin;
+                let fileUrl = rutaRaiz + '/storage/' + response.response.url;
+                console.log("Abriendo archivo en:", fileUrl);
+                window.open(fileUrl, '_blank');
+            } else {
+                alert("No se pudo cargar el archivo.");
+            }
+        } catch (e) {
+            console.error("Error al parsear JSON:", e, res);
+            alert("Error en la respuesta del servidor.");
+        }
+    }).fail(function(res) {
+        console.error("Error en la petición AJAX:", res);
+        alert("Error al obtener el archivo.");
+    });
+}
+
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -734,6 +876,7 @@
             //$('#datos_tributarios').hide();  
             //$('a[href="#datos_tributarios"]').hide();
             $('#tab_item_tributario').hide();
+            $('#tab_archivos').hide();
             $('#datos_tributarios').removeClass('show active');
 
 
@@ -1709,6 +1852,209 @@ function toggleNaturalConRuc(active) {
                     );
                 }
 
+                $.ajax({
+                    url: "{{ route('admin.get_cedulas_socio') }}",
+                    type: "GET",
+                    data: { socio_id: socioSelected },
+                    success: function(response) {
+                        let container = $("#cedula-container"); 
+                        container.empty(); // Limpiar la sección de documentos
+
+                        if (response.length === 0) {
+                            container.append('No hay Documentos Cargados');
+                        } else {
+                            container.append(`
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        ${response.length} Documento(s) cargado(s)
+                                    </div>
+                                </div>
+                            `);
+
+                            response.forEach(item => {
+                                container.append(`
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            ${item.titulo}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">&nbsp;</div>
+                                    </div>
+                                `);
+                            });
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('admin.get_fotos_socio') }}",
+                    type: "GET",
+                    data: { socio_id: socioSelected },
+                    success: function(response) {
+                        let container = $("#foto-container"); 
+                        container.empty(); // Limpiar la sección de documentos
+
+                        if (response.length === 0) {
+                            container.append('No hay Documentos Cargados');
+                        } else {
+                            container.append(`
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        ${response.length} Documento(s) cargado(s)
+                                    </div>
+                                </div>
+                            `);
+
+                            response.forEach(item => {
+                                container.append(`
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            ${item.titulo}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">&nbsp;</div>
+                                    </div>
+                                `);
+                            });
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('admin.get_nombramientos_socio') }}",
+                    type: "GET",
+                    data: { socio_id: socioSelected },
+                    success: function(response) {
+                        let container = $("#nombramiento-container"); 
+                        container.empty(); // Limpiar la sección de documentos
+
+                        if (response.length === 0) {
+                            container.append('No hay Documentos Cargados');
+                        } else {
+                            container.append(`
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        ${response.length} Documento(s) cargado(s)
+                                    </div>
+                                </div>
+                            `);
+
+                            response.forEach(item => {
+                                container.append(`
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            ${item.titulo}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">&nbsp;</div>
+                                    </div>
+                                `);
+                            });
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('admin.get_ruc_socio') }}",
+                    type: "GET",
+                    data: { socio_id: socioSelected },
+                    success: function(response) {
+                        let container = $("#ruc-container"); 
+                        container.empty(); // Limpiar la sección de documentos
+
+                        if (response.length === 0) {
+                            container.append('No hay Documentos Cargados');
+                        } else {
+                            container.append(`
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        ${response.length} Documento(s) cargado(s)
+                                    </div>
+                                </div>
+                            `);
+
+                            response.forEach(item => {
+                                container.append(`
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            ${item.titulo}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">&nbsp;</div>
+                                    </div>
+                                `);
+                            });
+                        }
+                    }
+                });
+
+                
+                $.ajax({
+                    url: "{{ route('admin.get_varios_socio') }}",
+                    type: "GET",
+                    data: { socio_id: socioSelected },
+                    success: function(response) {
+                        let container = $("#varios-container"); 
+                        container.empty(); // Limpiar la sección de documentos
+
+                        if (response.length === 0) {
+                            container.append('No hay Documentos Cargados');
+                        } else {
+                            container.append(`
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        ${response.length} Documento(s) cargado(s)
+                                    </div>
+                                </div>
+                            `);
+
+                            response.forEach(item => {
+                                container.append(`
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            ${item.titulo}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">&nbsp;</div>
+                                    </div>
+                                `);
+                            });
+                        }
+                    }
+                });
+
+                $('#tab_archivos').show();
+
 
 
                 $('#ModalSocio').find('#btn_register_socio').hide();
@@ -1803,6 +2149,8 @@ function toggleNaturalConRuc(active) {
                         '#tipo_personeria, #tipo_regimen, #agente_retencion, #contribuyente_especial, #pais, #provincia, #canton, #parroquia'
                     )
                     .val(-1);
+                $('#tab_archivos').hide();
+                $('a[href="#datos_generales"]').tab('show');
             }
 
             function validarRegistro() {  //jbuestan  Para validacion de Registro
@@ -2718,7 +3066,8 @@ function toggleNaturalConRuc(active) {
 
             calcularDuracion('fecha_registro_sri', 'fecha_nacimiento',
                 'error-fecha-fecha-nacimiento-mayor', 'anios_edad'
-            );
+            ); 
+            
         });
     </script>
 @endsection
