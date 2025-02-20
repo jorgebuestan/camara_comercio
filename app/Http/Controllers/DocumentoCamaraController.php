@@ -106,4 +106,34 @@ class DocumentoCamaraController extends Controller
             ]
         ], 201);
     }
+
+    public function get_escrituras_camara(Request $request)
+    { 
+        $escrituras = DocumentoCamara::where('id_camara', $request->camara_id)->where('id_tipo_documento', '2')->where('estado', '1')->get();  
+        return response()->json($escrituras);
+    }
+
+    public function get_estatutos_camara(Request $request)
+    { 
+        $estatutos = DocumentoCamara::where('id_camara', $request->camara_id)->where('id_tipo_documento', '3')->where('estado', '1')->get(); 
+        return response()->json($estatutos);
+    }
+
+    public function get_nombramientos_camara(Request $request)
+    { 
+        $nombramientos = DocumentoCamara::where('id_camara', $request->camara_id)->where('id_tipo_documento', '5')->where('estado', '1')->get(); 
+        return response()->json($nombramientos);
+    }
+
+    public function get_ruc_camara(Request $request)
+    { 
+        $ruc = DocumentoCamara::where('id_camara', $request->camara_id)->where('id_tipo_documento', '6')->where('estado', '1')->get(); 
+        return response()->json($ruc);
+    }
+
+    public function get_varios_camara(Request $request)
+    {   
+        $varios = DocumentoCamara::where('id_camara', $request->camara_id)->where('id_tipo_documento', '8')->where('estado', '1')->get();
+        return response()->json($varios);
+    }
 }

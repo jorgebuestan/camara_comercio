@@ -594,106 +594,106 @@
                                                 </div>
                                             </div>
                                             <div id="archivos" class="tab-pane">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <section class="card" id="w3"> 
-                                                        <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-3">  
-                                                                                Cédula
-                                                                            </div>
-                                                                            <div class="col-md-9">   
-                                                                                <div class="rowborder">
-                                                                                    <div id="cedula-container">
-                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                    </div>
-                                                                                </div> 		 
-                                                                            </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <section class="card" id="w3"> 
+                                                            <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">  
+                                                                                    Cédula
+                                                                                </div>
+                                                                                <div class="col-md-9">   
+                                                                                    <div class="rowborder">
+                                                                                        <div id="cedula-container">
+                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                        </div>
+                                                                                    </div> 		 
+                                                                                </div>
+                                                                            </div> 
                                                                         </div> 
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">  
+                                                                                    Foto
+                                                                                </div>
+                                                                                <div class="col-md-9">   
+                                                                                    <div class="rowborder">
+                                                                                        <div id="foto-container">
+                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                        </div>
+                                                                                    </div> 		 
+                                                                                </div>
+                                                                            </div> 
+                                                                        </div>
                                                                     </div> 
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-3">  
-                                                                                Foto
-                                                                            </div>
-                                                                            <div class="col-md-9">   
-                                                                                <div class="rowborder">
-                                                                                    <div id="foto-container">
-                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                    </div>
-                                                                                </div> 		 
-                                                                            </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">  
+                                                                                    Nombramiento
+                                                                                </div>
+                                                                                <div class="col-md-9">   
+                                                                                    <div class="rowborder">
+                                                                                        <div id="nombramiento-container">
+                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                        </div>
+                                                                                    </div> 		 
+                                                                                </div>
+                                                                            </div> 
                                                                         </div> 
-                                                                    </div>
-                                                                </div> 
-                                                                <div class="row">
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-3">  
-                                                                                Nombramiento
-                                                                            </div>
-                                                                            <div class="col-md-9">   
-                                                                                <div class="rowborder">
-                                                                                    <div id="nombramiento-container">
-                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                    </div>
-                                                                                </div> 		 
-                                                                            </div>
-                                                                        </div> 
-                                                                    </div> 
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-3">  
-                                                                                RUC
-                                                                            </div>
-                                                                            <div class="col-md-9">   
-                                                                                <div class="rowborder">
-                                                                                    <div id="ruc-container">
-                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                    </div>
-                                                                                </div> 		 
-                                                                            </div>
-                                                                        </div> 
-                                                                    </div> 
-                                                                </div> 
-                                                                <div class="row">
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-3">  
-                                                                                Varios
-                                                                            </div>
-                                                                            <div class="col-md-9">   
-                                                                                <div class="rowborder">
-                                                                                    <div id="varios-container">
-                                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                    </div>
-                                                                                </div> 		 
-                                                                            </div>
-                                                                        </div> 
-                                                                    </div> 
-                                                                    <div class="col-md-6"> 
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">  
-                                                                                &nbsp;
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">  
+                                                                                    RUC
+                                                                                </div>
+                                                                                <div class="col-md-9">   
+                                                                                    <div class="rowborder">
+                                                                                        <div id="ruc-container">
+                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                        </div>
+                                                                                    </div> 		 
+                                                                                </div>
                                                                             </div> 
                                                                         </div> 
                                                                     </div> 
-                                                                </div>      
-                                                                <div class="row">
-                                                                    <div class="col-md-6"> 
-                                                                        &nbsp;
-                                                                    </div> 
-                                                                    <div class="col-md-6"> 
-                                                                        &nbsp;
-                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">  
+                                                                                    Varios
+                                                                                </div>
+                                                                                <div class="col-md-9">   
+                                                                                    <div class="rowborder">
+                                                                                        <div id="varios-container">
+                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                                        </div>
+                                                                                    </div> 		 
+                                                                                </div>
+                                                                            </div> 
+                                                                        </div> 
+                                                                        <div class="col-md-6"> 
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">  
+                                                                                    &nbsp;
+                                                                                </div> 
+                                                                            </div> 
+                                                                        </div> 
+                                                                    </div>      
+                                                                    <div class="row">
+                                                                        <div class="col-md-6"> 
+                                                                            &nbsp;
+                                                                        </div> 
+                                                                        <div class="col-md-6"> 
+                                                                            &nbsp;
+                                                                        </div>
+                                                                    </div>    
                                                                 </div>    
-                                                            </div>    
-                                                        </div> 
-                                                    </section> 
-                                                </div> 
-                                            </div>
+                                                            </div> 
+                                                        </section> 
+                                                    </div> 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -719,37 +719,36 @@
 
     <script>
         function showFile(id) {
-    $.ajax({
-        url: "{{ url('/administrador/socio/file/ver/') }}/" + id,
-        type: "get",
-        dataType: "html",
-        contentType: false,
-        processData: false
-    }).done(function(res) {
-        console.log("Respuesta AJAX:", res);
+            $.ajax({
+                url: "{{ url('/administrador/socio/file/ver/') }}/" + id,
+                type: "get",
+                dataType: "html",
+                contentType: false,
+                processData: false
+            }).done(function(res) {
+                console.log("Respuesta AJAX:", res);
 
-        try {
-            let response = JSON.parse(res);
-            console.log("Objeto parseado:", response);
+                try {
+                    let response = JSON.parse(res);
+                    console.log("Objeto parseado:", response);
 
-            if (response.response && response.response.url) {
-                let rutaRaiz = window.location.origin;
-                let fileUrl = rutaRaiz + '/storage/' + response.response.url;
-                console.log("Abriendo archivo en:", fileUrl);
-                window.open(fileUrl, '_blank');
-            } else {
-                alert("No se pudo cargar el archivo.");
-            }
-        } catch (e) {
-            console.error("Error al parsear JSON:", e, res);
-            alert("Error en la respuesta del servidor.");
-        }
-    }).fail(function(res) {
-        console.error("Error en la petición AJAX:", res);
-        alert("Error al obtener el archivo.");
-    });
-}
-
+                    if (response.response && response.response.url) {
+                        let rutaRaiz = window.location.origin;
+                        let fileUrl = rutaRaiz + '/storage/' + response.response.url;
+                        console.log("Abriendo archivo en:", fileUrl);
+                        window.open(fileUrl, '_blank');
+                    } else {
+                        alert("No se pudo cargar el archivo.");
+                    }
+                } catch (e) {
+                    console.error("Error al parsear JSON:", e, res);
+                    alert("Error en la respuesta del servidor.");
+                }
+            }).fail(function(res) {
+                console.error("Error en la petición AJAX:", res);
+                alert("Error al obtener el archivo.");
+            });
+        } 
     </script>
 
     <script>

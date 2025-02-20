@@ -34,7 +34,7 @@ Documentos registrados por Socio
         <div class="col-lg-12">
             <section class="card" id="w3">
                 <header class="card-header"> 
-                    <h2 class="card-title">Adjunta los siguientes Documentos</h2>
+                    <h2 class="card-title">Adjunta los siguientes Documentos para el Socio</h2>
                 </header>
                 <div class="card-body">
                         <div class="row">

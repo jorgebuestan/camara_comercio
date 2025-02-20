@@ -231,6 +231,12 @@ Route::middleware(['auth', 'password.change'])->group(function () {
     Route::get('/administrador/camara/file/ver/{id}', [DocumentoCamaraController::class, 'ver_doc_camara'])->middleware('auth')->name('admin.ver_doc_camara');
     Route::get('/administrador/camara/file/eliminar/{id}', [DocumentoCamaraController::class, 'eliminar_archivo_camara'])->middleware('auth')->name('admin.eliminar_archivo_camara');
 
+    Route::get('/administrador/camara/archivos/get_escrituras_camara', [DocumentoCamaraController::class, 'get_escrituras_camara'])->name('admin.get_escrituras_camara');
+    Route::get('/administrador/camara/archivos/get_estatutos_camara', [DocumentoCamaraController::class, 'get_estatutos_camara'])->name('admin.get_estatutos_camara');
+    Route::get('/administrador/camara/archivos/get_nombramientos_camara', [DocumentoCamaraController::class, 'get_nombramientos_camara'])->name('admin.get_nombramientos_camara');
+    Route::get('/administrador/camara/archivos/get_ruc_camara', [DocumentoCamaraController::class, 'get_ruc_camara'])->name('admin.get_ruc_camara');
+    Route::get('/administrador/camara/archivos/get_varios_camara', [DocumentoCamaraController::class, 'get_varios_camara'])->name('admin.get_varios_camara');
+
     //Para manejo de Documentos por Socio
     Route::get('/administrador/socio/documentos/{id}', [DocumentoSocioController::class, 'documentos_socio'])->middleware('auth')->name('admin.documentos_socio');
     Route::post('/administrador/socio/documentos/registrar_documento', [DocumentoSocioController::class, 'registrar_documento_socio'])->middleware('auth')->name('admin.registrar_documento_socio');
