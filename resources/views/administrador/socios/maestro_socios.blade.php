@@ -596,104 +596,81 @@
                                             <div id="archivos" class="tab-pane">
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <section class="card" id="w3"> 
-                                                            <div class="card-body">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Cédula
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="cedula-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Foto
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="foto-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div>
-                                                                    </div> 
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Nombramiento
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="nombramiento-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    RUC
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="ruc-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                    </div> 
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Varios
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="varios-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">  
-                                                                                    &nbsp;
-                                                                                </div> 
-                                                                            </div> 
-                                                                        </div> 
-                                                                    </div>      
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            &nbsp;
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            &nbsp;
-                                                                        </div>
-                                                                    </div>    
-                                                                </div>    
+                                                        <div class="row">
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        Cédula
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="cedula-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                        </div>  
+                                                                    </div>
+                                                                </div> 
                                                             </div> 
-                                                        </section> 
-                                                    </div> 
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        Foto
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                            <div id="foto-container">
+                                                                                <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                            </div>  
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                        </div> 
+                                                    </div>
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-md-6"> 
+                                                        <div class="row">
+                                                            <div class="col-md-3">  
+                                                                Nombramiento
+                                                            </div>
+                                                            <div class="col-md-9">    
+                                                                    <div id="nombramiento-container">
+                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                    </div> 
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
+                                                    <div class="col-md-6"> 
+                                                        <div class="row">
+                                                            <div class="col-md-3">  
+                                                                RUC
+                                                            </div>
+                                                            <div class="col-md-9">    
+                                                                    <div id="ruc-container">
+                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                    </div>  
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="col-md-6"> 
+                                                        <div class="row">
+                                                            <div class="col-md-3">  
+                                                                Varios
+                                                            </div>
+                                                            <div class="col-md-9">    
+                                                                    <div id="varios-container">
+                                                                        <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                    </div> 
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
+                                                    <div class="col-md-6"> 
+                                                        <div class="row">
+                                                            <div class="col-md-12">  
+                                                                &nbsp;
+                                                            </div> 
+                                                        </div> 
+                                                    </div> 
+                                                </div>      
                                             </div>
                                         </div>
                                     </div>
@@ -1851,6 +1828,14 @@ function toggleNaturalConRuc(active) {
                     );
                 }
 
+                console.log("Ejecutando cambio de botones");
+                console.log($("#ModalSocio").length);
+                console.log($("#btn_register_socio").length);
+                console.log($("#btn_update_socio").length);
+                //$('#tab_archivos').show();  
+                $('#ModalSocio').find('#btn_register_socio').hide();
+                $('#ModalSocio').find('#btn_update_socio').show();
+
                 $.ajax({
                     url: "{{ route('admin.get_cedulas_socio') }}",
                     type: "GET",
@@ -1862,13 +1847,13 @@ function toggleNaturalConRuc(active) {
                         if (response.length === 0) {
                             container.append('No hay Documentos Cargados');
                         } else {
-                            container.append(`
+                            /*container.append(`
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         ${response.length} Documento(s) cargado(s)
                                     </div>
                                 </div>
-                            `);
+                            `);*/
 
                             response.forEach(item => {
                                 container.append(`
@@ -1902,13 +1887,13 @@ function toggleNaturalConRuc(active) {
                         if (response.length === 0) {
                             container.append('No hay Documentos Cargados');
                         } else {
-                            container.append(`
+                            /*container.append(`
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         ${response.length} Documento(s) cargado(s)
                                     </div>
                                 </div>
-                            `);
+                            `);*/
 
                             response.forEach(item => {
                                 container.append(`
@@ -1942,13 +1927,13 @@ function toggleNaturalConRuc(active) {
                         if (response.length === 0) {
                             container.append('No hay Documentos Cargados');
                         } else {
-                            container.append(`
+                            /*container.append(`
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         ${response.length} Documento(s) cargado(s)
                                     </div>
                                 </div>
-                            `);
+                            `);*/
 
                             response.forEach(item => {
                                 container.append(`
@@ -1982,13 +1967,13 @@ function toggleNaturalConRuc(active) {
                         if (response.length === 0) {
                             container.append('No hay Documentos Cargados');
                         } else {
-                            container.append(`
+                            /*container.append(`
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         ${response.length} Documento(s) cargado(s)
                                     </div>
                                 </div>
-                            `);
+                            `);*/
 
                             response.forEach(item => {
                                 container.append(`
@@ -2023,13 +2008,13 @@ function toggleNaturalConRuc(active) {
                         if (response.length === 0) {
                             container.append('No hay Documentos Cargados');
                         } else {
-                            container.append(`
+                            /*container.append(`
                                 <div class="row"> 
                                     <div class="col-md-12">
                                         ${response.length} Documento(s) cargado(s)
                                     </div>
                                 </div>
-                            `);
+                            `);*/
 
                             response.forEach(item => {
                                 container.append(`
@@ -2052,12 +2037,7 @@ function toggleNaturalConRuc(active) {
                     }
                 });
 
-                $('#tab_archivos').show();
-
-
-
-                $('#ModalSocio').find('#btn_register_socio').hide();
-                $('#ModalSocio').find('#btn_update_socio').show();
+                
                 $('#ModalSocio').modal('show');
             });
             $('#btn-more-info').on('click', function() {
@@ -3066,6 +3046,13 @@ function toggleNaturalConRuc(active) {
             calcularDuracion('fecha_registro_sri', 'fecha_nacimiento',
                 'error-fecha-fecha-nacimiento-mayor', 'anios_edad'
             ); 
+
+            $('#ModalSocio').on('shown.bs.modal', function () {
+                console.log("Modal mostrado, ejecutando cambios en botones");
+                $('#tab_archivos').show();  
+                $('#btn_register_socio').hide();
+                $('#btn_update_socio').show();
+            });
             
         });
     </script>
