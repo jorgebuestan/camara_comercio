@@ -900,102 +900,79 @@
                                             <div id="archivos" class="tab-pane">
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <section class="card" id="w3"> 
-                                                            <div class="card-body">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Escrituras
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="escritura-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
+                                                        <div class="row">
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        <b>Escrituras</b>
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="escritura-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
                                                                         </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Estatutos
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="estatuto-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div>
-                                                                    </div> 
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Nombramiento
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="nombramiento-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    RUC
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="ruc-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                    </div> 
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-3">  
-                                                                                    Varios
-                                                                                </div>
-                                                                                <div class="col-md-9">   
-                                                                                    <div class="rowborder">
-                                                                                        <div id="varios-container">
-                                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
-                                                                                        </div>
-                                                                                    </div> 		 
-                                                                                </div>
-                                                                            </div> 
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">  
-                                                                                    &nbsp;
-                                                                                </div> 
-                                                                            </div> 
-                                                                        </div> 
-                                                                    </div>      
-                                                                    <div class="row">
-                                                                        <div class="col-md-6"> 
-                                                                            &nbsp;
-                                                                        </div> 
-                                                                        <div class="col-md-6"> 
-                                                                            &nbsp;
-                                                                        </div>
-                                                                    </div>    
-                                                                </div>    
+                                                                    </div>
+                                                                </div> 
                                                             </div> 
-                                                        </section> 
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        <b>Estatutos</b>
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="estatuto-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                        </div>  
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        <b>Nombramiento</b>
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="nombramiento-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                        </div> 
+                                                                    </div>
+                                                                </div> 
+                                                            </div> 
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        <b>RUC</b>
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="ruc-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                        </div>  
+                                                                    </div>
+                                                                </div> 
+                                                            </div> 
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-3">  
+                                                                        <b>Varios</b>
+                                                                    </div>
+                                                                    <div class="col-md-9">    
+                                                                        <div id="varios-container">
+                                                                            <!-- Aquí se insertarán los documentos dinámicamente -->
+                                                                        </div> 
+                                                                    </div>
+                                                                </div> 
+                                                            </div> 
+                                                            <div class="col-md-6"> 
+                                                                <div class="row">
+                                                                    <div class="col-md-12">  
+                                                                        &nbsp;
+                                                                    </div> 
+                                                                </div> 
+                                                            </div> 
+                                                        </div>
                                                     </div> 
                                                 </div>
                                             </div>
@@ -2609,13 +2586,13 @@
                                 if (response.length === 0) {
                                     container.append('No hay Documentos Cargados');
                                 } else {
-                                    container.append(`
+                                    /*container.append(`
                                         <div class="row"> 
                                             <div class="col-md-12">
                                                 ${response.length} Documento(s) cargado(s)
                                             </div>
                                         </div>
-                                    `);
+                                    `);*/
 
                                     response.forEach(item => {
                                         container.append(`
@@ -2649,13 +2626,13 @@
                                 if (response.length === 0) {
                                     container.append('No hay Documentos Cargados');
                                 } else {
-                                    container.append(`
+                                    /*container.append(`
                                         <div class="row"> 
                                             <div class="col-md-12">
                                                 ${response.length} Documento(s) cargado(s)
                                             </div>
                                         </div>
-                                    `);
+                                    `);*/
 
                                     response.forEach(item => {
                                         container.append(`
@@ -2689,13 +2666,13 @@
                                 if (response.length === 0) {
                                     container.append('No hay Documentos Cargados');
                                 } else {
-                                    container.append(`
+                                    /*container.append(`
                                         <div class="row"> 
                                             <div class="col-md-12">
                                                 ${response.length} Documento(s) cargado(s)
                                             </div>
                                         </div>
-                                    `);
+                                    `);*/
 
                                     response.forEach(item => {
                                         container.append(`
@@ -2729,13 +2706,13 @@
                                 if (response.length === 0) {
                                     container.append('No hay Documentos Cargados');
                                 } else {
-                                    container.append(`
+                                    /*container.append(`
                                         <div class="row"> 
                                             <div class="col-md-12">
                                                 ${response.length} Documento(s) cargado(s)
                                             </div>
                                         </div>
-                                    `);
+                                    `);*/
 
                                     response.forEach(item => {
                                         container.append(`
@@ -2769,13 +2746,13 @@
                                 if (response.length === 0) {
                                     container.append('No hay Documentos Cargados');
                                 } else {
-                                    container.append(`
+                                    /*container.append(`
                                         <div class="row"> 
                                             <div class="col-md-12">
                                                 ${response.length} Documento(s) cargado(s)
                                             </div>
                                         </div>
-                                    `);
+                                    `);*/
 
                                     response.forEach(item => {
                                         container.append(`
@@ -2796,8 +2773,7 @@
                                     });
                                 }
                             }
-                        });
-
+                        }); 
 
                         //console.log('Valor cargo_id:', camaraIdInput.val()); // Verificar que el valor se asigna
                         //console.log('Valor cargoname:', CargoInput.val()); // Verificar que el valor se asigna 

@@ -129,6 +129,112 @@
   }
 </style>
 
+<style>
+    .boton-container {
+        position: relative;
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        min-height: 100px;
+        overflow: hidden;
+    }
+
+    /* Fondo de Cédula */
+    .boton-cedula::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/cedula.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    /* Fondo de Foto */
+    .boton-foto::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/foto.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    /* Fondo de Nombramiento */
+    .boton-nombramiento::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/nombramiento.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    /* Fondo de RUC */
+    .boton-ruc::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/ruc.jpg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    /* Fondo de Varios */
+    .boton-varios::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/varios.png') }}');
+        background-size: cover;
+        /* background-size: 100% 100%;  Se ajusta completamente al div */
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    /* Para asegurarse de que el botón se vea correctamente */
+    .boton-container button {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 10px;
+    }
+</style>
+
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ URL::asset('porto/css/theme.css') }}" />
 

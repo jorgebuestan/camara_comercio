@@ -600,7 +600,7 @@
                                                             <div class="col-md-6"> 
                                                                 <div class="row">
                                                                     <div class="col-md-3">  
-                                                                        Cédula
+                                                                        <b>Cédula</b>
                                                                     </div>
                                                                     <div class="col-md-9">    
                                                                         <div id="cedula-container">
@@ -612,7 +612,7 @@
                                                             <div class="col-md-6"> 
                                                                 <div class="row">
                                                                     <div class="col-md-3">  
-                                                                        Foto
+                                                                        <b>Foto</b>
                                                                     </div>
                                                                     <div class="col-md-9">    
                                                                             <div id="foto-container">
@@ -628,7 +628,7 @@
                                                     <div class="col-md-6"> 
                                                         <div class="row">
                                                             <div class="col-md-3">  
-                                                                Nombramiento
+                                                                <b>Nombramiento</b>
                                                             </div>
                                                             <div class="col-md-9">    
                                                                     <div id="nombramiento-container">
@@ -640,7 +640,7 @@
                                                     <div class="col-md-6"> 
                                                         <div class="row">
                                                             <div class="col-md-3">  
-                                                                RUC
+                                                                <b>RUC</b>
                                                             </div>
                                                             <div class="col-md-9">    
                                                                     <div id="ruc-container">
@@ -654,7 +654,7 @@
                                                     <div class="col-md-6"> 
                                                         <div class="row">
                                                             <div class="col-md-3">  
-                                                                Varios
+                                                                <b>Varios</b>
                                                             </div>
                                                             <div class="col-md-9">    
                                                                     <div id="varios-container">
@@ -1864,12 +1864,15 @@ function toggleNaturalConRuc(active) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                             &nbsp;
+                                        </div> 
+                                        <div class="col-md-8 boton-container boton-cedula">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">&nbsp;</div>
-                                    </div>
+                                        <div class="col-md-2">
+                                             &nbsp;
+                                        </div>
+                                    </div> 
                                 `);
                             });
                         }
@@ -1904,12 +1907,15 @@ function toggleNaturalConRuc(active) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                             &nbsp;
+                                        </div> 
+                                        <div class="col-md-8 boton-container boton-foto">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">&nbsp;</div>
-                                    </div>
+                                        <div class="col-md-2">
+                                             &nbsp;
+                                        </div>
+                                    </div> 
                                 `);
                             });
                         }
@@ -1944,12 +1950,15 @@ function toggleNaturalConRuc(active) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                             &nbsp;
+                                        </div> 
+                                        <div class="col-md-8 boton-container boton-nombramiento">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">&nbsp;</div>
-                                    </div>
+                                        <div class="col-md-2">
+                                             &nbsp;
+                                        </div>
+                                    </div> 
                                 `);
                             });
                         }
@@ -1984,12 +1993,15 @@ function toggleNaturalConRuc(active) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                             &nbsp;
+                                        </div> 
+                                        <div class="col-md-8 boton-container boton-ruc">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">&nbsp;</div>
-                                    </div>
+                                        <div class="col-md-2">
+                                             &nbsp;
+                                        </div>
+                                    </div> 
                                 `);
                             });
                         }
@@ -2025,12 +2037,15 @@ function toggleNaturalConRuc(active) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                             &nbsp;
+                                        </div> 
+                                        <div class="col-md-8 boton-container boton-varios">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">&nbsp;</div>
-                                    </div>
+                                        <div class="col-md-2">
+                                             &nbsp;
+                                        </div>
+                                    </div> 
                                 `);
                             });
                         }
@@ -3045,14 +3060,7 @@ function toggleNaturalConRuc(active) {
 
             calcularDuracion('fecha_registro_sri', 'fecha_nacimiento',
                 'error-fecha-fecha-nacimiento-mayor', 'anios_edad'
-            ); 
-
-            $('#ModalSocio').on('shown.bs.modal', function () {
-                console.log("Modal mostrado, ejecutando cambios en botones");
-                $('#tab_archivos').show();  
-                $('#btn_register_socio').hide();
-                $('#btn_update_socio').show();
-            });
+            );  
             
         });
     </script>
