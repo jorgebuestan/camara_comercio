@@ -2603,12 +2603,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="col-md-8 boton-container boton-paper">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">&nbsp;</div>
-                                            </div>
+                                                <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div> 
                                         `);
                                     });
                                 }
@@ -2643,12 +2646,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="col-md-8 boton-container boton-paper">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">&nbsp;</div>
-                                            </div>
+                                                <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div> 
                                         `);
                                     });
                                 }
@@ -2683,12 +2689,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="col-md-8 boton-container boton-nombramiento">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">&nbsp;</div>
-                                            </div>
+                                                <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div> 
                                         `);
                                     });
                                 }
@@ -2723,12 +2732,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="col-md-8 boton-container boton-ruc">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">&nbsp;</div>
-                                            </div>
+                                                <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div> 
                                         `);
                                     });
                                 }
@@ -2763,12 +2775,15 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div> 
+                                                <div class="col-md-8 boton-container boton-varios">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">&nbsp;</div>
-                                            </div>
+                                                <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div> 
                                         `);
                                     });
                                 }

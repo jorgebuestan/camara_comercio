@@ -140,16 +140,27 @@ class SocioController extends Controller
             // Mapear los datos para la respuesta
             $data = $socios->map(function ($socio) {
                 $logSociosIns = LogActivity::with('user')->where('record_id', $socio->id)->where('table_name', 'socios')->where('action', 'insert')->get();
-                $logSociosMod = LogActivity::with('user')
-                    ->where(function ($query) use ($socio) {
-                        $query->where('record_id', $socio->id)
-                            ->where('table_name', 'socios')
-                            ->orWhere(function ($query) use ($socio) {
-                                $query->where('table_name', 'datos_tributarios_socio');
-                            });
-                    })
-                    ->where('action', 'update')
-                    ->get();
+                // Paso 1: Buscar en la tabla 'socios'
+$logSociosModSocios = LogActivity::with('user')
+->where('record_id', $socio->id)
+->where('table_name', 'socios')
+->where('action', 'update')
+->get();
+
+// Paso 2: Buscar en la tabla 'datos_tributarios_socio' usando el id_socio en 'data'
+$logSociosModDatosTributarios = LogActivity::with('user')
+->where('table_name', 'datos_tributarios_socio')
+->whereIn('record_id', function ($query) use ($socio) {
+    $query->select('id') // Seleccionamos el 'id' de 'datos_tributarios_socio'
+          ->from('datos_tributarios_socio')
+          ->where('id_socio', $socio->id); // Filtramos por 'id_socio'
+})
+->where('action', 'update')
+->get();
+
+// Unir los resultados de ambas consultas
+$logSociosMod = $logSociosModSocios->merge($logSociosModDatosTributarios);
+
                 $logSociosIns = $logSociosIns->map(function ($log) {
                     return [
                         'created_at' => $log->created_at,
