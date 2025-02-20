@@ -2052,6 +2052,9 @@ function toggleNaturalConRuc(active) {
                     }
                 });
 
+                $('#tab_archivos').show();  
+                $('#btn_register_socio').hide();
+                $('#btn_update_socio').show();
                 
                 $('#ModalSocio').modal('show');
             });
