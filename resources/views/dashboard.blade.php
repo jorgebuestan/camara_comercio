@@ -268,6 +268,32 @@
         z-index: 2;
         margin-bottom: 10px;
     }
+
+    .row-background {
+    background-image: url('{{ asset('storage/fondos/documentos_gris.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; 
+    padding: 20px 0;
+    border-radius: 15px; /* Esquinas redondeadas */
+    position: relative;
+}
+
+/* Deshabilitar la escala de grises específicamente para los botones */
+.row-background .btn, /* Aplica a botones con clase 'btn' */
+.row-background button { /* Aplica a todos los botones */
+    filter: none !important; /* Usa !important para asegurarnos de que no se sobrescriba */
+    position: relative;
+    z-index: 1; /* Asegura que los botones estén por encima de la imagen */
+}
+
+.rowborder {
+      margin: 0; /* Establece el margen deseado */
+      padding: 10px; /* Añade un relleno interno para separar el contenido del margen */
+      border: 2px solid #ccc; /* Añade un borde para crear el efecto rectangular */
+      border-radius: 10px; /* Agrega bordes circulares en las esquinas */
+      box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total del elemento */
+    }
 </style>
 
     <!-- Theme CSS -->

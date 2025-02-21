@@ -4,16 +4,7 @@
 Documentos registrados por Cámara
 @endsection
 
-@section('content') 
-<style>
-    .rowborder {
-      margin: 20px; /* Establece el margen deseado */
-      padding: 10px; /* Añade un relleno interno para separar el contenido del margen */
-      border: 2px solid #ccc; /* Añade un borde para crear el efecto rectangular */
-      border-radius: 10px; /* Agrega bordes circulares en las esquinas */
-      box-sizing: border-box; /* Incluye el borde y el relleno en el tamaño total del elemento */
-    }
-</style>
+@section('content')  
 <div class="container">
     <div class="row">
         <div class="col-lg-11 text-end">
@@ -56,17 +47,20 @@ Documentos registrados por Cámara
                                                         {{ count($escrituras) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
+                                                <div class="row"> 
+                                                    <div class="col-md-12"> 
+                                                        &nbsp;
+                                                    </div>
+                                                </div> 
                                                 @foreach ($escrituras as $key => $item) 
                                                     <div class="row">
-                                                            <div class="col-md-12"> 
-                                                                {{ $item->titulo }}
-                                                            </div>
-                                                        </div>
-                                                    <div class="row">
                                                         <div class="col-md-2">
+                                                            &nbsp;
+                                                        </div> 
+                                                        <div class="col-md-6 boton-container boton-paper">
                                                             <button type="button" class="btn btn-info" onclick="showFile('{{ $item->id }}')">Ver</button> 
                                                         </div> 
-                                                        <div class="col-md-3">    
+                                                        <div class="col-md-3 d-flex align-items-center">    
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
                                                     </div> 
@@ -101,17 +95,25 @@ Documentos registrados por Cámara
                                                         {{ count($estatutos) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
+                                                <div class="row"> 
+                                                    <div class="col-md-12"> 
+                                                        &nbsp;
+                                                    </div>
+                                                </div> 
                                                 @foreach ($estatutos as $key => $item) 
-                                                    <div class="row">
+                                                    <!--<div class="row">
                                                             <div class="col-md-12"> 
                                                                 {{ $item->titulo }}
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                     <div class="row">
                                                         <div class="col-md-2">
+                                                            &nbsp;
+                                                        </div> 
+                                                        <div class="col-md-6 boton-container boton-estatutos">
                                                             <button type="button" class="btn btn-info" onclick="showFile('{{ $item->id }}')">Ver</button> 
                                                         </div> 
-                                                        <div class="col-md-3">    
+                                                        <div class="col-md-3 d-flex align-items-center">    
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
                                                     </div> 
@@ -127,6 +129,11 @@ Documentos registrados por Cámara
                                         </div> 		 
                                     </div>
                                 </div> 
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-12"> 
+                                &nbsp;
                             </div>
                         </div> 
                         <div class="row">
@@ -148,20 +155,28 @@ Documentos registrados por Cámara
                                                         {{ count($nombramiento) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
+                                                <div class="row"> 
+                                                    <div class="col-md-12"> 
+                                                        &nbsp;
+                                                    </div>
+                                                </div> 
                                                 @foreach ($nombramiento as $key => $item) 
-                                                    <div class="row">
-                                                            <div class="col-md-12"> 
-                                                                {{ $item->titulo }}
-                                                            </div>
+                                                    <!-- <div class="row">
+                                                        <div class="col-md-12"> 
+                                                            {{ $item->titulo }}
                                                         </div>
+                                                    </div> -->
                                                     <div class="row">
                                                         <div class="col-md-2">
+                                                            &nbsp;
+                                                        </div> 
+                                                        <div class="col-md-6 boton-container boton-nombramiento">
                                                             <button type="button" class="btn btn-info" onclick="showFile('{{ $item->id }}')">Ver</button> 
                                                         </div> 
-                                                        <div class="col-md-3">    
+                                                        <div class="col-md-3 d-flex align-items-center">    
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
-                                                    </div> 
+                                                    </div>  
                                                     @if(count($nombramiento) > 1) 
                                                         <div class="row">
                                                             <div class="col-md-12"> 
@@ -193,20 +208,28 @@ Documentos registrados por Cámara
                                                         {{ count($ruc) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
+                                                <div class="row"> 
+                                                    <div class="col-md-12"> 
+                                                        &nbsp;
+                                                    </div>
+                                                </div> 
                                                 @foreach ($ruc as $key => $item) 
-                                                    <div class="row">
-                                                            <div class="col-md-12"> 
-                                                                {{ $item->titulo }}
-                                                            </div>
+                                                    <!-- <div class="row">
+                                                        <div class="col-md-12"> 
+                                                            {{ $item->titulo }}
                                                         </div>
+                                                    </div> -->
                                                     <div class="row">
                                                         <div class="col-md-2">
+                                                            &nbsp;
+                                                        </div> 
+                                                        <div class="col-md-6 boton-container boton-ruc">
                                                             <button type="button" class="btn btn-info" onclick="showFile('{{ $item->id }}')">Ver</button> 
                                                         </div> 
-                                                        <div class="col-md-3">    
+                                                        <div class="col-md-3 d-flex align-items-center">    
                                                             <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
-                                                    </div> 
+                                                    </div>  
                                                     @if(count($ruc) > 1) 
                                                         <div class="row">
                                                             <div class="col-md-12"> 
@@ -220,6 +243,11 @@ Documentos registrados por Cámara
                                     </div>
                                 </div> 
                             </div> 
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-12"> 
+                                &nbsp;
+                            </div>
                         </div> 
                         <div class="row">
                             <div class="col-md-6"> 
@@ -240,18 +268,29 @@ Documentos registrados por Cámara
                                                         {{ count($varios) }} Documento(s) cargado(s)
                                                     </div>
                                                 </div> 
-                                                @foreach ($varios as $key => $item) 
-                                                    <div class="row">
-                                                            <div class="col-md-12"> 
-                                                                {{ $item->titulo }}
-                                                            </div>
-                                                        </div>
+                                                <div class="row"> 
+                                                    <div class="col-md-12"> 
+                                                        &nbsp;
+                                                    </div>
+                                                </div> 
+                                                @foreach ($varios as $key => $item)  
                                                     <div class="row">
                                                         <div class="col-md-2">
-                                                            <button type="button" class="btn btn-info" onclick="showFile('{{ $item->id }}')">Ver</button> 
+                                                            &nbsp;
+                                                        </div>
+                                                        <div class="col-md-10"> 
+                                                            {{ $item->titulo }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            &nbsp;
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <button type="button" class="btn btn-info w-100" onclick="showFile('{{ $item->id }}')">Ver</button> 
                                                         </div> 
                                                         <div class="col-md-3">    
-                                                            <button type="button" class="btn btn-danger" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
+                                                            <button type="button" class="btn btn-danger w-100" onclick="deleteArchivo('{{ $item->id }}')">Eliminar</button>
                                                         </div>
                                                     </div> 
                                                     @if(count($varios) > 1) 
@@ -274,7 +313,7 @@ Documentos registrados por Cámara
                                     </div> 
                                 </div> 
                             </div> 
-                        </div>      
+                        </div>       
                         <div class="row">
                             <div class="col-md-6"> 
                                 &nbsp;
