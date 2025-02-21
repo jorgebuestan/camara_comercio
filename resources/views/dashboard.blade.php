@@ -183,7 +183,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('{{ asset('storage/fondos/nombramiento.jpg') }}');
+        background-image: url('{{ asset('storage/fondos/nombramientos.jpg') }}');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -200,7 +200,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('{{ asset('storage/fondos/ruc.jpg') }}');
+        background-image: url('{{ asset('storage/fondos/ruc.png') }}');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
@@ -217,7 +217,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('{{ asset('storage/fondos/varios.png') }}');
+        background-image: url('{{ asset('storage/fondos/documentos.jpg') }}');
         background-size: cover;
         /* background-size: 100% 100%;  Se ajusta completamente al div */
         background-repeat: no-repeat;
@@ -235,7 +235,24 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('{{ asset('storage/fondos/paper.jpg') }}');
+        background-image: url('{{ asset('storage/fondos/escrituras.jpeg') }}');
+        background-size: cover;
+        /* background-size: 100% 100%;  Se ajusta completamente al div */
+        background-repeat: no-repeat;
+        background-position: center;
+        filter: grayscale(100%);
+        z-index: 1;
+        border-radius: 10px;
+    }
+
+    .boton-estatutos::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ asset('storage/fondos/estatutos.png') }}');
         background-size: cover;
         /* background-size: 100% 100%;  Se ajusta completamente al div */
         background-repeat: no-repeat;

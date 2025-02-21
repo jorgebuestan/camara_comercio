@@ -2584,7 +2584,17 @@
                                 container.empty(); // Limpiar la sección de documentos
 
                                 if (response.length === 0) {
-                                    container.append('No hay Documentos Cargados');
+                                    container.append(`<div class="row">
+                                                        <div class="col-md-12">
+                                                            No hay Documentos cargados
+                                                        </div>
+                                                        </div>
+                                                       <div class="row">
+                                                         <div class="col-md-12">
+                                                            &nbsp;
+                                                         </div>
+                                                       </div>  
+                                                    `);
                                 } else {
                                     /*container.append(`
                                         <div class="row"> 
@@ -2609,6 +2619,11 @@
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
                                                 <div class="col-md-2">
+                                                    &nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
                                                     &nbsp;
                                                 </div>
                                             </div> 
@@ -2627,7 +2642,17 @@
                                 container.empty(); // Limpiar la sección de documentos
 
                                 if (response.length === 0) {
-                                    container.append('No hay Documentos Cargados');
+                                    container.append(`<div class="row">
+                                                        <div class="col-md-12">
+                                                            No hay Documentos cargados
+                                                        </div>
+                                                        </div>
+                                                       <div class="row">
+                                                         <div class="col-md-12">
+                                                            &nbsp;
+                                                         </div>
+                                                       </div>  
+                                                    `);
                                 } else {
                                     /*container.append(`
                                         <div class="row"> 
@@ -2648,13 +2673,18 @@
                                                 <div class="col-md-2">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-paper">
+                                                <div class="col-md-8 boton-container boton-estatutos">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
                                                 <div class="col-md-2">
                                                     &nbsp;
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    &nbsp;
+                                                </div>
+                                            </div>  
                                         `);
                                     });
                                 }
@@ -2670,7 +2700,17 @@
                                 container.empty(); // Limpiar la sección de documentos
 
                                 if (response.length === 0) {
-                                    container.append('No hay Documentos Cargados');
+                                    container.append(`<div class="row">
+                                                        <div class="col-md-12">
+                                                            No hay Documentos cargados
+                                                        </div>
+                                                        </div>
+                                                       <div class="row">
+                                                         <div class="col-md-12">
+                                                            &nbsp;
+                                                         </div>
+                                                       </div>  
+                                                    `);
                                 } else {
                                     /*container.append(`
                                         <div class="row"> 
@@ -2697,7 +2737,12 @@
                                                 <div class="col-md-2">
                                                     &nbsp;
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    &nbsp;
+                                                </div>
+                                            </div>  
                                         `);
                                     });
                                 }
@@ -2713,7 +2758,17 @@
                                 container.empty(); // Limpiar la sección de documentos
 
                                 if (response.length === 0) {
-                                    container.append('No hay Documentos Cargados');
+                                    container.append(`<div class="row">
+                                                        <div class="col-md-12">
+                                                            No hay Documentos cargados
+                                                        </div>
+                                                        </div>
+                                                       <div class="row">
+                                                         <div class="col-md-12">
+                                                            &nbsp;
+                                                         </div>
+                                                       </div>  
+                                                    `);
                                 } else {
                                     /*container.append(`
                                         <div class="row"> 
@@ -2740,7 +2795,12 @@
                                                 <div class="col-md-2">
                                                     &nbsp;
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    &nbsp;
+                                                </div>
+                                            </div>  
                                         `);
                                     });
                                 }
@@ -2756,7 +2816,17 @@
                                 container.empty(); // Limpiar la sección de documentos
 
                                 if (response.length === 0) {
-                                    container.append('No hay Documentos Cargados');
+                                    container.append(`<div class="row">
+                                                        <div class="col-md-12">
+                                                            No hay Documentos cargados
+                                                        </div>
+                                                        </div>
+                                                       <div class="row">
+                                                         <div class="col-md-12">
+                                                            &nbsp;
+                                                         </div>
+                                                       </div>  
+                                                    `);
                                 } else {
                                     /*container.append(`
                                         <div class="row"> 
@@ -2783,7 +2853,12 @@
                                                 <div class="col-md-2">
                                                     &nbsp;
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    &nbsp;
+                                                </div>
+                                            </div>  
                                         `);
                                     });
                                 }

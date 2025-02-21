@@ -1845,7 +1845,17 @@ function toggleNaturalConRuc(active) {
                         container.empty(); // Limpiar la sección de documentos
 
                         if (response.length === 0) {
-                            container.append('No hay Documentos Cargados');
+                            container.append(`<div class="row">
+                                                <div class="col-md-12">
+                                                    No hay Documentos cargados
+                                              </div>
+                                              </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                    &nbsp;
+                                                    </div>
+                                              </div>  
+                                            `);
                         } else {
                             /*container.append(`
                                 <div class="row"> 
@@ -1863,16 +1873,21 @@ function toggleNaturalConRuc(active) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                              &nbsp;
                                         </div> 
-                                        <div class="col-md-8 boton-container boton-cedula">
+                                        <div class="col-md-6 boton-container boton-cedula">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                              &nbsp;
                                         </div>
                                     </div> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            &nbsp;
+                                        </div>
+                                    </div>
                                 `);
                             });
                         }
@@ -1888,7 +1903,17 @@ function toggleNaturalConRuc(active) {
                         container.empty(); // Limpiar la sección de documentos
 
                         if (response.length === 0) {
-                            container.append('No hay Documentos Cargados');
+                            container.append(`<div class="row">
+                                                <div class="col-md-12">
+                                                    No hay Documentos cargados
+                                              </div>
+                                              </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                    &nbsp;
+                                                    </div>
+                                              </div>  
+                                            `);
                         } else {
                             /*container.append(`
                                 <div class="row"> 
@@ -1906,16 +1931,21 @@ function toggleNaturalConRuc(active) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                              &nbsp;
                                         </div> 
-                                        <div class="col-md-8 boton-container boton-foto">
+                                        <div class="col-md-6 boton-container boton-foto">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                              &nbsp;
                                         </div>
                                     </div> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            &nbsp;
+                                        </div>
+                                    </div>
                                 `);
                             });
                         }
@@ -1931,7 +1961,17 @@ function toggleNaturalConRuc(active) {
                         container.empty(); // Limpiar la sección de documentos
 
                         if (response.length === 0) {
-                            container.append('No hay Documentos Cargados');
+                            container.append(`<div class="row">
+                                                <div class="col-md-12">
+                                                    No hay Documentos cargados
+                                              </div>
+                                              </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                    &nbsp;
+                                                    </div>
+                                              </div>  
+                                            `);
                         } else {
                             /*container.append(`
                                 <div class="row"> 
@@ -1949,16 +1989,21 @@ function toggleNaturalConRuc(active) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                              &nbsp;
                                         </div> 
-                                        <div class="col-md-8 boton-container boton-nombramiento">
+                                        <div class="col-md-6 boton-container boton-nombramiento">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                              &nbsp;
                                         </div>
                                     </div> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            &nbsp;
+                                        </div>
+                                    </div>
                                 `);
                             });
                         }
@@ -1974,7 +2019,17 @@ function toggleNaturalConRuc(active) {
                         container.empty(); // Limpiar la sección de documentos
 
                         if (response.length === 0) {
-                            container.append('No hay Documentos Cargados');
+                            container.append(`<div class="row">
+                                                <div class="col-md-12">
+                                                    No hay Documentos cargados
+                                              </div>
+                                              </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                    &nbsp;
+                                                    </div>
+                                              </div>  
+                                            `);
                         } else {
                             /*container.append(`
                                 <div class="row"> 
@@ -1992,16 +2047,21 @@ function toggleNaturalConRuc(active) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                              &nbsp;
                                         </div> 
-                                        <div class="col-md-8 boton-container boton-ruc">
+                                        <div class="col-md-6 boton-container boton-ruc">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                              &nbsp;
                                         </div>
                                     </div> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            &nbsp;
+                                        </div>
+                                    </div>
                                 `);
                             });
                         }
@@ -2018,7 +2078,17 @@ function toggleNaturalConRuc(active) {
                         container.empty(); // Limpiar la sección de documentos
 
                         if (response.length === 0) {
-                            container.append('No hay Documentos Cargados');
+                            container.append(`<div class="row">
+                                                <div class="col-md-12">
+                                                    No hay Documentos cargados
+                                              </div>
+                                              </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                    &nbsp;
+                                                    </div>
+                                              </div>  
+                                            `);
                         } else {
                             /*container.append(`
                                 <div class="row"> 
@@ -2036,16 +2106,21 @@ function toggleNaturalConRuc(active) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                              &nbsp;
                                         </div> 
-                                        <div class="col-md-8 boton-container boton-varios">
+                                        <div class="col-md-6 boton-container boton-varios">
                                             <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                         </div> 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4">
                                              &nbsp;
                                         </div>
                                     </div> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            &nbsp;
+                                        </div>
+                                    </div>
                                 `);
                             });
                         }
