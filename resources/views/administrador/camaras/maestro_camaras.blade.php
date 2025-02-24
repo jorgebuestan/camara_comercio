@@ -2612,13 +2612,13 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-paper">
+                                                <div class="col-md-6 boton-container boton-paper">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     &nbsp;
                                                 </div>
                                             </div>
@@ -2670,13 +2670,13 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-estatutos">
+                                                <div class="col-md-6 boton-container boton-estatutos">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     &nbsp;
                                                 </div>
                                             </div>
@@ -2728,13 +2728,13 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-nombramiento">
+                                                <div class="col-md-6 boton-container boton-nombramiento">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     &nbsp;
                                                 </div>
                                             </div>
@@ -2786,13 +2786,13 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-ruc">
+                                                <div class="col-md-6 boton-container boton-ruc">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     &nbsp;
                                                 </div>
                                             </div>
@@ -2844,13 +2844,13 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     &nbsp;
                                                 </div> 
-                                                <div class="col-md-8 boton-container boton-varios">
+                                                <div class="col-md-6 boton-container boton-varios">
                                                     <button type="button" class="btn btn-info" onclick="showFile('${item.id}')">Ver</button>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     &nbsp;
                                                 </div>
                                             </div>
