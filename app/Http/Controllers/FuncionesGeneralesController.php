@@ -216,6 +216,7 @@ class FuncionesGeneralesController extends Controller
         $id_socio = request('id_socio'); 
 
         $establecimientos = EstablecimientoSocio::where('id_socio', $id_socio)
+        ->whereIn('estado', [1, 2])
         ->orderBy('secuencial', 'asc')
         ->selectRaw("CONCAT(secuencial, ' - ', nombre_comercial) as nombre, id")
         ->pluck('nombre', 'id');
