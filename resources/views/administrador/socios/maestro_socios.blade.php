@@ -557,6 +557,30 @@
                                                 </div>
                                                 <div class="row my-2">
                                                     <div class="col-md-12">
+                                                        <h2 class="card-title">Establecimientos</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-1">
+                                                        <b>Abiertos:</b>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <span id="abiertos-count">0</span>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <b>Cerrados:</b>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <span id="cerrados-count">0</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        &nbsp;
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-md-12">
                                                         <h2
                                                             class="card-title
                                                             ">
@@ -1751,6 +1775,9 @@ function toggleNaturalConRuc(active) {
                 $('#ModalSocio').find('#numero').val(data.numero);
                 $('#ModalSocio').find('#interseccion').val(data.interseccion);
                 $('#ModalSocio').find('#referencia').val(data.referencia);
+
+                $('#abiertos-count').text(data.establecimientos?.estado_1 || 0);
+                $('#cerrados-count').text(data.establecimientos?.estado_2 || 0);
 
 
                 // Limpia la lista visual y el array

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\LogActivity;
 use App\Models\ActividadEconomica;
+use App\Models\EstablecimientoSocio;
  
 use Illuminate\Support\Str; 
 
@@ -206,6 +207,20 @@ class SocioController extends Controller
                 }else{
                     $estado = "No aplica";
                 }
+
+                // Contar los registros en Establecimiento relacionados con esta cámara
+                $totalEstablecimientos = EstablecimientoSocio::where('id_socio', $socio->id)->count();
+
+                // Contar los registros de estado igual a 1 y estado igual a 2
+                $estado1 = EstablecimientoSocio::where('id_socio', $socio->id)->where('estado', 1)->count();
+                $estado2 = EstablecimientoSocio::where('id_socio', $socio->id)->where('estado', 2)->count();
+
+                // Agregar la información de los establecimientos al array de respuesta
+                $socioEstablecimientoArray = [
+                    'total' => $totalEstablecimientos,
+                    'estado_1' => $estado1,
+                    'estado_2' => $estado2
+                ];
                 
 
                 // Convertir el modelo Camara a un array
@@ -238,6 +253,7 @@ class SocioController extends Controller
                     'identificacion' => $socio->identificacion,
                     'estado_sri' => $socio->datos_tributarios->estado_sri ?? '',
                     'estado' => $estado,
+                    'establecimientos' => $socioEstablecimientoArray,
                     'btn' => '<div class="d-flex justify-content-center align-items-center flex-wrap gap-2"><button class="btn btn-outline-primary btn-sm rounded-pill" title="Archivos" onclick="window.open(\'/administrador/socio/documentos/' . $socio->id . '\', \'_blank\')">&nbsp;<i class="fa-solid fa-file"></i>&nbsp;</button>'.
                              '<button class="btn btn-outline-warning btn-sm rounded-pill edit-modal " title="Modificar" data-id="' . $socio->id . '">&nbsp;<i class="fa-solid fa-pencil"></i>&nbsp;</button>' .
                              '<button class="btn btn-outline-danger btn-sm rounded-pill  delete-socio " title="Eliminar" data-id="' . $socio->id . '">&nbsp;<i class="fa-solid fa-trash"></i>&nbsp;</button></div>'

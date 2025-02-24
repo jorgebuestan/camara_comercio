@@ -106,7 +106,7 @@
                                                     <th>Nombre</th>
                                                     <th>Tipo</th>
                                                     <th>Dirección</th>
-                                                    <th>Representante</th>
+                                                    <th>Representante Legal</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -208,18 +208,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                    Representante
+                                    Representante Legal
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="representante" id="representante"
-                                        placeholder="Representante">
+                                        placeholder="Representante Legal">
                                 </div>
                                 <div class="col-md-2">
-                                    Teléfono Representante
+                                    Teléfono Representante Legal
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="telefono_representante"
-                                        id="telefono_representante" placeholder="Teléfono Representante">
+                                        id="telefono_representante" placeholder="Teléfono Representante Legal">
                                 </div>
                             </div>
                             <div class="row">
@@ -379,18 +379,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                    Representante
+                                    Representante Legal
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="representante_mod"
-                                        id="representante_mod" placeholder="Representante">
+                                        id="representante_mod" placeholder="Representante Legal">
                                 </div>
                                 <div class="col-md-2">
-                                    Teléfono Representante
+                                    Teléfono Representante Legal
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="telefono_representante_mod"
-                                        id="telefono_representante_mod" placeholder="Teléfono Representante">
+                                        id="telefono_representante_mod" placeholder="Teléfono Representante Legal">
                                 </div>
                             </div>
                             <div class="row">
